@@ -96,6 +96,8 @@
   --surface-200: #FFFFFF;
   --surface-300: #E5E5E5;
   --surface-400: #EDEDED;
+  --surface-500: #FFFFFF;
+
 }
 
 .dark {
@@ -136,6 +138,7 @@
   --surface-200: #1B1B1B;
   --surface-300: #000000;
   --surface-400: #272727;
+  --surface-500: #272727;
 }
 
 @layer base {

@@ -1,5 +1,5 @@
 import { AlertCard } from "@/components/alert/AlertCard";
-import CameraStreamCard from "@/components/camera/CameraStreamCard";
+import CameraStreamCard from "@/components/camera/CameraStreamRecordingCard";
 import HomeProfileCard from "@/components/common/HomeProfileCard";
 import { IconBellRinging } from "@tabler/icons-react";
 import Link from 'next/link';
@@ -24,7 +24,7 @@ export default function Home() {
           </span>
         </div>
       </div>
-      <div className="flex flex-1 gap-4 min-h-0 rounded-4xl">
+      <div className="flex flex-1 gap-4 min-h-0">
         {/* 5/7 of available width */}
         <div className="flex-[5] flex flex-col p-6 rounded-4xl bg-[var(--surface-100)] overflow-hidden">
           <div className="flex justify-between items-center mb-4">

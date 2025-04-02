@@ -1,6 +1,6 @@
 "use client";
 import { CameraDetailsViewToggleButton } from "@/components/camera/CameraDetailsViewToggleButton";
-import CameraStreamCard from "@/components/camera/CameraStreamCard";
+import CameraStreamCard from "@/components/camera/CameraStreamRecordingCard";
 import OrganizationFilterButtons from "@/components/camera/OrganizationFilterButtons";
 import SearchBar from "@/components/common/Searchbar";
 import { RootState } from "@/redux/store";
@@ -21,7 +21,7 @@ export default function Streams() {
       <OrganizationFilterButtons />
       <h2 className="text-lg ">Showing {6} streams</h2>
       <div className="flex-1 overflow-y-auto  scrollbar-hide">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 min-h-min">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 min-h-min">
           {[0, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map((_, index) => (
             <CameraStreamCard key={index} />
           ))}
