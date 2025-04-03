@@ -97,6 +97,8 @@
   --surface-300: #E5E5E5;
   --surface-400: #EDEDED;
   --surface-500: #FFFFFF;
+  --surface-600: #E3E3E3;
+  --surface-700: #F6F6F6;
 
 }
 
@@ -139,6 +141,9 @@
   --surface-300: #000000;
   --surface-400: #272727;
   --surface-500: #272727;
+  --surface-600: #3E3E3E;
+  --surface-700: #3A3A3A;
+
 }
 
 @layer base {
@@ -156,6 +161,7 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
 
 .scrollbar-hide {
   -ms-overflow-style: none;

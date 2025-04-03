@@ -11,15 +11,15 @@ export function CameraDetailsViewToggleButton() {
         dispatch(setToggleCameraDetailsView(value))
     }
     return (
-        <div className="flex items-center bg-[var(--surface-100)] rounded-full py-2 px-2">
+        <div className="flex items-center bg-[var(--surface-100)] rounded-full py-1 px-1">
             <button
-                className={`px-4 py-2 rounded-full transition-colors text-[#888888] ${cameraDetailView === 'focused' ? 'bg-white shadow-sm' : ''}`}
+                className={`px-2 py-1 rounded-full transition-colors text-[#888888] ${cameraDetailView === 'focused' ? 'bg-white shadow-sm' : ''}`}
                 onClick={() => handleChange('focused')}
             >
                 Focused
             </button>
             <button
-                className={`px-4 py-2 rounded-full transition-colors text-[#888888] ${cameraDetailView === 'overview' ? 'bg-white shadow-sm' : ''}`}
+                className={`px-2 py-1 rounded-full transition-colors text-[#888888] ${cameraDetailView === 'overview' ? 'bg-white shadow-sm' : ''}`}
                 onClick={() => handleChange('overview')}
             >
                 Overview

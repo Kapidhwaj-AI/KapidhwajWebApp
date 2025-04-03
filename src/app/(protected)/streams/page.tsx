@@ -1,13 +1,17 @@
 "use client";
 import { CameraDetailsViewToggleButton } from "@/components/camera/CameraDetailsViewToggleButton";
-import CameraStreamCard from "@/components/camera/CameraStreamRecordingCard";
+import CameraStreamCard from "@/components/camera/CameraStreamCard";
+import ColumnDropdown from "@/components/camera/ColumnDropdown";
 import OrganizationFilterButtons from "@/components/camera/OrganizationFilterButtons";
 import SearchBar from "@/components/common/Searchbar";
+import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
+import { useLayoutEffect } from "react";
 import { useSelector } from "react-redux";
 
 export default function Streams() {
   console.log("app-home-page");
+  const toogleColumnValue = useSelector((state: RootState) => state.camera.toogleColumns);
 
   return (
     <div className="h-full flex flex-col gap-4 min-h-0 p-5">
@@ -15,13 +19,22 @@ export default function Streams() {
         <h1 className="text-2xl font-bold">Streams</h1>
         <div className="flex justify-between items-center gap-4">
           <CameraDetailsViewToggleButton />
-          <SearchBar search="" setSearch={() => { }} />
+          <ColumnDropdown />
+          <SearchBar search="" setSearch={() => { }} placeholder="Search Streams" />
         </div>
       </div>
       <OrganizationFilterButtons />
       <h2 className="text-lg ">Showing {6} streams</h2>
-      <div className="flex-1 overflow-y-auto  scrollbar-hide">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 min-h-min">
+      <div className="flex-1 overflow-y-auto scrollbar-hide">
+        <div className={cn("grid grid-cols-1 gap-6 min-h-min",
+          {
+            "md:grid-cols-1": toogleColumnValue === 1,
+            "md:grid-cols-2": toogleColumnValue === 2,
+            "md:grid-cols-3": toogleColumnValue === 3,
+            "md:grid-cols-4": toogleColumnValue === 4,
+            "md:grid-cols-5": toogleColumnValue === 5,
+          }
+        )}>
           {[0, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map((_, index) => (
             <CameraStreamCard key={index} />
           ))}

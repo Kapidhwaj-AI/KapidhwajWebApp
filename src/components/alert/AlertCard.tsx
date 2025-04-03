@@ -1,4 +1,4 @@
-import { IconClock, IconCalendar, IconMovie, IconAlertTriangle } from "@tabler/icons-react";
+import { IconClock, IconCalendar, IconMovie, IconTreadmill } from "@tabler/icons-react";
 
 export function AlertCard({ alert }: { alert: any }) {
     return (
@@ -7,7 +7,7 @@ export function AlertCard({ alert }: { alert: any }) {
             <div className="flex justify-between items-center px-4 pt-4">
                 <div className="flex items-center gap-3">
                     <div className="h-14 w-14 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                        <IconAlertTriangle className="text-gray-600 dark:text-gray-400" size={20} />
+                        <IconTreadmill className="text-gray-600 dark:text-gray-400" size={20} />
                     </div>
                     <div>
                         <h3 className="text-xs">Intrusion</h3>
@@ -18,11 +18,11 @@ export function AlertCard({ alert }: { alert: any }) {
                 <div className="text-right text-xs mr-3">
                     <div className="flex items-center gap-1">
                         <IconCalendar size={14} />
-                        <span className="text-gray-500 dark:text-gray-400">24th Aug 2025</span>
+                        <span className="text-gray-500 dark:text-gray-400">24/10/25</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <IconClock size={14} />
-                        <span className="text-gray-500 dark:text-gray-400">07:30 am</span>
+                        <span className="text-gray-500 dark:text-gray-400">07:30</span>
                     </div>
                 </div>
             </div>

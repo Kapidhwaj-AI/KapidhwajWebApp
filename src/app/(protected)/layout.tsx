@@ -12,10 +12,10 @@ export default function AppLayout({
     console.log("app-protected-layout");
 
     return (
-        <div className="flex my-4 h-[calc(100vh-2rem)]">
-            {/* border-2 border-black */}
+        <div className="flex flex-col md:flex-row h-screen md:h-[calc(100vh-2rem)] md:my-4">
+            {/* Mobile Sidebar Toggle would go here */}
             <Sidebar />
-            <main className="flex-1 bg-[var(--surface-200)] p-4 rounded-4xl mr-4 flex flex-col min-h-0">
+            <main className="flex-1 bg-[var(--surface-200)] p-2 md:p-4 rounded-none md:rounded-4xl md:mr-4 flex flex-col min-h-0 overflow-auto">
                 {children}
             </main>
         </div>

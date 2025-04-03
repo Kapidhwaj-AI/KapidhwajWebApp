@@ -1,5 +1,5 @@
 import { AlertCard } from "@/components/alert/AlertCard";
-import CameraStreamCard from "@/components/camera/CameraStreamRecordingCard";
+import CameraStreamCard from "@/components/camera/CameraStreamCard";
 import HomeProfileCard from "@/components/common/HomeProfileCard";
 import { IconBellRinging } from "@tabler/icons-react";
 import Link from 'next/link';

@@ -9,39 +9,42 @@ export default function CameraStreamCardMedium() {
     const cameraDetailView = useSelector((state: RootState) => state.camera.cameraDetailView)
 
     return (
-        < div className={cn("w-full min-h-100 max-h-100 aspect-video bg-white dark:bg-gray-800 rounded-4xl shadow-lg",
-            "overflow-hidden flex items-center justify-center relative")}
+        <div className={cn(
+            "w-full h-48 sm:h-64 md:min-h-100 md:max-h-100 aspect-video bg-white dark:bg-gray-800 rounded-xl md:rounded-4xl shadow-lg",
+            "overflow-hidden flex items-center justify-center relative"
+        )}
             style={{
                 backgroundImage: "url('/assets/images/image.png')",
                 backgroundSize: "cover",
                 backgroundPosition: "center"
-            }
-            }>
+            }}
+        >
             {/* Live Badge - Top Left */}
-            < div className="absolute top-3 left-3" >
+            <div className="absolute top-2 left-2 md:top-3 md:left-3">
                 <LiveBadge />
-            </div >
-            <div className={cn("w-full px-4 pb-4 absolute bottom-0",
+            </div>
+
+            <div className={cn(
+                "w-full px-2 md:px-4 pb-2 md:pb-4 absolute bottom-0",
                 cameraDetailView === 'overview' && 'hidden',
             )}>
-                <div className="backdrop-blur-md bg-black/30 dark:bg-gray-500/30 rounded-full py-3 px-4 shadow-lg">
-                    {/* Your content here */}
+                <div className="backdrop-blur-md bg-black/30 dark:bg-gray-500/30 rounded-full py-1 md:py-3 px-2 md:px-4 shadow-lg">
                     <div className="flex justify-between items-center">
                         {/* Left text section */}
-                        <div className="flex flex-col text-white ml-2">
-                            <span className="font-bold text-md">Main Office</span>
-                            <span className="text-sm text-gray-300">HQ &gt; Frontside Camera</span>
+                        <div className="flex flex-col text-white ml-1 md:ml-2">
+                            <span className="font-bold text-sm md:text-md">Main Office</span>
+                            <span className="text-xs md:text-sm text-gray-300">HQ &gt; Frontside</span>
                         </div>
 
                         {/* Right icon circle */}
-                        <div className="h-14 w-14 rounded-full bg-black flex items-center justify-center">
+                        <div className="h-8 w-8 md:h-14 md:w-14 text-white rounded-full bg-black flex items-center justify-center">
                             <button>
-                                <IconMaximize stroke={2} />
+                                <IconMaximize stroke={2} size={16} />
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }
