@@ -8,14 +8,17 @@ const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <QueryClientProvider client={queryClient}>
-        <ReduxProvider store={store}>{children}</ReduxProvider>
-      </QueryClientProvider></NextThemesProvider>
+    <QueryClientProvider client={queryClient}>
+      <ReduxProvider store={store}>
+        <NextThemesProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </NextThemesProvider>
+      </ReduxProvider>
+    </QueryClientProvider>
   );
 }

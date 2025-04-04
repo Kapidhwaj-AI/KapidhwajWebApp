@@ -25,13 +25,13 @@ const AlertsFiltersButtons = () => {
                             : "bg-[var(--surface-400)] text-[#888888]"
                     )}
                 >
-                    <div className={cn("p-4 rounded-full",
+                    <div className={cn("p-1 md:p-2 lg:p-3 2xl:p-4 rounded-full",
                         selectedFilter === filter.id
                             ? "text-black bg-white"
                             : " bg-[var(--surface-700)]")}>
                         {filter.icon}
                     </div>
-                    <span className="text-md font-bold">{filter.label}</span>
+                    <span className="text-xs md:text-xs lg:text-sm xl:text-md font-bold">{filter.label}</span>
                 </button>
             ))
             }

@@ -10,8 +10,8 @@ export default function CameraStreamCardMedium() {
 
     return (
         <div className={cn(
-            "w-full h-48 sm:h-64 md:min-h-100 md:max-h-100 aspect-video bg-white dark:bg-gray-800 rounded-xl md:rounded-4xl shadow-lg",
-            "overflow-hidden flex items-center justify-center relative"
+            "h-48 sm:h-64 md:min-h-70 md:max-h-70 lg:min-h-80 lg:max-h-80 2xl:min-h-110 2xl:max-h-110 bg-white dark:bg-gray-800 rounded-xl md:rounded-3xl lg:rounded-4xl",
+            "overflow-hidden flex items-center justify-center relative ring-background"
         )}
             style={{
                 backgroundImage: "url('/assets/images/image.png')",
