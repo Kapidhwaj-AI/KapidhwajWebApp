@@ -5,7 +5,8 @@ import { IconX, IconCheck, IconDeviceSpeaker, IconVideo, IconTreadmill, IconBoun
 import { cn } from '@/lib/utils';
 import { Switch } from '../ui/CustomeSwitch';
 
-export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+export function StreamSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+
     const [settings, setSettings] = useState({
         recordings: false,
         allMotions: false,
@@ -35,13 +36,14 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
         setSettings(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
+
     if (isOpen) {
         return (
             <div className="fixed inset-0 bg-black/20 dark:bg-white/20 flex items-center justify-center z-50">
-                <div className="bg-[var(--surface-200)] rounded-2xl w-full max-w-2xl p-6 shadow-xl">
+                <div className="bg-[var(--surface-200)] rounded-[60px] w-full max-w-2xl py-8 px-10 shadow-xl">
                     {/* Header */}
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-xl font-bold">Settings</h2>
+                    <div className="flex justify-between items-center mb-7">
+                        <h2 className="text-2xl font-light">Settings</h2>
                         <button
                             onClick={onClose}
                             className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
@@ -49,11 +51,10 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                             <IconX size={24} />
                         </button>
                     </div>
-
                     {/* Settings List */}
-                    <div className="space-y-4 mb-6">
+                    <div className="space-y-4 mb-10">
                         {/* Record All Videos */}
-                        <div className="flex justify-between items-center bg-[var(--surface-300)] p-3 rounded-3xl">
+                        <div className="flex justify-between items-center bg-[var(--surface-800)] p-4 rounded-4xl">
                             <div className='flex gap-2 items-center'>
                                 <div className='p-2 bg-[#2B4C88] rounded-2xl'>
                                     <IconVideo stroke={2} color='white' />
@@ -67,7 +68,7 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                         </div>
 
                         {/* Intrusion Detection */}
-                        <div className="flex justify-between items-center bg-[var(--surface-300)] p-3 rounded-3xl">
+                        <div className="flex justify-between items-center bg-[var(--surface-800)] p-4 rounded-4xl">
 
                             <div className='flex gap-2 items-center'>
                                 <div className='p-2 bg-[#2B4C88] rounded-2xl'>
@@ -82,7 +83,7 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                         </div>
 
                         {/* Motion Detection */}
-                        <div className="flex justify-between items-center bg-[var(--surface-300)] p-3 rounded-3xl">
+                        <div className="flex justify-between items-center bg-[var(--surface-800)] p-4 rounded-4xl">
 
                             <div className='flex gap-2 items-center'>
                                 <div className='p-2 bg-[#2B4C88] rounded-2xl'>
@@ -97,7 +98,7 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                         </div>
 
                         {/* People Detection */}
-                        <div className="flex justify-between items-center bg-[var(--surface-300)] p-3 rounded-3xl">
+                        <div className="flex justify-between items-center bg-[var(--surface-800)] p-4 rounded-4xl">
                             <div className='flex gap-2 items-center'>
                                 <div className='p-2 bg-[#2B4C88] rounded-2xl'>
                                     <IconFriends stroke={2} color='white' />
@@ -111,7 +112,7 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                         </div>
 
                         {/* Audio */}
-                        <div className="flex justify-between items-center bg-[var(--surface-300)] p-3 rounded-3xl">
+                        <div className="flex justify-between items-center bg-[var(--surface-800)] p-4 rounded-4xl">
                             <div className="flex items-center gap-2">
                                 <div className='flex gap-2 items-center'>
                                     <div className='p-2 bg-[#2B4C88] rounded-2xl'>
@@ -131,20 +132,19 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                     <div className="flex justify-end gap-3">
                         <button
                             onClick={onClose}
-                            className="flex items-center gap-2 px-4 py-2 rounded-lg border bg-[var(--surface-300)] text-gray-700 dark:text-gray-300"
+                            className="flex items-center gap-2 px-4 py-2 rounded-4xl border bg-[var(--surface-850)] text-gray-700 dark:text-gray-300"
                         >
                             <IconX size={24} /><span>Cancel</span>
                         </button>
                         <button
                             onClick={handleSave}
-                            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                            className="flex items-center gap-2 px-4 py-2 rounded-4xl bg-[#2B4C88] text-white hover:bg-blue-700"
                         >
                             <IconCheck size={24} /><span>Save</span>
                         </button>
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 }
-

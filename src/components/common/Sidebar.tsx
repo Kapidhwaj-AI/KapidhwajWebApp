@@ -59,14 +59,14 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile Sidebar Toggle Button */}
-      {isMobile && (
+      {/* {isMobile && (
         <button
           onClick={toggleSidebar}
           className="fixed top-4 left-4 z-50 p-2 rounded-full bg-[var(--surface-300)] md:hidden"
         >
           ☰
         </button>
-      )}
+      )} */}
 
       <div
         className={cn(
@@ -86,6 +86,7 @@ export default function Sidebar() {
         )}>
           <div className="w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
             <Image
+              onClick={toggleSidebar}
               src="/assets/images/logo-square.png"
               alt="Logo"
               width={98}
@@ -101,7 +102,7 @@ export default function Sidebar() {
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 flex flex-col items-center px-2 md:px-4 space-y-2 md:space-y-3">
+        <nav className="flex-1 flex flex-col items-center px-2 space-y-2 md:space-y-3">
           {menuItems.map((item) => (
             <button
               key={item.label}

@@ -7,12 +7,18 @@ import { AlertCard } from '@/components/alert/AlertCard';
 import AlertsFiltersButtonAtStream from '@/components/alert/AlertsFiltersButtonAtStream';
 import CameraStreamRecordingCard from '@/components/camera/CameraStreamRecordingCard';
 import { AlertFiltersDialogue } from '@/components/dialogue/AlertsFiltersDialogue';
+import { StreamSettingsDialogue } from '@/components/dialogue/StreamSettingsDialogue';
 
 
 function page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
     const [filterDial, setFilterDial] = useState(false);
-
+    const [settingDial, setSettingDial] = useState(false);
+    const [makeFav, setMakeFav] = useState(false);
+    // const [settingDial, setSettingDial] = useState(false);
+    const toggleStreamFav = () => {
+        setMakeFav(!makeFav)
+    };
     return (
         <div className="h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4 pt-2 md:pt-3">
             {/* Header Section */}
@@ -31,21 +37,23 @@ function page({ params }: { params: Promise<{ id: string }> }) {
                     </h1>
                 </div>
                 <div className="flex items-center flex-wrap gap-2 w-full md:w-auto justify-end">
-                    <div className={filterButtonClassname}>
-                        <IconHeart stroke={2} size={16} />
+                    <button className={filterButtonClassname}
+                        onClick={toggleStreamFav}>
+                        <IconHeart stroke={makeFav ? 0 : 1} size={24} fill={makeFav ? 'red' : 'white'} />
                         <span className="hidden sm:inline">Favourite</span>
-                    </div>
-                    <div className={filterButtonClassname}>
-                        <IconPencil stroke={2} size={16} />
+                    </button>
+                    <button className={filterButtonClassname}>
+                        <IconPencil stroke={1} size={24} />
                         <span className="hidden sm:inline">Edit</span>
-                    </div>
-                    <div className={filterButtonClassname}>
-                        <IconSettings stroke={2} size={16} />
+                    </button>
+                    <button className={filterButtonClassname}
+                        onClick={() => setSettingDial(true)} >
+                        <IconSettings stroke={1} size={24} />
                         <span className="hidden sm:inline">Settings</span>
-                    </div>
+                    </button>
                     <button className={filterButtonClassname}
                         onClick={() => setFilterDial(true)}>
-                        <IconFilter stroke={2} size={16} />
+                        <IconFilter stroke={1} size={24} />
                         <span className="hidden sm:inline">Filters</span>
                     </button>
                 </div>
@@ -85,7 +93,7 @@ function page({ params }: { params: Promise<{ id: string }> }) {
                 </div>
             </div >
             <AlertFiltersDialogue isOpen={filterDial} onClose={() => setFilterDial(false)} />
-
+            <StreamSettingsDialogue isOpen={settingDial} onClose={() => setSettingDial(false)} />
         </div >
     )
 }

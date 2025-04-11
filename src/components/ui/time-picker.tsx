@@ -15,7 +15,7 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
 
     return (
         <div className={`p-4 ${className}`}>
-            <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="flex items-center justify-center gap-4">
                 <input
                     type="time"
                     value={format(time, 'HH:mm')}
@@ -30,9 +30,9 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
                     className="bg-[var(--surface-150)] p-2 rounded-lg"
                 />
             </div>
-            <div className="flex justify-center">
+            {/* <div className="flex justify-center">
                 <Clock className="h-6 w-6 text-gray-500" />
-            </div>
+            </div> */}
         </div>
     );
 }
