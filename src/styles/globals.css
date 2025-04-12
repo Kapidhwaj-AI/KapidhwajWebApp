@@ -102,6 +102,10 @@
   --surface-700: #F6F6F6;
   --surface-800: #F0F0F0;
   --surface-850: #F1F1F1;
+  
+  
+  --surface-pink: #FFEBEB;
+  
 
 }
 
@@ -150,6 +154,7 @@
   --surface-800: #2C2C2C;
   --surface-850: #2C2C2C;
 
+  --surface-pink: #3C0000;
 
 }
 
