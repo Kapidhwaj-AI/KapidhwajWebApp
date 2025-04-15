@@ -73,8 +73,8 @@ export default function Sidebar() {
           'bg-[var(--surface-200)] flex flex-col py-4 transition-[width] duration-1000',
           'fixed md:relative z-40 h-full',
           isMobile ?
-            (shouldExpand ? 'w-64 rounded-r-2xl' : 'w-20 rounded-r-2xl') :
-            (shouldExpand ? 'w-64 rounded-4xl mx-4' : 'w-20 rounded-full mx-4'),
+            (shouldExpand ? 'w-64 rounded-r-2xl' : 'w-24 rounded-r-2xl') :
+            (shouldExpand ? 'w-64 rounded-4xl mx-4' : 'w-24 rounded-full mx-4'),
         )}
         onMouseEnter={() => !isMobile && setIsHovering(true)}
         onMouseLeave={() => !isMobile && setIsHovering(false)}
@@ -95,8 +95,8 @@ export default function Sidebar() {
             />
           </div>
           {shouldExpand && (
-            <h1 className="ml-3 font-semibold text-lg whitespace-nowrap">
-              Kapidhwaj AI
+            <h1 className="ml-3 font-semibold text-lg whitespace-nowrap overflow-hidden">
+              <span className="inline-block animate-text-slide">Kapidhwaj AI</span>
             </h1>
           )}
         </div>

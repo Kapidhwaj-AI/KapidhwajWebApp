@@ -14,7 +14,7 @@ export function SelectLanguageDialogue({ isOpen, onClose }: { isOpen: boolean; o
     if (isOpen) {
         return (
             <div className="fixed inset-0 bg-black/20 dark:bg-white/20 flex items-center justify-center z-50">
-                <div className="bg-[var(--surface-200)] rounded-2xl w-full max-w-xl p-6 shadow-xl">
+                <div className="bg-[var(--surface-200)] rounded-[69px] w-full max-w-2xl p-10 shadow-xl">
                     {/* Header */}
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-bold">Language Settings</h2>
@@ -22,7 +22,7 @@ export function SelectLanguageDialogue({ isOpen, onClose }: { isOpen: boolean; o
                             onClick={onClose}
                             className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                         >
-                            <IconX size={24} />
+                            <IconX size={24} color='red' />
                         </button>
                     </div>
 
