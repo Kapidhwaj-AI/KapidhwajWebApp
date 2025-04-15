@@ -25,10 +25,22 @@ module.exports = {
             opacity: '1'
           },
         },
+        'spin-once': {
+          'from': { 
+            transform: 'rotate(0deg)'
+          },
+          'to': { 
+            transform: 'rotate(360deg)'
+          },
+        },
       },
       animation: {
         'text-slide': 'text-slide 0.5s ease-out forwards',
+        'spin-once': 'spin-once 1s ease-in-out',
       },
+      rotate: {
+        '360': '360deg'
+      }
     },
   },
   plugins: [],
