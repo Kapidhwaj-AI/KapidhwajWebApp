@@ -37,7 +37,7 @@ export default function Home() {
           <div className="flex-1 overflow-y-auto  scrollbar-hide">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 min-h-min">
               {[0, 1, 2, 3, 4, 5].map((_, index) => (
-                <CameraStreamCard key={index} />
+                <CameraStreamCard key={index} camera={null} />
               ))}
             </div>
           </div>

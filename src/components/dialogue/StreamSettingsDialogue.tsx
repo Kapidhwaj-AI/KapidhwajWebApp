@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { IconX, IconCheck, IconDeviceSpeaker, IconVideo, IconTreadmill, IconBounceRight, IconFriends, IconHeadphones } from '@tabler/icons-react';
-import { cn } from '@/lib/utils';
 import { Switch } from '../ui/CustomeSwitch';
 
 export function StreamSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -65,6 +64,7 @@ export function StreamSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; o
                             <Switch
                                 enabled={settings.recordings}
                                 onChange={() => toggleSetting('recordings')}
+                                trackColor='bg-white'
                             />
                         </div>
 
@@ -76,9 +76,11 @@ export function StreamSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; o
                                 </div>
                                 <span>Intrusion Detection</span>
                             </div>
+
                             <Switch
                                 enabled={settings.humanIntrusion}
                                 onChange={() => toggleSetting('humanIntrusion')}
+                                trackColor='bg-white'
                             />
                         </div>
 
@@ -93,6 +95,7 @@ export function StreamSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; o
                             <Switch
                                 enabled={settings.allMotions}
                                 onChange={() => toggleSetting('allMotions')}
+                                trackColor='bg-white'
                             />
                         </div>
 
@@ -107,6 +110,7 @@ export function StreamSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; o
                             <Switch
                                 enabled={settings.faceRecognition}
                                 onChange={() => toggleSetting('faceRecognition')}
+                                trackColor='bg-white'
                             />
                         </div>
 
@@ -123,6 +127,7 @@ export function StreamSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; o
                             <Switch
                                 enabled={settings.audio}
                                 onChange={() => toggleSetting('audio')}
+                                trackColor='bg-white'
                             />
                         </div>
                     </div>

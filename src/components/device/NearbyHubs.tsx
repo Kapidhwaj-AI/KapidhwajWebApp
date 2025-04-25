@@ -1,6 +1,6 @@
 'use client';
 
-import { IconCopy, IconRouter, IconRefresh } from "@tabler/icons-react";
+import { IconCopy, IconRouter, IconRefresh, IconCopyPlus } from "@tabler/icons-react";
 import { useState } from "react";
 
 interface Hub {
@@ -52,11 +52,11 @@ export const NearbyHubs: React.FC<NearbyHubsProps> = ({ className = "" }) => {
     };
 
     return (
-        <div className={`flex flex-col bg-[var(--surface-100)] px-8 rounded-2xl md:rounded-[60px] ${className}`}>
+        <div className={`flex flex-col bg-[var(--surface-100)] px-8 rounded-2xl md:rounded-4xl ${className}`}>
             {/* Header - Fixed height */}
             <div className="flex justify-between items-center pt-4 pb-2 flex-shrink-0">
                 <div className="flex items-center gap-2">
-                    <IconRouter size={24} className="text-gray-600" />
+                    <IconRouter size={24} className="text-[var(--text-color)]" />
                     <h2 className="text-sm font-bold">Nearby Hubs</h2>
                 </div>
                 <button
@@ -77,7 +77,7 @@ export const NearbyHubs: React.FC<NearbyHubsProps> = ({ className = "" }) => {
                     {hubs.map((hub) => (
                         <div key={hub.ip} className="flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors">
                             <div className="w-10 h-10 bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
-                                <IconRouter size={20} className="text-gray-600" />
+                                <IconRouter size={20} className="text-[#888888]" />
                             </div>
                             <div className="ml-3 flex-1 min-w-0">
                                 <h3 className="text-sm font-medium truncate">{hub.name}</h3>
@@ -87,7 +87,7 @@ export const NearbyHubs: React.FC<NearbyHubsProps> = ({ className = "" }) => {
                                 onClick={() => handleCopyIP(hub.ip)}
                                 className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
                             >
-                                <IconCopy size={18} className="text-gray-600" />
+                                <IconCopyPlus size={18} className="text-gray-600" />
                             </button>
                         </div>
                     ))}

@@ -1,13 +1,15 @@
 // app/api/auth.ts
 'use server'
-import axios from 'axios';
+import api from './api';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { apiBaseUrl } from './config';
+import { handleLogout } from '@/utils/tokenManager';
+import axios from 'axios';
 
 export const handleLoginApi = async (username: string, password: string) => {
     try {
-        const response = await axios.post(`${apiBaseUrl}/signin`, {
+        const response = await api.post('/signin', {
             username,
             password,
         })
@@ -35,23 +37,31 @@ export const handleLoginApi = async (username: string, password: string) => {
         console.error('Login error:', error)
         return { success: false, error: error.message }
     }
-}// app/actions/auth.ts
+}
 
-export async function handleLogout() {
-    const token = (await cookies()).get('auth-token')?.value
-    console.log("token", token);
+export const singupUser = async (signupData: any) => {
+    try {
+        const response = await axios({
+            method: 'POST',
+            url: `${apiBaseUrl}/signup`,
+            data: {
+                name: signupData.firstName,
+                username: signupData.userName,
+                email: signupData.email,
+                phone: signupData.phone,
+                password: signupData.password,
+            },
+        });
+        console.error('Signup response:234', JSON.stringify(response.data))
 
-    await axios({
-        method: 'POST',
-        url: `${apiBaseUrl}/signout`,
-        headers: { Authorization: `Bearer ${token}` },
-    }).then(async (res) => {
-        (await cookies()).delete('auth-token')
-        console.log("logout successfully");
-
-        redirect('/login')
-    }).catch((error) => {
-        console.error('Backend logout failed:', error)
-    })
-
+        if (response.status === 200) {
+            return {
+                success: true,
+                data: response.data
+            }
+        }
+    } catch (error) {
+        console.error('Signup error:234', error)
+        return { success: false, error: error.response.data.message }
+    }
 }

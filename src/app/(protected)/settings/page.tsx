@@ -62,9 +62,9 @@ const settingsItems = [
   },
   {
     id: 7,
-    title: "Manage Access",
+    title: "Manage User",
     icon: <IconLockAccess size={40} />,
-    path: "/settings/manage-access"
+    path: "/settings/manage-users"
   }
 ];
 

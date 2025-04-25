@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { handleLogout } from '@/services/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { ThemeToggle } from './ThemeToggle';
+import { ProfileMenu } from './ProfileMenu';
 
 type SidebarTabs = "/home" | "/streams" | "/alerts" | "/favourites" | "/notifications" | "/settings";
 
@@ -30,6 +31,7 @@ export default function Sidebar() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -134,27 +136,29 @@ export default function Sidebar() {
 
         {/* Bottom Section */}
         <div className="mt-auto flex flex-col items-center space-y-2 md:space-y-3 px-2">
-          {/* Theme Toggle */}
-          <div className={cn(
-            'flex items-center',
-            shouldExpand ? 'w-full justify-start pl-3' : 'w-12 h-12 md:w-14 md:h-14 justify-center'
-          )}>
-            <ThemeToggle />
-            {/* {shouldExpand && <span className="ml-3">Theme</span>} */}
-          </div>
-
-          {/* Logout Button */}
-          <Button
-            onClick={handleLogout}
+          <button
+            onClick={() => setIsProfileMenuOpen(true)}
             className={cn(
-              'rounded-full bg-[#a50000] text-white hover:bg-[#8a0000]',
-              'transition-all duration-300',
-              shouldExpand ? 'w-full px-3 py-2 h-12' : 'w-12 h-12 md:w-14 md:h-14 p-0'
+              'relative rounded-full transition-[width] duration-1000 hover:ring-2 hover:ring-blue-500 ',
+              shouldExpand ? 'w-full flex items-center gap-3 px-3 py-2' : 'w-12 h-12 md:w-14 md:h-14'
             )}
-            variant="ghost"
           >
-            {shouldExpand ? 'Log Out' : <IconLogout2 stroke={2} size={isMobile ? 20 : 24} />}
-          </Button>
+            <Image
+              src="/assets/images/person-logo.png"
+              alt="Profile"
+              width={isMobile ? 40 : 48}
+              height={isMobile ? 40 : 48}
+              className="rounded-full object-cover"
+            />
+            {shouldExpand && (
+              <span className="text-sm text-gray-700 dark:text-gray-200">Your Profile</span>
+            )}
+          </button>
+
+          <ProfileMenu
+            isOpen={isProfileMenuOpen}
+            onClose={() => setIsProfileMenuOpen(false)}
+          />
         </div>
       </div>
     </>

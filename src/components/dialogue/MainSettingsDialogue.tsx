@@ -60,9 +60,16 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                                 </div>
                                 <span> Record All Videos</span>
                             </div>
+                            {/* <Switch
+                                key={camera.id}
+                                enabled={camera.isActive}
+                                onChange={() => handleToggleCamera(camera.id)}
+                                trackColor="bg-[#EFEFEF]"
+                            /> */}
                             <Switch
                                 enabled={settings.recordings}
                                 onChange={() => toggleSetting('recordings')}
+                                trackColor='bg-white'
                             />
                         </div>
 
@@ -77,6 +84,7 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                             <Switch
                                 enabled={settings.humanIntrusion}
                                 onChange={() => toggleSetting('humanIntrusion')}
+                                trackColor='bg-white'
                             />
                         </div>
 
@@ -91,6 +99,7 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                             <Switch
                                 enabled={settings.allMotions}
                                 onChange={() => toggleSetting('allMotions')}
+                                trackColor='bg-white'
                             />
                         </div>
 
@@ -105,6 +114,7 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                             <Switch
                                 enabled={settings.faceRecognition}
                                 onChange={() => toggleSetting('faceRecognition')}
+                                trackColor='bg-white'
                             />
                         </div>
 
@@ -121,6 +131,7 @@ export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                             <Switch
                                 enabled={settings.audio}
                                 onChange={() => toggleSetting('audio')}
+                                trackColor='bg-white'
                             />
                         </div>
                     </div>

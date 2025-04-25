@@ -1,23 +1,70 @@
 // middleware.ts
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-export function middleware(request: NextRequest) {
+import axios from 'axios';
+import { apiBaseUrl } from '@/services/config';
+
+export async function middleware(request: NextRequest) {
     const token = request.cookies.get('auth-token')?.value
     const { pathname } = request.nextUrl
 
-    // Protected routes
-    const protectedRoutes = ['/home', "/streams", "/alerts", "/favourites", "/notifications", "/settings"] // Add all protected paths
-    const authRoutes = ['/login', '/register']
+    // Authentication routes (login, register, forgot-password)
+    const authRoutes = ['/login', '/register', '/forgot-password']
 
+    // Protected routes that require authentication
+    const protectedRoutes = [
+        '/home',
+        '/streams',
+        '/alerts',
+        '/favourites',
+        '/notifications',
+        '/settings',
+        '/profile',
+        '/manage-account',
+        '/create-stream',
+        '/create-alert',
+        '/create-favourite',
+        '/create-notification',
+        '/create-setting'
+    ]
 
-    // 1. Redirect logged-in users from auth pages
+    // If user is on an auth route and has a token, redirect to home
     if (authRoutes.some(route => pathname.startsWith(route)) && token) {
         return NextResponse.redirect(new URL('/home', request.url))
     }
 
-    // 2. Protect main routes from unauthorized access
-    if (protectedRoutes.some(route => pathname.startsWith(route)) && !token) {
-        return NextResponse.redirect(new URL('/login', request.url))
+    // If user is on a protected route
+    if (protectedRoutes.some(route => pathname.startsWith(route))) {
+        // If no token, redirect to login
+        if (!token) {
+            return NextResponse.redirect(new URL('/login', request.url))
+        }
+
+        // Check token validity with backend
+        try {
+            const response = await axios({
+                method: 'GET',
+                url: `${apiBaseUrl}/user/added`,
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (response.status !== 200) {
+                // Clear cookies and redirect to login
+                const response = NextResponse.redirect(new URL('/login', request.url))
+                response.cookies.delete('auth-token')
+                response.cookies.delete('kapidhwajai-user')
+                return response
+            }
+        } catch (error: any) {
+            // If we get a 401 or 403, the token is invalid
+            if (error.response?.status === 401 || error.response?.status === 403) {
+                // Clear cookies and redirect to login
+                const response = NextResponse.redirect(new URL('/login', request.url))
+                response.cookies.delete('auth-token')
+                response.cookies.delete('kapidhwajai-user')
+                return response
+            }
+        }
     }
 
     return NextResponse.next()

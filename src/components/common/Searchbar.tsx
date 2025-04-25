@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { IconSearch } from "@tabler/icons-react";
 
-const SearchBar = ({ search, setSearch, placeholder }: { search: string; setSearch: () => void; placeholder: string; }) => {
+const SearchBar = ({ search, setSearch, placeholder }: { search: string; setSearch: (e: React.ChangeEvent<HTMLInputElement>) => void; placeholder: string; }) => {
     return (
         <div className="flex items-center bg-[var(--surface-100)] px-4 py-0.5 rounded-full">
             <IconSearch stroke={2} color="#888888" />

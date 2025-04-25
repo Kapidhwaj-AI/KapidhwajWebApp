@@ -1,0 +1,61 @@
+'use client';
+
+import { useTheme } from 'next-themes';
+import { IconMoon, IconSun, IconUser, IconLogout2 } from '@tabler/icons-react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { handleLogout } from '@/utils/tokenManager';
+
+interface ProfileMenuProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
+    const { theme, setTheme } = useTheme();
+    const router = useRouter();
+
+    const handleLogoutClick = async () => {
+        await handleLogout();
+        router.push('/login');
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div
+            className="absolute bottom-24 left-1/2 -translate-x-1/2 lg:left-[72px] lg:translate-x-0 w-48 bg-white dark:bg-gray-800 rounded-2xl shadow-lg py-2 z-50"
+            onMouseLeave={onClose}
+        >
+            <div className="px-3 py-2">
+                <button
+                    onClick={() => router.push('/settings')}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                >
+                    <div className='bg-[#7A73D1] rounded-lg p-2'>
+                        <IconUser size={18} color='white' />
+                    </div>
+                    Profile
+                </button>
+                <button
+                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                >
+                    <div className=' bg-black dark:bg-white rounded-lg p-2 text-white dark:text-black'>
+                        {theme === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
+                    </div>
+                    {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                </button>
+                <button
+                    onClick={handleLogoutClick}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[#FF6868] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors"
+                >
+                    <div className='bg-[#FF6868] rounded-lg p-2'>
+                        <IconLogout2 size={18} color='white' />
+                    </div>
+                    Logout
+                </button>
+            </div>
+        </div>
+    );
+} 

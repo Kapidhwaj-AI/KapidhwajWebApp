@@ -1,17 +1,15 @@
 "use client";
 import CameraStreamCardMedium from '@/components/camera/CameraStreamCardMedium';
 import { IconFilter, IconHeart, IconPencil, IconSettings, IconVideo } from '@tabler/icons-react'
-import Link from 'next/link'
 import React, { use, useState } from 'react'
 import { AlertCard } from '@/components/alert/AlertCard';
 import AlertsFiltersButtonAtStream from '@/components/alert/AlertsFiltersButtonAtStream';
 import CameraStreamRecordingCard from '@/components/camera/CameraStreamRecordingCard';
 import { AlertFiltersDialogue } from '@/components/dialogue/AlertsFiltersDialogue';
-import { StreamSettingsDialogue } from '@/components/dialogue/StreamSettingsDialogue';
 import { useRouter } from 'next/navigation';
 import { BackButton } from '@/components/common/BackButton';
 import { filterButtonClassname } from '@/styles/tailwind-class';
-
+import { StreamSettingsDialogue } from '@/components/dialogue/StreamSettingsDialogue';
 function page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
     const [filterDial, setFilterDial] = useState(false);

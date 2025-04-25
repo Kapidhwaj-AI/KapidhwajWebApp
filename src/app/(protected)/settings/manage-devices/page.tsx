@@ -1,11 +1,13 @@
 "use client";
 
 import { BackButton } from "@/components/common/BackButton";
-import { IconDoor, IconMapPinFilled } from "@tabler/icons-react";
+import { IconDoor, IconMapPinFilled, IconDevices, IconFolderPlus } from "@tabler/icons-react";
 import { NearbyHubs } from "@/components/device/NearbyHubs";
 import { SavedCameras } from "@/components/device/SavedCameras";
 import { SavedHubs } from "@/components/device/SavedHubs";
 import { useState } from "react";
+import { AddNewSiteDialogue } from "@/components/dialogue/AddNewSiteDialogue";
+import { AddNewFolderDialogue } from '@/components/dialogue/AddNewFolderDialogue';
 
 interface Hub {
     name: string;
@@ -14,6 +16,8 @@ interface Hub {
 
 export default function ManageDevices() {
     const [selectedHub, setSelectedHub] = useState<Hub | null>(null);
+    const [siteModalOpen, setSiteModalOpen] = useState(false);
+    const [isAddFolderModalOpen, setAddFolderModalOpen] = useState(false);
 
     const handleHubSelect = (hub: Hub) => {
         setSelectedHub(hub);
@@ -21,21 +25,25 @@ export default function ManageDevices() {
 
     return (
         <div className="h-full flex flex-col min-h-0">
-            {/* Header Section - Fixed Height */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 px-2 md:px-4 pt-2 md:pt-3 pb-7">
                 <div className="flex items-center flex-wrap gap-2">
                     <BackButton />
-                    <h1 className="sm:text-md md:text-lg lg:text-xl xl:text-2xl font-light ml-2 md:ml-5 whitespace-nowrap">
-                        Manage Devices
+                    <h1 className="sm:text-md md:text-lg lg:text-xl xl:text-2xl font-medium ml-2 md:ml-5 whitespace-nowrap">
+                        <span>Setting</span>
+                        <span className="px-5">&gt;</span>
+                        <span>Manage Devices</span>
                     </h1>
                 </div>
                 <div className="flex items-center flex-wrap gap-2 w-full md:w-auto justify-end">
-                    <button className={filterButtonClassname}>
-                        <IconMapPinFilled stroke={1} size={24} />
-                        <span className="hidden sm:inline">Manage Sites</span>
+                    <button onClick={() => setSiteModalOpen(true)} className={filterButtonClassname}>
+                        <IconMapPinFilled stroke={1} size={24} className="dark:text-white" />
+                        <span className="hidden sm:inline dark:text-white">Manage Sites</span>
                     </button>
-                    <button className={filterButtonClassname}>
-                        <IconDoor stroke={1} size={24} />
+                    <button
+                        onClick={() => setAddFolderModalOpen(true)}
+                        className={filterButtonClassname}
+                    >
+                        <IconFolderPlus stroke={1.5} size={20} />
                         <span className="hidden sm:inline">Manage Rooms</span>
                     </button>
                 </div>
@@ -58,7 +66,7 @@ export default function ManageDevices() {
 
                 {/* Right Column */}
                 <div className="flex-[4] flex flex-col min-h-0">
-                    <div className="h-full bg-[var(--surface-100)] rounded-2xl md:rounded-[60px]">
+                    <div className="h-full bg-[var(--surface-100)] rounded-2xl md:rounded-4xl">
                         {selectedHub ? (
                             <SavedCameras hub={selectedHub} />
                         ) : (
@@ -69,6 +77,14 @@ export default function ManageDevices() {
                     </div>
                 </div>
             </div>
+            <AddNewSiteDialogue
+                isOpen={siteModalOpen}
+                onClose={() => setSiteModalOpen(false)}
+            />
+            <AddNewFolderDialogue
+                isOpen={isAddFolderModalOpen}
+                onClose={() => setAddFolderModalOpen(false)}
+            />
         </div>
     );
 }

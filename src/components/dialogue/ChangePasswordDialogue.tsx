@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { IconX } from '@tabler/icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 
 export function ChangePasswordDialogue({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     const [newPassword, setNewPassword] = useState('');
@@ -63,16 +63,16 @@ export function ChangePasswordDialogue({ isOpen, onClose }: { isOpen: boolean; o
                 {/* Action Buttons - Fixed to Bottom */}
                 <div className="flex justify-end gap-4 mt-4 pt-4">
                     <button
-                        className="px-6 py-3 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
+                        className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
                         onClick={onClose}
                     >
-                        Close
+                        <span className='flex items-center gap-2 text-[#888888]'><IconX size={16} />Close</span>
                     </button>
                     <button
-                        className="px-6 py-3 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base"
+                        className="px-5 py-2 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base"
                         onClick={handleSave}
                     >
-                        Save
+                        <span className='flex items-center gap-2'><IconCheck size={16} />Save</span>
                     </button>
                 </div>
             </div>

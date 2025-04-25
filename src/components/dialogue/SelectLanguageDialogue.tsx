@@ -79,15 +79,15 @@ export function SelectLanguageDialogue({ isOpen, onClose }: { isOpen: boolean; o
                     <div className="flex justify-end gap-3">
                         <button
                             onClick={onClose}
-                            className="px-4 py-2 rounded-lg border bg-[var(--surface-300)] text-gray-700 dark:text-gray-300"
+                            className="flex items-center gap-2 px-4 py-2 rounded-4xl border bg-[var(--surface-850)] text-[#888888]"
                         >
-                            Cancel
+                            <IconX size={20} /><span>Close</span>
                         </button>
                         <button
                             onClick={handleSave}
-                            className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                            className="flex items-center gap-2 px-4 py-2 rounded-4xl bg-[#2B4C88] text-white hover:bg-blue-700"
                         >
-                            Save
+                            <IconCheck size={20} /><span>Save</span>
                         </button>
                     </div>
                 </div>

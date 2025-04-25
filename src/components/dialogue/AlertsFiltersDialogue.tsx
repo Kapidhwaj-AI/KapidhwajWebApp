@@ -153,10 +153,10 @@ export function AlertFiltersDialogue({ isOpen, onClose }: { isOpen: boolean; onC
                 {/* Action Buttons - Fixed to Bottom */}
                 <div className="flex justify-end gap-4 mt-4 pt-4">
                     <button
-                        className="px-6 py-3 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
+                        className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
                         onClick={onClose}
                     >
-                        Cancel
+                        <span className='flex items-center gap-2 text-[#888888]'><IconX size={16} />Close</span>
                     </button>
                     <button
                         className="px-6 py-3 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base"
