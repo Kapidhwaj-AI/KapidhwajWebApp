@@ -67,8 +67,8 @@ export default function Notifications() {
             <div className="col-span-full text-center text-gray-500">No notifications found</div>
           ) : (
             <>
-              {filteredNotifications.map(notification => (
-                <NotificationCard key={notification.id} notification={notification} />
+              {filteredNotifications.map((notification, index) => (
+                index < 10 && <NotificationCard key={notification.id} notification={notification} />
               ))}
               <div ref={ref} className="col-span-full h-10">
                 {isLoading && allNotifications.length > 0 && (
