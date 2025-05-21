@@ -135,12 +135,12 @@ export default function Sidebar() {
         </nav>
 
         {/* Bottom Section */}
-        <div className="mt-auto flex flex-col items-center space-y-2 md:space-y-3 px-2">
+        <div className="mt-auto flex flex-col items-center space-y-2 md:space-y-3 px-2 align-middle">
           <button
             onClick={() => setIsProfileMenuOpen(true)}
             className={cn(
               'relative rounded-full transition-[width] duration-1000 hover:ring-2 hover:ring-blue-500 ',
-              shouldExpand ? 'w-full flex items-center gap-3 px-3 py-2' : 'w-12 h-12 md:w-14 md:h-14'
+              shouldExpand ? 'w-full flex items-center gap-3 px-3 py-2' : 'w-12 h-12 md:w-14 md:h-14 flex justify-center'
             )}
           >
             <Image
@@ -148,7 +148,7 @@ export default function Sidebar() {
               alt="Profile"
               width={isMobile ? 40 : 48}
               height={isMobile ? 40 : 48}
-              className="rounded-full object-cover"
+              className="rounded-full object-cover aspect-square h-fit"
             />
             {shouldExpand && (
               <span className="text-sm text-gray-700 dark:text-gray-200">Your Profile</span>
