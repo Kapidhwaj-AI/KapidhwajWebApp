@@ -76,13 +76,14 @@ export default function ManagePeoplePage() {
             </div>
 
             {/* People Grid */}
-            <div className="scrollbar-hide grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-2 md:px-4 overflow-y-auto ">
+
+            {/* dark mode */}
+            {/* <div className="scrollbar-hide grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-2 md:px-4 overflow-y-auto ">
                 {people.map((person) => (
                     <div
                         key={person.id}
                         className="relative bg-[var(--surface-200)] rounded-3xl w-full max-w-[360px] h-[140px] group hover:bg-[var(--surface-300)] transition-colors border border-[var(--surface-300)] bg-gray-850"
                     >
-                        {/* Top-right Action Buttons */}
                         <div className="absolute right-4 top-4 flex gap-2 z-10">
                             <button className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors">
                                 <IconPencil size={16} className="text-gray-400" />
@@ -93,7 +94,6 @@ export default function ManagePeoplePage() {
                         </div>
 
                         <div className="flex h-full p-4 items-center gap-4">
-                            {/* Centered Profile Image */}
                             <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0">
                                 <Image
                                     src={person.image}
@@ -103,8 +103,6 @@ export default function ManagePeoplePage() {
                                     className="object-cover w-full h-full"
                                 />
                             </div>
-
-                            {/* Info */}
                             <div className="flex flex-col justify-center flex-1">
                                 <div className="flex items-center gap-2 mb-1">
                                     <h3 className="text-base font-semibold text-white dark:text-gray-100">{person.name}</h3>
@@ -128,10 +126,10 @@ export default function ManagePeoplePage() {
                         </div>
                     </div>
                 ))}
-            </div>
+            </div> */}
 
-
-            {/* <div className="scrollbar-hide grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 px-2 md:px-4 overflow-y-auto">
+            {/* light mode */}
+            <div className="scrollbar-hide grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 px-2 md:px-4 overflow-y-auto">
                 {people.map((person) => (
                     <div
                         key={person.id}
@@ -144,7 +142,7 @@ export default function ManagePeoplePage() {
                                     alt={person.name}
                                     width={151}
                                     height={199}
-                                    className="rounded-l-[24px] object-cover h-full w-full "
+                                    className="rounded-l-[24px] object-cover h-full w-full"
                                 />
                             </div>
 
@@ -179,7 +177,7 @@ export default function ManagePeoplePage() {
                         </div>
                     </div>
                 ))}
-            </div> */}
+            </div>
 
             {/* Add New Person Dialog */}
             <AddNewPersonDialogue
