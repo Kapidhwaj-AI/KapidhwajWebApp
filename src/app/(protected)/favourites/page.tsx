@@ -32,7 +32,7 @@ export default function Favourites() {
                     }
                 )}>
                     {[0, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map((_, index) => (
-                        <CameraStreamCard key={index} />
+                        <CameraStreamCard key={index} isFavouritesPage/>
                     ))}
                 </div>
             </div>
