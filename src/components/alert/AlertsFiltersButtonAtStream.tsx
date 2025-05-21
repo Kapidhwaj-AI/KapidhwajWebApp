@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils';
 import { IconBounceRight, IconFriends, IconTreadmill } from '@tabler/icons-react';
 import React, { useState } from 'react'
 export const tabFilters = [
+    
     { id: 0, label: "Intrusion", icon: <IconTreadmill stroke={2} /> },
     { id: 1, label: "Motion", icon: <IconBounceRight stroke={2} /> },
     { id: 2, label: "People", icon: <IconFriends stroke={2} /> },

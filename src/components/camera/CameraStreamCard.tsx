@@ -51,22 +51,25 @@ export default function CameraStreamCard({ camera, folder, orgName, isFavourites
                     Your browser does not support the video tag.
                 </video>
             )}
-            {!streamError && hasStream && (
+            {/* {!streamError && hasStream && (
                 <div className="absolute top-3 left-3 z-5">
                     <LiveBadge />
                 </div>
-            )}
+            )} */}
+            <div className="absolute top-4 left-4 z-5">
+                <LiveBadge />
+            </div>
             {
                 isFavouritesPage && (
                     <button className="absolute top-4 right-4 bg-red-600 rounded-full">
                         <svg width="35" height="35" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="19" cy="19" r="19" fill="#FF6868" />
-                            <g clip-path="url(#clip0_62_1478)">
-                                <path d="M11 14H27" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M17 18V24" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M21 18V24" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M12 14L13 26C13 26.5304 13.2107 27.0391 13.5858 27.4142C13.9609 27.7893 14.4696 28 15 28H23C23.5304 28 24.0391 27.7893 24.4142 27.4142C24.7893 27.0391 25 26.5304 25 26L26 14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M16 14V11C16 10.7348 16.1054 10.4804 16.2929 10.2929C16.4804 10.1054 16.7348 10 17 10H21C21.2652 10 21.5196 10.1054 21.7071 10.2929C21.8946 10.4804 22 10.7348 22 11V14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <g clipPath="url(#clip0_62_1478)">
+                                <path d="M11 14H27" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M17 18V24" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M21 18V24" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M12 14L13 26C13 26.5304 13.2107 27.0391 13.5858 27.4142C13.9609 27.7893 14.4696 28 15 28H23C23.5304 28 24.0391 27.7893 24.4142 27.4142C24.7893 27.0391 25 26.5304 25 26L26 14" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M16 14V11C16 10.7348 16.1054 10.4804 16.2929 10.2929C16.4804 10.1054 16.7348 10 17 10H21C21.2652 10 21.5196 10.1054 21.7071 10.2929C21.8946 10.4804 22 10.7348 22 11V14" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </g>
                             <defs>
                                 <clipPath id="clip0_62_1478">

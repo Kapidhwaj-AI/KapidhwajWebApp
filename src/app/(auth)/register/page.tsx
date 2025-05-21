@@ -65,7 +65,7 @@ export default function Register() {
     return (
         <div className="w-full bg-white rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden">
             {/* Logo Section */}
-            <div className="flex justify-center pt-2 xs:pt-2.5 sm:pt-3 md:pt-4 lg:pt-5 pb-0.5 xs:pb-1 sm:pb-1.5">
+            <div className="flex justify-center pt-2 xs:pt-2.5 sm:pt-2 md:pt-3 lg:pt-4 pb-0 xs:pb-0.5 sm:pb-1">
                 <Image
                     src="/assets/images/logo-rectangle.png"
                     alt="Kapidhwaj AI"
@@ -77,20 +77,33 @@ export default function Register() {
             </div>
 
             {/* Registration Form */}
-            <div className="px-3 xs:px-4 sm:px-5 md:px-6 lg:px-8 pb-2 xs:pb-2.5 sm:pb-3 md:pb-4">
-                <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-center mb-2 xs:mb-2.5 sm:mb-3">Register</h1>
+            <div className="px-3 xs:px-4 sm:px-5 md:px-6 lg:px-8 pb-2 xs:pb-2 sm:pb-2.5 md:pb-3">
+                <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-center mb-1 xs:mb-1.5 sm:mb-2">Create Account</h1>
                 <form onSubmit={onSubmit} className="space-y-1.5 xs:space-y-2 sm:space-y-2.5">
                     {/* First Name Field */}
-                    <div className="space-y-0.5 xs:space-y-1">
-                        <label className="block text-[11px] xs:text-xs sm:text-sm text-black dark:text-white">First Name</label>
-                        <input
-                            type="text"
-                            name="firstName"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                            placeholder="Enter your first name..."
-                            className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-xl border-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
-                        />
+                    <div className="flex justify-between gap-4">
+                        <div className="space-y-0.5 xs:space-y-1 w-full">
+                            <label className="block text-[11px] xs:text-xs sm:text-sm text-black dark:text-white">First Name</label>
+                            <input
+                                type="text"
+                                name="firstName"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                                placeholder="Enter your first name..."
+                                className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-xl border-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
+                            />
+                        </div>
+                        <div className="space-y-0.5 xs:space-y-1 w-full">
+                            <label className="block text-[11px] xs:text-xs sm:text-sm text-black dark:text-white">First Name</label>
+                            <input
+                                type="text"
+                                name="firstName"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                                placeholder="Enter your first name..."
+                                className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-xl border-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
+                            />
+                        </div>
                     </div>
 
                     {/* User Name Field */}

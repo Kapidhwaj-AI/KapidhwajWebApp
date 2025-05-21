@@ -23,7 +23,7 @@ export default function ManageUsersPage() {
     // Generate sample users
     const generateUsers = () => {
         const sampleUsers = [
-            { name: 'Randi', accessLevel: 'Full Access', userId: 'randi_001' },
+            { name: 'Ram', accessLevel: 'Full Access', userId: 'ram_001' },
             { name: 'Dhruvi', accessLevel: 'Full Access', userId: 'dhruvi_002' },
             { name: 'Nia', accessLevel: 'Edit Access', userId: 'nia2789' },
             { name: 'Audie', accessLevel: 'Full Access', userId: 'audeep_12' },
@@ -82,7 +82,17 @@ export default function ManageUsersPage() {
                         key={user.id}
                         className="bg-[var(--surface-200)] rounded-[24px] w-full max-w-[465px] h-[140px] 2xl:h-[160px] 4xl:h-[199px] relative group hover:bg-[var(--surface-300)] transition-colors border border-[var(--surface-300)]"
                     >
-                        <div className="flex h-full">
+                        {/* Top-right action buttons */}
+                        <div className="absolute top-4 2xl:top-5 4xl:top-6 right-4 2xl:right-5 4xl:right-6 flex gap-2 z-10">
+                            <button className="p-1.5 2xl:p-2 hover:bg-[var(--surface-400)] rounded-lg transition-colors">
+                                <IconPencil size={18} className="text-gray-600" />
+                            </button>
+                            <button className="p-1.5 2xl:p-2 hover:bg-[var(--surface-400)] rounded-lg transition-colors">
+                                <IconTrash size={18} className="text-[#FF6868]" />
+                            </button>
+                        </div>
+
+                        <div className="flex h-full items-center">
                             {/* Image Container */}
                             <div className="flex items-center justify-center w-[140px] 2xl:w-[160px] 4xl:w-[199px] h-full flex-shrink-0 px-4">
                                 <div className="relative w-[80px] h-[80px] 2xl:w-[90px] 2xl:h-[90px] 4xl:w-[100px] 4xl:h-[100px]">
@@ -96,18 +106,8 @@ export default function ManageUsersPage() {
                             </div>
 
                             {/* Content Container */}
-                            <div className="flex-1 py-4 2xl:py-5 4xl:py-6 pr-4 2xl:pr-5 4xl:pr-6 relative">
-                                {/* Action Buttons - Aligned with name */}
-                                <div className="absolute right-4 2xl:right-5 4xl:right-6 top-4 2xl:top-5 4xl:top-6 flex gap-2">
-                                    <button className="p-1.5 2xl:p-2 hover:bg-[var(--surface-400)] rounded-lg transition-colors">
-                                        <IconPencil size={18} className="text-gray-600" />
-                                    </button>
-                                    <button className="p-1.5 2xl:p-2 hover:bg-[var(--surface-400)] rounded-lg transition-colors">
-                                        <IconTrash size={18} className="text-[#FF6868]" />
-                                    </button>
-                                </div>
-
-                                <div className="flex flex-col gap-1 2xl:gap-2">
+                            <div className="flex-1 px-4 2xl:px-5 4xl:px-6">
+                                <div className="flex flex-col justify-center gap-1 2xl:gap-2">
                                     <h3 className="text-base 2xl:text-lg font-medium">{user.name}</h3>
                                     <div className="flex items-center gap-2">
                                         <IconLock size={14} className="2xl:w-4 2xl:h-4 text-gray-500" />
@@ -120,6 +120,7 @@ export default function ManageUsersPage() {
                             </div>
                         </div>
                     </div>
+
                 ))}
             </div>
 
