@@ -4,7 +4,7 @@ import { Notification } from '@/models/notification';
 import { getNotifications } from '@/services/notification';
 import { useEffect } from 'react';
 
-export const useNotifications = (offset: number, options?: { onSuccess: (data: Notification[]) => void }) => {
+export const    useNotifications = (offset: number, options?: { onSuccess: (data: Notification[]) => void }) => {
     console.log("useNotifications hook called with offset:", offset);
 
     const query = useQuery<Notification[]>({
@@ -24,7 +24,7 @@ export const useNotifications = (offset: number, options?: { onSuccess: (data: N
             console.log("Calling onSuccess with data:", query.data);
             options.onSuccess(query.data);
         }
-    }, [query.data, options?.onSuccess]);
+    }, [query.data]);
 
     return query;
 }; 
