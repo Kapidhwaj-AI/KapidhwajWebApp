@@ -8,7 +8,8 @@ export default function Alerts() {
   console.log("app-home-page");
 
   return (
-    <div className="h-full flex flex-col gap-4 min-h-0 p-5">
+    //temp colour changed -> bg-stone-800
+    <div className="h-full flex flex-col gap-4 min-h-0 p-5 ">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Alerts</h1>
         <div className="flex items-center gap-4">

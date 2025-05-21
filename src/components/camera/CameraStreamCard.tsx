@@ -58,8 +58,8 @@ export default function CameraStreamCard({ camera, folder, orgName }: CameraStre
                 <div className="backdrop-blur-md bg-black/30 dark:bg-gray-500/30 rounded-full py-3 px-4 shadow-lg">
                     <div className="flex justify-between items-center">
                         <div className="flex flex-col text-white ml-2">
-                            <span className="font-bold text-md">{camera?.name}</span>
-                            <span className="text-sm text-gray-300">{orgName} &gt; {folder?.name}</span>
+                            <span className="font-bold text-md">{camera?.name} trial camera name</span>
+                            <span className="text-sm text-gray-300">{orgName} trial org &gt; {folder?.name} trial folder</span>
                         </div>
                         <div className="h-14 w-14 rounded-full bg-black flex items-center justify-center">
                             <IconBorderCornerSquare className="rotate-90" color="white" stroke={4} size={15} />

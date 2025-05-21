@@ -72,12 +72,13 @@ export default function Login() {
         <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
           {/* Email/Phone Field */}
           <div className="space-y-1.5 sm:space-y-2">
-            <label className="block text-xs sm:text-sm text-black dark:text-white">Email / Phone</label>
+            <label className="block text-xs sm:text-sm text-black dark:text-white">Username</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your phone / email here..."
+              // placeholder="Enter your phone / email here..."
+              placeholder="Enter username..."
               className="w-full h-[35px] sm:h-[40px] md:h-[45px] px-3 sm:px-4 text-sm sm:text-base bg-[#F6F6F6] hover:bg-gray-100 border-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500 rounded-xl"
               // rounded-full to rounded-xl for every input
             />

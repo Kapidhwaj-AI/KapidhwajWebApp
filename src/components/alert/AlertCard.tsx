@@ -1,8 +1,8 @@
-import { IconClock, IconCalendar, IconMovie, IconTreadmill } from "@tabler/icons-react";
+import { IconClock, IconCalendar, IconMovie, IconTreadmill, IconPhoto } from "@tabler/icons-react";
 
 export function AlertCard({ alert }: { alert: any }) {
     return (
-        <div className="w-full bg-[var(--surface-200)] rounded-4xl shadow-lg overflow-hidden">
+        <div className="w-full bg-[var(--surface-200)] rounded-4xl shadow-lg overflow-hidden pb-2 bg-stone-800">
             {/* Header */}
             <div className="flex justify-between items-center px-4 pt-4">
                 <div className="flex items-center gap-3">
@@ -28,18 +28,73 @@ export function AlertCard({ alert }: { alert: any }) {
             </div>
 
             {/* Image Area */}
-            <div className="relative aspect-video m-4 rounded-xl flex items-center justify-center"
+            {/* <div className="multipleimages flex justify-center">
+                <div className="relative aspect-video m-1 rounded-xl flex items-center justify-center "
+                    style={{
+                        backgroundImage: "url('/assets/images/alert-image.png')",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center"
+                    }}>
+
+                    Center Circle Icon
+                    <div className="absolute h-16 w-16 rounded-full backdrop-blur-sm flex items-center justify-center">
+                        <IconPhoto stroke={2} className="text-gray-600 dark:text-gray-300" size={24} />
+                    </div>
+                </div>
+                <div className="relative aspect-video m-1 rounded-xl flex items-center justify-center "
+                    style={{
+                        backgroundImage: "url('/assets/images/alert-image.png')",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center"
+                    }}>
+
+                    Center Circle Icon
+                    <div className="absolute h-16 w-16 rounded-full backdrop-blur-sm flex items-center justify-center">
+                        <IconMovie stroke={2} className="text-gray-600 dark:text-gray-300" size={24} />
+                    </div>
+                </div>
+            </div> */}
+
+            <div className="flex gap-3 p-3">
+                {/* Image preview */}
+                <div
+                    className="relative aspect-video w-1/2 h-20 sm:h-25 md:h-30 rounded-xl bg-cover bg-center overflow-hidden"
+                    style={{
+                        backgroundImage: "url('/assets/images/alert-image.png')"
+                    }}
+                >
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="h-12 w-12 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center">
+                            <IconPhoto className="text-white" size={20} />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Video preview */}
+                <div
+                    className="relative aspect-video w-1/2 h-20 sm:h-25 md:h-30 rounded-xl bg-cover bg-center overflow-hidden"
+                    style={{
+                        backgroundImage: "url('/assets/images/alert-image.png')"
+                    }}
+                >
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="h-12 w-12 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center">
+                            <IconMovie className="text-white" size={20} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* <div className="relative aspect-video m-4 rounded-xl flex items-center justify-center"
                 style={{
                     backgroundImage: "url('/assets/images/alert-image.png')",
                     backgroundSize: "cover",
                     backgroundPosition: "center"
                 }}>
 
-                {/* Center Circle Icon */}
                 <div className="absolute h-16 w-16 rounded-full backdrop-blur-sm flex items-center justify-center">
                     <IconMovie stroke={2} className="text-gray-600 dark:text-gray-300" size={24} />
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }
