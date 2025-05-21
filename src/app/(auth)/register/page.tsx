@@ -82,66 +82,66 @@ export default function Register() {
                 <form onSubmit={onSubmit} className="space-y-1.5 xs:space-y-2 sm:space-y-2.5">
                     {/* First Name Field */}
                     <div className="space-y-0.5 xs:space-y-1">
-                        <label className="block text-[11px] xs:text-xs sm:text-sm">First Name</label>
+                        <label className="block text-[11px] xs:text-xs sm:text-sm text-black dark:text-white">First Name</label>
                         <input
                             type="text"
                             name="firstName"
                             value={formData.firstName}
                             onChange={handleChange}
                             placeholder="Enter your first name..."
-                            className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-xl border-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
                         />
                     </div>
 
                     {/* User Name Field */}
                     <div className="space-y-0.5 xs:space-y-1">
-                        <label className="block text-[11px] xs:text-xs sm:text-sm">User Name</label>
+                        <label className="block text-[11px] xs:text-xs sm:text-sm text-black dark:text-white">User Name</label>
                         <input
                             type="text"
                             name="userName"
                             value={formData.userName}
                             onChange={handleChange}
                             placeholder="Enter your last name..."
-                            className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-xl border-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
                         />
                     </div>
 
                     {/* Phone Field */}
                     <div className="space-y-0.5 xs:space-y-1">
-                        <label className="block text-[11px] xs:text-xs sm:text-sm">Phone</label>
+                        <label className="block text-[11px] xs:text-xs sm:text-sm text-black dark:text-white">Phone</label>
                         <input
                             type="tel"
                             name="phone"
                             value={formData.phone}
                             onChange={handleChange}
                             placeholder="Enter your phone number..."
-                            className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-xl border-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
                         />
                     </div>
 
                     {/* Email Field */}
                     <div className="space-y-0.5 xs:space-y-1">
-                        <label className="block text-[11px] xs:text-xs sm:text-sm">Email</label>
+                        <label className="block text-[11px] xs:text-xs sm:text-sm text-black dark:text-white">Email</label>
                         <input
                             type="email"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="Enter your email..."
-                            className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-xl border-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
                         />
                     </div>
 
                     {/* Password Field */}
                     <div className="space-y-0.5 xs:space-y-1">
-                        <label className="block text-[11px] xs:text-xs sm:text-sm">Password</label>
+                        <label className="block text-[11px] xs:text-xs sm:text-sm text-black dark:text-white">Password</label>
                         <input
                             type="password"
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="Enter password..."
-                            className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] px-2.5 xs:px-3 sm:px-3.5 text-xs xs:text-sm bg-[#F6F6F6] hover:bg-gray-100 rounded-xl border-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
                         />
                     </div>
 
@@ -156,26 +156,40 @@ export default function Register() {
                     <button
                         disabled={isLoading}
                         onClick={handleRegister}
-                        className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] bg-[#2B4C88] hover:bg-blue-700 text-white text-xs xs:text-sm rounded-full transition-colors"
+                        className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] bg-[#2B4C88] hover:bg-blue-700 text-white text-xs xs:text-sm rounded-xl transition-colors"
                     >
                         Register
                     </button>
 
                     {/* OR Divider */}
-                    <div className="relative py-1 xs:py-1.5 sm:py-2">
+                    {/* <div className="relative py-1 xs:py-1.5 sm:py-2">
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-full border-t border-gray-200"></div>
                         </div>
                         <div className="relative flex justify-center">
-                            <span className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 flex items-center justify-center text-[10px] xs:text-xs sm:text-sm text-gray-500 bg-[#F6F6F6] rounded-full">OR</span>
+                            <span className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 flex items-center justify-center text-[10px] xs:text-xs sm:text-sm text-gray-500 bg-[#F6F6F6] rounded-full p-4 md:p-5 mx-14">OR</span>
                         </div>
+                    </div> */}
+
+                    {/* OR Divider */}
+                    <div className="flex items-center justify-between py-2">
+                        {/* Left Line */}
+                        <div className="flex-grow border-t border-gray-200 "></div>
+
+                        {/* OR Circle */}
+                        <div className="relative flex justify-center">
+                            <span className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 flex items-center justify-center text-[10px] xs:text-xs sm:text-sm text-gray-500 bg-[#F6F6F6] rounded-full p-4 md:p-5 mx-5 md:mx-7">OR</span>
+                        </div>
+
+                        {/* Right Line */}
+                        <div className="flex-grow border-t border-gray-200"></div>
                     </div>
 
                     {/* Sign In Button */}
                     <button
                         type="button"
                         onClick={() => router.push('/login')}
-                        className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] bg-[#F6F6F6] hover:bg-gray-100 text-gray-700 text-xs xs:text-sm rounded-full transition-colors"
+                        className="w-full h-[28px] xs:h-[30px] sm:h-[32px] md:h-[35px] lg:h-[38px] bg-[#F6F6F6] hover:bg-gray-100 text-gray-700 text-xs xs:text-sm rounded-xl transition-colors"
                     >
                         Sign In
                     </button>
