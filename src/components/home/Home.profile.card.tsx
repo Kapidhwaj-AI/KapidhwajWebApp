@@ -1,15 +1,14 @@
-import { User } from "@/models/user";
-import { cookies } from "next/headers";
 import Image from "next/image";
-import React from "react";
 
-async function HomeProfileCard() {
-  const cookieStore = await cookies();
-  const userFromCookies = cookieStore.get("kapidhwajai-user").value;
-  const user: User = JSON.parse(userFromCookies);
-  const imagePath = `https://storage.googleapis.com/kph-ml/${user.profile_image}`;
-  console.log("user finally coming ", user);
-
+export const HomeProfileCard = ({
+  imagePath,
+  name,
+  devices,
+}: {
+  imagePath: string;
+  name: string;
+  devices: number;
+}) => {
   return (
     <div className="flex items-center gap-3">
       {/* Circular Profile Image */}
@@ -32,13 +31,13 @@ async function HomeProfileCard() {
             className="text-md font-bold text-white leading-[100%]"
             style={{ fontWeight: 700 }}
           >
-            Hi, {user.name}
+            Hi, {name}
           </h1>
-          <p className="text-xs text-white mt-0.5">1 devices active</p>
+          <p className="text-xs text-white mt-0.5">
+            {devices.toString()} devices active
+          </p>
         </div>
       </div>
     </div>
   );
-}
-
-export default HomeProfileCard;
+};
