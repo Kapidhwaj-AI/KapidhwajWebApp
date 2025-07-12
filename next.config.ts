@@ -22,6 +22,16 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.hindustantimes.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'wallsdesk.com',
+        pathname: '/**',
+      }
     ],
   },
   experimental: {
@@ -73,17 +83,18 @@ const nextConfig: NextConfig = {
     }
     return config
   },
+
   /* config options here */
   devIndicators: false,
   // Add support for video streaming
-  /* async rewrites() { // Remove or comment out the rewrites section
+  async rewrites() { // Remove or comment out the rewrites section
     return [
       {
         source: '/video/:path*',
         destination: 'https://media.kapidhwaj.ai:9889/:path*',
       },
     ]
-  }, */
+  },
 };
 
 export default nextConfig;

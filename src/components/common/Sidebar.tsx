@@ -1,12 +1,14 @@
+'use client'
 import React, { ReactElement, useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { IconBellRinging, IconFolderStar, IconLogout2, IconSettings2, IconShareplay, IconSmartHome, IconUrgent } from '@tabler/icons-react';
 import Image from 'next/image';
 import { Button } from '../ui/button';
-import { handleLogout } from '@/services/auth';
+// import { handleLogout } from '@/services/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { ThemeToggle } from './ThemeToggle';
 import { ProfileMenu } from './ProfileMenu';
+import Link from 'next/link';
 
 type SidebarTabs = "/home" | "/streams" | "/alerts" | "/favourites" | "/notifications" | "/settings";
 
@@ -46,10 +48,7 @@ export default function Sidebar() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleChangeTab = (path: SidebarTabs) => {
-    router.push(path);
-    if (isMobile) setIsExpanded(false);
-  };
+
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
@@ -106,9 +105,10 @@ export default function Sidebar() {
         {/* Navigation Items */}
         <nav className="flex-1 flex flex-col items-center px-2 space-y-2 md:space-y-3">
           {menuItems.map((item) => (
-            <button
+            <Link
+              onClick={() => { if (isMobile) setIsExpanded(false) }}
               key={item.label}
-              onClick={() => handleChangeTab(item.path)}
+              href={item.path}
               className={cn(
                 'flex items-center rounded-full transition-all duration-300',
                 'hover:text-gray-900 dark:hover:text-gray-100',
@@ -130,7 +130,7 @@ export default function Sidebar() {
                   {item.label}
                 </span>
               )}
-            </button>
+            </Link>
           ))}
         </nav>
 

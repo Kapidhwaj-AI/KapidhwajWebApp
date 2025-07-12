@@ -1,4 +1,4 @@
-import { InputField } from "./ui/Input.field";
+import { InputField } from "../ui/Input.field";
 
 export const LoginForm = ({
   onSubmit,
@@ -10,6 +10,9 @@ export const LoginForm = ({
   setUsername,
   password,
   setPassword,
+  setShowPassword,
+  showPassword,
+  forgotPasswordAction
 }: {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
@@ -20,6 +23,9 @@ export const LoginForm = ({
   setUsername: (username: string) => void;
   password: string;
   setPassword: (password: string) => void;
+  setShowPassword: (value: boolean) => void;
+  showPassword: boolean
+  forgotPasswordAction: () => void
 }) => {
   return (
     <div className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8">
@@ -42,9 +48,11 @@ export const LoginForm = ({
           placeholder="Enter password here..."
           isPasswordField
           showForgotPasswordLabel
-          forgotPasswordAction={() => {}}
+          forgotPasswordAction={forgotPasswordAction}
           value={password}
           setValue={setPassword}
+          setShowPassword={setShowPassword}
+          showPassword={showPassword}
         />
 
         {/* Error Message */}

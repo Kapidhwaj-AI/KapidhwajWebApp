@@ -1,9 +1,13 @@
 "use client";
 
+import { removeLocalStorageItem } from "@/lib/storage";
+import { clearAuthToken } from "@/redux/slices/authSlice";
+import { AppDispatch } from "@/redux/store";
 import { IconMoon, IconSun, IconUser, IconLogout2 } from "@tabler/icons-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 // import { handleLogout } from '@/utils/tokenManager';
 
@@ -15,9 +19,12 @@ interface ProfileMenuProps {
 export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
-
+  const dispatch = useDispatch <AppDispatch>()
   const handleLogoutClick = async () => {
     // await handleLogout();
+    removeLocalStorageItem('user')
+    removeLocalStorageItem('kapi-token')
+    dispatch(clearAuthToken())
     router.push("/login");
   };
 

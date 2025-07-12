@@ -1,18 +1,33 @@
 "use client";
 
 import { CameraHomeView } from "@/components/camera/Camera.home.view";
-import axios from "axios";
+import { protectApi } from "@/lib/protectApi";
+import { Camera } from "@/models/camera";
 import React, { useEffect, useState } from "react";
 
-export const CameraHomeViewController = () => {
-  const [cameras, setCameras] = useState([]);
+export const CameraHomeViewController = ({
+
+}: {
+  }) => {
+  const [cameras, setCameras] = useState<Camera[]>([]);
 
   useEffect(() => {
     const fetchCameras = async () => {
-      const res = await axios({ method: "GET", url: "/api/camera" });
-      const data = res.data;
 
-      setCameras(data.data.cameras);
+      console.log('camera')
+      try {
+        const res = await protectApi('/camera');
+        const data = res.data.data;
+        const cleanedCameras = data.cameras.map((cam: any) => cam.camera);
+        setCameras(cleanedCameras);
+      } catch (error) {
+        console.error("Error fetching camera", error);
+
+      }
+      finally {
+
+      }
+
     };
 
     fetchCameras();

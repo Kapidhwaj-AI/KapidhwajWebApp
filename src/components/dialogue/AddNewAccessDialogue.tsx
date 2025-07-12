@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { IconX, IconCheck, IconPlus, IconPencil, IconTrash, IconCrown } from '@tabler/icons-react';
+import Modal from '../ui/Modal';
 
 interface AddNewAccessDialogueProps {
     isOpen: boolean;
@@ -44,20 +45,7 @@ export function AddNewAccessDialogue({ isOpen, onClose }: AddNewAccessDialoguePr
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/20 dark:bg-white/20 flex items-center justify-center z-50">
-            <div className="bg-[var(--surface-200)] rounded-[50px] w-[95%] lg:w-2xl max-w-[600px] max-h-[97vh] px-10 pt-5 pb-4 shadow-xl flex flex-col">
-                {/* Header */}
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-medium">Add New Access</h2>
-                    <button
-                        onClick={onClose}
-                        className="text-gray-500 hover:text-gray-700 p-1.5 rounded-full hover:bg-[var(--surface-150)]"
-                    >
-                        <IconX size={20} color='red' />
-                    </button>
-                </div>
-
-                {/* Content Area */}
+        <Modal onClose={onClose} title='Add New Access'>
                 <div className="flex-1 overflow-y-auto scrollbar-hide">
                     {/* Name Field */}
                     <div className="mb-6">
@@ -154,7 +142,6 @@ export function AddNewAccessDialogue({ isOpen, onClose }: AddNewAccessDialoguePr
                         <span className='flex items-center gap-2'><IconCheck size={16} />Save</span>
                     </button>
                 </div>
-            </div>
-        </div>
+       </Modal>
     );
 } 

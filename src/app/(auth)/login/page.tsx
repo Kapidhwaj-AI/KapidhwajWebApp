@@ -1,4 +1,4 @@
-import { LoginFormController } from "@/controllers/Login.form.controller";
+import { LoginFormController } from "@/controllers/auth/Login.form.controller";
 
 const Login = () => {
   return (

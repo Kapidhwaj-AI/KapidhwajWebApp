@@ -26,14 +26,11 @@ export default function ManageDevices() {
     return (
         <div className="h-full flex flex-col min-h-0">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 px-2 md:px-4 pt-2 md:pt-3 pb-7">
-                <div className="flex items-center flex-wrap gap-2">
-                    <BackButton />
-                    <h1 className="sm:text-md md:text-lg lg:text-xl xl:text-2xl font-medium ml-2 md:ml-5 whitespace-nowrap">
-                        <span>Setting</span>
-                        <span className="px-5">&gt;</span>
-                        <span>Manage Devices</span>
+               
+                    <h1 className="sm:text-md md:text-lg lg:text-xl xl:text-2xl font-bold ml-2 md:ml-5 whitespace-nowrap">
+                        Manage Devices
                     </h1>
-                </div>
+                
                 <div className="flex items-center flex-wrap gap-2 w-full md:w-auto justify-end">
                     <button onClick={() => setSiteModalOpen(true)} className={filterButtonClassname}>
                         <IconMapPinFilled stroke={1} size={24} className="dark:text-white" />

@@ -5,7 +5,7 @@ import React from "react";
 
 async function HomeProfileCard() {
   const cookieStore = await cookies();
-  const userFromCookies = cookieStore.get("kapidhwajai-user").value;
+  const userFromCookies = cookieStore.get("kapidhwajai-user")?.value;
   const user: User = JSON.parse(userFromCookies);
   const imagePath = `https://storage.googleapis.com/kph-ml/${user.profile_image}`;
   console.log("user finally coming ", user);

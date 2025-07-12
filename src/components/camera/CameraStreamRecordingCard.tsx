@@ -4,9 +4,9 @@ import LiveBadge from "./LiveBadge";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import { RecordedClip } from "@/models/clip";
 
-export default function CameraStreamRecordingCard() {
-    const cameraDetailView = useSelector((state: RootState) => state.camera.cameraDetailView);
+export default function CameraStreamRecordingCard({ recording }: { recording: RecordedClip }) {
 
     return (
         <div
@@ -15,14 +15,16 @@ export default function CameraStreamRecordingCard() {
                 "overflow-hidden flex items-center justify-center relative group",
                 "transition-all duration-300 hover:shadow-xl hover:scale-[1.01]"
             )}
-            style={{
-                backgroundImage: "url('/assets/images/image.png')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat"
-            }}
+
         >
-            {/* Play Button (scales with screen size) */}
+            <video src={recording.recorded_path}
+                controls
+                autoPlay
+                muted
+                playsInline
+                className="w-[100%] h-[100%] rounded-4xl">
+
+            </video>
             <div className={cn(
                 "absolute h-12 w-12 md:h-14 md:w-14 lg:h-16 lg:w-16 rounded-full",
                 "backdrop-blur-sm flex items-center justify-center",

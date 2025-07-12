@@ -3,6 +3,7 @@ import "../styles/globals.css";
 import { jakarta } from "@/lib/fonts";
 import { Providers } from "@/providers/Providers";
 
+
 export const metadata: Metadata = {
   title: "Kapidhwaj AI",
   description: "",
@@ -13,6 +14,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  
+
   return (
     <html lang="en" suppressHydrationWarning>
       {/* suppressHydrationWarning */}

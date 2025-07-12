@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { cookies } from 'next/headers';
 import { apiBaseUrl } from '@/services/config';
+import { getLocalStorageItem } from '@/lib/storage';
 
 interface ApiResponse<T> {
     data: T;
@@ -9,14 +10,10 @@ interface ApiResponse<T> {
     message?: string;
 }
 
-const getToken = async () => {
-    const token = (await cookies()).get('auth-token')?.value;
-    if (!token) throw new Error('No token found');
-    return token;
-}
+const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
 
 export async function getOrganizations(organizationId?: string) {
-    const token = await getToken();
+
     try {
         const response = await axios<ApiResponse<any>>({
             method: 'GET',

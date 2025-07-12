@@ -1,9 +1,11 @@
-import { InputField } from "./ui/Input.field";
+import { InputField } from "../ui/Input.field";
 import React from "react";
 
 export const RegisterForm = ({
-  name,
-  setName,
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
   username,
   setUsername,
   phone,
@@ -17,9 +19,13 @@ export const RegisterForm = ({
   isError,
   error,
   redirectLogin,
+  setShowPassword,
+  showPassword
 }: {
-  name: string;
-  setName: (name: string) => void;
+  firstName: string;
+  setFirstName: (name: string) => void;
+  lastName: string;
+  setLastName: (name: string) => void;
   username: string;
   setUsername: (username: string) => void;
   phone: string;
@@ -33,11 +39,13 @@ export const RegisterForm = ({
   isError: boolean;
   error: string;
   redirectLogin: () => void;
+  showPassword: boolean;
+  setShowPassword: (value: boolean) => void;
 }) => {
   return (
     <div className="px-3 xs:px-4 sm:px-5 md:px-6 lg:px-8 pb-2 xs:pb-2.5 sm:pb-3 md:pb-4">
       <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-center mb-2 xs:mb-2.5 sm:mb-3 text-black">
-        Register
+        Create Account
       </h1>
 
       <form
@@ -45,13 +53,23 @@ export const RegisterForm = ({
         className="space-y-1.5 xs:space-y-2 sm:space-y-2.5"
       >
         {/* Name Field */}
-        <InputField
-          label="Name"
-          placeholder="Enter your name..."
-          value={name}
-          setValue={setName}
-          required
-        />
+        <div className="flex justify-between gap-4">
+          <InputField
+            label="First Name"
+            placeholder="Enter your first name..."
+            value={firstName}
+            setValue={setFirstName}
+            required
+          />
+
+          <InputField
+            label="Last Name"
+            placeholder="Enter your last name..."
+            value={lastName}
+            setValue={setLastName}
+            required
+          />
+        </div>
 
         {/* Username Field */}
         <InputField
@@ -88,6 +106,8 @@ export const RegisterForm = ({
           showForgotPasswordLabel={false}
           value={password}
           setValue={setPassword}
+          setShowPassword={setShowPassword}
+          showPassword={showPassword}
           required
         />
 

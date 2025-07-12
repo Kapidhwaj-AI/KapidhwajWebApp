@@ -1,6 +1,6 @@
 "use client";
 
-import { RegisterFormController } from "@/controllers/Register.form.controller";
+import { RegisterFormController } from "@/controllers/auth/Register.form.controller";
 
 export default function Register() {
   return (

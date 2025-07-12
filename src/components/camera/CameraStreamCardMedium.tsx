@@ -1,5 +1,6 @@
 "use client";
 
+import { Camera } from "@/models/camera";
 import LiveBadge from "./LiveBadge";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
@@ -10,10 +11,7 @@ import {
 } from "@tabler/icons-react";
 import { useSelector } from "react-redux";
 
-export default function CameraStreamCardMedium() {
-  const cameraDetailView = useSelector(
-    (state: RootState) => state.camera.cameraDetailView
-  );
+export default function CameraStreamCardMedium({camera}:{camera?:Camera}) {
 
   return (
     <div
@@ -21,21 +19,25 @@ export default function CameraStreamCardMedium() {
         "h-48 sm:h-64 md:min-h-70 md:max-h-70 lg:min-h-80 lg:max-h-80 2xl:min-h-110 2xl:max-h-110 bg-white dark:bg-gray-800 rounded-xl md:rounded-3xl lg:rounded-4xl",
         "overflow-hidden flex items-center justify-center relative ring-background"
       )}
-      style={{
-        backgroundImage: "url('/assets/images/image.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
     >
-      {/* Live Badge - Top Left */}
+      <video
+        src={camera?.webrtc_url}
+        controls
+        autoPlay
+        muted
+        playsInline
+        className="w-[100%] h-[100%] rounded-4xl"
+      >
+        Your browser does not support the video tag.
+      </video>
       <div className="absolute top-2 left-2 md:top-3 md:left-3">
         <LiveBadge />
       </div>
 
       <div
         className={cn(
-          "w-full px-2 md:px-4 pb-2 md:pb-4 absolute bottom-0",
-          cameraDetailView === "overview" && "hidden"
+          "w-full px-2 md:px-4 pb-2 md:pb-4 absolute bottom-0"
+         
         )}
       >
         <div className="backdrop-blur-md bg-black/30 dark:bg-gray-500/30 rounded-full py-1 md:py-3 px-2 md:px-4 shadow-lg">
@@ -44,7 +46,7 @@ export default function CameraStreamCardMedium() {
             <div className="flex flex-col text-white ml-1 md:ml-2">
               <span className="font-bold text-sm md:text-md">Main Office</span>
               <span className="text-xs md:text-sm text-gray-300">
-                HQ &gt; Frontside
+                {camera?.organization?.name} {">"} {camera?.name}
               </span>
             </div>
 

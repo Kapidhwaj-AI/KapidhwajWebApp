@@ -1,9 +1,10 @@
 "use client";
 
-import { LoginForm } from "@/components/Login.form";
+import { LoginForm } from "@/components/auth/Login.form";
+import { setLocalStorageItem } from "@/lib/storage";
 import { setAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
-import { LOCALSTORAGE_KEY } from "@/services/config";
+import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -13,10 +14,12 @@ export const LoginFormController = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
-
+  const [showPassword, setShowPassword] = useState<boolean>(false)
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-
+  const forgotPasswordAction = () => {
+    router.push("/forgot-password")
+  }
   const handleRegisterRedirect = () => {
     router.push("/register");
   };
@@ -38,12 +41,12 @@ export const LoginFormController = () => {
       const key = emailRegex.test(username)
         ? "email"
         : phoneRegex.test(username)
-        ? "phone"
-        : "username";
+          ? "phone"
+          : "username";
 
       const res = await axios({
         method: "POST",
-        url: "/api/login",
+        url: `${apiBaseUrl}/signin`,
         data: {
           [key]: username,
           password,
@@ -51,18 +54,12 @@ export const LoginFormController = () => {
       });
 
       if (res.status === 200) {
-        // const expiresAt = new Date();
-        // expiresAt.setDate(expiresAt.getDate() + 7);
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + 7);
 
-        // localStorage.setItem(
-        //   LOCALSTORAGE_KEY,
-        //   JSON.stringify({
-        //     token: res.data.token,
-        //     expiresAt: expiresAt.toISOString(),
-        //   })
-        // );
-
-        // dispatch(setAuthToken(res.data.token));
+        setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.token, expiresAt: expiresAt.toISOString() }))
+        setLocalStorageItem('user', JSON.stringify({ name: res.data.data.name, email: res.data.data.email, username: res.data.data.username }))
+        dispatch(setAuthToken(res.data.token));
 
         router.replace("/home");
       }
@@ -92,6 +89,9 @@ export const LoginFormController = () => {
       setUsername={setUsername}
       password={password}
       setPassword={setPassword}
+      setShowPassword={setShowPassword}
+      showPassword={showPassword}
+      forgotPasswordAction={forgotPasswordAction}
     />
   );
 };

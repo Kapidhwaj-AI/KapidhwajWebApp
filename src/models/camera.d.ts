@@ -7,6 +7,7 @@ import { Hub } from './hub';
 export interface Camera {
   camera_id: number;
   name: string;
+  folder_id?: number | null
   physical_address: string;
   isRegistered: number;
   site_id: number;
@@ -15,11 +16,13 @@ export interface Camera {
   uri?: any;
   rtsp_url?: string;
   webrtc_url: string;
-  isRecord: number;
+  is_record: number;
   is_fav: number;
-  isAiStreamActive: number;
+  is_ai_stream_active: number;
   is_people_count_active: number;
   is_intrusion_active: number;
+  is_motion_event_active: number;
+  is_license_plate_detection_active: number;
   organization_id?: number;
   room?: Room;
   site?: Site;
@@ -40,3 +43,4 @@ export interface CameraLocation {
   parantFolderId: any;
   organization: string;
 }
+//camera/cam-details?cam-id

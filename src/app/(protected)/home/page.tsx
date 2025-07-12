@@ -1,19 +1,33 @@
+'use client'
 import { AlertCard } from "@/components/alert/AlertCard";
 import CameraStreamCard from "@/components/camera/CameraStreamCard";
+import Spinner from "@/components/ui/Spinner";
+import AlertsHomeViewController from "@/controllers/alerts/Alerts.home.view.controller";
 import { CameraHomeViewController } from "@/controllers/camera/Camera.home.view.controller";
 import { HomeProfileCardController } from "@/controllers/home/Home.profile.card.controller";
 import { NotificationBadgeController } from "@/controllers/ui/Notification.badge.controller";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [loading, setLoading] = useState(true)
+  const [loadCount, setLoadCount] = useState(0);
+
+  const incrementLoad = () => setLoadCount(prev => prev - 1)
+  const decrementLoad = () => setLoadCount((prev) => prev - 1);
+  useEffect(() => {
+    if (loadCount === 0) setLoading(false);
+  }, [loadCount]);
+  console.log(loadCount, loading)
+
+  if (loading) return <Spinner />;
   return (
     <div className="h-full flex flex-col gap-4 min-h-0">
       <div className="flex items-center justify-between px-4">
-        {/* Profile Card - Positioned top-left */}
         <HomeProfileCardController />
 
         <div className="relative">
-          <NotificationBadgeController />
+          <NotificationBadgeController  />
         </div>
       </div>
 
@@ -31,21 +45,7 @@ export default function Home() {
               <span className="text-md leading-none">&gt;</span>
             </Link>
           </div>
-
-          {/* <div className="flex-1 overflow-y-auto  scrollbar-hide">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 min-h-min">
-              {[0, 1, 2, 3, 4, 5].map((_, index) => (
-                <CameraStreamCard
-                  key={index}
-                  camera={null}
-                  folder={null}
-                  orgName={""}
-                />
-              ))}
-            </div>
-          </div> */}
-
-          <CameraHomeViewController />
+          <CameraHomeViewController  />
         </div>
 
         {/* 2/7 of available width */}
@@ -60,13 +60,7 @@ export default function Home() {
               <span className="text-md leading-none">&gt;</span>
             </Link>
           </div>
-          <div className="flex-1 overflow-y-auto  scrollbar-hide">
-            <div className="grid grid-cols-1 gap-6 min-h-min">
-              {[0, 1, 2, 3, 4, 5].map((_, index) => (
-                <AlertCard alert={""} key={index} />
-              ))}
-            </div>
-          </div>
+          <AlertsHomeViewController onStart={incrementLoad} onFinish={decrementLoad} />
         </div>
       </div>
     </div>

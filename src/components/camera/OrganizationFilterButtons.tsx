@@ -2,24 +2,29 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useOrganizations } from "@/hooks/useOrganizations";
-import { Organization } from "@/models/organization";
+import { Folders, Organization } from "@/models/organization";
 
 interface OrganizationFilterButtonsProps {
-    organizations: Organization[];
+    organizations?: Organization[];
+    folders?: Folders[]
+    childFolders?: Folders[]
     isLoading: boolean;
-    onOrganizationSelect: (organization: Organization) => void;
+    onOrganizationSelect?: (organization: Organization) => void;
+    onSelectedFolder?:(data:Folders) => void
+    onSelectedChild?:(data:Folders)=> void
 }
 
-const OrganizationFilterButtons = ({ organizations, isLoading, onOrganizationSelect }: OrganizationFilterButtonsProps) => {
-    const [selected, setSelected] = useState<string>("");
+const OrganizationFilterButtons = ({ organizations, folders, isLoading, onOrganizationSelect, onSelectedFolder, childFolders, onSelectedChild }: OrganizationFilterButtonsProps) => {
+    const [selected, setSelected] = useState<string| number| null>(null);
     // const { data: organizations, isLoading } = useOrganizations();
-
+    console.log(folders, childFolders)
     useEffect(() => {
-        if (organizations && organizations.length > 0 && !selected) {
+        if (organizations && organizations.length > 0 && !selected && onOrganizationSelect) {
             const firstOrg = organizations[0];
             setSelected(firstOrg.id);
             onOrganizationSelect(firstOrg);
         }
+        
     }, [organizations]);
 
     if (isLoading) {
@@ -27,8 +32,8 @@ const OrganizationFilterButtons = ({ organizations, isLoading, onOrganizationSel
     }
 
     return (
-        <div className="w-full xl:max-w-250 lg:max-w-200 md:max-w-150 sm:max-w-100 pb-2">
-            <div className="flex overflow-x-auto gap-2 scrollbar-hide">
+        <div className="w-full xl:max-w-250 lg:max-w-200 md:max-w-150 sm:max-w-100 ">
+            <div className="flex items-center overflow-x-auto overflow-visible gap-2 py-3 scrollbar-hide">
                 {organizations?.map((org) => (
                     <Button
                         key={org.id}
@@ -39,10 +44,42 @@ const OrganizationFilterButtons = ({ organizations, isLoading, onOrganizationSel
                             }`}
                         onClick={() => {
                             setSelected(org.id);
-                            onOrganizationSelect(org);
+                            onOrganizationSelect &&onOrganizationSelect(org);
                         }}
                     >
                         {org.name}
+                    </Button>
+                ))}
+                {folders?.map((folder)=>(
+                    <Button
+                        key={folder.id}
+                        variant="ghost"
+                        className={`px-4 py-2 rounded-full transition-all ${selected === folder.id
+                            ? "bg-[#2B4C88] text-white shadow-md"
+                            : "bg-[var(--surface-400)] text-gray-500"
+                            }`}
+                        onClick={() => {
+                            setSelected(folder.id);
+                            onSelectedFolder?.(folder);
+                        }}
+                    >
+                        {folder.name}
+                    </Button>
+                ))}
+                {childFolders?.map((folder) => (
+                    <Button
+                        key={folder.id}
+                        variant="ghost"
+                        className={`px-4 py-2 rounded-full transition-all ${selected === folder.id
+                            ? "bg-[#2B4C88] text-white shadow-md"
+                            : "bg-[var(--surface-400)] text-gray-500"
+                            }`}
+                        onClick={() => {
+                            setSelected(folder.id);
+                              onSelectedChild?.(folder);
+                        }}
+                    >
+                        {folder.name}
                     </Button>
                 ))}
             </div>

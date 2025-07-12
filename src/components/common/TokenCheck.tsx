@@ -1,19 +1,21 @@
 "use client";
-
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-// import { checkTokenExpiration } from '@/utils/tokenManager';
+import { checkLocalToken } from '@/utils/tokenManager';
+import { removeLocalStorageItem } from "@/lib/storage";
 
 export function TokenCheck() {
   const router = useRouter();
 
   useEffect(() => {
     const checkToken = async () => {
-      // const isValid = await checkTokenExpiration();
-      // if (!isValid) {
-      //     router.push('/login');
-      // }
+      const isValid = await checkLocalToken();
+      console.log(isValid)
+      if (isValid) {
+        removeLocalStorageItem('kapi-token')
+        router.push('/login');
+      }
     };
 
     // Check token on mount
@@ -24,7 +26,7 @@ export function TokenCheck() {
 
     // Clean up interval on unmount
     return () => clearInterval(interval);
-  }, [router]);
-
+  }, []);
+ 
   return null;
 }
