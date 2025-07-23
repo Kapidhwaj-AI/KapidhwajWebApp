@@ -1,59 +1,58 @@
 "use client";
 
-import { Camera } from "@/models/camera";
+import { Camera, CameraLocation } from "@/models/camera";
 import LiveBadge from "./LiveBadge";
 import { cn } from "@/lib/utils";
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 import {
-  IconBorderCornerSquare,
-  IconEye,
   IconMaximize,
+  IconMinimize,
 } from "@tabler/icons-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsFullScreenMode } from "@/redux/slices/cameraSlice";
 
-export default function CameraStreamCardMedium({camera}:{camera?:Camera}) {
 
+export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {
+  const isFullscreen = useSelector((state:RootState)=> state.camera.isFullScreen)
+  const dispatch = useDispatch<AppDispatch>()
   return (
     <div
-      className={cn(
+      className={cn( isFullscreen?"absolute top-0 left-0 right-0 w-full h-full overflow-hidden":
         "h-48 sm:h-64 md:min-h-70 md:max-h-70 lg:min-h-80 lg:max-h-80 2xl:min-h-110 2xl:max-h-110 bg-white dark:bg-gray-800 rounded-xl md:rounded-3xl lg:rounded-4xl",
         "overflow-hidden flex items-center justify-center relative ring-background"
       )}
     >
-      <video
+      <iframe
         src={camera?.webrtc_url}
-        controls
-        autoPlay
-        muted
-        playsInline
+        allowFullScreen
         className="w-[100%] h-[100%] rounded-4xl"
       >
         Your browser does not support the video tag.
-      </video>
+      </iframe>
       <div className="absolute top-2 left-2 md:top-3 md:left-3">
         <LiveBadge />
       </div>
-
+     
       <div
         className={cn(
           "w-full px-2 md:px-4 pb-2 md:pb-4 absolute bottom-0"
-         
+
         )}
       >
         <div className="backdrop-blur-md bg-black/30 dark:bg-gray-500/30 rounded-full py-1 md:py-3 px-2 md:px-4 shadow-lg">
           <div className="flex justify-between items-center">
             {/* Left text section */}
             <div className="flex flex-col text-white ml-1 md:ml-2">
-              <span className="font-bold text-sm md:text-md">Main Office</span>
+              {camLocation?.parantFolder !== "NA" && <span className="font-bold text-sm md:text-md">{camLocation?.parantFolder}</span>}
               <span className="text-xs md:text-sm text-gray-300">
-                {camera?.organization?.name} {">"} {camera?.name}
+                {camLocation?.organization} {">"} {camera?.name}
               </span>
             </div>
 
             {/* Right icon circle */}
             <div className="h-8 w-8 md:h-14 md:w-14 text-white rounded-full bg-black flex items-center justify-center">
-              <button>
-                <IconMaximize stroke={2} size={16} />
+              <button onClick={() => {dispatch(setIsFullScreenMode(!isFullscreen))}}>
+                {isFullscreen ? <IconMinimize stroke={2} size={16} /> :<IconMaximize stroke={2} size={16} />}
               </button>
             </div>
           </div>

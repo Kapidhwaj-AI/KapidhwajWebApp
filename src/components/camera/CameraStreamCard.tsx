@@ -4,31 +4,37 @@ import LiveBadge from "./LiveBadge";
 import { cn } from "@/lib/utils";
 import { Camera } from "@/models/camera";
 import { RootState } from "@/redux/store";
-import { IconBorderCornerSquare, IconEye } from "@tabler/icons-react";
+import { IconBorderCornerSquare, IconEye, IconTrash } from "@tabler/icons-react";
+import { Trash } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import {DeleteDialog} from "../dialogue/DeleteDialog";
+import { useTranslations } from "next-intl";
 
 interface CameraStreamCardProps {
   camera: Camera | null;
+  isFav?: boolean;
+  isDelete?: boolean;
+  setIsDelete?: (val: boolean) => void
+  handleDelete?: (id: number) => void
 }
 
 export default function CameraStreamCard({
-  camera,
-
+  camera, isFav, isDelete, setIsDelete, handleDelete
 }: CameraStreamCardProps) {
   const cameraDetailView = useSelector(
     (state: RootState) => state?.camera?.cameraDetailView
   );
   const [streamError, setStreamError] = useState<string | null>(null);
   const hasStream = camera?.webrtc_url;
-
+  console.log(isDelete, "asdhkk,")
   useEffect(() => {
     if (hasStream) {
     }
     setStreamError(null);
   }, [hasStream, camera?.webrtc_url, camera?.rtsp_url]);
-
+  const t = useTranslations()
   return (
     <div
       className={cn(
@@ -50,11 +56,16 @@ export default function CameraStreamCard({
           Your browser does not support the video tag.
         </iframe>
       )}
-      {/* {!streamError && hasStream && (
+      {!streamError && hasStream && (
         <div className="absolute top-3 left-3 z-5">
           <LiveBadge />
         </div>
-      )} */}
+      )}
+      {cameraDetailView !== "focused" && isFav && setIsDelete && (
+        <div className="absolute top-3 right-3 z-5 text-white">
+          <button onClick={() => { setIsDelete(true); console.log("sdj") }} className="rounded-full p-1 bg-[#FF6868]"><IconTrash size={18} /></button>
+        </div>
+      )}
       <Link
         href={`/streams/${camera?.camera_id}`}
         className={cn(
@@ -78,6 +89,8 @@ export default function CameraStreamCard({
           </div>
         </div>
       </Link>
+
+      {isDelete && handleDelete && setIsDelete && <DeleteDialog title={t('settings.delete_camera_confirm')} data={camera?.camera_id ?? -1} handleDelete={handleDelete} onClose={() => setIsDelete(false)} />}
     </div>
   );
 }

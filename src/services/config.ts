@@ -12,4 +12,4 @@ export const LOCALSTORAGE_KEY =
 export const REGISTER_OTP_ACCESS_KEY = `${LOCALSTORAGE_KEY}/REGISTER_OTP_ACCESS`;
 
 export const USER_TOKEN_COOKIE = "kapi-token";
-export const GOOGLE_KPH_BUCKET_URL = "https://storage.googleapis.com/kph-ml/";
+export const GOOGLE_KPH_BUCKET_URL = "https://storage.googleapis.com/";

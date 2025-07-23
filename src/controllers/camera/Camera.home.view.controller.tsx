@@ -16,9 +16,10 @@ export const CameraHomeViewController = ({
 
       console.log('camera')
       try {
-        const res = await protectApi('/camera');
+        const res = await protectApi<{cameras:{camera:Camera}[]}>('/camera');
         const data = res.data.data;
         const cleanedCameras = data.cameras.map((cam: any) => cam.camera);
+        console.log(cleanedCameras,"fav")
         setCameras(cleanedCameras);
       } catch (error) {
         console.error("Error fetching camera", error);

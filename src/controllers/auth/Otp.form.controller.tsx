@@ -1,7 +1,7 @@
 "use client";
 
 import Modal from "@/components/ui/Modal";
-import { OtpForm } from "@/components/Otp.form";
+import { OtpForm } from "@/components/common/Otp.form";
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "@/lib/storage";
 import { setAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -10,8 +10,9 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { protectApi } from "@/lib/protectApi";
 
-export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, isForgot, password, showPassword, setShowPassword, setPassword }: { value: string, backKey: string, verify: string, resend: string; setIsOpen: (value: boolean) => void; isForgot?: boolean, password?: string, setPassword?: (value: string) => void; showPassword?: boolean; setShowPassword?: (val: boolean) => void }) => {
+export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, isForgot, password, showPassword, setShowPassword, setPassword, isProtected, handleChangePassword }: { value: string, backKey: string, verify: string, resend: string; setIsOpen: (value: boolean) => void; isForgot?: boolean, password?: string, setPassword?: (value: string) => void; showPassword?: boolean; setShowPassword?: (val: boolean) => void; isProtected?: boolean; handleChangePassword?: () => void }) => {
   const router = useRouter();
 
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -19,11 +20,10 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
   const dispatch = useDispatch<AppDispatch>();
-  const { registerOtpAccess } = useSelector((state: RootState) => state.auth);
   const [canResendOtp, setCanResendOtp] = useState(false);
   const [resendOtpTimer, setResendOtpTimer] = useState("01:30");
   const [timeLeft, setTimeLeft] = useState(90); // 90 seconds in total
-
+  const [isVerifyLoading, setIsVerifyLoading] = useState(false)
   const handleOtpChange = (value: string, index: number,) => {
     if (/^\d$/.test(value)) {
       const newOtp = [...otp];
@@ -69,7 +69,6 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
       setResendOtpTimer("00:00");
       return;
     }
-
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         const newTime = prev - 1;
@@ -89,25 +88,47 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
 
   const handleOtpVerify = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsVerifyLoading(true)
+    setError('')
     try {
       const enteredOTP = otp.join("");
       const payload = { [backKey]: value, otp: enteredOTP }
       if (isForgot && password) {
-        payload.password = password
+        payload.newPassword = password
       }
-      const res = await axios({
-        method: 'POST',
-        data: payload,
-        url: `${apiBaseUrl + verify}`
-      })
+      let res;
+      if (isProtected) {
+        console.log('is', isProtected)
+        res = await protectApi(verify, 'POST', payload)
+      }
+      else {
+        res = await axios({
+          method: 'POST',
+          data: payload,
+          url: `${apiBaseUrl + verify}`
+        })
+      }
       if (res.status === 201) {
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7);
         setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.token, expiresAt: expiresAt.toISOString() }))
-        setLocalStorageItem('user', JSON.stringify({ name: res.data.data.name, email: res.data.data.email, username: res.data.data.username }))
+        setLocalStorageItem('user', JSON.stringify(res.data.data))
         removeLocalStorageItem('email')
         dispatch(setAuthToken(res.data.token));
         router.push('/home')
+
+
+
+      }
+      if (res.status === 200) {
+        if (isForgot) {
+          router.push('/login')
+        }
+        else if (isProtected && handleChangePassword) {
+          console.log("hello")
+          await handleChangePassword()
+
+        }
       }
     } catch (error) {
       setIsError(true);
@@ -119,6 +140,8 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
       } else {
         setError("An unexpected error occurred");
       }
+    } finally {
+      setIsVerifyLoading(false)
     }
   };
 
@@ -157,6 +180,7 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
   return (
     <Modal onClose={() => setIsOpen(false)}>
       <OtpForm
+        isVerifyLoading={isVerifyLoading}
         showPassword={showPassword}
         setPassword={setPassword}
         setShowPassword={setShowPassword}

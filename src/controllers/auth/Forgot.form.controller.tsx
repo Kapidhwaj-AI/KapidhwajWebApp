@@ -1,5 +1,5 @@
 'use client'
-import ForgotForm from '@/components/auth/Forgot.form';
+import ForgotForm from '@/components/views/auth/Forgot.form';
 import { apiBaseUrl } from '@/services/config';
 import axios from 'axios';
 import React, {  useState } from 'react'
@@ -55,7 +55,7 @@ const ForgotFormController = () => {
     return (
         <>
             <ForgotForm onSubmit={handleSendOtp} value={value} setValue={setValue} isError={isError} isLoading={isLoading} error={error} isOpen={isOpen} />
-            {isOpen && <OtpFormController setPassword={setPassword} setShowPassword={setShowPassword} password={password} showPassword={showPassword} isForgot value={value} setIsOpen={setIsOpen} resend='/sendOTP' verify='/verifyOTP' backKey={emailRegex.test(value)
+            {isOpen && <OtpFormController setPassword={setPassword} setShowPassword={setShowPassword} password={password} showPassword={showPassword} isForgot value={value} setIsOpen={setIsOpen} resend='/sendOTP' verify='/changePassword' backKey={emailRegex.test(value)
                 ? "email"
                 : "phone"} />}
         </>

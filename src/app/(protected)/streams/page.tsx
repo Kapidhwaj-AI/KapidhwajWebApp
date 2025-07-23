@@ -12,13 +12,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { cn } from "@/lib/utils";
 import Spinner from "@/components/ui/Spinner";
+import { useTranslations } from "next-intl";
 
 export default function Streams() {
   const toogleColumnValue = useSelector((state: RootState) => state?.camera?.toogleColumns);
   const [selectedOrganization, setSelectedOrganization] = useState<Organization | null>(null);
   const [selectedFolder, setSelectedFolder] = useState<Folders | null>(null)
   const [selectedChildFolder, setSelectedChildFolder] = useState<Folders | null>(null)
-  const [selectedData, setSelecteddata] = useState<Organization | Folders | null>(null)
+  const [selectedData, setSelecteddata] = useState<Camera[] | null>(null)
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data: organizations, isLoading, error } = useOrganizations(undefined, {
@@ -28,49 +29,48 @@ export default function Streams() {
   });
   useEffect(() => {
     if (selectedChildFolder) {
-      setSelecteddata(selectedChildFolder);
+      setSelecteddata(selectedChildFolder.cameras);
     } else if (selectedFolder) {
-      console.log
-      setSelecteddata(selectedFolder);
+      setSelecteddata(selectedFolder.cameras);
     } else if (selectedOrganization) {
-      setSelecteddata(selectedOrganization);
+      setSelecteddata(selectedOrganization.cameras.filter((item) => item.folder_id === null));
     } else {
       setSelecteddata(null);
     }
   }, [selectedOrganization, selectedFolder, selectedChildFolder]);
 
+
   const visibleCameras = useMemo(() => {
-    const sourceCameras = selectedData?.cameras ?? [];
 
     return searchQuery.trim()
-      ? sourceCameras.filter((camera) =>
+      ? selectedData?.filter((camera) =>
         `${camera.name} ${camera.physical_address}`
           .toLowerCase()
           .includes(searchQuery.toLowerCase())
       )
-      : sourceCameras;
+      : selectedData;
   }, [selectedData, searchQuery]);
-
   const handleOrganizationSelect = (org: Organization) => {
     setSelectedOrganization(org);
-    setSelectedFolder(null);          
-    setSelectedChildFolder(null);    
+    setSelectedFolder(null);
+    setSelectedChildFolder(null);
   };
 
   const handleFolderSelect = (folder: Folders) => {
     setSelectedFolder(folder);
-    setSelectedChildFolder(null);     
+    setSelectedChildFolder(null);
   }
+  const t = useTranslations()
   if (isLoading) {
     return (
       <div className="flex flex-col gap-4 p-4 h-full w-full">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Streams</h1>
+          <h1 className="text-2xl font-bold">{t('streams.title')}</h1>
           <div className="flex gap-2">
             <SearchBar
               search={searchQuery}
               setSearch={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search cameras..."
+              placeholder={t("streams.search_placeholder")}
             />
           </div>
         </div>
@@ -83,12 +83,12 @@ export default function Streams() {
     return (
       <div className="flex flex-col gap-4 p-4 h-full w-full">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Streams</h1>
+          <h1 className="text-2xl font-bold">{t('streams.title')}</h1>
           <div className="flex gap-2">
             <SearchBar
               search={searchQuery}
               setSearch={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search cameras..."
+              placeholder={t("streams.search_placeholder")}
             />
           </div>
         </div>
@@ -101,12 +101,12 @@ export default function Streams() {
     return (
       <div className="flex flex-col gap-4 p-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Streams</h1>
+          <h1 className="text-2xl font-bold">{t('streams.title')}</h1>
           <div className="flex gap-2">
             <SearchBar
               search={searchQuery}
               setSearch={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search cameras..."
+              placeholder={t("streams.search_placeholder")}
             />
           </div>
         </div>
@@ -114,24 +114,24 @@ export default function Streams() {
       </div>
     );
   }
-
+  const cameraCount = visibleCameras?.length ?? 0;
   return (
     <div className="flex flex-col gap-4 p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Streams</h1>
+        <h1 className="text-2xl font-bold">{t('streams.title')}</h1>
         <div className="flex gap-2">
           <CameraDetailsViewToggleButton />
           <ColumnDropdown />
           <SearchBar
             search={searchQuery}
             setSearch={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search cameras..."
+            placeholder={t("streams.search_placeholder")}
           />
         </div>
       </div>
       <div className="">
         <div className="flex gap-2 items-center">
-          <p className="text-gray-400">Organizations:</p>
+          <p className="text-gray-400">{t('settings.sites')}:</p>
           <OrganizationFilterButtons
             isLoading={isLoading}
             organizations={organizations}
@@ -140,7 +140,7 @@ export default function Streams() {
         </div>
         {selectedOrganization && selectedOrganization?.folders?.length > 0 && (
           <div className="flex gap-2 items-center">
-            <p className="text-gray-400">Folders:</p>
+            <p className="text-gray-400">{t('settings.folders')}:</p>
             <OrganizationFilterButtons
               isLoading={isLoading}
               folders={selectedOrganization.folders}
@@ -148,9 +148,9 @@ export default function Streams() {
             />
           </div>
         )}
-        {selectedFolder  && selectedFolder && selectedFolder?.child_folders?.length > 0 && (
+        {selectedFolder && selectedFolder && selectedFolder?.child_folders?.length > 0 && (
           <div className="flex gap-2 items-center">
-            <p className="text-gray-400">Sub folders:</p>
+            <p className="text-gray-400">{t('settings.subfolders')}:</p>
             <OrganizationFilterButtons
               isLoading={isLoading}
               childFolders={selectedFolder.child_folders}
@@ -159,9 +159,9 @@ export default function Streams() {
           </div>
         )}
       </div>
-      <h4 className="text-xl dark:text-white">Showing {visibleCameras.length} streams</h4>
+      <h4 className="text-xl dark:text-white"> {t('streams.showing_streams', { count: cameraCount})}</h4>
       {selectedData ? (
-        <div className={cn("grid grid-cols-1 gap-6 max-h-[55vh] overflow-y-auto scrollbar-hide p-2",
+        <div className={cn("grid grid-cols-1 gap-6 max-h-[53vh] overflow-y-auto scrollbar-hide p-2",
           {
             "md:grid-cols-1": toogleColumnValue === 1,
             "md:grid-cols-2": toogleColumnValue === 2,
@@ -170,7 +170,7 @@ export default function Streams() {
             "md:grid-cols-5": toogleColumnValue === 5,
           }
         )}>
-          {visibleCameras?.filter((item) => (!selectedChildFolder || !selectedFolder) ? item.folder_id === null : item).map((camera: any) => {
+          {visibleCameras?.map((camera: any) => {
             return (
               <CameraStreamCard
                 key={camera.camera_id}
@@ -186,7 +186,7 @@ export default function Streams() {
         </div>
       }
 
-      {selectedOrganization && visibleCameras.length === 0 && (
+      {selectedOrganization && visibleCameras?.length === 0 && (
         <div className="text-center text-gray-500">
           No cameras found
         </div>
@@ -194,3 +194,6 @@ export default function Streams() {
     </div>
   );
 }
+
+//camera/get-shared
+//camera/update-shared

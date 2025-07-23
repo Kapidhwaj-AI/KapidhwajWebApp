@@ -6,10 +6,11 @@ import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/redux/store'
 import { log } from 'console'
+import { getLocalStorageItem } from '@/lib/storage'
 
 export default function RootRedirector() {
   const router = useRouter()
-  const token = useSelector((state: RootState) => state.auth.token)
+  const token = getLocalStorageItem('kapi-token')
 
   useEffect(() => {
     token ? router.push('/home') : router.push('/login')

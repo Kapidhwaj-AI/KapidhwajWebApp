@@ -23,7 +23,7 @@ export interface Camera {
   is_intrusion_active: number;
   is_motion_event_active: number;
   is_license_plate_detection_active: number;
-  organization_id?: number;
+  organization_id?: string;
   room?: Room;
   site?: Site;
   hub?: Hub;
@@ -43,4 +43,4 @@ export interface CameraLocation {
   parantFolderId: any;
   organization: string;
 }
-//camera/cam-details?cam-id
+

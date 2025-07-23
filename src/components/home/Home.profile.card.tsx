@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 export const HomeProfileCard = ({
@@ -9,13 +10,14 @@ export const HomeProfileCard = ({
   name: string;
   devices: number;
 }) => {
+  const t = useTranslations()
   return (
     <div className="flex items-center gap-3">
       {/* Circular Profile Image */}
       <div className="h-18 w-18 rounded-full bg-[var(--surface-100)] text-[#888888] overflow-hidden">
         {/* Replace with your actual image component */}
         <Image
-          src={imagePath ?? ' '}
+          src={imagePath ?? '/dummy-user.jpg'}
           alt="User Profile"
           width={200} // Set your desired width
           height={200} // Set your desired height
@@ -31,10 +33,10 @@ export const HomeProfileCard = ({
             className="text-md font-bold text-white leading-[100%]"
             style={{ fontWeight: 700 }}
           >
-            Hi, {name}
+            {t('home.greetings')} {name ?? 'Your Name'}
           </h1>
           <p className="text-xs text-white mt-0.5">
-            {devices.toString()} devices active
+            {devices.toString()} {t('home.devices_active')}
           </p>
         </div>
       </div>

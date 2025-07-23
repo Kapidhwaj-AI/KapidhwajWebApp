@@ -1,0 +1,53 @@
+import React from 'react';
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
+    SelectLabel,
+    SelectGroup,
+} from './select';
+import { useTranslations } from 'next-intl';
+
+interface SelectFieldProps {
+    value: string | number;
+    setValue: (val: string) => void;
+    data?: { id: string| number; name: string }[];
+    label: string;
+    placeholder: string;
+}
+
+const SelectField: React.FC<SelectFieldProps> = ({
+    value,
+    setValue,
+    data,
+    label,
+    placeholder,
+}) => {
+    const t = useTranslations()
+    console.log(data?.length,"value")
+    return (
+            <Select value={value.toString()} onValueChange={(e) => setValue(e)}>
+                <SelectGroup className='space-y-1.5 sm:space-y-2'>
+                <SelectLabel className='block text-xs sm:text-sm text-black dark:text-white p-0'>{label}</SelectLabel>
+                    <SelectTrigger 
+                    className="w-full min-h-[35px] sm:min-h-[40px] md:min-h-[45px] bg-transparent  px-4  rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] dark:text-gray-400">
+                        <SelectValue className='text-gray-500' placeholder={placeholder} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            {data?.length === 0 || !data  ?<p className='text-center'>{t('no_data_found')}</p> :data?.map((type) => (
+                                <SelectItem key={type.id} value={type.id.toString()}>
+                                    {type.name}
+                                </SelectItem>
+                            ))}
+                        </SelectGroup>
+                    </SelectContent>
+                </SelectGroup>
+            </Select>
+      
+    );
+};
+
+export default SelectField;

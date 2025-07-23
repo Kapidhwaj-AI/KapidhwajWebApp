@@ -2,6 +2,7 @@
 
 import { CameraDetailView, setToggleCameraDetailsView } from '@/redux/slices/cameraSlice';
 import { AppDispatch, RootState } from '@/redux/store';
+import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 export function CameraDetailsViewToggleButton() {
@@ -10,19 +11,20 @@ export function CameraDetailsViewToggleButton() {
     const handleChange = (value: CameraDetailView) => {
         dispatch(setToggleCameraDetailsView(value))
     }
+    const t = useTranslations()
     return (
         <div className="flex items-center bg-[var(--surface-100)] rounded-full py-1 px-1">
             <button
                 className={`px-2 py-1 rounded-full transition-colors text-[#888888] ${cameraDetailView === 'focused' ? 'bg-white shadow-sm' : ''}`}
                 onClick={() => handleChange('focused')}
             >
-                Focused
+                {t('focused')}
             </button>
             <button
                 className={`px-2 py-1 rounded-full transition-colors text-[#888888] ${cameraDetailView === 'overview' ? 'bg-white shadow-sm' : ''}`}
                 onClick={() => handleChange('overview')}
             >
-                Overview
+                {t('overview')}
             </button>
         </div>
     );

@@ -2,29 +2,32 @@ import type { Metadata } from "next";
 import "../styles/globals.css";
 import { jakarta } from "@/lib/fonts";
 import { Providers } from "@/providers/Providers";
-
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages, getLocale } from 'next-intl/server';
 
 export const metadata: Metadata = {
   title: "Kapidhwaj AI",
   description: "",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  
-
+  const locale = await getLocale();
+  const messages = await getMessages();
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       {/* suppressHydrationWarning */}
       <body
         className={`${jakarta.variable} antialiased bg-[var(--surface-150)]`}
       >
-        <Providers>
-          {children} {/* This will render either auth or app layout */}
-        </Providers>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Providers>
+            {children} 
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

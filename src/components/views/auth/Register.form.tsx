@@ -1,4 +1,4 @@
-import { InputField } from "../ui/Input.field";
+import { InputField } from "../../ui/Input.field";
 import React from "react";
 
 export const RegisterForm = ({

@@ -2,6 +2,9 @@
 
 import { IconCopy, IconRouter, IconRefresh, IconCopyPlus } from "@tabler/icons-react";
 import { useState } from "react";
+import Spinner from "../ui/Spinner";
+import { ManageHub } from "@/models/settings";
+import { useTranslations } from "next-intl";
 
 interface Hub {
     name: string;
@@ -10,46 +13,14 @@ interface Hub {
 
 interface NearbyHubsProps {
     className?: string;
+    isHubLoading: boolean;
+    fetchHub: () => void;
+    nearbyHubs: ManageHub[];
+    handleNearbyAdd: (ip: string) => void
 }
 
-export const NearbyHubs: React.FC<NearbyHubsProps> = ({ className = "" }) => {
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleRefresh = async () => {
-        if (isLoading) return; // Prevent multiple clicks while loading
-
-        setIsLoading(true);
-
-        // Simulate API call
-        try {
-            await new Promise(resolve => setTimeout(resolve, 3000));
-            // Here you would typically fetch new data
-            console.log('Refreshed nearby hubs');
-        } catch (error) {
-            console.error('Error refreshing hubs:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const hubs = [
-        { name: 'Main Hub', ip: '10.0.0.1' },
-        { name: 'Basement Hub', ip: '10.0.0.2' },
-        { name: 'Second Floor Hub', ip: '10.0.0.3' },
-        { name: 'Reception Hub', ip: '10.0.0.4' },
-        { name: 'Conference Room Hub', ip: '10.0.0.5' },
-        { name: 'Security Office Hub', ip: '10.0.0.6' },
-        { name: 'Cafeteria Hub', ip: '10.0.0.7' },
-        { name: 'Parking Hub', ip: '10.0.0.8' },
-        { name: 'Server Room Hub', ip: '10.0.0.9' },
-        { name: 'Executive Hub', ip: '10.0.0.10' },
-        { name: 'Training Room Hub', ip: '10.0.0.11' },
-        { name: 'Lobby Hub', ip: '10.0.0.12' },
-    ];
-
-    const handleCopyIP = (ip: string) => {
-        navigator.clipboard.writeText(ip);
-    };
+export const NearbyHubs: React.FC<NearbyHubsProps> = ({ className = "", isHubLoading, fetchHub, nearbyHubs, handleNearbyAdd }) => {
+    const t= useTranslations()
 
     return (
         <div className={`flex flex-col bg-[var(--surface-100)] px-8 rounded-2xl md:rounded-4xl ${className}`}>
@@ -57,42 +28,46 @@ export const NearbyHubs: React.FC<NearbyHubsProps> = ({ className = "" }) => {
             <div className="flex justify-between items-center pt-4 pb-2 flex-shrink-0">
                 <div className="flex items-center gap-2">
                     <IconRouter size={24} className="text-[var(--text-color)]" />
-                    <h2 className="text-sm font-bold">Nearby Hubs</h2>
+                    <h2 className="text-sm font-bold">{t('manage_hubs.nearby_hubs')}</h2>
                 </div>
                 <button
-                    onClick={handleRefresh}
-                    disabled={isLoading}
+                    onClick={fetchHub}
+                    disabled={isHubLoading}
                     className="p-2 hover:bg-[var(--surface-200)] rounded-full transition-colors disabled:opacity-50"
                 >
                     <IconRefresh
                         size={20}
-                        className={`text-gray-600 ${isLoading ? 'animate-spin' : ''}`}
+                        className={`text-gray-600 ${isHubLoading ? 'animate-spin' : ''}`}
                     />
                 </button>
             </div>
 
             {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-5rem)] pb-4 scrollbar-hide">
-                <div className="space-y-3">
-                    {hubs.map((hub) => (
-                        <div key={hub.ip} className="flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors">
-                            <div className="w-10 h-10 bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
-                                <IconRouter size={20} className="text-[#888888]" />
+            {isHubLoading ? <Spinner /> : nearbyHubs.length === 0 ? <div className="flex justify-center items-center w-full h-full">
+                {t(`manage_hubs.couldn't_get_nearby_hubs`)}
+            </div>:
+                <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-5rem)] pb-4 scrollbar-hide">
+                    <div className="space-y-3">
+                        {nearbyHubs?.map((hub) => (
+                            <div key={hub.ip} className="flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors">
+                                <div className="w-10 h-10 bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
+                                    <IconRouter size={20} className="text-[#888888]" />
+                                </div>
+                                <div className="ml-3 flex-1 min-w-0">
+                                    <h3 className="text-sm font-medium truncate">{hub.name}</h3>
+                                    <p className="text-xs text-gray-500 truncate">{hub.ip}</p>
+                                </div>
+                                <button
+                                    onClick={() => handleNearbyAdd(hub.name)}
+                                    className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
+                                >
+                                    <IconCopyPlus size={18} className="text-gray-600" />
+                                </button>
                             </div>
-                            <div className="ml-3 flex-1 min-w-0">
-                                <h3 className="text-sm font-medium truncate">{hub.name}</h3>
-                                <p className="text-xs text-gray-500 truncate">{hub.ip}</p>
-                            </div>
-                            <button
-                                onClick={() => handleCopyIP(hub.ip)}
-                                className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
-                            >
-                                <IconCopyPlus size={18} className="text-gray-600" />
-                            </button>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     );
 }; 

@@ -1,170 +1,245 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { IconX, IconCheck, IconPlus, IconCamera, IconSearch } from '@tabler/icons-react';
 import Image from 'next/image';
+import { AccessLevel } from '@/models/settings';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Input } from '../ui/input';
+import clsx from 'clsx';
+import { Organization } from '@/models/organization';
+import { Checkbox } from '../ui/checkbox';
+import StreamsCard from '../views/settings/StreamsCard';
+import Spinner from '../ui/Spinner';
+import { useTranslations } from 'next-intl';
+import SelectField from '../ui/Select.field';
+import { InputField } from '../ui/Input.field';
 
 interface AddNewUserDialogueProps {
     isOpen: boolean;
     onClose: () => void;
+    accessLevels: AccessLevel[];
+    setUsername: (val: string) => void;
+    username: string;
+    selectedAccess: number;
+    setSelectedAccess: (val: number) => void;
+    searchedUsers: { name: string, userId: string }[]
+    setSelectedUser: (val: { name: string, userId: string } | null) => void;
+    open: boolean;
+    selectedUser: { name: string, userId: string } | null;
+    setOpen: (val: boolean) => void;
+    handleSelectUser: (val: { name: string, userId: string }) => void
+    popoverRef: React.RefObject<HTMLDivElement>;
+    selectedTab: string;
+    setSelectedTab: (val: string) => void;
+    organizations: Organization[];
+    searchQuery: string;
+    setSearchQuery: (val: string) => void;
+    selectedStreams: Set<number>;
+    setSelectedStreams: React.Dispatch<React.SetStateAction<Set<number>>>;
+    handleSave: () => void;
+    isLoading: boolean;
+    isEdit: boolean
 }
 
-interface Stream {
-    id: string;
-    name: string;
-    location: string;
-    area: string;
-    imageUrl?: string;
-}
 
-export function AddNewUserDialogue({ isOpen, onClose }: AddNewUserDialogueProps) {
-    const [usernameOrMobile, setUsernameOrMobile] = useState('');
-    const [selectedAccess, setSelectedAccess] = useState('');
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedTab, setSelectedTab] = useState('All Streams');
-    const [selectedStreams, setSelectedStreams] = useState<string[]>([]);
 
-    // Sample data
-    const accessTypes = [
-        { id: '1', name: 'Full Access' },
-        { id: '2', name: 'Streams Only' },
-        { id: '3', name: 'Limited Access' }
-    ];
+export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQuery, setSearchQuery, selectedStreams, handleSave, setSelectedStreams, accessLevels, selectedTab, setSelectedTab, organizations, selectedUser, popoverRef, handleSelectUser, username, setUsername, selectedAccess, setSelectedAccess, setSelectedUser, searchedUsers, open, setOpen }: AddNewUserDialogueProps) {
+    const allCameras = organizations.flatMap(org => org.cameras);
+    const selectedOraganizationsFolders = organizations.find((item) => item.id === selectedTab)?.folders
+    const getVisibleStreamIds = (): number[] => {
+        const visibleStreams: number[] = [];
+        filteredStreams.forEach(stream => {
+            visibleStreams.push(stream.camera_id);
+        });
 
-    const streams: Stream[] = [
-        { id: '1', name: 'Camera 1', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream1.jpg' },
-        { id: '2', name: 'Camera 2', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream2.jpg' },
-        { id: '3', name: 'Camera 3', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream3.jpg' },
-        { id: '4', name: 'Camera 4', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream4.jpg' },
-        { id: '5', name: 'Camera 5', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream5.jpg' },
-        { id: '6', name: 'Camera 6', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream6.jpg' },
-        { id: '7', name: 'Camera 7', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream7.jpg' },
-        { id: '8', name: 'Camera 8', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream8.jpg' },
-        { id: '9', name: 'Camera 9', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream9.jpg' },
-        { id: '10', name: 'Camera 10', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream10.jpg' },
-        { id: '11', name: 'Camera 11', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream11.jpg' },
-        { id: '12', name: 'Camera 12', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream12.jpg' },
-        { id: '13', name: 'Camera 13', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream13.jpg' },
-        { id: '14', name: 'Camera 14', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream14.jpg' },
-        { id: '15', name: 'Camera 15', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream15.jpg' },
-        { id: '16', name: 'Camera 16', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream16.jpg' },
-        { id: '17', name: 'Camera 17', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream17.jpg' },
-        { id: '18', name: 'Camera 18', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream18.jpg' },
-        { id: '19', name: 'Camera 19', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream19.jpg' },
-        { id: '20', name: 'Camera 20', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream20.jpg' },
-        { id: '21', name: 'Camera 21', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream21.jpg' },
-        { id: '22', name: 'Camera 22', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream22.jpg' },
-        { id: '23', name: 'Camera 23', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream23.jpg' },
-        { id: '24', name: 'Camera 24', location: 'HQ', area: 'Reception Area', imageUrl: '/assets/images/streams/stream24.jpg' },
-        { id: '25', name: 'Camera 25', location: 'HQ', area: 'Office Ground', imageUrl: '/assets/images/streams/stream25.jpg' }
-    ];
+        selectedOraganizationsFolders?.forEach(folder => {
+            folder.cameras.forEach(camera => {
+                if (searchQuery === '' || camera.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+                    visibleStreams.push(camera.camera_id);
+                }
+            });
+            folder.child_folders?.forEach(child => {
+                child.cameras.forEach(camera => {
+                    if (searchQuery === '' || camera.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+                        visibleStreams.push(camera.camera_id);
+                    }
+                });
+            });
+        });
 
-    const areas = ['All Streams', 'Reception Area', 'Office Ground'];
-
-    const toggleStreamSelection = (streamId: string) => {
-        setSelectedStreams(prev =>
-            prev.includes(streamId)
-                ? prev.filter(id => id !== streamId)
-                : [...prev, streamId]
+        return visibleStreams;
+    };
+    const toggleStreamSelection = (streamId: number) => {
+        setSelectedStreams((prev) => {
+            const newSet = new Set(prev);
+            newSet.has(streamId) ? newSet.delete(streamId) : newSet.add(streamId);
+            return newSet;
+        }
         );
     };
+    const filteredStreams = useMemo(() => {
+        return allCameras.filter((camera) => {
+            const matchesSearch = searchQuery === '' || camera.name.toLowerCase().includes(searchQuery.toLowerCase());
 
+            if (selectedTab === 'all') {
+                return matchesSearch;
+            }
+
+            const matchesOrg = camera.organization_id === selectedTab;
+            const isRootLevel = camera.folder_id === null;
+
+            return matchesSearch && matchesOrg && isRootLevel;
+        });
+    }, [allCameras, selectedTab, searchQuery]);
+    const filteredChildFolders = useMemo(() => {
+        if (selectedTab === 'all') return [];
+
+        const selectedOrg = organizations.find((org) => org.id === selectedTab);
+        if (!selectedOrg) return [];
+
+        return selectedOrg.folders.flatMap((folder) =>
+            folder.child_folders.map((child) => ({
+                ...child,
+                cameras: child.cameras.filter((cam) =>
+                    cam.name.toLowerCase().includes(searchQuery.toLowerCase())
+                ),
+            }))
+        ).filter((child) => child.cameras.length > 0);
+    }, [organizations, selectedTab, searchQuery]);
+    const filteredOrganizationFolders = useMemo(() => {
+        if (selectedTab === 'all') return [];
+
+        const selectedOrg = organizations.find((org) => org.id === selectedTab);
+        if (!selectedOrg) return [];
+
+        return selectedOrg.folders.map((folder) => ({
+            ...folder,
+            cameras: folder.cameras.filter((cam) =>
+                cam.name.toLowerCase().includes(searchQuery.toLowerCase())
+            ),
+        })).filter((folder) => folder.cameras.length > 0);
+    }, [organizations, selectedTab, searchQuery]);
     const handleSelectAll = () => {
-        const filteredStreams = streams
-            .filter(stream =>
-                (selectedTab === 'All Streams' || stream.area === selectedTab) &&
-                (searchQuery === '' || stream.name.toLowerCase().includes(searchQuery.toLowerCase()))
-            )
-            .map(stream => stream.id);
+        const visibleStreamIds = getVisibleStreamIds();
 
-        if (selectedStreams.length === filteredStreams.length) {
-            setSelectedStreams([]);
+        const allVisibleSelected = visibleStreamIds.every((id) => selectedStreams.has(id));
+
+        const newSet = new Set(selectedStreams);
+        if (allVisibleSelected) {
+            visibleStreamIds.forEach((id) => newSet.delete(id));
         } else {
-            setSelectedStreams(filteredStreams);
+            visibleStreamIds.forEach((id) => newSet.add(id));
         }
+
+        setSelectedStreams(newSet);
     };
 
-    const filteredStreams = streams.filter(stream =>
-        (selectedTab === 'All Streams' || stream.area === selectedTab) &&
-        (searchQuery === '' || stream.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
-
+    const allVisibleSelected = getVisibleStreamIds().every(id => selectedStreams.has(id));
+    const t = useTranslations()
     if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 bg-black/20 dark:bg-white/20 flex items-center justify-center z-50 p-3">
             <div className="bg-white dark:bg-gray-800 rounded-[32px] w-[98%] h-[90vh] shadow-xl flex flex-col">
-                <div className="flex flex-col lg:flex-row h-full">
-                    {/* Left Section - Form */}
-                    <div className="w-full lg:w-[30%] p-6 lg:p-8 flex flex-col border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700">
-                        {/* Header */}
+                <div className="grid lg:grid-cols-7 grid-cols-1 h-full">
+                    <div className="w-full lg:col-span-2 p-6  flex flex-col border-b  border-gray-200 dark:border-gray-700">
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-medium dark:text-white">Add New User</h2>
+                            <h2 className="text-xl font-medium dark:text-white">{isEdit ? t('update_user') : t('add_new_user')}</h2>
                         </div>
-
-                        {/* Form Fields */}
                         <div className="flex-1">
-                            {/* Username/Mobile Field */}
                             <div className="mb-4">
-                                <label className="block text-sm font-medium mb-2 dark:text-gray-300">Username / Mobile Phone</label>
-                                <input
-                                    type="text"
-                                    value={usernameOrMobile}
-                                    onChange={(e) => setUsernameOrMobile(e.target.value)}
-                                    placeholder="Search User"
-                                    className="w-full h-[45px] px-4 text-base bg-[#F6F6F6] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
-                                />
+                                <Popover open={open && !isEdit} onOpenChange={setOpen} >
+                                    <PopoverTrigger className='w-full'>
+                                        <InputField
+                                            placeholder={t('settings.enter_username')}
+                                            value={username}
+                                            disabled={isEdit}
+                                            setValue={(e) => {
+                                                setUsername(e);
+                                                setSelectedUser(null);
+                                            }}
+                                            label={t('settings.username')}
+                                        />
+
+                                    </PopoverTrigger>
+
+                                    <PopoverContent className="p-0 w-full" ref={popoverRef} sideOffset={5}>
+                                        <ul className="max-h-64 overflow-y-auto py-1 w-full">
+                                            {searchedUsers.length === 0 && (
+                                                <li className="text-sm text-muted-foreground px-4 py-2">
+                                                    No Users found.
+                                                </li>
+                                            )}
+                                            {searchedUsers.map((user) => (
+                                                <li
+                                                    key={user.userId}
+                                                    className={clsx(
+                                                        "cursor-pointer px-4 py-2 hover:bg-accent hover:text-accent-foreground",
+                                                        selectedUser?.userId === user.userId && "bg-accent font-medium"
+                                                    )}
+                                                    onClick={() => handleSelectUser(user)}
+                                                >
+                                                    <div className="flex flex-col">
+                                                        <span>{user.name}</span>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </PopoverContent>
+                                </Popover>
                             </div>
 
                             {/* Access Field */}
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium mb-2 dark:text-gray-300">Access</label>
-                                <select
-                                    value={selectedAccess}
-                                    onChange={(e) => setSelectedAccess(e.target.value)}
-                                    className="w-full h-[45px] px-4 text-base bg-[#F6F6F6] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer dark:text-white"
-                                >
-                                    <option value="" disabled>Select Access</option>
-                                    {accessTypes.map(type => (
-                                        <option key={type.id} value={type.id}>{type.name}</option>
-                                    ))}
-                                </select>
+                            <div className="mb-6">
+                                <SelectField label={t('settings.access')} placeholder={t('settings.select_access')} data={accessLevels} value={selectedAccess} setValue={(e) => setSelectedAccess(Number(e))}/>
+                            
                             </div>
+
+                            <button
+                                disabled={isLoading}
+                                className="w-full h-[45px] flex items-center justify-center gap-2 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base transition-colors"
+                                onClick={handleSave}
+                            >
+                                {isLoading ? <Spinner /> :
+                                    <>
+                                        <IconCheck size={16} /><span>{isEdit ? t('update') : t('save')}</span>
+                                    </>
+                                }
+
+                            </button>
+
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="flex flex-col gap-3 mt-4">
-                            <button
-                                className="w-full h-[45px] bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base transition-colors"
-                                onClick={() => {
-                                    console.log({
-                                        usernameOrMobile,
-                                        selectedAccess,
-                                        selectedStreams
-                                    });
-                                    onClose();
-                                }}
-                            >
-                                <span className='flex items-center justify-center gap-2'><IconCheck size={16} />Save</span>
-                            </button>
-                        </div>
                     </div>
 
                     {/* Right Section - Streams */}
-                    <div className="w-full lg:w-[70%] lg:rounded-r-[32px] px-6 lg:px-8 py-3 lg:py-6 overflow-hidden flex flex-col">
+                    <div className="w-full lg:col-span-5 lg:rounded-r-[32px] px-6  py-3 lg:py-6 overflow-hidden flex flex-col">
                         {/* Tabs */}
                         <div className='flex items-center  mb-5 justify-between'>
                             <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-                                {areas.map((area) => (
+                                <button
+
+                                    onClick={() => setSelectedTab('all')}
+                                    className={`px-4 py-2 rounded-full text-sm whitespace-nowrap ${selectedTab === 'all'
+                                        ? 'bg-[#2B4C88] text-white'
+                                        : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                        }`}
+                                >
+                                    All Streams
+                                </button>
+                                {organizations.map((area) => (
                                     <button
-                                        key={area}
-                                        onClick={() => setSelectedTab(area)}
-                                        className={`px-4 py-2 rounded-full text-sm whitespace-nowrap ${selectedTab === area
+                                        key={area.id}
+                                        onClick={() => setSelectedTab(area.id)}
+                                        className={`px-4 py-2 rounded-full text-sm whitespace-nowrap ${selectedTab === area.id
                                             ? 'bg-[#2B4C88] text-white'
                                             : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
                                             }`}
                                     >
-                                        {area}
+                                        {area.name}
                                     </button>
                                 ))}
                             </div>
@@ -181,11 +256,10 @@ export function AddNewUserDialogue({ isOpen, onClose }: AddNewUserDialogueProps)
 
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedStreams.length === filteredStreams.length && filteredStreams.length > 0}
-                                        onChange={handleSelectAll}
-                                        className="w-4 h-4 rounded border-gray-300 dark:border-gray-600"
+                                    <Checkbox
+                                        checked={allVisibleSelected && filteredStreams.length > 0}
+                                        onCheckedChange={handleSelectAll}
+                                        className='data-[state=checked]:bg-[#2B4C88] data-[state=checked]:border-[#2B4C88]'
                                     />
                                     <span className="text-sm dark:text-gray-300">Select all</span>
                                 </div>
@@ -194,8 +268,8 @@ export function AddNewUserDialogue({ isOpen, onClose }: AddNewUserDialogueProps)
                                         type="text"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        placeholder="Search Stream..."
-                                        className="h-[35px] w-[200px] pl-9 pr-4 text-sm bg-white dark:bg-gray-800 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+                                        placeholder={t('streams.search_placeholder')}
+                                        className="h-[35px] w-[200px] pl-9 pr-4 text-sm bg-white dark:bg-gray-800 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-[#2B4C88] dark:text-white"
                                     />
                                     <IconSearch size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400" />
                                 </div>
@@ -203,35 +277,45 @@ export function AddNewUserDialogue({ isOpen, onClose }: AddNewUserDialogueProps)
 
                             {/* Streams Grid */}
                             <div className="flex-1 overflow-y-auto scrollbar-hide">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-1 p-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
                                     {filteredStreams.map((stream) => (
-                                        <div
-                                            key={stream.id}
-                                            className="group relative bg-white p-5 dark:bg-gray-800 rounded-xl overflow-hidden"
-                                        >
-                                            <div className="aspect-video relative">
-                                                <Image
-                                                    src={'/assets/images/camera-default.png'}
-                                                    alt={stream.name}
-                                                    fill
-                                                    className="object-cover rounded-xl"
-                                                />
-                                            </div>
-                                            <div className='flex items-center justify-between'>
-                                                <div className="px-3 pt-3 to-transparent">
-                                                    <h3 className="text-sm font-black">{stream.name}</h3>
-                                                    <p className="text-xs text-[#888888]">{stream.location} {' > '} {stream.area}</p>
-                                                </div>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedStreams.includes(stream.id)}
-                                                    onChange={() => toggleStreamSelection(stream.id)}
-                                                    className="w-4 h-4 rounded border-gray-300 dark:border-gray-600"
-                                                />
-                                            </div>
-                                        </div>
+                                        <StreamsCard key={stream.camera_id} stream={stream} selectedStreams={selectedStreams} toggleStreamSelection={toggleStreamSelection} />
                                     ))}
+
                                 </div>
+
+
+                                {filteredOrganizationFolders?.map((folder) => (
+                                    <div key={folder.id} className='flex flex-col ms-4 gap-2'>
+                                        <span>{organizations.find((item) => item.id === selectedTab)?.name}{" > "} {folder.name}</span>
+                                        <div className="grid grid-cols-1 p-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            {folder.cameras.map((stream) => (
+                                                <StreamsCard key={stream.camera_id} stream={stream} selectedStreams={selectedStreams} toggleStreamSelection={toggleStreamSelection} />
+                                            )
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                                {filteredChildFolders?.map((child) => (
+                                    <div key={child.id} className='flex flex-col ms-4 gap-2'>
+                                        <span>
+                                            {organizations.find((item) => item.id === selectedTab)?.name}{" > "} {child.name}
+                                        </span>
+                                        <div className="grid grid-cols-1 p-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            {child.cameras.map((stream) => (
+                                                <StreamsCard
+                                                    key={stream.camera_id}
+                                                    stream={stream}
+                                                    selectedStreams={selectedStreams}
+                                                    toggleStreamSelection={toggleStreamSelection}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+
+
                             </div>
                         </div>
 

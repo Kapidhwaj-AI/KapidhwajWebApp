@@ -1,10 +1,9 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['media.kapidhwaj.ai', 'storage.googleapis.com', 'images.unsplash.com'],
-    // Optional: if you want to specify path patterns
-
+    domains: ['storage.googleapis.com'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -15,7 +14,7 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'storage.googleapis.com',
-        pathname: '/kph-ml/**',
+        pathname: '/**',
       },
       {
         protocol: 'https',
@@ -31,70 +30,54 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'wallsdesk.com',
         pathname: '/**',
-      }
+      },
     ],
   },
+
   experimental: {
     serverActions: {
-      // bodySizeLimit: '10mb',
       allowedOrigins: ['https://media.kapidhwaj.ai'],
     },
   },
+
   async headers() {
     return [
       {
         source: '/:path*',
         headers: [
-          {
-            key: 'Access-Control-Allow-Origin',
-            value: '*'
-          },
-          {
-            key: 'Access-Control-Allow-Methods',
-            value: 'GET, POST, PUT, DELETE, OPTIONS'
-          },
-          {
-            key: 'Access-Control-Allow-Headers',
-            value: 'Content-Type, Authorization'
-          },
-          {
-            key: 'Cross-Origin-Embedder-Policy',
-            value: 'require-corp'
-          },
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin'
-          },
-          {
-            key: 'Cross-Origin-Resource-Policy',
-            value: 'cross-origin'
-          }
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, DELETE, OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
+          { key: 'Cross-Origin-Embedder-Policy', value: 'unsafe-none' },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+          { key: 'Cross-Origin-Resource-Policy', value: 'cross-origin' },
         ],
       },
-    ]
+    ];
   },
-  // Bypass TLS/SSL in development (temporary)
+
   webpack(config) {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
       tls: false,
       net: false,
-    }
-    return config
+    };
+    return config;
   },
 
-  /* config options here */
   devIndicators: false,
-  // Add support for video streaming
-  async rewrites() { // Remove or comment out the rewrites section
+
+  async rewrites() {
     return [
       {
-        source: '/video/:path*',
-        destination: 'https://media.kapidhwaj.ai:9889/:path*',
+        source: '/video:port*/:path*',
+        destination: 'https://media.kapidhwaj.ai:port*/:path*',
       },
-    ]
+    ];
   },
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin();
+
+export default withNextIntl(nextConfig);

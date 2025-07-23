@@ -1,97 +1,88 @@
 'use client';
+import { useEffect, useState } from 'react';
+import Modal from '../ui/Modal';
+import { IconCheck, IconX, IconLanguage } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
+import { cookies } from 'next/headers';
 
-import { IconX, IconCheck, IconDeviceSpeaker, IconVideo, IconLanguage } from '@tabler/icons-react';
-import { useState } from 'react';
-
-export function SelectLanguageDialogue({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-    const [selectedLanguage, setSelectedLanguage] = useState('english');
+export  function SelectLanguageDialogue({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+    const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'hi' | 'gu'>('en');
+    useEffect(() => {
+        const match = document.cookie.match(/(^| )locale=([^;]+)/);
+        if (match && ['en', 'hi', 'gu'].includes(match[2])) {
+            setSelectedLanguage(match[2] as 'en' | 'hi' | 'gu');
+        }
+    }, []);
+    const t = useTranslations()
     const handleSave = () => {
-        // Save the selected language to your backend or state management
-        console.log('Selected language:', selectedLanguage);
+        document.cookie = `locale=${selectedLanguage}; path=/; max-age=31536000`; 
         onClose();
-    }
+        window.location.reload(); 
+    };
 
-    if (isOpen) {
-        return (
-            <div className="fixed inset-0 bg-black/20 dark:bg-white/20 flex items-center justify-center z-50">
-                <div className="bg-[var(--surface-200)] rounded-[69px] w-full max-w-2xl p-10 shadow-xl">
-                    {/* Header */}
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-xl font-bold">Language Settings</h2>
-                        <button
-                            onClick={onClose}
-                            className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                            <IconX size={24} color='red' />
-                        </button>
-                    </div>
+    if (!isOpen) return null;
 
-                    {/* Language Selection */}
-                    <div className="space-y-4 mb-6">
-                        <div className="flex items-center gap-3 mb-4">
-                            <IconLanguage size={24} />
-                            <h3 className="font-medium">Select Language</h3>
-                        </div>
+    return (
+        <Modal onClose={onClose} title={t('language') + " " + t('settings.title')}>
+            <div className="space-y-4 mb-6">
+                <div className="flex items-center gap-3 mb-4">
+                    <IconLanguage size={24} />
+                    <h3 className="font-medium">{t("select_language")}</h3>
+                </div>
 
-                        <div className="space-y-3 pl-9">
-                            {/* English */}
-                            <label className="flex items-center gap-3 cursor-pointer">
-                                <input
-                                    type="radio"
-                                    name="language"
-                                    value="english"
-                                    checked={selectedLanguage === 'english'}
-                                    onChange={() => setSelectedLanguage('english')}
-                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                                />
-                                <span>English</span>
-                            </label>
+                <div className="space-y-3 pl-9">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                        <input
+                            type="radio"
+                            name="language"
+                            value="en"
+                            checked={selectedLanguage === 'en'}
+                            onChange={() => setSelectedLanguage('en')}
+                            className="h-4 w-4"
+                        />
+                        <span>English</span>
+                    </label>
 
-                            {/* Hindi */}
-                            <label className="flex items-center gap-3 cursor-pointer">
-                                <input
-                                    type="radio"
-                                    name="language"
-                                    value="hindi"
-                                    checked={selectedLanguage === 'hindi'}
-                                    onChange={() => setSelectedLanguage('hindi')}
-                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                                />
-                                <span>हिंदी</span>
-                            </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                        <input
+                            type="radio"
+                            name="language"
+                            value="hi"
+                            checked={selectedLanguage === 'hi'}
+                            onChange={() => setSelectedLanguage('hi')}
+                            className="h-4 w-4"
+                        />
+                        <span>हिंदी</span>
+                    </label>
 
-                            {/* Gujarati */}
-                            <label className="flex items-center gap-3 cursor-pointer">
-                                <input
-                                    type="radio"
-                                    name="language"
-                                    value="gujarati"
-                                    checked={selectedLanguage === 'gujarati'}
-                                    onChange={() => setSelectedLanguage('gujarati')}
-                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                                />
-                                <span>ગુજરાતી</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    {/* Footer Buttons */}
-                    <div className="flex justify-end gap-3">
-                        <button
-                            onClick={onClose}
-                            className="flex items-center gap-2 px-4 py-2 rounded-4xl border bg-[var(--surface-850)] text-[#888888]"
-                        >
-                            <IconX size={20} /><span>Close</span>
-                        </button>
-                        <button
-                            onClick={handleSave}
-                            className="flex items-center gap-2 px-4 py-2 rounded-4xl bg-[#2B4C88] text-white hover:bg-blue-700"
-                        >
-                            <IconCheck size={20} /><span>Save</span>
-                        </button>
-                    </div>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                        <input
+                            type="radio"
+                            name="language"
+                            value="gu"
+                            checked={selectedLanguage === 'gu'}
+                            onChange={() => setSelectedLanguage('gu')}
+                            className="h-4 w-4"
+                        />
+                        <span>ગુજરાતી</span>
+                    </label>
                 </div>
             </div>
-        );
-    }
+
+            <div className="flex justify-end gap-3">
+                <button
+                    onClick={onClose}
+                    className="flex items-center gap-2 px-4 py-2 rounded-4xl border bg-[var(--surface-850)] text-[#888888]"
+                >
+                    <IconX size={20} /><span>{t('close')}</span>
+                </button>
+                <button
+                    onClick={handleSave}
+                    className="flex items-center gap-2 px-4 py-2 rounded-4xl bg-[#2B4C88] text-white hover:bg-blue-700"
+                >
+                    <IconCheck size={20} /><span>{t("save")}</span>
+                </button>
+            </div>
+        </Modal>
+    );
 }

@@ -9,7 +9,7 @@ export const useOrganizations = (organizationId?: string, p0?: { onSuccess: (dat
   const query = useQuery<Organization[]>({
     queryKey: ['organizations', organizationId],
     queryFn: async () => {
-      const res = await protectApi(
+      const res = await protectApi<{organization:Organization}[]>(
         organizationId
           ? `/organizations?organizationId=${organizationId}`
           : `/organizations`

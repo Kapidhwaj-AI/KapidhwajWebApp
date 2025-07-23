@@ -1,27 +1,17 @@
 'use client';
 
 import { IconMail, IconPhone, IconX } from '@tabler/icons-react';
+import Modal from '../ui/Modal';
+import { useTranslations } from 'next-intl';
 
 export function HelpAndSupportDialogue({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+    const t = useTranslations()
     if (isOpen) {
         return (
-            <div className="fixed inset-0 bg-black/20 dark:bg-white/20 flex items-center justify-center z-50">
-                <div className="bg-[var(--surface-200)] rounded-[69px] w-full max-w-3xl p-10 shadow-xl">
-                    {/* Header */}
-                    <div className="flex justify-between items-center mb-7">
-                        <h2 className="text-xl font-bold">Support</h2>
-                        <button
-                            onClick={onClose}
-                            className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-                        >
-                            <IconX size={24} color='red' />
-                        </button>
-                    </div>
-
-                    {/* Support Content */}
+            <Modal onClose={onClose} title={t('settings.support')}>
                     <div className="space-y-7 mb-5">
                         <p className="text-md text-gray-700 dark:text-gray-300">
-                            For any questions or issues, please reach out to the contact number provided below.
+                            {t('settings.query')}
                         </p>
 
                         <div className="flex flex-col space-y-5">
@@ -51,8 +41,7 @@ export function HelpAndSupportDialogue({ isOpen, onClose }: { isOpen: boolean; o
 
                         </div>
                     </div>
-                </div>
-            </div>
+            </Modal>
         );
     }
     return null;

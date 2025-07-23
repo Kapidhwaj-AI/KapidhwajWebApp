@@ -1,102 +1,181 @@
 import { IconDeviceCctv, IconDeviceCctvFilled, IconEdit, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { Switch } from "../ui/CustomeSwitch";
 import { AddNewCameraDialogue } from '@/components/dialogue/AddNewCameraDialogue';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EditCameraDialogue } from "../dialogue/EditCameraDialogue";
+import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
+import { DevicesMap, Hub } from "@/models/settings";
+import { Camera, CameraLocation } from "@/models/camera";
+import { AxiosResponse } from "axios";
+import EditStreamDialog from "../dialogue/EditStreamDialog";
+import { protectApi } from "@/lib/protectApi";
+import { StreamFormData } from "@/models/stream";
+import { useOrganizations } from "@/hooks/useOrganizations";
+import { Organization } from "@/models/organization";
+import { useTranslations } from "next-intl";
 
-interface Camera {
-    id: string;
-    name: string;
-    ip: string;
-    location: string;
-    isActive: boolean;
-}
 
-interface Hub {
-    name: string;
-    ip: string;
-}
+
+
 
 interface SavedCamerasProps {
     hub: Hub;
     className?: string;
+    toggleStream: (toggleVal: boolean, id: number, physical_address: string, hub_id: number) => Promise<AxiosResponse>;
+    setIsDelete: (val: boolean) => void;
+    isDelete: boolean;
+    handleDelet: (camearId: number | undefined, organizationId: string) => void;
+    setSelectedSite: (val: string) => void;
+    selectedSite: string;
+    sites: Organization[]
 }
-export const cameras: Camera[] = [
-    { id: '1', name: 'Camera 1', ip: '10.0.0.125', location: 'Reception Area', isActive: true },
-    { id: '2', name: 'Camera 2', ip: '10.0.0.126', location: 'Reception Area', isActive: true },
-    { id: '3', name: 'Camera 3', ip: '10.0.0.127', location: 'Main Office Area', isActive: false },
-    { id: '4', name: 'Camera 4', ip: '10.0.0.128', location: 'Main Office Area', isActive: true },
-    { id: '5', name: 'Camera 5', ip: '10.0.0.129', location: 'Second Floor', isActive: true },
-    { id: '1', name: 'Camera 1', ip: '10.0.0.125', location: 'Reception Area', isActive: true },
-    { id: '2', name: 'Camera 2', ip: '10.0.0.126', location: 'Reception Area', isActive: true },
-    { id: '3', name: 'Camera 3', ip: '10.0.0.127', location: 'Main Office Area', isActive: false },
-    { id: '4', name: 'Camera 4', ip: '10.0.0.128', location: 'Main Office Area', isActive: true },
-    { id: '5', name: 'Camera 5', ip: '10.0.0.129', location: 'Second Floor', isActive: true },
-    { id: '1', name: 'Camera 1', ip: '10.0.0.125', location: 'Reception Area', isActive: true },
-    { id: '2', name: 'Camera 2', ip: '10.0.0.126', location: 'Reception Area', isActive: true },
-    { id: '3', name: 'Camera 3', ip: '10.0.0.127', location: 'Main Office Area', isActive: false },
-    { id: '4', name: 'Camera 4', ip: '10.0.0.128', location: 'Main Office Area', isActive: true },
-    { id: '5', name: 'Camera 5', ip: '10.0.0.129', location: 'Second Floor', isActive: true },
-    { id: '1', name: 'Camera 1', ip: '10.0.0.125', location: 'Reception Area', isActive: true },
-    { id: '2', name: 'Camera 2', ip: '10.0.0.126', location: 'Reception Area', isActive: true },
-    { id: '3', name: 'Camera 3', ip: '10.0.0.127', location: 'Main Office Area', isActive: false },
-    { id: '4', name: 'Camera 4', ip: '10.0.0.128', location: 'Main Office Area', isActive: true },
-    { id: '5', name: 'Camera 5', ip: '10.0.0.129', location: 'Second Floor', isActive: true },
-    { id: '1', name: 'Camera 1', ip: '10.0.0.125', location: 'Reception Area', isActive: true },
-    { id: '2', name: 'Camera 2', ip: '10.0.0.126', location: 'Reception Area', isActive: true },
-    { id: '3', name: 'Camera 3', ip: '10.0.0.127', location: 'Main Office Area', isActive: false },
-    { id: '4', name: 'Camera 4', ip: '10.0.0.128', location: 'Main Office Area', isActive: true },
-    { id: '5', name: 'Camera 5', ip: '10.0.0.129', location: 'Second Floor', isActive: true },
-];
-export const SavedCameras: React.FC<SavedCamerasProps> = ({ hub, className = "" }) => {
-    // This would typically come from an API or state management
 
+export const SavedCameras: React.FC<SavedCamerasProps> = ({ hub, className = "", toggleStream, setIsDelete, isDelete, handleDelet, setSelectedSite, selectedSite, sites }) => {
     const [isEditCameraOpen, setIsEditCameraOpen] = useState(false);
     const [isAddCameraOpen, setIsAddCameraOpen] = useState(false);
-
+    const [cameraToggle, setCameraToggle] = useState(false);
+    const [cameraId, setCameraId] = useState<number>()
+    const [organizationId, setOrganizationId] = useState('')
+    const [nearbyCams, setNearbyCams] = useState<DevicesMap>()
+    const [camera, setCamera] = useState<Camera>()
+    const [loading, setLoading] = useState(false)
+    const [editLoading, setEditLoading] = useState(false)
+    const { data: organizations, isLoading, error } = useOrganizations();
+    const [formData, setFormData] = useState<StreamFormData>({
+        name: '',
+        people_threshold_count: -1,
+        organizationId: '',
+        folderId: null,
+        subfolder: null
+    });
+    const handleSwitchToggle = async (newToggle: boolean) => {
+        if (camera) {
+            const res = await toggleStream(
+                newToggle,
+                camera.camera_id,
+                camera.physical_address,
+                camera.hub_id
+            );
+            if (res.status === 200) {
+                setCameraToggle(newToggle)
+            }
+        }
+    }
+    const fetchNearByCam = async () => {
+        setLoading(true)
+        try {
+            const res = await protectApi<{ devices: DevicesMap }>(`/camera/nearby?hubId=${hub.id}`)
+            if (res.status === 200) {
+                setNearbyCams(res.data.data.devices)
+            }
+        }
+        catch (e) {
+            console.error("Err:", e)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+    useEffect(() => {
+        fetchNearByCam();
+    }, [])
     const handleAddCamera = () => {
         setIsAddCameraOpen(true);
     };
 
-    const handleToggleCamera = (id: string) => {
-        // Handle toggle camera
-        console.log('Toggle camera:', id);
-    };
 
-    const handleEditCamera = (id: string) => {
+    const handleEditCamera = async (camera: Camera) => {
         setIsEditCameraOpen(true);
-        console.log('Edit camera:', id);
+        setCamera(camera)
+        setCameraToggle(camera.is_ai_stream_active !== 0)
+        await fetchCameraLocation(camera.camera_id)
+        setFormData((prev) => ({ ...prev, name: camera.name, people_threshold_count: camera.people_threshold_count, organizationId: camera.organization_id ?? '' }))
+    };
+    const handleDeleteCamera = (id: number, orgId: string) => {
+
+        setIsDelete(true)
+        setCameraId(id)
+        setOrganizationId(orgId)
     };
 
-    const handleDeleteCamera = (id: string) => {
-        // Handle delete camera
-        console.log('Delete camera:', id);
-    };
+    const fetchCameraLocation = async (id: number) => {
+        setEditLoading(true)
+        try {
+            const res = await protectApi<CameraLocation, undefined>(`/camera/cam-details?cameraId=${id}`)
+            setFormData((prev) => ({
+                ...prev, folderId: res.data.data.parantFolderId !== "NA"
+                    ? Number(res.data.data.parantFolderId)
+                    : null, subfolder: res.data.data.folderId !== "NA"
+                        ? Number(res.data.data.folderId)
+                        : null
+            }))
 
+        } catch (err) {
+            console.error("err", err)
+        }
+        finally {
+            setEditLoading(false)
+        }
+    }
+    const handleSave = async () => {
+        setLoading(true)
+        const fallbackFolderId =
+            formData.folderId && formData.folderId > 0
+                ? formData.folderId
+                : formData.subfolder && formData.subfolder > 0
+                    ? formData.subfolder
+                    : null;
+
+        const payload: Partial<StreamFormData> = {
+            name: formData.name,
+            people_threshold_count: formData.people_threshold_count,
+            organizationId: formData.organizationId,
+            folderId: fallbackFolderId,
+        };
+        try {
+            const res = await protectApi<any, Partial<StreamFormData>>(
+                `camera?action=update&cameraId=${camera?.camera_id}`,
+                'PUT',
+                payload
+            );
+
+            if (res.status === 200) {
+                setIsEditCameraOpen(false)
+                setFormData({
+                    name: '',
+                    people_threshold_count: 0,
+                    organizationId: '',
+                    folderId: -1,
+                    subfolder: -1
+                })
+            }
+        } catch (e) { console.error(e) }
+        finally{
+            setLoading(false)
+        }
+    }
+    const t = useTranslations()
     return (
         <>
             <div className={`flex flex-col h-full px-8  ${className}`}>
-                {/* Header */}
                 <div className="flex justify-between items-center pt-6 pb-5 flex-shrink-0">
                     <div>
                         <h2 className="text-sm font-bold">{hub.name}</h2>
-                        <p className="text-sm text-gray-500">{hub.ip}</p>
+                        <p className="text-sm text-gray-500">{hub.physical_address}</p>
                     </div>
                     <button
                         onClick={handleAddCamera}
                         className="flex items-center gap-2 shadow-md px-4 py-2 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors"
                     >
                         <IconPlus size={18} />
-                        <span className="text-sm">Add New Camera</span>
+                        <span className="text-sm">{t('settings.add_new_camera')}</span>
                     </button>
                 </div>
-
-                {/* Cameras List */}
                 <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-6rem)]  pb-4 scrollbar-hide">
                     <div className="space-y-3">
-                        {cameras.map((camera, index) => (
+                        {hub.cameras.filter((item) => item.camera_id !== cameraId).map((camera, index) => (
                             <div
-                                key={camera.id + index}
+                                key={camera.camera_id + index}
                                 className="flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors"
                             >
                                 <div className="w-15 h-15 bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
@@ -105,26 +184,19 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ hub, className = "" 
                                 <div className="ml-3 flex-1 min-w-0">
                                     <h3 className="text-sm font-medium truncate">{camera.name}</h3>
                                     <div className="flex items-center gap-2">
-                                        <p className="text-xs text-gray-500 truncate">{camera.ip}</p>
-                                        <span className="text-xs text-gray-400">•</span>
-                                        <p className="text-xs text-gray-500 truncate">{camera.location}</p>
+
+                                        <p className="text-xs text-gray-500 truncate">{camera.organization?.name}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <Switch
-                                        key={camera.id}
-                                        enabled={camera.isActive}
-                                        onChange={() => handleToggleCamera(camera.id)}
-                                        trackColor="bg-[#EFEFEF]"
-                                    />
                                     <button
-                                        onClick={() => handleEditCamera(camera.id)}
+                                        onClick={() => handleEditCamera(camera)}
                                         className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
                                     >
                                         <IconPencil size={24} className="text-gray-600" />
                                     </button>
                                     <button
-                                        onClick={() => handleDeleteCamera(camera.id)}
+                                        onClick={() => handleDeleteCamera(camera.camera_id, camera.organization_id ?? '')}
                                         className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
                                     >
                                         <IconTrash size={24} className="text-[#FF6868]" />
@@ -136,13 +208,32 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ hub, className = "" 
                 </div>
             </div>
             <AddNewCameraDialogue
+                nearCams={nearbyCams}
                 isOpen={isAddCameraOpen}
                 onClose={() => setIsAddCameraOpen(false)}
+                isLoading={loading}
+                fetchNearCams={fetchNearByCam}
+                sites={sites}
+                setSelectedSite={setSelectedSite}
+                selectedSite={selectedSite}
+                hubId={hub.id}
             />
-            <EditCameraDialogue
-                isOpen={isEditCameraOpen}
-                onClose={() => setIsEditCameraOpen(false)}
-            />
+            {isEditCameraOpen &&
+                <EditStreamDialog
+                    isEditLoading={editLoading}
+                    isLoading={loading}
+                    setFormData={setFormData}
+                    folders={organizations?.find((item) => item.id === formData.organizationId)?.folders.map((folder) => ({ key: folder.id.toString(), value: folder.name }))}
+                    organizations={organizations?.map((item) => ({ key: item.id, value: item.name }))}
+                    subfolders={organizations?.find((item) => item.id === formData.organizationId)?.folders.find((item) => item.id === formData.folderId)?.child_folders.map((folder) => ({ key: folder.id.toString(), value: folder.name }))}
+                    isStream={cameraToggle}
+                    handleToggleStream={handleSwitchToggle}
+                    onClose={() => setIsEditCameraOpen(false)}
+                    formData={formData}
+                    handleSave={handleSave}
+                />
+            }
+            {isDelete && <DeleteDialog<{ cameraId: number | undefined, organizationId: string }> title={t('settings.delete_camera_confirm')} handleDelete={() => handleDelet(cameraId, organizationId)} data={{ cameraId, organizationId }} onClose={() => setIsDelete(false)} />}
         </>
     );
 }; 

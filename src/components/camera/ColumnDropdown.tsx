@@ -4,22 +4,24 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { setToggleColumns } from "@/redux/slices/cameraSlice";
+import { useTranslations } from "next-intl";
 
-const columns = [
-    { label: "2 columns", value: 2 },
-    { label: "3 columns", value: 3 },
-    { label: "4 columns", value: 4 },
-    { label: "5 columns", value: 5 },
-];
+
 
 const ColumnDropdown = () => {
     const dispatch = useDispatch<AppDispatch>();
     const toggleColumnValue = useSelector((state: RootState) => state.camera.toogleColumns);
-
-    const [selected, setSelected] = useState(columns.find(col => col.value === toggleColumnValue)?.label || "3 columns");
+    const t = useTranslations()
+    const columns = [
+        { label: `2 ${t('columns')}`, value: 2 },
+        { label: `3 ${t('columns')}`, value: 3 },
+        { label: `4 ${t('columns')}`, value: 4 },
+        { label: `5 ${t('columns')}`, value: 5 },
+    ];
+    const [selected, setSelected] = useState(columns.find(col => col.value === toggleColumnValue)?.label || `3 ${t('columns')}`);
 
     const handleChange = (colValue: number) => {
-        setSelected(columns.find(col => col.value === colValue)?.label || "3 columns");
+        setSelected(columns.find(col => col.value === colValue)?.label || `3 ${t('columns')}`);
         dispatch(setToggleColumns(colValue)); // Dispatch action to Redux
     };
 

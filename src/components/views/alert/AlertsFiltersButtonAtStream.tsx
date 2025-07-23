@@ -1,0 +1,35 @@
+import { cn } from '@/lib/utils';
+import { IconBounceRight, IconFireExtinguisher, IconFriends, IconLayoutDashboard, IconLicense, IconTreadmill, IconUserScan } from '@tabler/icons-react';
+import React from 'react'
+import { useTranslations } from "next-intl";
+function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selectedTab: string, setSelectedTab: (val: string) => void }) {
+    const t = useTranslations()
+    const tabFilters = [
+        { id: 0, label: `${t("alerts.all")}`, value: 'all', icon: <IconLayoutDashboard stroke={2} /> },
+        { id: 1, label: `${t("alerts.intrusion_detection")}`, value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={2} /> },
+        { id: 2, label: `${t("alerts.motion_detection")}`, value: 'MOTION_DETECTION', icon: <IconBounceRight stroke={2} /> },
+        { id: 3, label: `${t("alerts.people_count")}`, value: 'PEOPLE_COUNT', icon: <IconFriends stroke={2} /> },
+        { id: 4, label: `${t("alerts.face_detection")}`, value: 'FACE_DETECTION', icon: <IconUserScan stroke={2} /> },
+        { id: 5, label: `${t("alerts.license_plate_detection")}`, value: 'LICENSE_PLATE_DETECTION', icon: <IconLicense stroke={2} /> },
+        { id: 6, label: `${t("alerts.fire_smoke_detection")}`, value: 'FIRE_SMOKE_DETECTION', icon: <IconFireExtinguisher stroke={2} /> },
+    ];
+
+    return (
+        <div className="flex gap-2 md:gap-4 min-h-min overflow-x-auto scrollbar-hide  p-2 pb-4 justify-center md:justify-normal">
+            {tabFilters.map((tf, index) => (
+                <button key={index}
+                    onClick={() => setSelectedTab(tf.value)}
+                    className={cn('flex flex-col items-center justify-center',
+                        " w-10  md:w-17 px-3 rounded-lg md:rounded-xl hover:bg-white hover:text-black",
+                        selectedTab === tf.value
+                            ? "bg-[#2B4C88] text-white "
+                            : "bg-[var(--surface-350)] text-[#888888]")}>
+                    <div className='flex items-center justify-center ' > {React.cloneElement(tf.icon, { size: 16 })}</div>
+                    <span className='text-xs mt-1'>{tf.label}</span>
+                </button>
+            ))}
+        </div>
+    )
+}
+
+export default AlertsFiltersButtonAtStream

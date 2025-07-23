@@ -1,4 +1,5 @@
-import { InputField } from "../ui/Input.field";
+import { InputField } from "@/components/ui/Input.field";
+import Spinner from "@/components/ui/Spinner";
 
 export const LoginForm = ({
   onSubmit,
@@ -66,8 +67,8 @@ export const LoginForm = ({
         <button
           type="submit"
           className="w-full h-[35px] sm:h-[40px] md:h-[45px] bg-[#2B4C88] hover:bg-blue-700 text-white text-sm sm:text-base rounded-full transition-colors"
-        >
-          Sign In
+        >{isLoading ? <Spinner /> :
+          'Sign In'}
         </button>
 
         {/* OR Divider */}

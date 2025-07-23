@@ -1,6 +1,6 @@
-import { InputField } from "./ui/Input.field";
+import { InputField } from "../ui/Input.field";
 import React from "react";
-import Spinner from "./ui/Spinner";
+import Spinner from "../ui/Spinner";
 
 export const OtpForm = ({
   onSubmit,
@@ -18,7 +18,8 @@ export const OtpForm = ({
   password,
   setPassword,
   showPassword,
-  setShowPassword
+  setShowPassword,
+  isVerifyLoading
 }: {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   otp: string[];
@@ -35,7 +36,8 @@ export const OtpForm = ({
   password?: string,
   setPassword?: (value:string) => void 
   showPassword?: boolean,
-  setShowPassword?: (val: boolean) => void
+  setShowPassword?: (val: boolean) => void;
+  isVerifyLoading: boolean
 }) => {
   return (
     <div className="px-3 xs:px-4 sm:px-5 md:px-6 lg:px-8 pb-2 xs:pb-2.5 sm:pb-3 md:pb-4">
@@ -86,14 +88,15 @@ export const OtpForm = ({
 
         {/* Register Button */}
         <button
+        disabled={isVerifyLoading}
           type="submit"
           className="w-full h-[35px] sm:h-[40px] md:h-[45px] bg-[#2B4C88] hover:bg-blue-700 text-white text-sm sm:text-base rounded-full transition-colors"
         >
-          {isForgot?'Verify & Change Password' :'Verify'}
+          {isVerifyLoading ? <Spinner/> :<span>{isForgot ? 'Verify & Change Password' : 'Verify'}</span> }
         </button>
 
         <button
-          disabled={!canResendOtp && isLoading}
+          disabled={!canResendOtp && isLoading && isVerifyLoading}
           type="button"
           onClick={resendOtp}
           className="w-full h-[35px] flex items-center justify-center text-center sm:h-[40px] md:h-[45px] bg-[#F6F6F6] hover:bg-gray-100 text-gray-700 text-sm sm:text-base rounded-full transition-colors"

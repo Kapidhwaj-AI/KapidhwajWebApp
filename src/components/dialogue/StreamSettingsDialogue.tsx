@@ -14,6 +14,7 @@ import { useState } from "react";
 import Modal from "../ui/Modal";
 import { AxiosResponse } from "axios";
 import { ApiResponse } from "@/lib/protectApi";
+import { useTranslations } from "next-intl";
 
 export function StreamSettingsDialogue({
   isOpen,
@@ -64,10 +65,10 @@ export function StreamSettingsDialogue({
       setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
     }
   };
-
+  const t = useTranslations()
   if (isOpen) {
     return (
-      <Modal onClose={onClose} title='Settings'>
+      <Modal onClose={onClose} title={t('streams.options.settings')}>
         {/* Settings List */}
         <div className="space-y-3">
           {/* Record All Videos */}
@@ -76,7 +77,7 @@ export function StreamSettingsDialogue({
               <div className="p-2 bg-[#2B4C88] rounded-xl">
                 <IconVideo stroke={2} color="white" />
               </div>
-              <span> Record All Videos</span>
+              <span> {t('record_all_videos')}</span>
             </div>
             <Switch
               enabled={settings.recordings}
@@ -91,7 +92,7 @@ export function StreamSettingsDialogue({
               <div className="p-2 bg-[#2B4C88] rounded-xl">
                 <IconTreadmill stroke={2} color="white" />
               </div>
-              <span>Intrusion Detection</span>
+              <span>{t('intrusion_detection')}</span>
             </div>
 
             <Switch
@@ -107,7 +108,7 @@ export function StreamSettingsDialogue({
               <div className="p-2 bg-[#2B4C88] rounded-xl">
                 <IconBounceRight stroke={2} color="white" />
               </div>
-              <span>Motion Detection</span>
+              <span>{t('motion_detection')}</span>
             </div>
             <Switch
               enabled={settings.motion}
@@ -122,7 +123,7 @@ export function StreamSettingsDialogue({
               <div className="p-2 bg-[#2B4C88] rounded-xl">
                 <IconFriends stroke={2} color="white" />
               </div>
-              <span>People Detection</span>
+              <span>{t('people_detection')}</span>
             </div>
             <Switch
               enabled={settings.people_count}
@@ -138,7 +139,7 @@ export function StreamSettingsDialogue({
                 <div className="p-2 bg-[#2B4C88] rounded-xl">
                   <IconLicense stroke={2} color="white" />
                 </div>
-                <span>License</span>
+                <span>{t('alerts.license_plate_detection')}</span>
               </div>
             </div>
             <Switch

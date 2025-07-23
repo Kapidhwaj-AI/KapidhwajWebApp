@@ -64,7 +64,7 @@ function InfiniteScrolling<T>({
         return () => observer.disconnect();
     }, [divRef, hasMore, isLoading, offset, setOffset]);
 
-    return <>{children}</>;
+    return children;
 }
 
 export default InfiniteScrolling;

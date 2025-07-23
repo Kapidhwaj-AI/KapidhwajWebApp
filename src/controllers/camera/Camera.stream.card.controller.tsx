@@ -13,7 +13,7 @@ export const CameraStreamCardController = ({
   useEffect(() => {
     const fetchCameraLocation = async () => {
       try {
-        const res = await protectApi(`/camera/cam-details?cameraId=${camera.camera_id}`)
+        const res = await protectApi<CameraLocation>(`/camera/cam-details?cameraId=${camera.camera_id}`)
         const data = res.data.data
 
         setCameraLocation(data)
@@ -21,8 +21,7 @@ export const CameraStreamCardController = ({
         console.error("Error while fetching camera location", err)
       }
     }
-    if (camera.camera_id) {
-
+    if (camera?.camera_id) {
       fetchCameraLocation()
     }
   }, [camera?.camera_id])

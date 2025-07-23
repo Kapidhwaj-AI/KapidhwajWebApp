@@ -4,6 +4,7 @@ import { removeLocalStorageItem } from "@/lib/storage";
 import { clearAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
 import { IconMoon, IconSun, IconUser, IconLogout2 } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -22,12 +23,13 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const dispatch = useDispatch <AppDispatch>()
   const handleLogoutClick = async () => {
     // await handleLogout();
+    document.cookie = "locale=; path=/; max-age=0";
     removeLocalStorageItem('user')
     removeLocalStorageItem('kapi-token')
     dispatch(clearAuthToken())
     router.push("/login");
   };
-
+  const t = useTranslations()
   if (!isOpen) return null;
 
   return (
@@ -43,7 +45,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
           <div className="bg-[#7A73D1] rounded-lg p-2">
             <IconUser size={18} color="white" />
           </div>
-          Profile
+         { t('settings.profile')}
         </button>
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -52,7 +54,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
           <div className=" bg-black dark:bg-white rounded-lg p-2 text-white dark:text-black">
             {theme === "dark" ? <IconSun size={18} /> : <IconMoon size={18} />}
           </div>
-          {theme === "dark" ? "Light Mode" : "Dark Mode"}
+          {theme === "dark" ? t('light_mode') : t('dark_mode')}
         </button>
         <button
           onClick={handleLogoutClick}
@@ -61,7 +63,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
           <div className="bg-[#FF6868] rounded-lg p-2">
             <IconLogout2 size={18} color="white" />
           </div>
-          Logout
+          {t('settings.logout')}
         </button>
       </div>
     </div>

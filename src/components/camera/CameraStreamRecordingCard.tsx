@@ -1,46 +1,73 @@
 "use client";
-import { IconBorderCornerSquare, IconEye, IconMovie, IconPlayerPlay } from "@tabler/icons-react";
-import LiveBadge from "./LiveBadge";
+import { IconBorderCornerSquare, IconEye, IconMovie, IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { RecordedClip } from "@/models/clip";
+import { GOOGLE_KPH_BUCKET_URL } from "@/services/config";
+import { useRef, useState } from "react";
 
 export default function CameraStreamRecordingCard({ recording }: { recording: RecordedClip }) {
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
+    const handleTogglePlay = () => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        if (isPlaying) {
+            video.pause();
+            setIsPlaying(false);
+        } else {
+            video.play();
+            setIsPlaying(true);
+        }
+    };
     return (
         <div
             className={cn(
-                "w-full aspect-video bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl lg:rounded-3xl xl:rounded-4xl shadow-md lg:shadow-lg",
-                "overflow-hidden flex items-center justify-center relative group",
-                "transition-all duration-300 hover:shadow-xl hover:scale-[1.01]"
+                'w-full aspect-video bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl lg:rounded-3xl xl:rounded-4xl shadow-md lg:shadow-lg',
+                'overflow-hidden flex items-center justify-center relative group',
+                'transition-all duration-300 hover:shadow-xl hover:scale-[1.01]'
             )}
-
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
-            <video src={recording.recorded_path}
-                controls
-                autoPlay
-                muted
-                playsInline
-                className="w-[100%] h-[100%] rounded-4xl">
+            <video
+                ref={videoRef}
+                src={GOOGLE_KPH_BUCKET_URL + recording.recorded_path}
+                
+                className="w-full h-full object-cover rounded-4xl"
+            />
 
-            </video>
-            <div className={cn(
-                "absolute h-12 w-12 md:h-14 md:w-14 lg:h-16 lg:w-16 rounded-full",
-                "backdrop-blur-sm flex items-center justify-center",
-                "bg-black/20 group-hover:bg-black/30 transition-all duration-300",
-                "transform group-hover:scale-110"
-            )}>
-                <IconPlayerPlay
-                    stroke={2}
-                    className="text-white/80 group-hover:text-white"
-                    size={20}
-                    style={{
-                        width: "clamp(1rem, 2vw, 1.5rem)",
-                        height: "clamp(1rem, 2vw, 1.5rem)"
-                    }}
-                />
-            </div>
+            {/* Overlay Play/Pause Button */}
+            {(!isPlaying || isHovered) && (
+                <button
+                    onClick={handleTogglePlay}
+                    className={cn(
+                        'absolute h-12 w-12 md:h-14 md:w-14 lg:h-16 lg:w-16 rounded-full',
+                        'backdrop-blur-sm flex items-center justify-center z-10',
+                        'bg-black/20 hover:bg-black/30 transition-all duration-300',
+                        'transform hover:scale-110'
+                    )}
+                >
+                    {isPlaying ? (
+                        <IconPlayerPause
+                            stroke={2}
+                            className="text-white/80 hover:text-white"
+                            size={24}
+                        />
+                    ) : (
+                        <IconPlayerPlay
+                            stroke={2}
+                            className="text-white/80 hover:text-white"
+                            size={24}
+                        />
+                    )}
+                </button>
+            )}
+    
 
             {/* Bottom Controls Bar */}
             {/* <div className={cn(

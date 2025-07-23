@@ -1,10 +1,11 @@
 'use client';
 
+import { Notification } from '@/models/notification';
 import { getNotificationStyle } from '@/utils/notification';
 import { IconBell, IconBellFilled, IconSparkles } from '@tabler/icons-react';
 import clsx from 'clsx';
 
-export default function NotificationCard({ notification }: { notification: any }) {
+export default function NotificationCard({ notification }: { notification: Notification }) {
     const { id, title, message, type, seen } = notification;
     const notificationType = getNotificationStyle(type);
     return (

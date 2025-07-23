@@ -7,28 +7,25 @@ import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { TimePicker } from "@/components/ui/time-picker";
 import Modal from '../ui/Modal';
+import { useTranslations } from 'next-intl';
 
-export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime, setDate, setEndTime, setStartTime }: { isOpen: boolean; onClose: () => void; date: Date | undefined, startTime: Date | undefined; endTime: Date | undefined; setDate: (val: Date | undefined) => void; setStartTime: (val: Date | undefined) => void; setEndTime: (val: Date | undefined) => void }) {
-    console.log(date, startTime, endTime,"times")
+export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime, setDate, setEndTime, setStartTime, handleApplyFilter }: { isOpen: boolean; onClose: () => void; date: Date | undefined, startTime: Date | undefined; endTime: Date | undefined; setDate: (val: Date | undefined) => void; setStartTime: (val: Date | undefined) => void; setEndTime: (val: Date | undefined) => void; handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void }) {
     if (!isOpen) return null;
-
+    const t = useTranslations()
     return (
-        <Modal onClose={onClose} title='Apply Filter'>
+        <Modal onClose={onClose} title={t('alerts.apply_filter')}>
             {/* Content Area */}
             <div className="flex-1 space-y-4 mb-6">
-                {/* Person Filter - Dropdown */}
-
-
-                {/* Date Filter - Calendar Popover */}
+            
                 <div>
-                    <label className="block text-md font-medium mb-2">Date</label>
+                    <label className="block text-md font-medium mb-2">{t('date')}</label>
                     <Popover>
                         <PopoverTrigger asChild>
                             <Button
                                 variant="outline"
-                                className="w-full h-[60px] justify-between p-4 text-left bg-[var(--surface-150)] hover:bg-[var(--surface-100)] border-none rounded-full text-base"
+                                className="w-full h-[35px] flex items-center justify-between sm:h-[40px] md:h-[45px] p-2 px-4 bg-transparent rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] dark:text-white"
                             >
-                                {date ? format(date, "PPP") : "Select Date"}
+                                {date ? format(date, "PPP") : t("alerts.select_date")}
                                 <IconChevronDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
                             </Button>
                         </PopoverTrigger>
@@ -48,14 +45,14 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                 <div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-md font-medium mb-2">Start Time</label>
+                            <label className="block text-md font-medium mb-2">{t('start_time')}</label>
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <Button
                                         variant="outline"
-                                        className="w-full h-[60px] justify-between p-4 text-left bg-[var(--surface-150)] hover:bg-[var(--surface-100)] border-none rounded-full text-base"
+                                        className="w-full h-[35px] flex items-center justify-between sm:h-[40px] md:h-[45px] p-2 px-4 bg-transparent rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] dark:text-white"
                                     >
-                                        {startTime ? format(startTime, "h:mm a") : "Select Time"}
+                                        {startTime ? format(startTime, "h:mm a") : t('alerts.start_time') }
                                         <IconChevronDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
@@ -69,14 +66,14 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                             </Popover>
                         </div>
                         <div>
-                            <label className="block text-md font-medium mb-2">End Time</label>
+                            <label className="block text-md font-medium mb-2">{t('start_time')}</label>
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <Button
                                         variant="outline"
-                                        className="w-full h-[60px] justify-between p-4 text-left bg-[var(--surface-150)] hover:bg-[var(--surface-100)] border-none rounded-full text-base"
+                                        className="w-full h-[35px] flex items-center justify-between sm:h-[40px] md:h-[45px] p-2 px-4 bg-transparent rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] dark:text-white"
                                     >
-                                        {endTime ? format(endTime, "h:mm a") : "Select Time"}
+                                        {endTime ? format(endTime, "h:mm a") : t('alerts.end_time') }
                                         <IconChevronDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
@@ -99,16 +96,16 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                     className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
                     onClick={onClose}
                 >
-                    <span className='flex items-center gap-2 text-[#888888]'><IconX size={16} />Close</span>
+                    <span className='flex items-center gap-2 text-[#888888]'><IconX size={16} />{t('close')}</span>
                 </button>
                 <button
                     className="px-6 py-3 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base"
                     onClick={() => {
+                        handleApplyFilter(date, startTime, endTime)
 
-                        
                     }}
                 >
-                    Apply Filter
+                    {t('alerts.apply_filter')}
                 </button>
             </div>
         </Modal>

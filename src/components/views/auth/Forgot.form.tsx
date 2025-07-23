@@ -1,7 +1,6 @@
 import React from 'react'
-import { InputField } from '../ui/Input.field';
-import Modal from '../ui/Modal';
-import { OtpForm } from '../Otp.form';
+import { InputField } from '../../ui/Input.field';
+
 
 const ForgotForm = ({
   onSubmit,

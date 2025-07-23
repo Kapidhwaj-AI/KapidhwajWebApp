@@ -1,8 +1,7 @@
 
-import AlertHomeView from '@/components/alert/Alert.home.view';
+import AlertHomeView from '@/components/views/alert/Alert.home.view';
 import { protectApi } from '@/lib/protectApi';
 import { Alert } from '@/models/alert';
-import { Alerts } from '@/types/alert';
 import React, { useEffect, useState } from 'react'
 
 const AlertsHomeViewController = ({
@@ -18,7 +17,7 @@ const AlertsHomeViewController = ({
         onStart()
         const fetchAlerts = async () => {
             try {
-                const res = await protectApi('/alert/recent')
+                const res = await protectApi<Alert[]>('/alert/recent')
                 setAlerts(res.data?.data)
                 console.log(res.data.data)
             } catch (error) {

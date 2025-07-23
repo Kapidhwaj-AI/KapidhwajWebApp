@@ -1,6 +1,6 @@
 "use client";
 
-import { LoginForm } from "@/components/auth/Login.form";
+import { LoginForm } from "@/components/views/auth/Login.form";
 import { setLocalStorageItem } from "@/lib/storage";
 import { setAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
@@ -58,7 +58,7 @@ export const LoginFormController = () => {
         expiresAt.setDate(expiresAt.getDate() + 7);
 
         setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.token, expiresAt: expiresAt.toISOString() }))
-        setLocalStorageItem('user', JSON.stringify({ name: res.data.data.name, email: res.data.data.email, username: res.data.data.username }))
+        setLocalStorageItem('user', JSON.stringify(res.data.data))
         dispatch(setAuthToken(res.data.token));
 
         router.replace("/home");

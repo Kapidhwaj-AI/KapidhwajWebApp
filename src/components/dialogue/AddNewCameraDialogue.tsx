@@ -1,138 +1,171 @@
 'use client';
 
-import { useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { IconX, IconCheck, IconRefresh, IconCopy, IconRouter, IconCopyPlus } from '@tabler/icons-react';
-import { cameras } from '../device/SavedCameras';
+// import { cameras } from '../device/SavedCameras';
 import Modal from '../ui/Modal';
+import { DevicesMap } from '@/models/settings';
+import Spinner from '../ui/Spinner';
+import { InputField } from '../ui/Input.field';
+import { useTranslations } from 'next-intl';
+import SelectField from '../ui/Select.field';
+import { Folders, Organization } from '@/models/organization';
+import { protectApi } from '@/lib/protectApi';
 
 interface AddNewCameraDialogueProps {
     isOpen: boolean;
     onClose: () => void;
+    nearCams: DevicesMap | undefined
+    isLoading: boolean;
+    fetchNearCams: () => void;
+    setSelectedSite: (val: string) => void;
+    selectedSite: string;
+    sites: Organization[];
+    hubId: string;
 }
 
-export function AddNewCameraDialogue({ isOpen, onClose }: AddNewCameraDialogueProps) {
+export function AddNewCameraDialogue({ isOpen, hubId, onClose, isLoading, fetchNearCams, nearCams, selectedSite, setSelectedSite, sites }: AddNewCameraDialogueProps) {
     const [ipAddress, setIpAddress] = useState('');
     const [name, setName] = useState('');
-    const [siteName, setSiteName] = useState('');
+    const [password, setPassword] = useState('');
     const [roomName, setRoomName] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [mac, setMac] = useState('')
+    const [username, setUsername] = useState('')
+    const [rooms, setRooms] = useState<{ id: string; name: string }[]>([])
+    const [subfolders, setSubfolders] = useState<{ id: string; name: string }[]>([])
+    const [subfolderId, setSubfolderId] = useState('')
+    const [isSaving, setIsSaving] = useState(false);
+    const t = useTranslations()
 
-    const handleRefresh = async () => {
-        if (isLoading) return;
-        setIsLoading(true);
+
+    const handleSave = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (
+            !name ||
+            !ipAddress ||
+            !mac ||
+            !username ||
+            !password ||
+            !selectedSite ||
+            !hubId
+        ) {
+
+            return;
+        }
+        setIsSaving(true)
         try {
-            await new Promise(resolve => setTimeout(resolve, 3000));
-            console.log('Refreshed nearby hubs');
-        } catch (error) {
-            console.error('Error refreshing hubs:', error);
+            const folderToSend = subfolderId || roomName || null;
+            const res = await protectApi(`/camera?action=add&organizationId=${selectedSite}`, 'POST', {
+                name,
+                physicalAddress: mac,
+                folderId: Number(folderToSend),
+                hubId, username, password, ipaddress: ipAddress,
+            })
+            if(res.status === 200){
+                onClose()
+            }
+        } catch {
+
         } finally {
-            setIsLoading(false);
+            setIsSaving(false)
         }
     };
-
-    const handleSave = () => {
-        console.log({
-            ipAddress,
-            name,
-            siteName,
-            roomName
-        });
-        onClose();
-    };
-
+    useEffect(() => {
+        setRoomName('')
+        const fetchFolders = async () => {
+            try {
+                const res = await protectApi<Folders[]>(`/Folders?action=view&organizationId=${selectedSite}`)
+                if (res.status === 200) {
+                    const data = res.data.data.map((item) => ({ id: item.id.toString(), name: item.name }))
+                    setRooms(data)
+                }
+            } catch (e) {
+                console.error("Err:", e)
+            }
+        }
+        if (selectedSite.length > 0) {
+            fetchFolders()
+        }
+    }, [selectedSite])
+    useEffect(() => {
+        setSubfolderId('')
+        const fetchFolders = async () => {
+            try {
+                const res = await protectApi<{ child_folders: Folders[] }>(`/Folders/${roomName}?action=view`)
+                if (res.status === 200) {
+                    const data = res.data.data.child_folders.map((item) => ({ id: item.id.toString(), name: item.name }))
+                    setSubfolders(data)
+                }
+            } catch (e) {
+                console.error("Err:", e)
+            }
+        }
+        if (roomName.length > 0) {
+            fetchFolders()
+        }
+    }, [roomName])
     if (!isOpen) return null;
 
     return (
-        <Modal onClose={onClose} title='Add New Camera'>
-            {/* Header */}
-       
-
-            {/* Content Area */}
-            <div className="flex-1">
+        <Modal onClose={onClose} title={t('settings.add_new_camera')}>
+            <form onSubmit={handleSave} className="h-full w-full flex flex-col gap-4">
                 {/* Form Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     {/* IP Address Field */}
-                    <div>
-                        <label className="block text-sm font-medium mb-2">IP Address</label>
-                        <input
-                            type="text"
-                            value={ipAddress}
-                            onChange={(e) => setIpAddress(e.target.value)}
-                            placeholder="Enter IP Address here..."
-                            className="w-full h-[45px] px-4 text-base bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                   
+                        <InputField value={name}
+                            setValue={setName}
+                            label={t('settings.name')}
+                            placeholder={t('settings.enter_name_here')}
                         />
-                    </div>
+                
 
                     {/* Name Field */}
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Name</label>
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            placeholder="Enter Name here..."
-                            className="w-full h-[45px] px-4 text-base bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                   
+                        <InputField value={ipAddress}
+                            setValue={setIpAddress}
+                            label={t('settings.ip_address')}
+                            placeholder={t('settings.enter_ip_address')}
                         />
-                    </div>
+                   
+                        <InputField value={mac}
+                            setValue={setMac}
+                            label={t('settings.mac_address')}
+                            placeholder={t('settings.enter_mac_address')}
+                        />
+                 
 
                     {/* Username Field */}
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Username</label>
-                        <input
-                            type="text"
-                            value={siteName}
-                            onChange={(e) => setSiteName(e.target.value)}
-                            placeholder="Enter username"
-                            className="w-full h-[45px] px-4 text-base bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    
+                        <InputField value={username}
+                            setValue={setUsername}
+                            label={t('settings.username')}
+                            placeholder={t('settings.enter_username')}
                         />
-                    </div>
+                    
+                    <InputField value={password}
+                        setValue={setPassword}
+                        label={t('settings.password')}
+                        placeholder={t('settings.enter_password')}
+                    />
+                    <SelectField placeholder={t('settings.select_a_site')} label={t('settings.select_site')} value={selectedSite} setValue={setSelectedSite} data={sites} />
 
-                    {/* Password Field */}
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Password</label>
-                        <input
-                            type="password"
-                            value={siteName}
-                            onChange={(e) => setSiteName(e.target.value)}
-                            placeholder="Enter password"
-                            className="w-full h-[45px] px-4 text-base bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-
-                    {/* Site Name Field */}
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Site Name</label>
-                        <input
-                            type="text"
-                            value={siteName}
-                            onChange={(e) => setSiteName(e.target.value)}
-                            placeholder="Enter site name"
-                            className="w-full h-[45px] px-4 text-base bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
 
                     {/* Folder Name Field */}
-                    <div>
-                        <label className="block text-sm font-medium mb-2">Folder Name</label>
-                        <input
-                            type="text"
-                            value={roomName}
-                            onChange={(e) => setRoomName(e.target.value)}
-                            placeholder="Enter folder name"
-                            className="w-full h-[45px] px-4 text-base bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
+                    <SelectField placeholder={t('settings.select_folder')} label={t('settings.folder_optional')} value={roomName} setValue={setRoomName} data={rooms} />
+                    <SelectField placeholder={t('settings.select_subfolder')} label={t('settings.subfolder_optional')} value={subfolderId} setValue={setSubfolderId} data={subfolders} />
+
                 </div>
 
                 {/* Divider */}
-                <div className="h-px bg-gray-200 mb-4"></div>
+                
 
                 {/* Nearby Cameras Section */}
                 <div>
                     <div className="flex gap-2 items-center mb-2">
-                        <h2 className="text-sm font-bold">Nearby Cameras</h2>
+                        <h2 className="text-sm font-bold">{t('manage_hubs.manage_cameras.nearby_cameras')}</h2>
                         <button
-                            onClick={handleRefresh}
+                            onClick={fetchNearCams}
                             disabled={isLoading}
                             className="p-1.5 hover:bg-[var(--surface-200)] rounded-full transition-colors disabled:opacity-50"
                         >
@@ -145,23 +178,32 @@ export function AddNewCameraDialogue({ isOpen, onClose }: AddNewCameraDialoguePr
 
                     <div className="w-full h-[140px] md:h-[160px] xl:h-[240px] bg-[var(--surface-100)] p-3 rounded-[24px]">
                         <div className="space-y-2 h-full overflow-y-auto pr-2 scrollbar-hide">
-                            {cameras.map((hub) => (
-                                <div key={hub.ip} className="flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-[12px] transition-colors min-h-[60px]">
-                                    <div className="w-[44px] h-[44px] bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
-                                        <IconRouter size={18} className="text-gray-600" />
-                                    </div>
-                                    <div className="ml-2.5 flex-1 min-w-0">
-                                        <h3 className="text-sm font-medium truncate">{hub.name}</h3>
-                                        <p className="text-xs text-gray-500 truncate">{hub.ip}</p>
-                                    </div>
-                                    <button
-                                        onClick={() => { }}
-                                        className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
+                            {isLoading ? (
+                                <Spinner />
+                            ) : nearCams ? (
+                                Object.entries(nearCams).map(([mac, device]) => (
+                                    <div
+                                        key={device.ipaddress}
+                                        className="flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-[12px] transition-colors min-h-[60px]"
                                     >
-                                        <IconCopyPlus size={16} className="text-gray-600" />
-                                    </button>
-                                </div>
-                            ))}
+                                        <div className="w-[44px] h-[44px] bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
+                                            <IconRouter size={18} className="text-gray-600" />
+                                        </div>
+                                        <div className="ml-2.5 flex-1 min-w-0">
+                                            <h3 className="text-sm font-medium truncate">{device.name}</h3>
+                                            <p className="text-xs text-gray-500 truncate">{device.ipaddress}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => { navigator.clipboard.writeText(device.rtsp); setName(device.name); setIpAddress(device.ipaddress); setMac(mac) }}
+                                            className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
+                                        >
+                                            <IconCopyPlus size={16} className="text-gray-600" />
+                                        </button>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-gray-500">No cameras found nearby.</p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -172,16 +214,16 @@ export function AddNewCameraDialogue({ isOpen, onClose }: AddNewCameraDialoguePr
                         className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
                         onClick={onClose}
                     >
-                        <span className='flex items-center gap-2 text-[#888888]'><IconX size={16} />Close</span>
+                        <span className='flex items-center gap-2 text-[#888888]'><IconX size={16} />{t('close')}</span>
                     </button>
-                    <button
+                    <button type='submit'
                         className="px-5 py-2 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base"
-                        onClick={handleSave}
+
                     >
-                        <span className='flex items-center gap-2'><IconCheck size={16} />Save</span>
+                        <span className='flex items-center gap-2'><IconCheck size={16} />{t('save')}</span>
                     </button>
                 </div>
-            </div>
+            </form>
         </Modal>
     );
 } 
