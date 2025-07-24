@@ -1,5 +1,6 @@
 "use client";
 
+import { protectApi } from "@/lib/protectApi";
 import { removeLocalStorageItem } from "@/lib/storage";
 import { clearAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
@@ -22,12 +23,15 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const router = useRouter();
   const dispatch = useDispatch <AppDispatch>()
   const handleLogoutClick = async () => {
-    // await handleLogout();
-    document.cookie = "locale=; path=/; max-age=0";
-    removeLocalStorageItem('user')
-    removeLocalStorageItem('kapi-token')
-    dispatch(clearAuthToken())
-    router.push("/login");
+
+    const res = await protectApi('/signout', "POST")
+    if(res.status === 200){
+      document.cookie = "locale=; path=/; max-age=0";
+      removeLocalStorageItem('user')
+      removeLocalStorageItem('kapi-token')
+      dispatch(clearAuthToken())
+      router.push("/login");
+    }
   };
   const t = useTranslations()
   if (!isOpen) return null;
