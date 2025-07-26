@@ -5,11 +5,11 @@ import NearbyHubsHome from './NearbyHubsHome'
 import SavedHubsHome from './SavedHubsHome'
 import { HomeViewProps } from '@/models/home'
 
-const HomeView: React.FC<HomeViewProps> = ({ isRemotely, isHubLoading, isSavedHubLoading, nearbyHubs, savedHubs, fetchHub, fetchSavedHubs, handleAccessRemotely }) => {
+const HomeView: React.FC<HomeViewProps> = ({ devices, isRemotely, isHubLoading, isSavedHubLoading, nearbyHubs, savedHubs, fetchHub, fetchSavedHubs, handleAccessRemotely }) => {
     return (
         <div className="h-full flex flex-col gap-4 min-h-0">
             <div className="flex items-center justify-between px-4">
-                <HomeProfileCardController />
+                <HomeProfileCardController devices={devices} />
 
                 <div className="relative">
                     <NotificationBadgeController />

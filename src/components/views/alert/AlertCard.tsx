@@ -2,7 +2,6 @@ import { Alert } from "@/models/alert";
 import { IconClock, IconCalendar, IconMovie, IconTreadmill, IconLayoutDashboard, IconBounceRight, IconFriends, IconUserScan, IconLicense, IconFireExtinguisher } from "@tabler/icons-react";
 import Image from "next/image";
 
-import { GOOGLE_KPH_BUCKET_URL } from "@/services/config";
 import { getLocalStorageItem } from "@/lib/storage";
 import { useState } from "react";
 import AlertPreviewDialogue from "@/components/dialogue/AlertPreviewDialogue";
@@ -12,33 +11,15 @@ export function AlertCard({ alert }: { alert: Alert }) {
     const timestamp = alert?.timestamp || 0
     const alertTimestamp = new Date(timestamp * 1000);
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    let baseUrl = hub ? `http://media.kapidhwaj.ai:${hub.static_port}/` : 'http://media.kapidhwaj.ai:3000/'
+    const baseUrl = hub ? `http://media.kapidhwaj.ai:${hub.static_port}/` : 'http://media.kapidhwaj.ai:3000/'
     const formattedDate = alertTimestamp.toLocaleDateString("en-GB");
     const formattedTime = alertTimestamp.toLocaleTimeString("en-GB", {
         hour: '2-digit',
         minute: '2-digit'
     });
-    const handleDownload = async() => {
-        try{
-
-            const response = await fetch(baseUrl + alert.frame_url);
-            const blob = await response.blob();
-            const blobUrl = URL.createObjectURL(blob);
-    
-            const link = document.createElement('a');
-            link.href = baseUrl + alert.frame_url;
-            link.download = `${alert.alertType}_${new Date().toISOString()}.png` ;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
-        }catch(err){
-            console.error(err)
-        }
-    }
+   
     return (
         <div className="w-full bg-[var(--surface-200)] rounded-4xl shadow-lg overflow-hidden">
-            {/* Header */}
             <div className="flex justify-between items-center px-4 pt-4">
                 <div className="flex items-center gap-3">
                     <div className="h-14 w-14 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
@@ -79,7 +60,7 @@ export function AlertCard({ alert }: { alert: Alert }) {
                     <IconMovie stroke={2} className="text-gray-600 dark:text-gray-300" size={24} />
                 </button>
             </div>
-            {isPreview && <AlertPreviewDialogue handleDownload={handleDownload} onClose={() => setIsPreview(false)} imageUrl={baseUrl + alert.frame_url} alertType={alert.alertType} />}
+            {isPreview && <AlertPreviewDialogue onClose={() => setIsPreview(false)} imageUrl={baseUrl + alert.frame_url} alertType={alert.alertType} />}
         </div>
     );
 }

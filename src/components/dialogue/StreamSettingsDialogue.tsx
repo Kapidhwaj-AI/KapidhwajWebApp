@@ -2,8 +2,6 @@
 
 import { Switch } from "../ui/CustomeSwitch";
 import {
-  IconX,
-  IconCheck,
   IconVideo,
   IconTreadmill,
   IconBounceRight,
@@ -35,9 +33,9 @@ export function StreamSettingsDialogue({
   motion: boolean;
   people: boolean;
   license: boolean;
-  handleAiStremToggle: (key: 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<any>, any>>;
-  handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<any>, any>>;
-  handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<any>, any>>
+  handleAiStremToggle: (key: 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
+  handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
+  handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
 
 }) {
   const [settings, setSettings] = useState({

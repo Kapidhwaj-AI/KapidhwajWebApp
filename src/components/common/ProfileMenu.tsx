@@ -7,11 +7,8 @@ import { AppDispatch } from "@/redux/store";
 import { IconMoon, IconSun, IconUser, IconLogout2 } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-
-// import { handleLogout } from '@/utils/tokenManager';
 
 interface ProfileMenuProps {
   isOpen: boolean;

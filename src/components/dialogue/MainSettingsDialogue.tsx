@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { IconX, IconCheck, IconDeviceSpeaker, IconVideo, IconTreadmill, IconBounceRight, IconFriends, IconHeadphones } from '@tabler/icons-react';
-import { cn } from '@/lib/utils';
+import { IconX, IconCheck,  IconVideo, IconTreadmill, IconBounceRight, IconFriends, IconHeadphones } from '@tabler/icons-react';
 import { Switch } from '../ui/CustomeSwitch';
 
 export function MainSettingsDialogue({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {

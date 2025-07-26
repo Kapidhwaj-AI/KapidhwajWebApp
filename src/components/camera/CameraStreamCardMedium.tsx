@@ -11,7 +11,6 @@ import {
 } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsFullScreenMode } from "@/redux/slices/cameraSlice";
-import { getLocalStorageItem } from "@/lib/storage";
 
 
 export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {

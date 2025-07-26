@@ -3,10 +3,10 @@ import { SavedCameras } from '@/components/device/SavedCameras'
 import { SavedHubs } from '@/components/device/SavedHubs'
 import { AddNewFolderDialogue } from '@/components/dialogue/AddNewFolderDialogue'
 import { AddNewSiteDialogue } from '@/components/dialogue/AddNewSiteDialogue'
-import HubDialogue from '@/components/dialogue/HubDialogue'
+
 
 import { ManageDeviceViewProp } from '@/models/settings'
-import { IconFolderPlus, IconMapPinFilled } from '@tabler/icons-react'
+
 import { useTranslations } from 'next-intl'
 import React from 'react'
 
@@ -79,4 +79,3 @@ const ManageDeviceView: React.FC<ManageDeviceViewProp> = ({ setIsOpen, sites, se
 export default ManageDeviceView
 
 
-const filterButtonClassname = "bg-[var(--surface-500)] text-xs md:text-sm hover:bg-gray-50 text-[#888888] font-medium py-1 md:py-2 px-2 md:px-4 rounded-full shadow-sm transition-all duration-200 flex items-center gap-1";

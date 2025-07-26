@@ -1,7 +1,6 @@
 'use client'
 import { useQuery } from '@tanstack/react-query';
 import { Notification } from '@/models/notification';
-import { getNotifications } from '@/services/notification';
 import { useEffect } from 'react';
 import { protectApi } from '@/lib/protectApi';
 

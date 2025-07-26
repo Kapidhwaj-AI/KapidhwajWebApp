@@ -1,10 +1,10 @@
-import { Organization } from './organization';
+import { Folders, Organization } from './organization';
 import { Camera } from './camera';
 export interface Site {
     id: number;
     name: string;
     organization_id: number;
-    Folders?: any;
+    Folders?: Folders[];
     organization?: Organization;
     cameras?: Camera[];
 

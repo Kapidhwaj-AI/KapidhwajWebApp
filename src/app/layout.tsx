@@ -8,6 +8,10 @@ import { getMessages, getLocale } from 'next-intl/server';
 export const metadata: Metadata = {
   title: "Kapidhwaj AI",
   description: "",
+  icons:{
+    icon:'/assets/images/logo-sqaure.png'
+
+  }
 };
 
 export default async function RootLayout({
@@ -16,11 +20,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const locale = await getLocale();
-  console.log(locale, "locale" )
   const messages = await getMessages();
   return (
     <html lang={locale} suppressHydrationWarning>
-      {/* suppressHydrationWarning */}
       <body
         className={`${jakarta.variable} antialiased bg-[var(--surface-150)]`}
       >

@@ -1,5 +1,4 @@
 import { Activity } from "./activity";
-import { Organization } from "./organization";
 
 export interface User {
   id: string;
@@ -8,7 +7,7 @@ export interface User {
   phone: number;
   password?: string;
   email?: string;
-  profile_image?: any;
+  profile_image?: string;
   activities?: Activity[];
   createdAt?: Date;
   updatedAt?: Date;

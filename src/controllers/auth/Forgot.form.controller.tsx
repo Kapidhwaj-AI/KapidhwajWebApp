@@ -54,7 +54,7 @@ const ForgotFormController = () => {
 
     return (
         <>
-            <ForgotForm onSubmit={handleSendOtp} value={value} setValue={setValue} isError={isError} isLoading={isLoading} error={error} isOpen={isOpen} />
+            <ForgotForm onSubmit={handleSendOtp} value={value} setValue={setValue} isError={isError} isLoading={isLoading} error={error}  />
             {isOpen && <OtpFormController setPassword={setPassword} setShowPassword={setShowPassword} password={password} showPassword={showPassword} isForgot value={value} setIsOpen={setIsOpen} resend='/sendOTP' verify='/changePassword' backKey={emailRegex.test(value)
                 ? "email"
                 : "phone"} />}

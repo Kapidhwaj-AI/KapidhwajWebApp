@@ -1,6 +1,4 @@
 'use client';
-
-import { useRef, useState } from 'react';
 import { IconCameraPlus, IconCheck, IconX } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
 import Image from 'next/image';
@@ -10,9 +8,9 @@ import Spinner from '../ui/Spinner';
 import { useTranslations } from 'next-intl';
 import { InputField } from '../ui/Input.field';
 
-export function ProfileDialogue({ isOpen, isLoading, onClose, name, setName, id, setId, handleSave, handleImageChange, handleImageClick, email, setEmail, phone, setPhone, image, file, setFile, preview, setPreview, fileInputRef }: Profile) {
-    if (!isOpen) return null;
+export function ProfileDialogue({ isOpen, isLoading, onClose, name, setName, id, setId, handleSave, handleImageChange, handleImageClick, email, setEmail, phone, setPhone, image,  preview, fileInputRef }: Profile) {
     const t = useTranslations()
+    if (!isOpen) return null;
 
     return (
         <Modal onClose={onClose} title={t('settings.profile')}>

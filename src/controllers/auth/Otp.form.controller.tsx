@@ -2,14 +2,14 @@
 
 import Modal from "@/components/ui/Modal";
 import { OtpForm } from "@/components/common/Otp.form";
-import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "@/lib/storage";
+import {  removeLocalStorageItem, setLocalStorageItem } from "@/lib/storage";
 import { setAuthToken } from "@/redux/slices/authSlice";
-import { AppDispatch, RootState } from "@/redux/store";
+import { AppDispatch } from "@/redux/store";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { protectApi } from "@/lib/protectApi";
 
 export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, isForgot, password, showPassword, setShowPassword, setPassword, isProtected, handleChangePassword }: { value: string, backKey: string, verify: string, resend: string; setIsOpen: (value: boolean) => void; isForgot?: boolean, password?: string, setPassword?: (value: string) => void; showPassword?: boolean; setShowPassword?: (val: boolean) => void; isProtected?: boolean; handleChangePassword?: () => void }) => {
@@ -159,7 +159,7 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
       }
 
     }
-    catch (err) {
+    catch (error) {
       setIsError(true);
 
       if (axios.isAxiosError(error)) {

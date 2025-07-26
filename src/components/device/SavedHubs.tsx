@@ -1,6 +1,6 @@
 'use client';
 
-import { Hub, ManageHub } from "@/models/settings";
+import { Hub} from "@/models/settings";
 import { IconChevronRight, IconRefresh, IconRouter, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
 import Spinner from "../ui/Spinner";

@@ -49,7 +49,7 @@ const EditStreamDialogue = ({ onClose, isEditLoading, isLoading, isStream, formD
                     </div>
                     <InputField value={formData.name} setValue={(e) => setFormData({ ...formData, name: e })} label={t('settings.camera_name')} placeholder={t('settings.enter_camera_name')} />
 
-                    <InputField value={formData.people_threshold_count} type='number' setValue={(e) => setFormData({ ...formData, people_threshold_count: Number(e) })} label={t('settings.people_threshold_count')} placeholder={t('settings.enter_people_threshold_count')} />
+                    <InputField value={formData.people_threshold_count ?? NaN} type='number' setValue={(e) => setFormData({ ...formData, people_threshold_count: Number(e) })} label={t('settings.people_threshold_count')} placeholder={t('settings.enter_people_threshold_count')} />
 
                     <SelectField label={t('settings.select_site')} placeholder={t('settings.select_a_site')} data={organizations?.map((item) => ({ id: item.key, name: item.value }))} value={formData.organizationId} setValue={(e) => setFormData({ ...formData, organizationId: e })} />
                     <SelectField label={t('settings.folder_optional')} placeholder={t('settings.select_folder')} data={folders?.map((item) => ({ id: item.key, name: item.value }))} value={formData.folderId ?? ''} setValue={(e) => setFormData({ ...formData, folderId: Number(e) })} />

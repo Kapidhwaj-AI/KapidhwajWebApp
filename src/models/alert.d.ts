@@ -6,7 +6,7 @@ export interface Alert {
   frame_url: string;
   timestamp: number;
   person_ids: number[];
-  persons: any[];
+  persons: number[];
 
   camera?: Camera;
   persons?: Person[];

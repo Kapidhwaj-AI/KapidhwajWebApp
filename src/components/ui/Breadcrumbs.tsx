@@ -1,7 +1,7 @@
 'use client'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter, usePathname } from 'next/navigation'
+import {  usePathname } from 'next/navigation'
 import React from 'react'
 import { BackButton } from '../common/BackButton'
 import { useTranslations } from 'next-intl'

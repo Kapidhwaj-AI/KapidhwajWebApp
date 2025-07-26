@@ -16,7 +16,7 @@ import { filterButtonClassname } from '@/styles/tailwind-class';
 import { StreamsPageViewProps } from '@/models/stream';
 
 
-const StreamPageView: React.FC<StreamsPageViewProps> = ({ loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, setIsDateFiltered, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
+const StreamPageView: React.FC<StreamsPageViewProps> = ({ loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit,  selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
     startTime, stream, fetchAlerts, date, fetchRecordings, filterDial, filteredAlerts, formData, recordingLoading, recordingOffset, recordingref, recordings, alertEndRef, alertOffset, alerts, alertsLoading, handleAiToggle, handleMotionToggle, handleRecordingToggle, handleSave, handleToggleStream, hasMore, hasRecordingMore, endTime, organizations, handleApplyFilter
 
 }) => {

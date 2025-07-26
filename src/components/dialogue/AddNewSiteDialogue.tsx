@@ -3,9 +3,6 @@
 import {
   IconX,
   IconCheck,
-  IconMapPin,
-  IconTrash,
-  IconPencil,
   IconPlus,
 } from "@tabler/icons-react";
 import { useState } from "react";
@@ -28,13 +25,7 @@ export function AddNewSiteDialogue({
   const handleSave = () => {
  
   };
-  const handleEditSite = (id: string) => {
-  
-  };
 
-  const handleDeleteSite = (id: string) => {
-    // Handle delete camera
-  };
   if (!isOpen) return null;
 
   return (
@@ -69,32 +60,6 @@ export function AddNewSiteDialogue({
           <h2 className="text-sm mb-2">All Sites</h2>
           <div className="w-full lg:h-[300px] xl:h-[400px] bg-[var(--surface-100)] p-5 rounded-[24px]">
             <div className="space-y-3 h-full overflow-y-auto pr-2 scrollbar-hide">
-              {/* Example Site Items */}
-              {[1, 2, 3, 4, 5, 6].map((_, index) => (
-                <div className="flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-[12px] transition-colors">
-                  <div className="w-[44px] h-[44px] bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
-                    <IconMapPin size={18} className="text-gray-600" />
-                  </div>
-                  <div className="ml-2.5 flex-1">
-                    <h3 className="text-sm font-medium">Third Wing A</h3>
-                    <p className="text-xs text-gray-500">2 Cameras inside</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleEditSite("0")}
-                      className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
-                    >
-                      <IconPencil size={24} className="text-gray-600" />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteSite("1")}
-                      className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
-                    >
-                      <IconTrash size={24} className="text-[#FF6868]" />
-                    </button>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </div>

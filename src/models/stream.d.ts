@@ -5,10 +5,10 @@ import { Folders, Organization } from "./organization";
 
 export interface StreamFormData {
     name: string;
-    people_threshold_count: number;
+    people_threshold_count: number | undefined;
     organizationId: string;
-    folderId: number | null;
-    subfolder: number | null;
+    folderId: number | null | string;
+    subfolder: number | null | string;
 }
 
 export interface StreamsViewProps {
@@ -80,8 +80,8 @@ export interface StreamsPageViewProps {
     handleToggleStream: (val: boolean) => void;
     handleSave: (formData: StreamFormData) => void;
     settingDial: boolean;
-    handleAiToggle: (key: "intrusion_detection" | "people_count" | "license_plate_detection", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<any>, any>>;
-    handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<any>, any>>;
-    handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<any>, any>>;
+    handleAiToggle: (key: "intrusion_detection" | "people_count" | "license_plate_detection", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
+    handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
+    handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void
 }

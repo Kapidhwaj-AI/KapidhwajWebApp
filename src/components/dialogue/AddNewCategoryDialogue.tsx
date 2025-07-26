@@ -1,9 +1,8 @@
 'use client';
 
-import { SetStateAction, useState } from 'react';
-import { IconX, IconCheck, IconPlus, IconPencil, IconTrash, IconCategory2 } from '@tabler/icons-react';
+import { SetStateAction } from 'react';
+import { IconX, IconCheck } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
-import { Category } from '@/models/category';
 import { InputField } from '../ui/Input.field';
 import { useTranslations } from 'next-intl';
 import Spinner from '../ui/Spinner';

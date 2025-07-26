@@ -1,5 +1,5 @@
-import { RootState } from "../store";
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Adjust the import path to your store file
 

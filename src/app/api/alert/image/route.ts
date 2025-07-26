@@ -1,8 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
 
-export const GET = async (req: Request, res: Response
-) => {
-    console.log(req, "Sdnkn")
+export const GET = async (req: Request) => {
     const { searchParams } = new URL(req.url);
     const url = searchParams.get("url");
     const filename = searchParams.get("filename") || "download.jpg";
@@ -29,7 +26,7 @@ export const GET = async (req: Request, res: Response
             },
         });
     } catch (err) {
-        return new Response(JSON.stringify({ error: "Failed to fetch image" }), {
+        return new Response(JSON.stringify({ error: err }), {
             status: 500,
             headers: {
                 "Content-Type": "application/json",

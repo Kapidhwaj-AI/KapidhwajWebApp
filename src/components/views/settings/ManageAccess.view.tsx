@@ -1,12 +1,12 @@
 import Spinner from '@/components/ui/Spinner'
 import { ManageAccessViewProp } from '@/models/settings'
 import { GOOGLE_KPH_BUCKET_URL } from '@/services/config'
-import { IconCake, IconCategory2, IconCrown, IconGenderFemale, IconKey, IconLock, IconPencil, IconTrash, IconUserPlus } from '@tabler/icons-react'
+import {  IconCrown, IconLock, IconPencil, IconTrash, IconUserPlus } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import React from 'react'
 
-const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit, setAddAccessModalOpen, setAddUserModalOpen, sharedUser, setIsDelete, selectedShareableUser, setSelectedShareableUser, isAccessLoading, accessLevels }) => {
+const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit,  setAddUserModalOpen, sharedUser, setIsDelete,  setSelectedShareableUser, accessLevels }) => {
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col min-h-0">

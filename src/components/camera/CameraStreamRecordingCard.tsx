@@ -1,10 +1,7 @@
 "use client";
-import { IconBorderCornerSquare, IconEye, IconMovie, IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
+import {  IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
-import { RootState } from "@/redux/store";
-import { useSelector } from "react-redux";
 import { RecordedClip } from "@/models/clip";
-import { GOOGLE_KPH_BUCKET_URL } from "@/services/config";
 import { useRef, useState } from "react";
 import { getLocalStorageItem } from "@/lib/storage";
 
@@ -13,7 +10,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
     const [isPlaying, setIsPlaying] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    let baseUrl = hub ? `http://media.kapidhwaj.ai:${hub.static_port}/` : 'http://media.kapidhwaj.ai:3000/'
+    const  baseUrl = hub ? `http://media.kapidhwaj.ai:${hub.static_port}/` : 'http://media.kapidhwaj.ai:3000/'
     const handleTogglePlay = () => {
         const video = videoRef.current;
         if (!video) return;

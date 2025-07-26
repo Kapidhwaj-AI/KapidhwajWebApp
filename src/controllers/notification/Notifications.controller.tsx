@@ -25,7 +25,7 @@ const NotificationsController = () => {
             try {
                 setAllNotifications(await fetchNotification(offset))
             } catch (error) {
-                setErr(err)
+                setErr(error)
             } finally {
                 setLoading(false)
             }

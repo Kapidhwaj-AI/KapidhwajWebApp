@@ -1,6 +1,6 @@
 'use client';
 
-import { IconMail, IconPhone, IconX } from '@tabler/icons-react';
+import { IconMail, IconPhone } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
 import { useTranslations } from 'next-intl';
 

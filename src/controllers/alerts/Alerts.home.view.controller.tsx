@@ -19,7 +19,7 @@ const AlertsHomeViewController = ({
                 const res = await protectApi<Alert[]>('/alert/recent')
                 setAlerts(res.data?.data)
             } catch (error) {
-
+                console.error(error)
             } finally {
                 onFinish()
             }

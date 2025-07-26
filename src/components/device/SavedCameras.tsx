@@ -1,8 +1,6 @@
-import { IconDeviceCctv, IconDeviceCctvFilled, IconEdit, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
-import { Switch } from "../ui/CustomeSwitch";
+import {  IconDeviceCctvFilled,  IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { AddNewCameraDialogue } from '@/components/dialogue/AddNewCameraDialogue';
 import { useEffect, useState } from "react";
-import { EditCameraDialogue } from "../dialogue/EditCameraDialogue";
 import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
 import { DevicesMap, Hub } from "@/models/settings";
 import { Camera, CameraLocation } from "@/models/camera";
@@ -43,7 +41,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     const [camera, setCamera] = useState<Camera>()
     const [loading, setLoading] = useState(false)
     const [editLoading, setEditLoading] = useState(false)
-    const { data: organizations, isLoading, error } = useOrganizations();
+    const { data: organizations,  } = useOrganizations();
     const [formData, setFormData] = useState<StreamFormData>({
         name: '',
         people_threshold_count: -1,
@@ -123,9 +121,9 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     const handleSave = async () => {
         setLoading(true)
         const fallbackFolderId =
-            formData.folderId && formData.folderId > 0
+            formData.folderId && Number(formData.folderId) > 0
                 ? formData.folderId
-                : formData.subfolder && formData.subfolder > 0
+                : formData.subfolder && Number(formData.subfolder) > 0
                     ? formData.subfolder
                     : null;
 
@@ -136,7 +134,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
             folderId: fallbackFolderId,
         };
         try {
-            const res = await protectApi<any, Partial<StreamFormData>>(
+            const res = await protectApi<unknown, Partial<StreamFormData>>(
                 `/camera?action=update&cameraId=${camera?.camera_id}`,
                 'PUT',
                 payload

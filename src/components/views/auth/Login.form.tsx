@@ -13,7 +13,7 @@ export const LoginForm = ({
   setPassword,
   setShowPassword,
   showPassword,
-  forgotPasswordAction
+
 }: {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
@@ -26,7 +26,7 @@ export const LoginForm = ({
   setPassword: (password: string) => void;
   setShowPassword: (value: boolean) => void;
   showPassword: boolean
-  forgotPasswordAction: () => void
+
 }) => {
   return (
     <div className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8">
@@ -35,43 +35,35 @@ export const LoginForm = ({
       </h1>
 
       <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
-        {/* Email/Phone/Username Field */}
         <InputField
           label="Email / Phone / Username"
           placeholder="Enter your phone / email / username here..."
           value={username}
           setValue={setUsername}
         />
-
-        {/* Password Field */}
         <InputField
           label="Password"
           placeholder="Enter password here..."
           isPasswordField
           showForgotPasswordLabel
-          forgotPasswordAction={forgotPasswordAction}
           value={password}
           setValue={setPassword}
           setShowPassword={setShowPassword}
           showPassword={showPassword}
         />
 
-        {/* Error Message */}
         {isError && (
           <div className="text-red-500 text-xs sm:text-sm text-center">
             {error}
           </div>
         )}
 
-        {/* Sign In Button */}
         <button
           type="submit"
           className="w-full h-[35px] sm:h-[40px] md:h-[45px] bg-[#2B4C88] hover:bg-blue-700 text-white text-sm sm:text-base rounded-full transition-colors"
         >{isLoading ? <Spinner /> :
           'Sign In'}
         </button>
-
-        {/* OR Divider */}
         <div className="relative py-2 sm:py-3">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-200"></div>
@@ -82,8 +74,6 @@ export const LoginForm = ({
             </span>
           </div>
         </div>
-
-        {/* Register Button */}
         <button
           type="button"
           onClick={redirectRegister}

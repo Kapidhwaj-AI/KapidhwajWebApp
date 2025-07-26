@@ -14,21 +14,12 @@ interface AddNewFolderDialogueProps {
 export function AddNewFolderDialogue({ isOpen, onClose }: AddNewFolderDialogueProps) {
     const [name, setName] = useState('');
     const handleAddFolder = () => {
-   
+
         onClose();
     };
-    const handleSave = () => {
-  
-    };
-    const handleEditFolder = (id: string) => {
-        
-    };
-
-    const handleDeleteFolder = (id: string) => {
-
-    };
-    if (!isOpen) return null;
     const t = useTranslations()
+
+    if (!isOpen) return null;
     return (
         <Modal onClose={onClose} title='Add New Room'>
             <div className="flex-1">
@@ -36,8 +27,8 @@ export function AddNewFolderDialogue({ isOpen, onClose }: AddNewFolderDialoguePr
                 <div className="mb-6">
                     <label className="block text-sm font-medium mb-2">Name</label>
                     <div className='flex items-center gap-2'>
-                        <InputField value={name} setValue={setName} label={t('settings.name')} placeholder={t('settings.enter_name_here')}/>
-                        
+                        <InputField value={name} setValue={setName} label={t('settings.name')} placeholder={t('settings.enter_name_here')} />
+
                         <button
                             className="px-5 py-2 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base"
                             onClick={handleAddFolder}
@@ -69,13 +60,13 @@ export function AddNewFolderDialogue({ isOpen, onClose }: AddNewFolderDialoguePr
                                     </div>
                                     <div className="flex gap-2">
                                         <button
-                                            onClick={() => handleEditFolder(folder.id)}
+
                                             className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
                                         >
                                             <IconPencil size={24} className="text-gray-600" />
                                         </button>
                                         <button
-                                            onClick={() => handleDeleteFolder(folder.id)}
+
                                             className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
                                         >
                                             <IconTrash size={24} className="text-[#FF6868]" />
@@ -97,7 +88,7 @@ export function AddNewFolderDialogue({ isOpen, onClose }: AddNewFolderDialoguePr
                     </button>
                     <button
                         className="px-5 py-2 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base"
-                        onClick={handleSave}
+
                     >
                         <span className='flex items-center gap-2'><IconCheck size={16} />Save</span>
                     </button>

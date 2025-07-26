@@ -14,7 +14,6 @@ const ManagePeopleConroller = () => {
         const [isAddCategoryModalOpen, setAddCategoryModalOpen] = useState(false);
         const [mySites, setMySites] = useState<Organization[]>([])
         const [sharedWithMe, setSharedWithMe] = useState<Organization[]>([])
-        const [sites, setSites] = useState<Organization[]>([])
         const [isLoading, setIsLoading] = useState(false)
         const [isSaving, setIsSaving] = useState(false)
         const [selectedId, setSelectedId] = useState('')
@@ -46,9 +45,9 @@ const ManagePeopleConroller = () => {
                 const res = await protectApi<{ organization: Organization }[]>('/organizations')
                 if (res.status === 200) {
                     const sitesData = res.data.data?.map(
-                        (item: any) => item.organization,
+                        (item) => item.organization,
                     );
-                    setSites(sitesData)
+                   
                     setMySites(sitesData.filter((site) => site.owner === userDetails?.id))
                     setSharedWithMe(sitesData.filter((site) => site.owner !== userDetails?.id))
                 }

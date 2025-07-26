@@ -1,5 +1,6 @@
 import React from 'react'
 import { InputField } from '../../ui/Input.field';
+import Spinner from '@/components/ui/Spinner';
 
 
 const ForgotForm = ({
@@ -9,7 +10,7 @@ const ForgotForm = ({
   error = "",
   value,
   setValue,
-  isOpen
+
 }: {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
@@ -17,7 +18,6 @@ const ForgotForm = ({
   error?: string;
   value: string;
   setValue: (value: string) => void;
-  isOpen: boolean
 }) => {
   return (
     <div className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8">
@@ -48,7 +48,7 @@ const ForgotForm = ({
           type="submit"
           className="w-full h-[35px] sm:h-[40px] md:h-[45px] bg-[#2B4C88] hover:bg-blue-700 text-white text-sm sm:text-base rounded-full transition-colors"
         >
-          Send OTP
+          {isLoading ? <Spinner /> : ' Send OTP'}
         </button>
 
 

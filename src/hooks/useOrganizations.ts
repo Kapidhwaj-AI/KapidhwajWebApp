@@ -1,11 +1,9 @@
 'use client'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Organization } from '@/models/organization';
-import { getOrganizations } from '@/app/actions/organization';
 import { protectApi } from '@/lib/protectApi';
 
-export const useOrganizations = (organizationId?: string, p0?: { onSuccess: (data: any) => void; }) => {
-  const queryClient = useQueryClient();
+export const useOrganizations = (organizationId?: string) => {
   const query = useQuery<Organization[]>({
     queryKey: ['organizations', organizationId],
     queryFn: async () => {

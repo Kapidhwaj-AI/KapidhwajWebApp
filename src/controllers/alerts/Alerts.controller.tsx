@@ -29,7 +29,7 @@ const AlertsController = () => {
             try {
                 setAlerts(await fetchAlerts(alertOffset))
             } catch (error) {
-
+                console.error(error)
             } finally {
                 setIsLoading(false)
             }
@@ -50,7 +50,7 @@ const AlertsController = () => {
                     setAlerts(prev => [...prev, ...newAlerts]);
                 }
             } catch (error) {
-
+                console.error(error)
             }
             finally {
                 setAlertsLoading(false)

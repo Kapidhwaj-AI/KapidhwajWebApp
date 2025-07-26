@@ -9,5 +9,5 @@ export interface HomeViewProps {
     fetchSavedHubs: () => void;
     handleAccessRemotely:(hub: Hub) => void;
     isRemotely: boolean;
-
+    devices: number
 }

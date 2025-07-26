@@ -1,7 +1,4 @@
 import { Camera } from './camera';
-import { Category } from './category';
-import { Person } from './person';
-import { Hub } from './hub';
 import { User } from './user';
 
 export interface Organization {
