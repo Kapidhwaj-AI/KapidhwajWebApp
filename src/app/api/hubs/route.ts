@@ -7,8 +7,8 @@ startAIPublisher()
 export async function GET() {
     const hubs: ManageHub[] = [];
 
-    return new Promise((resolve, reject) => {
-        const browser = new dnssd.Browser(dnssd.tcp('workstation')); 
+    const hubsData = await new Promise<ManageHub[]>((resolve, reject) => {
+        const browser = new dnssd.Browser(dnssd.tcp('workstation'));
 
         browser.on('serviceUp', service => {
             const ip = service.addresses?.[0] ?? 'unknown';
@@ -19,22 +19,25 @@ export async function GET() {
                 port: service.port,
                 txt: service.txt,
             };
-            console.log(hub)
             hubs.push(hub);
         });
 
         browser.on('error', err => {
             console.error("❌ mDNS error:", err);
-            reject(NextResponse.json({ error: 'mDNS error' }, { status: 500 }));
+            browser.stop();
+            reject(err);
         });
 
         browser.start();
 
         setTimeout(() => {
             browser.stop();
-            resolve(NextResponse.json({ hubs }));
+            resolve(hubs);
         }, 2000);
     });
+
+    return NextResponse.json({ hubs: hubsData });
+
 }
 
 function extractMAC(name: string): string | null {

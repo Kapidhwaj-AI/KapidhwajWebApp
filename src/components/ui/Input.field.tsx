@@ -1,3 +1,4 @@
+'use client'
 import Link from "next/link";
 
 export const InputField = ({
@@ -10,7 +11,7 @@ export const InputField = ({
   setShowPassword,
   showForgotPasswordLabel = false,
   forgotPasswordLabel = "Forgot Password?",
-  forgotPasswordAction,
+ 
   required = false,
   isOtp,
   setOtp,
@@ -27,7 +28,6 @@ export const InputField = ({
   setShowPassword?: (showPassword: boolean) => void;
   showForgotPasswordLabel?: boolean;
   forgotPasswordLabel?: string;
-  forgotPasswordAction?: () => void;
   required?: boolean;
   isOtp?: boolean,
   setOtp?: (value: string, index?: number) => void
@@ -47,7 +47,6 @@ export const InputField = ({
             {required && <span className="text-red-500 ml-1">*</span>}
           </label>}
           <Link href={'/forgot-password'}
-            // onClick={forgotPasswordAction}
             className="text-xs sm:text-sm hover:underline text-gray-500 hover:text-gray-700"
           >
             {forgotPasswordLabel}

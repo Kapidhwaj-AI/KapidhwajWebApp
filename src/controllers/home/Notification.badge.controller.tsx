@@ -3,14 +3,9 @@
 import { NotificationBadge } from "@/components/ui/Notification.badge";
 import { protectApi } from "@/lib/protectApi";
 import { Notification } from "@/models/notification";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
-export const NotificationBadgeController = ({
-
-}: {
-
-  }) => {
+export const NotificationBadgeController = () => {
   const [notificationsCount, setNotificationsCount] = useState(0);
 
   useEffect(() => {

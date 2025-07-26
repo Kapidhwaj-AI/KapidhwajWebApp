@@ -1,12 +1,10 @@
 'use client'
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, {  useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { IconBellRinging, IconFolderStar, IconLogout2, IconSettings2, IconShareplay, IconSmartHome, IconUrgent } from '@tabler/icons-react';
+import { IconBellRinging, IconFolderStar,  IconSettings2, IconShareplay, IconSmartHome, IconUrgent } from '@tabler/icons-react';
 import Image from 'next/image';
-import { Button } from '../ui/button';
-// import { handleLogout } from '@/services/auth';
-import { usePathname, useRouter } from 'next/navigation';
-import { ThemeToggle } from './ThemeToggle';
+
+import { usePathname } from 'next/navigation';
 import { ProfileMenu } from './ProfileMenu';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -104,15 +102,14 @@ export default function Sidebar() {
             )}
           </div>
 
-          {/* Navigation Items */}
-          <nav className="flex flex-col items-center px-2 space-y-2 md:space-y-3">
+          <nav className="flex flex-col items-center  space-y-2 md:space-y-3">
             {menuItems.map((item) => (
               <Link
                 onClick={() => { if (isMobile) setIsExpanded(false) }}
                 key={item.label}
                 href={item.path}
                 className={cn(
-                  'flex items-center rounded-full transition-all duration-300',
+                  'flex items-center rounded-full transition-[width] duration-1000',
                   pathname.includes(item.path) ? 'bg-[#2B4C88] text-white' : 'bg-[var(--surface-400)] text-[#888888] hover:text-gray-900 dark:hover:text-gray-100',
                   shouldExpand
                     ? 'w-full px-3 py-2 md:px-4 md:py-3 justify-start h-12 md:h-14'
@@ -137,12 +134,12 @@ export default function Sidebar() {
         </div>
 
         {/* Bottom Section */}
-        <div className="flex  items-center justify-center  space-y-2 md:space-y-3 px-2">
+        <div className="flex w-full  items-center justify-center  space-y-2 md:space-y-3 px-5">
           <button
             onClick={() => setIsProfileMenuOpen(true)}
             className={cn(
-              'relative rounded-full flex items-center transition-[width] duration-1000 hover:ring-2 hover:ring-blue-500 ',
-              shouldExpand ? 'w-full flex items-center gap-3 px-3 py-2' : 'w-full h-12  md:h-14'
+              'relative rounded-full flex items-center justify-center transition-[width] duration-1000 hover:ring-2 hover:ring-blue-500 ',
+              shouldExpand ? 'w-full flex items-center justify-center gap-3 px-3 py-2' : 'w-full h-12  md:h-14'
             )}
           >
             <Image

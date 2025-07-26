@@ -1,7 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
-import { IconX, IconCheck, IconRefresh, IconCopy, IconRouter, IconCopyPlus } from '@tabler/icons-react';
+import { IconX, IconCheck, IconRefresh, IconRouter, IconCopyPlus } from '@tabler/icons-react';
 // import { cameras } from '../device/SavedCameras';
 import Modal from '../ui/Modal';
 import { DevicesMap } from '@/models/settings';
@@ -23,7 +23,7 @@ interface AddNewCameraDialogueProps {
     sites: Organization[];
     hubId: string;
 
-    fetchSavedHubs:() => void
+    fetchSavedHubs: () => void
 }
 
 export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, isLoading, fetchNearCams, nearCams, selectedSite, setSelectedSite, sites }: AddNewCameraDialogueProps) {
@@ -65,7 +65,7 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, i
             })
             if (res.status === 200) {
                 onClose()
-               await fetchSavedHubs()
+                await fetchSavedHubs()
             }
         } catch {
 
@@ -228,7 +228,7 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, i
                         className="px-5 py-2 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base"
 
                     >
-                        <span className='flex items-center gap-2'><IconCheck size={16} />{t('save')}</span>
+                        {isSaving ? <Spinner /> : <span className='flex items-center gap-2'><IconCheck size={16} />{t('save')}</span>}
                     </button>
                 </div>
             </form>

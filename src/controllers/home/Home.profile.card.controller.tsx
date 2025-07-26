@@ -6,13 +6,10 @@ import { GOOGLE_KPH_BUCKET_URL } from "@/services/config";
 
 import { useEffect, useState } from "react";
 
-export const HomeProfileCardController = ({
-}: {
-
-  }) => {
+export const HomeProfileCardController = ({devices}:{devices: number}) => {
   const [userImage, setUserImage] = useState("");
   const [name, setName] = useState("");
-  const [devices, setDevices] = useState(0);
+  
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {

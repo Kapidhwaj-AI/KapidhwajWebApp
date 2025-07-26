@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { IconX, IconCheck, IconPlus, IconPencil, IconTrash, IconCrown } from '@tabler/icons-react';
+import { IconX, IconCheck, IconPlus } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
 import { useTranslations } from 'next-intl';
 import { InputField } from '../ui/Input.field';
@@ -15,6 +15,7 @@ interface AddNewAccessDialogueProps {
 export function AddNewAccessDialogue({ isOpen, onClose }: AddNewAccessDialogueProps) {
     const [name, setName] = useState('');
     const [selectedType, setSelectedType] = useState('');
+    const t = useTranslations()
 
     const accessTypes = [
         { id: '1', name: 'OWNER', description: 'Full access to entire app' },
@@ -35,7 +36,6 @@ export function AddNewAccessDialogue({ isOpen, onClose }: AddNewAccessDialoguePr
     };
 
     if (!isOpen) return null;
-    const t = useTranslations()
     return (
         <Modal onClose={onClose} title={t('settings.add_new_access')}>
             <form className="w-full h-full overflow-y-auto scrollbar-hide">

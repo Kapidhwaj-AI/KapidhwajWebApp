@@ -2,9 +2,7 @@
 
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { cn } from "@/lib/utils";
-import { AlertTriangle } from "lucide-react";
-import { IconAlertHexagon, IconAlertHexagonFilled, IconCheck, IconX } from "@tabler/icons-react";
+import {  IconAlertHexagonFilled, IconCheck, IconX } from "@tabler/icons-react";
 
 interface ConfirmationDialogProps {
     isOpen: boolean;

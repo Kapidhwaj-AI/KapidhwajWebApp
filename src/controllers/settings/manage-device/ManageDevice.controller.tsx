@@ -2,10 +2,9 @@
 import HubDialogue from '@/components/dialogue/HubDialogue';
 import ManageDeviceView from '@/components/views/settings/ManageDevice.view';
 import { protectApi } from '@/lib/protectApi';
-import { Camera } from '@/models/camera';
 import { Organization } from '@/models/organization';
-import { DevicesMap, Hub, ManageHub } from '@/models/settings';
-import { AxiosResponse } from 'axios';
+import { Hub, ManageHub } from '@/models/settings';
+
 
 import React, { FormEvent, useEffect, useState } from 'react'
 
@@ -17,8 +16,6 @@ const ManageDevicesController = () => {
     const [savedHaubs, setSavedHubs] = useState<Hub[]>([])
     const [isHubLoading, setIsHubLoading] = useState(false)
     const [isSavedHubsLoading, setIsSavedHubsLoading] = useState(false)
-    const [nearbyHubsErr, setNearbyHubsErr] = useState('')
-    const [savedHubErr, setSavedErr] = useState('')
     const [isDelete, setIsDelete] = useState(false)
     const [isHubDelete, setIsHubDelete] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
@@ -39,12 +36,12 @@ const ManageDevicesController = () => {
             const res = await protectApi<{ organization: Organization }[]>('/organizations')
             if (res.status === 200) {
                 const sites = res.data.data?.map(
-                    (item: any) => item.organization,
+                    (item) => item.organization,
                 );
                 setSites(sites)
             }
         } catch (error) {
-
+            console.error("err:", error)
         }
     }
     const fetchHubs = async () => {
@@ -55,7 +52,7 @@ const ManageDevicesController = () => {
             setNearbyHubs(data.hubs)
         } catch (error) {
             console.error("err:", error)
-            setNearbyHubsErr(error)
+
         } finally {
             setIsHubLoading(false)
         }
@@ -73,12 +70,11 @@ const ManageDevicesController = () => {
             }
         } catch (error) {
             console.error("err:", error)
-            setSavedErr(error)
         } finally {
             setIsSavedHubsLoading(false)
         }
     }
-  
+
     const handleToggleStream = async (toggleValue: boolean, id: number, physical_address: string, hub_id: number) => {
         const url = toggleValue ? `/camera/start?action=add&hubId=${hub_id}` : `/camera/stop?action=remove&hubId=${hub_id}`
         const payload = {
@@ -89,11 +85,11 @@ const ManageDevicesController = () => {
                 },
             ],
         }
-        const res = await protectApi<any, typeof payload>(url, "POST", payload)
+        const res = await protectApi<unknown, typeof payload>(url, "POST", payload)
         return res
     }
     const handleDeleteSavedCamera = async (cameraId: number, organizationId: string) => {
-        const res = await protectApi<AxiosResponse, { cameraId: number, organizationId: string }>('/camera/delete?action=remove', 'DELETE', { cameraId, organizationId })
+        const res = await protectApi<unknown, { cameraId: number, organizationId: string }>('/camera/delete?action=remove', 'DELETE', { cameraId, organizationId })
         if (res.status === 200) {
             setIsDelete(false)
         }

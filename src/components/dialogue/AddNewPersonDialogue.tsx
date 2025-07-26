@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, SetStateAction, useState } from 'react';
+import { FormEvent, SetStateAction } from 'react';
 import { IconX, IconCheck } from '@tabler/icons-react';
 import Image from 'next/image';
 import Modal from '../ui/Modal';

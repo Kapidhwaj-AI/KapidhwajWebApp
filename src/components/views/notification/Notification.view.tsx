@@ -1,5 +1,4 @@
 import SearchBar from '@/components/common/Searchbar'
-import { IconFilter } from '@tabler/icons-react'
 import React from 'react'
 import NotificationCard from './NotificationCard'
 import { NotificationViewProps, Notification } from '@/models/notification'
@@ -7,7 +6,7 @@ import InfiniteScrolling from '@/components/ui/InfiniteScrolling'
 import Spinner from '@/components/ui/Spinner'
 import { useTranslations } from 'next-intl'
 
-const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setSearchQuery, isLoading, setIsLoading, allNotifications, filteredNotifications, error, isDateFiltered, setAllNotifications, setIsDateFiltered, divRef, fetchNotification, hasMore, setHasMore, offset, setOffset }) => {
+const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setSearchQuery, isLoading, setIsLoading, allNotifications, filteredNotifications, error, setAllNotifications,  divRef, fetchNotification, hasMore, setHasMore, offset, setOffset }) => {
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col gap-4 min-h-0 p-5">

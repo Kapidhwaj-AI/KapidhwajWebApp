@@ -74,7 +74,7 @@ const SettingsController = () => {
                 setShowProfileDial(false)
             }
         } catch (error) {
-
+            console.error("err:", error)
         }
         finally {
             setProfileSaveLoading(false)
@@ -100,7 +100,7 @@ const SettingsController = () => {
             }
 
         } catch (error) {
-
+            console.error("err:", error)
         } finally {
             setOtpLoading(false)
         }
@@ -116,7 +116,7 @@ const SettingsController = () => {
 
 
         } catch (error) {
-
+            console.error("err:", error)
         }
     }
 

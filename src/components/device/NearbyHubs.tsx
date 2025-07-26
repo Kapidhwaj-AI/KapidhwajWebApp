@@ -1,15 +1,11 @@
 'use client';
 
-import { IconCopy, IconRouter, IconRefresh, IconCopyPlus } from "@tabler/icons-react";
-import { useState } from "react";
+import {  IconRouter, IconRefresh, IconCopyPlus } from "@tabler/icons-react";
 import Spinner from "../ui/Spinner";
 import { ManageHub } from "@/models/settings";
 import { useTranslations } from "next-intl";
 
-interface Hub {
-    name: string;
-    ip: string;
-}
+
 
 interface NearbyHubsProps {
     className?: string;

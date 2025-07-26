@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import { X } from 'lucide-react';
 import React from 'react';
-import { isCancel } from 'axios';
+
 
 interface ModalProps {
     onClose: () => void;

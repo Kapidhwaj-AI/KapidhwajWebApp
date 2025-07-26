@@ -2,7 +2,7 @@
 
 import { Notification } from '@/models/notification';
 import { getNotificationStyle } from '@/utils/notification';
-import { IconBell, IconBellFilled, IconSparkles } from '@tabler/icons-react';
+import {  IconBellFilled, IconSparkles } from '@tabler/icons-react';
 import clsx from 'clsx';
 
 export default function NotificationCard({ notification }: { notification: Notification }) {

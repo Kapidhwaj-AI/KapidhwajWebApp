@@ -18,11 +18,7 @@ const StreamsController = () => {
     const [selectedData, setSelecteddata] = useState<Camera[] | null>(null)
     const [searchQuery, setSearchQuery] = useState("");
 
-    const { data: organizations, isLoading, error } = useOrganizations(undefined, {
-        onSuccess: (data) => {
-            setSelectedOrganization(data[0]);
-        }
-    });
+    const { data: organizations, isLoading, error } = useOrganizations();
     useEffect(() => {
         if (selectedChildFolder) {
             setSelecteddata(selectedChildFolder.cameras);
@@ -37,7 +33,6 @@ const StreamsController = () => {
 
 
     const visibleCameras = useMemo(() => {
-
         return searchQuery.trim()
             ? selectedData?.filter((camera) =>
                 `${camera.name} ${camera.physical_address}`

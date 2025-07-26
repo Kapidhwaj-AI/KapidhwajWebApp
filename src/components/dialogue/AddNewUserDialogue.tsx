@@ -1,12 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { IconX, IconCheck, IconPlus, IconCamera, IconSearch } from '@tabler/icons-react';
-import Image from 'next/image';
+import { useMemo } from 'react';
+import { IconX, IconCheck, IconSearch } from '@tabler/icons-react';
 import { AccessLevel } from '@/models/settings';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { Input } from '../ui/input';
 import clsx from 'clsx';
 import { Organization } from '@/models/organization';
 import { Checkbox } from '../ui/checkbox';
@@ -43,8 +40,6 @@ interface AddNewUserDialogueProps {
     isEdit: boolean
 }
 
-
-
 export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQuery, setSearchQuery, selectedStreams, handleSave, setSelectedStreams, accessLevels, selectedTab, setSelectedTab, organizations, selectedUser, popoverRef, handleSelectUser, username, setUsername, selectedAccess, setSelectedAccess, setSelectedUser, searchedUsers, open, setOpen }: AddNewUserDialogueProps) {
     const allCameras = organizations.flatMap(org => org.cameras);
     const selectedOraganizationsFolders = organizations.find((item) => item.id === selectedTab)?.folders
@@ -74,7 +69,8 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
     const toggleStreamSelection = (streamId: number) => {
         setSelectedStreams((prev) => {
             const newSet = new Set(prev);
-            newSet.has(streamId) ? newSet.delete(streamId) : newSet.add(streamId);
+            if (newSet.has(streamId)) newSet.delete(streamId);
+            else newSet.add(streamId);
             return newSet;
         }
         );
@@ -82,11 +78,9 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
     const filteredStreams = useMemo(() => {
         return allCameras.filter((camera) => {
             const matchesSearch = searchQuery === '' || camera.name.toLowerCase().includes(searchQuery.toLowerCase());
-
             if (selectedTab === 'all') {
                 return matchesSearch;
             }
-
             const matchesOrg = camera.organization_id === selectedTab;
             const isRootLevel = camera.folder_id === null;
 
@@ -162,7 +156,6 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
                                             }}
                                             label={t('settings.username')}
                                         />
-
                                     </PopoverTrigger>
 
                                     <PopoverContent className="p-0 w-full" ref={popoverRef} sideOffset={5}>
@@ -193,8 +186,8 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
 
                             {/* Access Field */}
                             <div className="mb-6">
-                                <SelectField label={t('settings.access')} placeholder={t('settings.select_access')} data={accessLevels} value={selectedAccess} setValue={(e) => setSelectedAccess(Number(e))}/>
-                            
+                                <SelectField label={t('settings.access')} placeholder={t('settings.select_access')} data={accessLevels} value={selectedAccess} setValue={(e) => setSelectedAccess(Number(e))} />
+
                             </div>
 
                             <button

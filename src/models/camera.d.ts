@@ -13,7 +13,7 @@ export interface Camera {
   site_id: number;
   room_id: number;
   hub_id: number;
-  uri?: any;
+  uri?: string;
   rtsp_url?: string;
   webrtc_url: string;
   is_record: number;
@@ -27,7 +27,7 @@ export interface Camera {
   room?: Room;
   site?: Site;
   hub?: Hub;
-  people_threshold_count?: any;
+  people_threshold_count?: number;
   organization?: Organization;
   recordedClips?: RecordedClip[];
   alerts?: Alert[];
@@ -37,10 +37,10 @@ export interface Camera {
 }
 
 export interface CameraLocation {
-  folder: any;
-  folderId: any;
-  parantFolder: any;
-  parantFolderId: any;
+  folder: string | null;
+  folderId: number | null | string;
+  parantFolder: string;
+  parantFolderId: null | number | string;
   organization: string;
 }
 

@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { useOrganizations } from "@/hooks/useOrganizations";
 import { Folders, Organization } from "@/models/organization";
 
 interface OrganizationFilterButtonsProps {
@@ -16,7 +15,7 @@ interface OrganizationFilterButtonsProps {
 }
 
 const OrganizationFilterButtons = ({ organizations, folders, isLoading, onOrganizationSelect, selectedId, onSelectedFolder, childFolders, onSelectedChild }: OrganizationFilterButtonsProps) => {
-    const [selected, setSelected] = useState<string| number| null>(null);
+    const [selected, setSelected] = useState<string | number | null>(null);
 
     useEffect(() => {
         if (organizations && organizations.length > 0 && !selected && onOrganizationSelect) {
@@ -24,7 +23,7 @@ const OrganizationFilterButtons = ({ organizations, folders, isLoading, onOrgani
             setSelected(firstOrg.id);
             onOrganizationSelect(firstOrg);
         }
-        
+
     }, [organizations]);
 
     if (isLoading) {
@@ -44,13 +43,15 @@ const OrganizationFilterButtons = ({ organizations, folders, isLoading, onOrgani
                             }`}
                         onClick={() => {
                             setSelected(org.id);
-                            onOrganizationSelect &&onOrganizationSelect(org);
+                            if (onOrganizationSelect) {
+                                onOrganizationSelect(org);
+                            }
                         }}
                     >
                         {org.name}
                     </Button>
                 ))}
-                {folders?.map((folder)=>(
+                {folders?.map((folder) => (
                     <Button
                         key={folder.id}
                         variant="ghost"
@@ -76,7 +77,7 @@ const OrganizationFilterButtons = ({ organizations, folders, isLoading, onOrgani
                             }`}
                         onClick={() => {
                             setSelected(folder.id);
-                              onSelectedChild?.(folder);
+                            onSelectedChild?.(folder);
                         }}
                     >
                         {folder.name}

@@ -1,3 +1,4 @@
+import Spinner from "@/components/ui/Spinner";
 import { InputField } from "../../ui/Input.field";
 import React from "react";
 
@@ -123,7 +124,7 @@ export const RegisterForm = ({
           type="submit"
           className="w-full h-[35px] sm:h-[40px] md:h-[45px] bg-[#2B4C88] hover:bg-blue-700 text-white text-sm sm:text-base rounded-full transition-colors"
         >
-          Register
+          {isLoading ? <Spinner /> : 'Register'}
         </button>
 
         {/* OR Divider */}
@@ -144,7 +145,7 @@ export const RegisterForm = ({
           onClick={redirectLogin}
           className="w-full h-[35px] sm:h-[40px] md:h-[45px] bg-[#F6F6F6] hover:bg-gray-100 text-gray-700 text-sm sm:text-base rounded-full transition-colors"
         >
-          Sign In
+          {'Sign In'}
         </button>
       </form>
     </div>

@@ -17,9 +17,7 @@ export const LoginFormController = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const forgotPasswordAction = () => {
-    router.push("/forgot-password")
-  }
+
   const handleRegisterRedirect = () => {
     router.push("/register");
   };
@@ -29,7 +27,7 @@ export const LoginFormController = () => {
 
   const phoneRegex = /^[0-9]{7,15}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  // const usernameRegex = /^[a-zA-Z0-9]{3,}$/;
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -91,7 +89,6 @@ export const LoginFormController = () => {
       setPassword={setPassword}
       setShowPassword={setShowPassword}
       showPassword={showPassword}
-      forgotPasswordAction={forgotPasswordAction}
     />
   );
 };

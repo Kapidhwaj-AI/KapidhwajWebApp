@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import { IconX, IconCheck, IconSquare, IconSquareCheck, IconChevronDown } from '@tabler/icons-react';
+
+import { IconX, IconChevronDown } from '@tabler/icons-react';
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
@@ -10,8 +10,8 @@ import Modal from '../ui/Modal';
 import { useTranslations } from 'next-intl';
 
 export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime, setDate, setEndTime, setStartTime, handleApplyFilter }: { isOpen: boolean; onClose: () => void; date: Date | undefined, startTime: Date | undefined; endTime: Date | undefined; setDate: (val: Date | undefined) => void; setStartTime: (val: Date | undefined) => void; setEndTime: (val: Date | undefined) => void; handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void }) {
-    if (!isOpen) return null;
     const t = useTranslations()
+    if (!isOpen) return null;
     return (
         <Modal onClose={onClose} title={t('alerts.apply_filter')}>
             {/* Content Area */}

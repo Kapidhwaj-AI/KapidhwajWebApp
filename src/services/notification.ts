@@ -4,11 +4,6 @@ import { cookies } from 'next/headers';
 import { apiBaseUrl } from './config';
 import { Notification } from '@/models/notification';
 
-interface ApiResponse<T> {
-    data: T;
-    status: number;
-    message?: string;
-}
 
 const getToken = async () => {
     const token = (await cookies()).get('auth-token')?.value;

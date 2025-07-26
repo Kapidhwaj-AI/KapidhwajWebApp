@@ -16,14 +16,9 @@ export function TokenCheck() {
         router.push('/login');
       }
     };
-
-    // Check token on mount
     checkToken();
-
-    // Set up interval to check token every 30 seconds
     const interval = setInterval(checkToken, 30000);
 
-    // Clean up interval on unmount
     return () => clearInterval(interval);
   }, []);
  

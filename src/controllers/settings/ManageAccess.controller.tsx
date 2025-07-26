@@ -46,7 +46,7 @@ const ManageAccessController = () => {
                 setSharedUser(data)
             }
         } catch (error) {
-
+            console.error("err:", error)
         } finally {
             setIsLoading(false)
         }
@@ -90,7 +90,7 @@ const ManageAccessController = () => {
                 setOpen(true)
             }
         } catch (error) {
-
+            console.error("err:", error)
         }
     }
     const fetchSharedOrg = async () => {
@@ -227,7 +227,7 @@ const ManageAccessController = () => {
             for (const org of shareableOrg) {
                 const cameraIds = JSON.stringify(orgCam[org.id]);
                 if (cameraIds.length === 0) continue;
-                const res = await protectApi<any, {
+                const res = await protectApi<unknown, {
                     roleId: number;
                     userId: string;
                     organizationId: string;

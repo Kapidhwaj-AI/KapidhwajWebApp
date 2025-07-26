@@ -4,8 +4,8 @@ import LiveBadge from "./LiveBadge";
 import { cn } from "@/lib/utils";
 import { Camera } from "@/models/camera";
 import { RootState } from "@/redux/store";
-import { IconBorderCornerSquare, IconEye, IconTrash } from "@tabler/icons-react";
-import { Trash } from "lucide-react";
+import { IconBorderCornerSquare,  IconTrash } from "@tabler/icons-react";
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

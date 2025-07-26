@@ -3,7 +3,6 @@ import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
 import SiteFolderModal from '@/components/dialogue/SiteFolderModal'
 import ManageSitesFolderView from '@/components/views/settings/ManageSitesFolder.view'
 import { protectApi } from '@/lib/protectApi'
-import { getLocalStorageItem, setLocalStorageItem } from '@/lib/storage'
 import { Folders, Organization } from '@/models/organization'
 import { useTranslations } from 'next-intl'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -30,12 +29,12 @@ const ManageSitesFoldersController = () => {
             const res = await protectApi<{ organization: Organization }[]>('/organizations')
             if (res.status === 200) {
                 const sites = res.data.data?.map(
-                    (item: any) => item.organization,
+                    (item) => item.organization,
                 );
                 setSites(sites)
             }
         } catch (error) {
-
+            console.error("err:", error)
         } finally {
             setIsSiteLoading(false)
         }

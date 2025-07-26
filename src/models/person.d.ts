@@ -7,7 +7,7 @@ import { PersonFormaData } from './settings';
 export interface Person {
   id: number;
   name: string ;
-  dob: any;
+  dob: string | Date;
   category_id: number;
   gcp_image_path?: string;
   frame_url?: string;

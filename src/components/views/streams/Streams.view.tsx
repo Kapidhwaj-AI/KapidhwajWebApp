@@ -68,7 +68,7 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
                       "md:grid-cols-5": toogleColumnValue === 5,
                   }
               )}>
-                  {visibleCameras?.map((camera: any) => {
+                  {visibleCameras?.map((camera) => {
                       return (
                           <CameraStreamCard
                               key={camera.camera_id}
