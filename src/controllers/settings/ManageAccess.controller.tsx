@@ -67,7 +67,6 @@ const ManageAccessController = () => {
     }
     const fetchUserSelectedStreams = async () => {
         try {
-            console.log(selectedUser)
             const res = await protectApi<{ cameraIds: number[] }[]>(`/camera/get-shared?userId=${selectedShareableUser?.id}`)
             if (res.status === 200) {
                 const cameraIdsSet = new Set<number>()
@@ -97,7 +96,6 @@ const ManageAccessController = () => {
     const fetchSharedOrg = async () => {
         try {
             const res = await protectApi<Organization[]>('/organizations/getShareable')
-            console.log(res.data.data)
             if (res.status === 200) {
                 setShareableOrg(res.data.data)
             }
@@ -119,7 +117,6 @@ const ManageAccessController = () => {
             setOriginalAccessRole(selectedShareableUser?.role_id)
         }
     }, [isEdit])
-    console.log(selectedShareableUser, selectedAccess)
     useEffect(() => {
         if (debouncedQuery.trim().length < 3) return;
         fetchSearchedUser()
@@ -141,7 +138,6 @@ const ManageAccessController = () => {
     };
     const handleSave = async () => {
         if (selectedStreams.size === 0) return;
-        console.log(selectedUser)
         if (!selectedUser?.userId) return;
         setIsSaving(true);
         const orgCam: { [key: string]: { cameraId: number }[] } = {};

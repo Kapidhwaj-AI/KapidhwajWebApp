@@ -1,7 +1,87 @@
+import { Alert } from "./alert";
+import { Camera, CameraLocation } from "./camera";
+import { RecordedClip } from "./clip";
+import { Folders, Organization } from "./organization";
+
 export interface StreamFormData {
     name: string;
     people_threshold_count: number;
     organizationId: string;
     folderId: number | null;
-    subfolder: number| null;
+    subfolder: number | null;
+}
+
+export interface StreamsViewProps {
+    searchQuery: string;
+    setSearchQuery: (val: string) => void;
+    isLoading: boolean;
+    organizations: Organization[];
+    handleOrganizationSelect: (organization: Organization) => void;
+    selectedOrganization: Organization | null;
+    handleFolderSelect: (data: Folders) => void;
+    selectedFolder: Folders | null;
+    setSelectedChildFolder: (data: Folders) => void;
+    selectedChildFolder: Folders | null;
+    selectedData: Camera[] | null;
+    visibleCameras: Camera[];
+    toogleColumnValue: number;
+    cameraCount: number;
+}
+
+export interface StreamsPageViewProps {
+    loading: boolean;
+    isFullscreen: boolean;
+    cameraLocation: CameraLocation | undefined;
+    camera: Camera | undefined ;
+    setIsEdit: (val: boolean) => void;
+    setSettingDial: (val: boolean) => void;
+    setFilterDial: (val: boolean) => void;
+    setAlertOffset: (val: number) => void;
+    setRecordings: (val: RecordedClip[]) => void;
+    makeFav: boolean;
+    toggleStreamFav: () => void;
+    fetchRecordings: (offSet: number) => Promise<RecordedClip[]>;
+    setHasRecordingMore: (val: boolean) => void;
+    setRecordingLoading: (val: boolean) => void;
+    setRecordingOffset: (val: number) => void;
+    recordingOffset: number;
+    recordingLoading: boolean;
+    recordings: RecordedClip[];
+    recordingref: React.RefObject<HTMLDivElement>;
+    hasRecordingMore: boolean;
+    selectedTab: string;
+    setSelectedTab: (val: string) => void;
+    setAlerts: (val: Alert[]) => void;
+    alertOffset: number;
+    alertEndRef: React.RefObject<HTMLDivElement>;
+    alerts: Alert[];
+    fetchAlerts: (offSet: number) => Promise<Alert[]>;
+    alertsLoading: boolean;
+    setAlertsLoading: (val: boolean) => void;
+    setHasMore: (val: boolean) => void;
+    hasMore: boolean;
+    filteredAlerts: Alert[];
+    isDateFiltered: boolean;
+    setIsDateFiltered:(val:boolean) => void;
+    date: Date | undefined;
+    startTime: Date | undefined;
+    endTime: Date | undefined;
+    setStartTime: (val: Date | undefined) => void;
+    setDate: (val: Date | undefined) => void;
+    setEndTime: (val: Date | undefined) => void;
+    filterDial: boolean;
+    isEdit: boolean;
+    setIsEdit: (val: boolean) => void;
+    formData: StreamFormData;
+    isEditLoading: boolean;
+    setFormData: (data: StreamFormData) => void;
+    organizations: Organization[] | undefined;
+    stream: boolean;
+    handleToggleStream: (val: boolean) => void;
+    handleSave: (formData: StreamFormData) => void;
+    settingDial: boolean;
+    handleAiToggle: (key: "intrusion_detection" | "people_count" | "license_plate_detection", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<any>, any>>;
+    handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<any>, any>>;
+    handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<any>, any>>;
+    handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void
 }

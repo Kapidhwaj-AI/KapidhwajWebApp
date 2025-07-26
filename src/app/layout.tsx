@@ -16,6 +16,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const locale = await getLocale();
+  console.log(locale, "locale" )
   const messages = await getMessages();
   return (
     <html lang={locale} suppressHydrationWarning>

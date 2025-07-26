@@ -3,17 +3,39 @@ import { IconClock, IconCalendar, IconMovie, IconTreadmill, IconLayoutDashboard,
 import Image from "next/image";
 
 import { GOOGLE_KPH_BUCKET_URL } from "@/services/config";
+import { getLocalStorageItem } from "@/lib/storage";
+import { useState } from "react";
+import AlertPreviewDialogue from "@/components/dialogue/AlertPreviewDialogue";
 
-export function AlertCard({ alert }: { alert?: Alert }) {
+export function AlertCard({ alert }: { alert: Alert }) {
+    const [isPreview, setIsPreview] = useState(false);
     const timestamp = alert?.timestamp || 0
     const alertTimestamp = new Date(timestamp * 1000);
-
-    console.log(timestamp, new Date(timestamp), "date")
+    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    let baseUrl = hub ? `http://media.kapidhwaj.ai:${hub.static_port}/` : 'http://media.kapidhwaj.ai:3000/'
     const formattedDate = alertTimestamp.toLocaleDateString("en-GB");
     const formattedTime = alertTimestamp.toLocaleTimeString("en-GB", {
         hour: '2-digit',
         minute: '2-digit'
     });
+    const handleDownload = async() => {
+        try{
+
+            const response = await fetch(baseUrl + alert.frame_url);
+            const blob = await response.blob();
+            const blobUrl = URL.createObjectURL(blob);
+    
+            const link = document.createElement('a');
+            link.href = baseUrl + alert.frame_url;
+            link.download = `${alert.alertType}_${new Date().toISOString()}.png` ;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+        }catch(err){
+            console.error(err)
+        }
+    }
     return (
         <div className="w-full bg-[var(--surface-200)] rounded-4xl shadow-lg overflow-hidden">
             {/* Header */}
@@ -49,14 +71,15 @@ export function AlertCard({ alert }: { alert?: Alert }) {
             </div>
 
             {/* Image Area */}
-            <div className="relative aspect-video m-4 rounded-xl flex items-center justify-center" 
+            <div className="relative aspect-video m-4 rounded-xl flex items-center justify-center"
             >
-                {alert?.frame_url && <Image src={GOOGLE_KPH_BUCKET_URL + alert?.frame_url} alt={alert?.alertType} width={1000} height={1000} className="object-cover w-auto h-auto rounded-2xl" />}
-                {/* Center Circle Icon */}
-                <div className="absolute h-16 w-16 rounded-full backdrop-blur-sm flex items-center justify-center">
+                {alert?.frame_url && <Image src={baseUrl + alert?.frame_url} alt={alert?.alertType} width={1000} height={1000} className="object-cover w-auto h-auto rounded-2xl" />}
+
+                <button onClick={() => setIsPreview(true)} className="absolute h-14 w-14 rounded-full bg-neutral-400/20 dark:bg-black/20 backdrop-blur-[32px] flex items-center justify-center">
                     <IconMovie stroke={2} className="text-gray-600 dark:text-gray-300" size={24} />
-                </div>
+                </button>
             </div>
+            {isPreview && <AlertPreviewDialogue handleDownload={handleDownload} onClose={() => setIsPreview(false)} imageUrl={baseUrl + alert.frame_url} alertType={alert.alertType} />}
         </div>
     );
 }

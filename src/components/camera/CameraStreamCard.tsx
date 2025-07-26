@@ -28,7 +28,7 @@ export default function CameraStreamCard({
   );
   const [streamError, setStreamError] = useState<string | null>(null);
   const hasStream = camera?.webrtc_url;
-  console.log(isDelete, "asdhkk,")
+
   useEffect(() => {
     if (hasStream) {
     }
@@ -63,7 +63,7 @@ export default function CameraStreamCard({
       )}
       {cameraDetailView !== "focused" && isFav && setIsDelete && (
         <div className="absolute top-3 right-3 z-5 text-white">
-          <button onClick={() => { setIsDelete(true); console.log("sdj") }} className="rounded-full p-1 bg-[#FF6868]"><IconTrash size={18} /></button>
+          <button onClick={() => setIsDelete(true) } className="rounded-full p-1 bg-[#FF6868]"><IconTrash size={18} /></button>
         </div>
       )}
       <Link

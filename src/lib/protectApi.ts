@@ -13,15 +13,19 @@ export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
     data?: D, type?: string) {
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
-
+    const hubId = JSON.parse(getLocalStorageItem('hub')?? '{}')?.id
+    const headers: Record<string, string> = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': type ?? 'application/json',
+    };
+    if (hubId) {
+        headers['x-hub-id'] = hubId;
+    }
     return axios<ApiResponse<T>>({
         method: method ?? 'GET',
         url: apiBaseUrl + url,
         data: data,
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': type ?? 'application/json'
-        },
+        headers,
     });
 }
 

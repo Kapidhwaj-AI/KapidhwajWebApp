@@ -171,7 +171,7 @@
         "enter_camera_name": "કેમેરા નામ દાખલ કરો",
         "people_threshold_count": "લોકોની થ્રેશોલ્ડ સંખ્યા",
         "enter_people_threshold_count": "લોકોની થ્રેશોલ્ડ સંખ્યા દાખલ કરો",
-        "Access": "ઍક્સેસ",
+        "access": "ઍક્સેસ",
         "select_access": "ઍક્સેસ પસંદ કરો"
     },
     "manage_devices": "ડિવાઇસ મેનેજ કરો",
@@ -205,7 +205,8 @@
     "common": {
         "close": "બંધ કરો",
         "save": "સાચવો",
-        "update": "અપડેટ"
+        "update": "અપડેટ",
+        "clear_filter": "ફિલ્ટર સાફ કરો"
     },
     "alerts": {
         "title": "એલર્ટ્સ",

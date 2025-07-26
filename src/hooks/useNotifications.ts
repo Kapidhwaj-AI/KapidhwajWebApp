@@ -6,8 +6,6 @@ import { useEffect } from 'react';
 import { protectApi } from '@/lib/protectApi';
 
 export const useNotifications = (offset: number, options?: { onSuccess: (data: Notification[]) => void }) => {
-    console.log("useNotifications hook called with offset:", offset);
-
     const query = useQuery<Notification[]>({
         queryKey: ['notifications', offset],
         queryFn: async () => {
@@ -23,7 +21,6 @@ export const useNotifications = (offset: number, options?: { onSuccess: (data: N
 
     useEffect(() => {
         if (query.data && options?.onSuccess) {
-            console.log("Calling onSuccess with data:", query.data);
             options.onSuccess(query.data);
         }
     }, [query.data, options?.onSuccess]);

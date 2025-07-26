@@ -22,9 +22,11 @@ interface AddNewCameraDialogueProps {
     selectedSite: string;
     sites: Organization[];
     hubId: string;
+
+    fetchSavedHubs:() => void
 }
 
-export function AddNewCameraDialogue({ isOpen, hubId, onClose, isLoading, fetchNearCams, nearCams, selectedSite, setSelectedSite, sites }: AddNewCameraDialogueProps) {
+export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, isLoading, fetchNearCams, nearCams, selectedSite, setSelectedSite, sites }: AddNewCameraDialogueProps) {
     const [ipAddress, setIpAddress] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -61,8 +63,9 @@ export function AddNewCameraDialogue({ isOpen, hubId, onClose, isLoading, fetchN
                 folderId: Number(folderToSend),
                 hubId, username, password, ipaddress: ipAddress,
             })
-            if(res.status === 200){
+            if (res.status === 200) {
                 onClose()
+               await fetchSavedHubs()
             }
         } catch {
 
@@ -112,43 +115,48 @@ export function AddNewCameraDialogue({ isOpen, hubId, onClose, isLoading, fetchN
                 {/* Form Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     {/* IP Address Field */}
-                   
-                        <InputField value={name}
-                            setValue={setName}
-                            label={t('settings.name')}
-                            placeholder={t('settings.enter_name_here')}
-                        />
-                
+
+                    <InputField value={name}
+                        required
+                        setValue={setName}
+                        label={t('settings.name')}
+                        placeholder={t('settings.enter_name_here')}
+                    />
+
 
                     {/* Name Field */}
-                   
-                        <InputField value={ipAddress}
-                            setValue={setIpAddress}
-                            label={t('settings.ip_address')}
-                            placeholder={t('settings.enter_ip_address')}
-                        />
-                   
-                        <InputField value={mac}
-                            setValue={setMac}
-                            label={t('settings.mac_address')}
-                            placeholder={t('settings.enter_mac_address')}
-                        />
-                 
+
+                    <InputField value={ipAddress}
+                        required
+                        setValue={setIpAddress}
+                        label={t('settings.ip_address')}
+                        placeholder={t('settings.enter_ip_address')}
+                    />
+
+                    <InputField value={mac}
+                        required
+                        setValue={setMac}
+                        label={t('settings.mac_address')}
+                        placeholder={t('settings.enter_mac_address')}
+                    />
+
 
                     {/* Username Field */}
-                    
-                        <InputField value={username}
-                            setValue={setUsername}
-                            label={t('settings.username')}
-                            placeholder={t('settings.enter_username')}
-                        />
-                    
+
+                    <InputField value={username}
+                        required
+                        setValue={setUsername}
+                        label={t('settings.username')}
+                        placeholder={t('settings.enter_username')}
+                    />
+
                     <InputField value={password}
+                        required
                         setValue={setPassword}
                         label={t('settings.password')}
                         placeholder={t('settings.enter_password')}
                     />
-                    <SelectField placeholder={t('settings.select_a_site')} label={t('settings.select_site')} value={selectedSite} setValue={setSelectedSite} data={sites} />
+                    <SelectField required placeholder={t('settings.select_a_site')} label={t('settings.select_site')} value={selectedSite} setValue={setSelectedSite} data={sites} />
 
 
                     {/* Folder Name Field */}
@@ -158,13 +166,13 @@ export function AddNewCameraDialogue({ isOpen, hubId, onClose, isLoading, fetchN
                 </div>
 
                 {/* Divider */}
-                
+
 
                 {/* Nearby Cameras Section */}
                 <div>
                     <div className="flex gap-2 items-center mb-2">
                         <h2 className="text-sm font-bold">{t('manage_hubs.manage_cameras.nearby_cameras')}</h2>
-                        <button
+                        <button type='button'
                             onClick={fetchNearCams}
                             disabled={isLoading}
                             className="p-1.5 hover:bg-[var(--surface-200)] rounded-full transition-colors disabled:opacity-50"
@@ -193,7 +201,7 @@ export function AddNewCameraDialogue({ isOpen, hubId, onClose, isLoading, fetchN
                                             <h3 className="text-sm font-medium truncate">{device.name}</h3>
                                             <p className="text-xs text-gray-500 truncate">{device.ipaddress}</p>
                                         </div>
-                                        <button
+                                        <button type='button'
                                             onClick={() => { navigator.clipboard.writeText(device.rtsp); setName(device.name); setIpAddress(device.ipaddress); setMac(mac) }}
                                             className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
                                         >
@@ -202,7 +210,7 @@ export function AddNewCameraDialogue({ isOpen, hubId, onClose, isLoading, fetchN
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-gray-500">No cameras found nearby.</p>
+                                <p className="text-gray-500 text-center">No cameras found nearby.</p>
                             )}
                         </div>
                     </div>
@@ -210,7 +218,7 @@ export function AddNewCameraDialogue({ isOpen, hubId, onClose, isLoading, fetchN
 
                 {/* Action Buttons */}
                 <div className="flex justify-end gap-3 mt-10">
-                    <button
+                    <button type='button'
                         className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
                         onClick={onClose}
                     >

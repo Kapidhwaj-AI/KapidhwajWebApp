@@ -7,12 +7,13 @@ import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
 import { DevicesMap, Hub } from "@/models/settings";
 import { Camera, CameraLocation } from "@/models/camera";
 import { AxiosResponse } from "axios";
-import EditStreamDialog from "../dialogue/EditStreamDialog";
+import EditStreamDialogue from "../dialogue/EditStreamDialogue";
 import { protectApi } from "@/lib/protectApi";
 import { StreamFormData } from "@/models/stream";
 import { useOrganizations } from "@/hooks/useOrganizations";
 import { Organization } from "@/models/organization";
 import { useTranslations } from "next-intl";
+import Spinner from "../ui/Spinner";
 
 
 
@@ -27,10 +28,12 @@ interface SavedCamerasProps {
     handleDelet: (camearId: number | undefined, organizationId: string) => void;
     setSelectedSite: (val: string) => void;
     selectedSite: string;
-    sites: Organization[]
+    sites: Organization[];
+    fetchSavedHubs: () => void;
+    camLoading: boolean
 }
 
-export const SavedCameras: React.FC<SavedCamerasProps> = ({ hub, className = "", toggleStream, setIsDelete, isDelete, handleDelet, setSelectedSite, selectedSite, sites }) => {
+export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fetchSavedHubs, className = "", toggleStream, setIsDelete, isDelete, handleDelet, setSelectedSite, selectedSite, sites }) => {
     const [isEditCameraOpen, setIsEditCameraOpen] = useState(false);
     const [isAddCameraOpen, setIsAddCameraOpen] = useState(false);
     const [cameraToggle, setCameraToggle] = useState(false);
@@ -134,13 +137,14 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ hub, className = "",
         };
         try {
             const res = await protectApi<any, Partial<StreamFormData>>(
-                `camera?action=update&cameraId=${camera?.camera_id}`,
+                `/camera?action=update&cameraId=${camera?.camera_id}`,
                 'PUT',
                 payload
             );
 
             if (res.status === 200) {
                 setIsEditCameraOpen(false)
+                await fetchSavedHubs()
                 setFormData({
                     name: '',
                     people_threshold_count: 0,
@@ -150,7 +154,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ hub, className = "",
                 })
             }
         } catch (e) { console.error(e) }
-        finally{
+        finally {
             setLoading(false)
         }
     }
@@ -171,7 +175,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ hub, className = "",
                         <span className="text-sm">{t('settings.add_new_camera')}</span>
                     </button>
                 </div>
-                <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-6rem)]  pb-4 scrollbar-hide">
+                {camLoading ? <Spinner /> : <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-6rem)]  pb-4 scrollbar-hide">
                     <div className="space-y-3">
                         {hub.cameras.filter((item) => item.camera_id !== cameraId).map((camera, index) => (
                             <div
@@ -205,7 +209,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ hub, className = "",
                             </div>
                         ))}
                     </div>
-                </div>
+                </div>}
             </div>
             <AddNewCameraDialogue
                 nearCams={nearbyCams}
@@ -217,9 +221,10 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ hub, className = "",
                 setSelectedSite={setSelectedSite}
                 selectedSite={selectedSite}
                 hubId={hub.id}
+                fetchSavedHubs={fetchSavedHubs}
             />
             {isEditCameraOpen &&
-                <EditStreamDialog
+                <EditStreamDialogue
                     isEditLoading={editLoading}
                     isLoading={loading}
                     setFormData={setFormData}

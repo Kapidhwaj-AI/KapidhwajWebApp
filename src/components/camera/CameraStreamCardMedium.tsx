@@ -5,15 +5,18 @@ import LiveBadge from "./LiveBadge";
 import { cn } from "@/lib/utils";
 import { AppDispatch, RootState } from "@/redux/store";
 import {
+  IconChevronRight,
   IconMaximize,
   IconMinimize,
 } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsFullScreenMode } from "@/redux/slices/cameraSlice";
+import { getLocalStorageItem } from "@/lib/storage";
 
 
 export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {
   const isFullscreen = useSelector((state:RootState)=> state.camera.isFullScreen)
+ 
   const dispatch = useDispatch<AppDispatch>()
   return (
     <div
@@ -44,8 +47,9 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
             {/* Left text section */}
             <div className="flex flex-col text-white ml-1 md:ml-2">
               {camLocation?.parantFolder !== "NA" && <span className="font-bold text-sm md:text-md">{camLocation?.parantFolder}</span>}
-              <span className="text-xs md:text-sm text-gray-300">
-                {camLocation?.organization} {">"} {camera?.name}
+              <span className="text-xs md:text-sm flex gap-1 items-center  text-gray-300">
+                {camLocation?.organization} <IconChevronRight size={16} className=" text-gray-400" />  {camera?.name}
+
               </span>
             </div>
 

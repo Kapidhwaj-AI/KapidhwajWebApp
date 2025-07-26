@@ -48,7 +48,8 @@ export interface Hub {
     organization: Organization;
     organization_id: string;
     physical_address: string;
-    cameras: Camera[]
+    cameras: Camera[];
+    port: string | number
 }
 
 export interface Profile {
@@ -157,4 +158,54 @@ export interface PersonFormaData {
     gender: string;
     category: string;
     file: File | undefined
+}
+
+
+export interface SettingsViewProps {
+    setShowMainSettingDial: (val: boolean) => void;
+    setShowSelectLanguageDial: (val: boolean) => void;
+    setShowProfileDial: (val: boolean) => void;
+    setShowChangePasswordDial: (val: boolean) => void;
+    setShowHelpDial: (val: boolean) => void;
+    showMainSettingDial: boolean;
+    showSelectLanguageDial: boolean;
+    profileSaveLoading: boolean;
+    user: { id: string, name: string, phone: string, profile_image: string };
+    name: string;
+    setName: (val: string) => void;
+    phone: string;
+    setPhone: (val: string) => void;
+    customerId: string;
+    email: string;
+    setEmail: (val: string) => void;
+    setCustomerId: (val: string) => void;
+    file: File | undefined;
+    setFile: (val: File | undefined) => void;
+    preview: string;
+    setPreview: (val: string) => void;
+    handleProfileSave: (e: FormEvent<HTMLFormElement>) => void;
+    handleImageClick: () => void;
+    handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    fileInputRef: React.RefObject<HTMLInputElement>;
+    showProfileDial: boolean;
+    showPassword: boolean;
+    setShowPassword: (val: boolean) => void;
+    newPassword: string;
+    confirmPassword: string;
+    setNewPassword: (val: string) => void;
+    setConfirmPassword: (val: string) => void;
+    otpLoading: boolean;
+    passwordErr: string;
+    handleOtpSend: () => void;
+    showChangePasswordDial: boolean;
+    showHelpDial: boolean;
+    isOtpSend: boolean;
+    handleChangePassword: () => void;
+    setIsOtpSend: (val: boolean) => void;
+    settingsItems: {
+        id: number;
+        title: string;
+        icon: JSX.Element;
+        path: string;
+    }[]
 }

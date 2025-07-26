@@ -33,7 +33,7 @@ const SiteFolderModal: React.FC<SiteFolderModalProps> = ({ setName, isLoading, h
           <button type='submit'
             className="px-5 py-2 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base"
           >
-            {isLoading ? <Spinner /> : <span className='flex items-center gap-2'><IconCheck size={16} />{t('save')}</span>}
+            {isLoading ? <Spinner /> : <span className='flex items-center gap-2'><IconCheck size={16} />{isEdit ? t('common.update') :t('save')}</span>}
           </button>
         </div>
       </form>

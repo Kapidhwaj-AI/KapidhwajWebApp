@@ -1,0 +1,246 @@
+'use client'
+import StreamPageView from '@/components/views/streams/id/StreamPage.view';
+import { useOrganizations } from '@/hooks/useOrganizations';
+import { protectApi } from '@/lib/protectApi';
+import { Alert } from '@/models/alert';
+import { Camera, CameraLocation } from '@/models/camera';
+import { RecordedClip } from '@/models/clip';
+import { Organization } from '@/models/organization';
+import { StreamFormData } from '@/models/stream';
+import { RootState } from '@/redux/store';
+import { getUtcTimestamp } from '@/utils/getUTCTimestamp';
+import { useTranslations } from 'next-intl';
+import React, { use, useEffect, useMemo, useRef, useState } from 'react'
+import { useSelector } from 'react-redux';
+
+const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) => {
+
+    const { id } = use(params);
+    const [filterDial, setFilterDial] = useState(false);
+    const [settingDial, setSettingDial] = useState(false);
+    const [loading, setLoading] = useState(false)
+    const [cameraError, setCameraError] = useState('')
+    const [alertsError, setAlertsError] = useState('')
+    const [recordingsError, setRecordingsError] = useState('')
+    const [recordingOffset, setRecordingOffset] = useState(0)
+    const [isEdit, setIsEdit] = useState(false)
+    const [alertOffset, setAlertOffset] = useState(0)
+    const [makeFav, setMakeFav] = useState(false);
+    const [camera, setCamera] = useState<Camera>()
+    const [alerts, setAlerts] = useState<Alert[]>([])
+    const [recordings, setRecordings] = useState<RecordedClip[]>([])
+    const [hasMore, setHasMore] = useState(true)
+    const [alertsLoading, setAlertsLoading] = useState(false)
+    const alertEndRef = useRef(null)
+    const [organization, selectOrganization] = useState<Organization[]>([])
+    const [cameraLocation, setCameraLocation] = useState<CameraLocation>()
+    const [hasRecordingMore, setHasRecordingMore] = useState(true)
+    const [recordingLoading, setRecordingLoading] = useState(false)
+    const recordingref = useRef(null)
+    const [selectedTab, setSelectedTab] = useState('all')
+    const [date, setDate] = useState<Date | undefined>();
+    const [startTime, setStartTime] = useState<Date | undefined>();
+    const [endTime, setEndTime] = useState<Date | undefined>();
+    const [isDateFiltered, setIsDateFiltered] = useState(false)
+    const [formData, setFormData] = useState<StreamFormData>({
+        name: camera?.name ?? '',
+        people_threshold_count: camera?.people_threshold_count ?? NaN,
+        organizationId: camera?.organization_id ?? '',
+        folderId: cameraLocation?.parantFolderId ?? NaN,
+        subfolder: cameraLocation?.folderId ?? NaN
+    });
+    const [isEditLoading, setIsEditLoading] = useState(false)
+    const [stream, setStream] = useState(false)
+    const { data: organizations, isLoading, error } = useOrganizations(undefined, {
+        onSuccess: (data) => {
+            selectOrganization(data);
+        }
+    });
+    const fetchCamera = async (id: string) => {
+        const res = await protectApi<Camera, undefined>(`/camera?cameraId=${id}`)
+        return res.data.data
+    }
+    const fetchCameraLocation = async () => {
+        const res = await protectApi<CameraLocation, undefined>(`/camera/cam-details?cameraId=${id}`)
+        return res.data.data
+    }
+    const fetchAlerts = async (offset: number, startTime?: number, endTime?: number) => {
+        const endpoint = startTime ? `/alert/recent?offset=${offset}&cameraId=${id}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}` : `/alert/recent?offset=${offset}&cameraId=${id}`
+        const res = await protectApi<Alert[]>(endpoint)
+        return res.data.data
+    }
+    const fetchRecordings = async (offset: number) => {
+        const res = await protectApi<RecordedClip[]>(`/recorded-clip?cameraId=${id}&offset=${offset}`)
+        return res.data.data
+    }
+    const fetchIsFav = async (id: string) => {
+        const res = await protectApi<{ is_fav: boolean }>(`/camera/fav-status?cameraId=${id}`)
+        return res.data.data
+    }
+
+
+    useEffect(() => {
+        setLoading(true);
+        setCameraError("");
+        setAlertsError("")
+        setRecordingsError("")
+        Promise.allSettled([
+            fetchCamera(id),
+            fetchAlerts(alertOffset),
+            fetchRecordings(recordingOffset),
+            fetchIsFav(id),
+            fetchCameraLocation()
+        ])
+            .then(([camRes, alertsRes, recRes, isFav, location]) => {
+                const newFormData: Partial<StreamFormData> = {};
+                if (camRes.status === "fulfilled") {
+                    setCamera(camRes.value);
+                    setStream(camRes.value.is_ai_stream_active !== 0);
+                    newFormData.name = camRes.value.name ?? '';
+                    newFormData.people_threshold_count = camRes.value.people_threshold_count ?? 0;
+                    newFormData.organizationId = camRes.value.organization_id ?? '';
+
+                }
+                else { setCameraError("Error while fetching camera data") }
+                if (alertsRes.status === "fulfilled") setAlerts(alertsRes.value);
+                else { setAlertsError("Error while fetching Alerts data") }
+
+                if (recRes.status === "fulfilled") setRecordings(recRes.value);
+                else { setRecordingsError("Error while fetching camera data") }
+                if (isFav.status === "fulfilled") setMakeFav(isFav.value.is_fav);
+                if (location.status === 'fulfilled') {
+                    setCameraLocation(location.value);
+                    newFormData.folderId =
+                        location.value?.parantFolderId !== "NA"
+                            ? Number(location.value?.parantFolderId)
+                            : null;
+                    newFormData.subfolder =
+                        location.value?.folderId !== "NA"
+                            ? Number(location.value?.folderId)
+                            : null;
+
+                }
+                setFormData((prev) => ({ ...prev, ...newFormData }));
+            })
+            .finally(() => setLoading(false));
+    }, [id]);
+
+
+
+    const filteredAlerts = useMemo(() => {
+        if (selectedTab === "all") return alerts;
+
+        return alerts.filter((alert) => alert.alertType === selectedTab);
+    }, [alerts, selectedTab]);
+
+    const toggleStreamFav = async () => {
+        const res = await protectApi<any, { cameraId: number }>(`/camera/fav?cameraId=${id}`, makeFav ? 'DELETE' : 'POST', { cameraId: Number(id) })
+        if (res.status === 200) {
+            setMakeFav((prev) => !prev)
+        }
+    };
+    const handleAiToggle = async (key: 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean,) => {
+
+        const endpoint = toggleValue ? `/camera/stream/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
+            : `/camera/stream/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`;
+
+        const res = await protectApi<any, { cameraId: number, serviceType: typeof key }>(endpoint, 'POST', { cameraId: Number(camera?.camera_id), serviceType: key })
+        const cameraRes = await fetchCamera(id)
+        setCamera(cameraRes)
+        return res
+    }
+    const handleMotionToggle = async (toggleValue: boolean) => {
+        const endpoint = toggleValue ? '/camera/motion/start' : '/camera/motion/stop'
+        const res = await protectApi<any, { camId: number }>(endpoint, "POST", { camId: Number(camera?.camera_id) })
+        const cameraRes = await fetchCamera(id)
+        setCamera(cameraRes)
+        return res
+    }
+
+    const handleRecordinToggle = async (isRecord: boolean) => {
+
+        const url = isRecord
+            ? `/camera/recording/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
+            : `/camera/recording/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
+
+        const res = await protectApi(url, "POST", { cameraId: Number(camera?.camera_id), serviceType: 'cloud_storage' })
+        const cameraRes = await fetchCamera(id)
+        setCamera(cameraRes)
+        return res
+    }
+    const handleApplyFilter = async (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => {
+        if (date && startTime && endTime) {
+            const start = getUtcTimestamp(date, startTime)
+            const end = getUtcTimestamp(date, endTime)
+            const res = await fetchAlerts(alertOffset, start, end)
+
+            setIsDateFiltered(true)
+            setAlerts(res)
+            setFilterDial(false)
+        }
+        return
+    }
+    const handleToggleStream = async (toggleValue: boolean) => {
+
+        const url = toggleValue ? `/camera/start?action=add&hubId=${camera?.hub_id}` : `/camera/stop?action=remove&hubId=${camera?.hub_id}`
+        const payload = {
+            cameras: [
+                {
+                    id: camera?.camera_id.toString(),
+                    macaddress: camera?.physical_address,
+                },
+            ],
+        }
+        const res = await protectApi<any, typeof payload>(url, "POST", payload)
+        if (res.status === 200) {
+            setStream(toggleValue)
+        }
+    }
+    const handleSave = async () => {
+        setIsEditLoading(true)
+        const fallbackFolderId =
+            formData.folderId && formData.folderId > 0
+                ? formData.folderId
+                : formData.subfolder && formData.subfolder > 0
+                    ? formData.subfolder
+                    : null;
+
+        const payload: Partial<StreamFormData> = {
+            name: formData.name,
+            people_threshold_count: formData.people_threshold_count,
+            organizationId: formData.organizationId,
+            folderId: fallbackFolderId,
+        };
+        try {
+            const res = await protectApi<any, Partial<StreamFormData>>(
+                `camera?action=update&cameraId=${camera?.camera_id}`,
+                'PUT',
+                payload
+            );
+
+            if (res.status === 200) {
+                setIsEdit(false)
+                setFormData({
+                    name: '',
+                    people_threshold_count: 0,
+                    organizationId: '',
+                    folderId: -1,
+                    subfolder: -1
+                })
+            }
+
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsEditLoading(false)
+        }
+    }   
+    console.log(camera, "controller")
+
+    const isFullscreen = useSelector((state: RootState) => state.camera.isFullScreen)
+    return (
+       <StreamPageView loading={loading} selectedTab={selectedTab} setAlertOffset={setAlertOffset} setAlerts={setAlerts} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setFormData={setFormData} setHasMore={setHasMore} setHasRecordingMore={setHasRecordingMore} setIsDateFiltered={setIsDateFiltered} setIsEdit={setIsEdit} setRecordingLoading={setRecordingLoading} setRecordingOffset={setRecordingOffset} setRecordings={setRecordings} setSelectedTab={setSelectedTab} setSettingDial={setSettingDial} setStartTime={setStartTime} settingDial={settingDial} startTime={startTime} stream={stream} isDateFiltered={isDateFiltered} isEdit={isEdit} isEditLoading={isEditLoading} isFullscreen={isFullscreen} camera={camera} cameraLocation={cameraLocation} makeFav={makeFav} toggleStreamFav={toggleStreamFav} handleAiToggle={handleAiToggle} handleApplyFilter={handleApplyFilter} handleMotionToggle={handleMotionToggle} handleRecordingToggle={handleRecordinToggle} handleSave={ handleSave} handleToggleStream={handleToggleStream} hasMore={hasMore} hasRecordingMore={hasRecordingMore} fetchAlerts={fetchAlerts} fetchRecordings={fetchRecordings} filterDial={filterDial} filteredAlerts={filteredAlerts} formData={formData} recordingLoading={recordingLoading} recordingOffset={recordingOffset} recordingref={recordingref} recordings={recordings} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} date={date} endTime={endTime} organizations={organizations}/>
+    )
+}
+
+export default StreamPageController

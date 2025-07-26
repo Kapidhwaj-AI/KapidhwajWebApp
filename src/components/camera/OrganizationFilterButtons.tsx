@@ -6,18 +6,18 @@ import { Folders, Organization } from "@/models/organization";
 
 interface OrganizationFilterButtonsProps {
     organizations?: Organization[];
-    folders?: Folders[]
-    childFolders?: Folders[]
+    folders?: Folders[];
+    childFolders?: Folders[];
     isLoading: boolean;
+    selectedId?: string | number | null;
     onOrganizationSelect?: (organization: Organization) => void;
-    onSelectedFolder?:(data:Folders) => void
-    onSelectedChild?:(data:Folders)=> void
+    onSelectedFolder?: (data: Folders) => void;
+    onSelectedChild?: (data: Folders) => void;
 }
 
-const OrganizationFilterButtons = ({ organizations, folders, isLoading, onOrganizationSelect, onSelectedFolder, childFolders, onSelectedChild }: OrganizationFilterButtonsProps) => {
+const OrganizationFilterButtons = ({ organizations, folders, isLoading, onOrganizationSelect, selectedId, onSelectedFolder, childFolders, onSelectedChild }: OrganizationFilterButtonsProps) => {
     const [selected, setSelected] = useState<string| number| null>(null);
-    // const { data: organizations, isLoading } = useOrganizations();
-    console.log(folders, childFolders)
+
     useEffect(() => {
         if (organizations && organizations.length > 0 && !selected && onOrganizationSelect) {
             const firstOrg = organizations[0];
@@ -38,7 +38,7 @@ const OrganizationFilterButtons = ({ organizations, folders, isLoading, onOrgani
                     <Button
                         key={org.id}
                         variant="ghost"
-                        className={`px-4 py-2 rounded-full transition-all ${selected === org.id
+                        className={`px-4 py-2 rounded-full transition-all ${selectedId === org.id
                             ? "bg-[#2B4C88] text-white shadow-md"
                             : "bg-[var(--surface-400)] text-gray-500"
                             }`}
@@ -54,7 +54,7 @@ const OrganizationFilterButtons = ({ organizations, folders, isLoading, onOrgani
                     <Button
                         key={folder.id}
                         variant="ghost"
-                        className={`px-4 py-2 rounded-full transition-all ${selected === folder.id
+                        className={`px-4 py-2 rounded-full transition-all ${selectedId === folder.id
                             ? "bg-[#2B4C88] text-white shadow-md"
                             : "bg-[var(--surface-400)] text-gray-500"
                             }`}
@@ -70,7 +70,7 @@ const OrganizationFilterButtons = ({ organizations, folders, isLoading, onOrgani
                     <Button
                         key={folder.id}
                         variant="ghost"
-                        className={`px-4 py-2 rounded-full transition-all ${selected === folder.id
+                        className={`px-4 py-2 rounded-full transition-all ${selectedId === folder.id
                             ? "bg-[#2B4C88] text-white shadow-md"
                             : "bg-[var(--surface-400)] text-gray-500"
                             }`}

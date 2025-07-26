@@ -38,7 +38,6 @@ const ManageDevicesController = () => {
         try {
             const res = await protectApi<{ organization: Organization }[]>('/organizations')
             if (res.status === 200) {
-                console.log(res.data.data, "res")
                 const sites = res.data.data?.map(
                     (item: any) => item.organization,
                 );
@@ -68,6 +67,10 @@ const ManageDevicesController = () => {
             const res = await protectApi<Hub[]>(`/devices/hub`);
             const data = res.data.data
             setSavedHubs(data)
+            if (selectedHub) {
+                const updated = data.find(h => h.id === selectedHub.id);
+                if (updated) setSelectedHub(updated);
+            }
         } catch (error) {
             console.error("err:", error)
             setSavedErr(error)

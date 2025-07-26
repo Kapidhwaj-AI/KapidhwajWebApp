@@ -12,3 +12,15 @@ interface Organization{
     owner:string
     updated_at:Date
 }
+
+export interface FavouriteViewProps {
+    search: string;
+    setSearch: (val:string) => void;
+    err: string;
+    loading: boolean;
+    filteredFavourites: Favourite[];
+    toogleColumnValue:number;
+    handleDelete: (id: number) => void;
+    setIsDelete:(val: boolean) => void;
+    isDelete: boolean;
+}

@@ -2,7 +2,7 @@
 import NotificationView from '@/components/views/notification/Notification.view';
 import { protectApi } from '@/lib/protectApi';
 import { Notification } from '@/models/notification';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 const NotificationsController = () => {
     const [offset, setOffset] = useState(0);
@@ -32,12 +32,12 @@ const NotificationsController = () => {
         }
         if (offset === 0) loadNotification()
     }, [])
-    const filteredNotifications = allNotifications.filter(notification =>
-        !searchQuery ||
-        notification.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        notification.message.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    return <NotificationView offset={offset} filteredNotifications={filteredNotifications} error={err} divRef={divRef} isDateFiltered={isDateFiltered} setIsDateFiltered={setIsDateFiltered} setIsLoading={setLoading} setAllNotifications={setAllNotifications} setOffset={setOffset} searchQuery={searchQuery} setSearchQuery={setSearchQuery} allNotifications={allNotifications} fetchNotification={fetchNotification} isLoading={loading} setHasMore={setHasMore} hasMore={hasMore}  />
+    const filteredNotifications = useMemo(() => {
+        return allNotifications.filter(notification => !searchQuery ||
+            notification.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    }, [allNotifications, searchQuery])
+
+    return <NotificationView offset={offset} filteredNotifications={filteredNotifications} error={err} divRef={divRef} isDateFiltered={isDateFiltered} setIsDateFiltered={setIsDateFiltered} setIsLoading={setLoading} setAllNotifications={setAllNotifications} setOffset={setOffset} searchQuery={searchQuery} setSearchQuery={setSearchQuery} allNotifications={allNotifications} fetchNotification={fetchNotification} isLoading={loading} setHasMore={setHasMore} hasMore={hasMore} />
 }
 
 export default NotificationsController

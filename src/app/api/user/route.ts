@@ -10,8 +10,6 @@ interface UserResponse extends ApiResponse {
 
 export const GET = async (req: NextRequest) => {
   const token = req.cookies.get(USER_TOKEN_COOKIE);
-  console.log(token);
-
   if (!token) {
     return NextResponse.json(
       { message: "Unauthorized", reason: "error" },

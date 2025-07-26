@@ -32,7 +32,7 @@ const HubDialogue: React.FC<HubDialogueProps> = ({ onClose, onSubmit, name, setN
                 <InputField required value={name} setValue={setName} label={t('settings.name')} placeholder={t('settings.enter_name_here')} />
                 <InputField required value={id} setValue={setId} label={t('settings.hub_id')} placeholder={t('settings.enter_hub_id')}/>
                 <InputField required value={password} setValue={setPassword} isPasswordField setShowPassword={setShowPassword} showPassword={showPassword} label={t('settings.password')} placeholder={t('settings.enter_password_here')} />
-                <SelectField placeholder={t('settings.select_a_site')} label={t('settings.select_site')} value={selectedSite} setValue={setSelectedSite} data={sites}/>
+                <SelectField required placeholder={t('settings.select_a_site')} label={t('settings.select_site')} value={selectedSite} setValue={setSelectedSite} data={sites}/>
                 <div className='flex justify-end gap-3 py-2'>
 
                     <button

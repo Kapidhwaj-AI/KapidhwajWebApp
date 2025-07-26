@@ -24,24 +24,13 @@ export function AddNewAccessDialogue({ isOpen, onClose }: AddNewAccessDialoguePr
 
     const handleAddAccess = () => {
         if (!name || !selectedType) return;
-        console.log({
-            name,
-            type: selectedType
-        });
         setName('');
         setSelectedType('');
     };
 
-    const handleEditAccess = (id: string) => {
-        console.log('Edit access:', id);
-    };
-
-    const handleDeleteAccess = (id: string) => {
-        console.log('Delete access:', id);
-    };
+  
 
     const handleSave = () => {
-        console.log('Save all changes');
         onClose();
     };
 

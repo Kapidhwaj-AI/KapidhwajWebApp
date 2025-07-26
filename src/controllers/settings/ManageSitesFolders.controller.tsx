@@ -29,7 +29,6 @@ const ManageSitesFoldersController = () => {
         try {
             const res = await protectApi<{ organization: Organization }[]>('/organizations')
             if (res.status === 200) {
-                console.log(res.data.data, "res")
                 const sites = res.data.data?.map(
                     (item: any) => item.organization,
                 );
@@ -89,9 +88,6 @@ const ManageSitesFoldersController = () => {
             } = {
                 name,
             };
-
-           
-            console.log(orgId, id, isOrgId)
             if (isEdit) {
                 if (isOrgId) {
                     payload.organizationId = id as string;
@@ -113,7 +109,6 @@ const ManageSitesFoldersController = () => {
                 setIsEdit(false)
                 setName('')
                 await fetchSites()
-                console.log(isOrg, isFolder, folderId)
                 if (isOrg && orgId) {
                     handleNavigate(orgId, 'org')
                 } else if (!isOrg && folderId) {
@@ -152,7 +147,7 @@ const ManageSitesFoldersController = () => {
     return (
         <>
             <ManageSitesFolderView setIsEdit={setIsEdit} setName={setName} setId={setId} setIsOpen={setIsOpen} folderId={folderId} orgId={orgId} subFolders={subFolders} folders={folders} setIsDelete={setIsDelete} isSiteLoading={isSiteLoading} sites={sites} setIsFolder={setIsFolder} setIsOrg={setIsOrg} handleNavigate={handleNavigate} />
-            {isOpen && <SiteFolderModal isEdit={isEdit} handleSubmit={handleSubmit} isLoading={isSaving} setName={setName} name={name} isFolder={isFolder} isSite={isOrg} onClose={() => { setIsOpen(false); setName('') }} />}
+            {isOpen && <SiteFolderModal isEdit={isEdit} handleSubmit={handleSubmit} isLoading={isSaving} setName={setName} name={name} isFolder={isFolder} isSite={isOrg} onClose={() => { setIsOpen(false); setName(''); setIsEdit(false) }} />}
             {isDelete && <DeleteDialog title={t(isOrg ? 'settings.delete_site' : isFolder ? 'settings.delete_folder' :'settings.delete_subfolder')} data={id} handleDelete={handleDelete} onClose={() => setIsDelete(false)} />}
         </>
     )

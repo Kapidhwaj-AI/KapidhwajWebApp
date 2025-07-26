@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import Modal from '../ui/Modal';
 import { IconCheck, IconX, IconLanguage } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
-import { cookies } from 'next/headers';
+import { useRouter } from 'next/navigation';
+
 
 export  function SelectLanguageDialogue({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'hi' | 'gu'>('en');
+    const router = useRouter()
     useEffect(() => {
         const match = document.cookie.match(/(^| )locale=([^;]+)/);
         if (match && ['en', 'hi', 'gu'].includes(match[2])) {
@@ -17,7 +19,7 @@ export  function SelectLanguageDialogue({ isOpen, onClose }: { isOpen: boolean; 
     const handleSave = () => {
         document.cookie = `locale=${selectedLanguage}; path=/; max-age=31536000`; 
         onClose();
-        window.location.reload(); 
+        router.refresh()
     };
 
     if (!isOpen) return null;

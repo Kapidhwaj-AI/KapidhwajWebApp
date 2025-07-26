@@ -6,12 +6,14 @@ import { useSelector } from "react-redux";
 import { RecordedClip } from "@/models/clip";
 import { GOOGLE_KPH_BUCKET_URL } from "@/services/config";
 import { useRef, useState } from "react";
+import { getLocalStorageItem } from "@/lib/storage";
 
 export default function CameraStreamRecordingCard({ recording }: { recording: RecordedClip }) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-
+    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    let baseUrl = hub ? `http://media.kapidhwaj.ai:${hub.static_port}/` : 'http://media.kapidhwaj.ai:3000/'
     const handleTogglePlay = () => {
         const video = videoRef.current;
         if (!video) return;
@@ -36,8 +38,8 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
         >
             <video
                 ref={videoRef}
-                src={GOOGLE_KPH_BUCKET_URL + recording.recorded_path}
-                
+                controls
+                src={baseUrl + recording.recorded_path}
                 className="w-full h-full object-cover rounded-4xl"
             />
 
