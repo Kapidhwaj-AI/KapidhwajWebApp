@@ -13,7 +13,7 @@ interface KeyValue {
     value: string;
 }
 
-interface EditStreamDialogProps {
+interface EditStreamDialogueProps {
     onClose: () => void;
     formData: StreamFormData;
     setFormData: (data: StreamFormData) => void;
@@ -28,7 +28,7 @@ interface EditStreamDialogProps {
     isLoading: boolean
 }
 
-const EditStreamDialog = ({ onClose, isEditLoading, isLoading, isStream, formData, setFormData, handleToggleStream, handleSave, organizations, folders, subfolders }: EditStreamDialogProps) => {
+const EditStreamDialogue = ({ onClose, isEditLoading, isLoading, isStream, formData, setFormData, handleToggleStream, handleSave, organizations, folders, subfolders }: EditStreamDialogueProps) => {
     const t = useTranslations()
     return (
         <Modal onClose={onClose} title={t('edit_streams_camera')}>
@@ -74,4 +74,4 @@ const EditStreamDialog = ({ onClose, isEditLoading, isLoading, isStream, formDat
     )
 }
 
-export default EditStreamDialog
+export default EditStreamDialogue

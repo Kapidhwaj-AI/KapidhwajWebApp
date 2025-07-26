@@ -206,3 +206,7 @@ select.react-day-picker-dropdown option {
   background-color: #1f2937;
   color: white;
 }
+
+*{
+  box-sizing: border-box;
+}

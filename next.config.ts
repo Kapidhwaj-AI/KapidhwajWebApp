@@ -31,12 +31,17 @@ const nextConfig: NextConfig = {
         hostname: 'wallsdesk.com',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'media.kapidhwaj.ai',
+        pathname: '/**',
+      },
     ],
   },
 
   experimental: {
     serverActions: {
-      allowedOrigins: ['https://media.kapidhwaj.ai'],
+      allowedOrigins: ['https://media.kapidhwaj.ai', 'https://storage.googleapis.com/kapibucket2'],
     },
   },
 
@@ -46,7 +51,7 @@ const nextConfig: NextConfig = {
         source: '/:path*',
         headers: [
           { key: 'Access-Control-Allow-Origin', value: '*' },
-          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, DELETE, OPTIONS' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, DELETE, OPTIONS PLAY' },
           { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
           { key: 'Cross-Origin-Embedder-Policy', value: 'unsafe-none' },
           { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
@@ -73,6 +78,10 @@ const nextConfig: NextConfig = {
       {
         source: '/video:port*/:path*',
         destination: 'https://media.kapidhwaj.ai:port*/:path*',
+      },
+      {
+        source: '/video/:path*',
+        destination: 'https://storage.googleapis.com/kapibucket2/:path*',
       },
     ];
   },

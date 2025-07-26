@@ -21,12 +21,7 @@ export function EditCameraDialogue({ isOpen, onClose, initialData }: EditCameraD
     const [roomName, setRoomName] = useState(initialData?.roomName || '');
 
     const handleSave = () => {
-        console.log({
-            ipAddress,
-            name,
-            siteName,
-            roomName
-        });
+      
         onClose();
     };
 

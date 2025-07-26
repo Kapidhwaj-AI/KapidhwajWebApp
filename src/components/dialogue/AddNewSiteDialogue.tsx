@@ -22,23 +22,18 @@ export function AddNewSiteDialogue({
 }: AddNewSiteDialogueProps) {
   const [name, setName] = useState("");
   const handleAddSite = () => {
-    console.log({
-      name,
-    });
+
     onClose();
   };
   const handleSave = () => {
-    console.log({
-      name,
-    });
+ 
   };
   const handleEditSite = (id: string) => {
-    console.log("Edit camera:", id);
+  
   };
 
   const handleDeleteSite = (id: string) => {
     // Handle delete camera
-    console.log("Delete camera:", id);
   };
   if (!isOpen) return null;
 

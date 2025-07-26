@@ -14,22 +14,18 @@ interface AddNewFolderDialogueProps {
 export function AddNewFolderDialogue({ isOpen, onClose }: AddNewFolderDialogueProps) {
     const [name, setName] = useState('');
     const handleAddFolder = () => {
-        console.log({
-            name,
-        });
+   
         onClose();
     };
     const handleSave = () => {
-        console.log({
-            name,
-        });
+  
     };
     const handleEditFolder = (id: string) => {
-        console.log('Edit folder:', id);
+        
     };
 
     const handleDeleteFolder = (id: string) => {
-        console.log('Delete folder:', id);
+
     };
     if (!isOpen) return null;
     const t = useTranslations()

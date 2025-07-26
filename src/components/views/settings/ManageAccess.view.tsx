@@ -44,13 +44,13 @@ const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit
                                         height={1000}
                                         className="object-cover rounded-l-[24px] w-auto h-auto"
                                     />
-                                    <div className="flex flex-col w-full items-start lg:gap-2 gap-1 lg:pb-15 md:pb-5 pb-8 md:pt-2 pt-1 md:px-4 px-2">
+                                    <div className="flex flex-col w-full items-start lg:gap-2 gap-1 lg:pb-15 md:pb-5 pb-8 md:pt-2 pt-1 px-2 ">
 
-                                        <div className="flex w-full justify-end items-center gap-2">
-                                            <button onClick={() => { setIsEdit(true); setSelectedShareableUser(user); setAddUserModalOpen(true) }} className="p-1 2xl:p-2 hover:bg-[var(--surface-400)] rounded-lg transition-colors">
+                                        <div className="flex w-full justify-end items-center ">
+                                            <button onClick={() => { setIsEdit(true); setSelectedShareableUser(user); setAddUserModalOpen(true) }} className="p-1  hover:bg-[var(--surface-400)] rounded-lg transition-colors">
                                                 <IconPencil size={18} className="text-gray-600" />
                                             </button>
-                                            <button onClick={() => { setIsDelete(true); setSelectedShareableUser(user) }} className="p-1 2xl:p-2 hover:bg-[var(--surface-400)] rounded-lg transition-colors">
+                                            <button onClick={() => { setIsDelete(true); setSelectedShareableUser(user) }} className="p-1  hover:bg-[var(--surface-400)] rounded-lg transition-colors">
                                                 <IconTrash size={18} className="text-[#FF6868]" />
                                             </button>
                                         </div>
@@ -59,14 +59,14 @@ const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit
 
                                         <div className=''>
                                             <div className="flex items-center gap-1">
-                                                <h2 className="font-semibold text-wrap lg:text-lg text-sm dark:text-white text-black">{user.name}</h2>
+                                                <h2 className="font-semibold text-wrap text-lg  dark:text-white text-black">{user.name}</h2>
                                                 <span className="w-3 h-3 rounded-full bg-red-400" />
                                             </div>
 
-                                            <div className="flex items-center gap-1 mt-1 lg:text-sm text-xs text-gray-500">
+                                            <div className="flex items-center gap-1 mt-1 text-sm  text-gray-500">
                                                 <IconCrown size={16} /> <span>{user.role}</span>
                                             </div>
-                                            <div className="flex items-center gap-1 mt-1 lg:text-sm text-xs text-gray-500">
+                                            <div className="flex items-center gap-1 mt-1 text-sm  text-gray-500">
                                                 <IconLock size={16} /> <span>{user.id}</span>
                                             </div>
                                         </div>

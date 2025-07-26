@@ -13,13 +13,11 @@ const AlertsHomeViewController = ({
 }) => {
     const [alerts, setAlerts] = useState<Alert[]>([])
     useEffect(() => {
-        console.log('alerts')
         onStart()
         const fetchAlerts = async () => {
             try {
                 const res = await protectApi<Alert[]>('/alert/recent')
                 setAlerts(res.data?.data)
-                console.log(res.data.data)
             } catch (error) {
 
             } finally {

@@ -208,7 +208,8 @@
     "common": {
         "close": "बंद करें",
         "save": "सहेजें",
-        "update": "अपडेट"
+        "update": "अपडेट",
+        "clear_filter": "फिल्टर साफ करो"
     },
     "alerts": {
         "title": "अलर्ट",

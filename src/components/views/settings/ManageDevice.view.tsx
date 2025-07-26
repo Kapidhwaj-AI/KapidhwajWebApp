@@ -10,7 +10,7 @@ import { IconFolderPlus, IconMapPinFilled } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 import React from 'react'
 
-const ManageDeviceView: React.FC<ManageDeviceViewProp> = ({ setIsOpen, sites, selectedSite, setSelectedSite,  setSiteModalOpen, isSavedHubLoading, setAddFolderModalOpen, setSelectedHub, selectedHub, siteModalOpen, isAddFolderModalOpen, fetchSavedHubs, isHubLoading, fetchHub, nearbyHubs, savedHubs, toggleStream, handleCopyIp, isDelete, setIsDelete, handleDelete, isHubDelete, setIsHubDelete, handleDeleteHub }) => {
+const ManageDeviceView: React.FC<ManageDeviceViewProp> = ({ setIsOpen, sites, selectedSite, setSelectedSite, setSiteModalOpen, isSavedHubLoading, setAddFolderModalOpen, setSelectedHub, selectedHub, siteModalOpen, isAddFolderModalOpen, fetchSavedHubs, isHubLoading, fetchHub, nearbyHubs, savedHubs, toggleStream, handleCopyIp, isDelete, setIsDelete, handleDelete, isHubDelete, setIsHubDelete, handleDeleteHub }) => {
   const t = useTranslations()
   return (
     <div className="h-full flex flex-col min-h-0">
@@ -54,10 +54,10 @@ const ManageDeviceView: React.FC<ManageDeviceViewProp> = ({ setIsOpen, sites, se
         <div className="flex-[4] flex flex-col min-h-0">
           <div className="h-full bg-[var(--surface-100)] rounded-2xl md:rounded-4xl">
             {selectedHub ? (
-              <SavedCameras sites={sites} selectedSite={selectedSite} setSelectedSite={setSelectedSite} handleDelet={handleDelete} isDelete={isDelete} toggleStream={toggleStream} hub={selectedHub} setIsDelete={setIsDelete} />
+              <SavedCameras camLoading={isSavedHubLoading} fetchSavedHubs={fetchSavedHubs} sites={sites} selectedSite={selectedSite} setSelectedSite={setSelectedSite} handleDelet={handleDelete} isDelete={isDelete} toggleStream={toggleStream} hub={selectedHub} setIsDelete={setIsDelete} />
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                  <p>{t('manage_hubs.select_hub_to_view_cameras')}</p>
+                <p>{t('manage_hubs.select_hub_to_view_cameras')}</p>
               </div>
             )}
           </div>

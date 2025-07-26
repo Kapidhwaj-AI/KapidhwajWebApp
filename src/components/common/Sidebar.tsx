@@ -21,7 +21,7 @@ interface MenuItemType {
 
 
 export default function Sidebar() {
- 
+
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -113,8 +113,7 @@ export default function Sidebar() {
                 href={item.path}
                 className={cn(
                   'flex items-center rounded-full transition-all duration-300',
-                  'hover:text-gray-900 dark:hover:text-gray-100',
-                  pathname.includes(item.path) ? 'bg-[#2B4C88] text-white' : 'bg-[var(--surface-400)] text-[#888888]',
+                  pathname.includes(item.path) ? 'bg-[#2B4C88] text-white' : 'bg-[var(--surface-400)] text-[#888888] hover:text-gray-900 dark:hover:text-gray-100',
                   shouldExpand
                     ? 'w-full px-3 py-2 md:px-4 md:py-3 justify-start h-12 md:h-14'
                     : 'w-12 h-12 md:w-14 md:h-14 justify-center p-0 mx-auto'

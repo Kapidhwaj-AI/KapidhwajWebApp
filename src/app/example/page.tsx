@@ -8,7 +8,7 @@ export default function ExamplePage() {
 
     const handleConfirm = () => {
         // Handle confirmation action here
-        console.log("Confirmed!");
+       
     };
 
     return (

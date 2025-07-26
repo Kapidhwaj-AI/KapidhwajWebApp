@@ -9,7 +9,6 @@ import { useTranslations } from 'next-intl'
 
 const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setSearchQuery, isLoading, setIsLoading, allNotifications, filteredNotifications, error, isDateFiltered, setAllNotifications, setIsDateFiltered, divRef, fetchNotification, hasMore, setHasMore, offset, setOffset }) => {
     const t = useTranslations()
-    if (isLoading) return <Spinner />
     return (
         <div className="h-full flex flex-col gap-4 min-h-0 p-5">
             <div className="flex justify-between items-center">
@@ -23,7 +22,7 @@ const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setSea
 
                 </div>
             </div>
-            <div className="flex-1 overflow-y-auto scrollbar-hide mt-5">
+            {isLoading ? <Spinner /> : <div className="flex-1 overflow-y-auto scrollbar-hide mt-5">
 
                 {error ? (
                     <div className="col-span-full h-full flex items-center justify-center w-full text-center text-red-500">Error loading notifications: {error.message}</div>
@@ -47,7 +46,7 @@ const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setSea
                         {filteredNotifications.length > 0 && <div ref={divRef} className="h-2" />}
                     </InfiniteScrolling>
                 )}
-            </div>
+            </div>}
 
         </div>
     )

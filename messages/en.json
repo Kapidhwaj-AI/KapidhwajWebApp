@@ -49,7 +49,7 @@
         "manage_people": "Manage People",
         "manage_access": "Manage Access",
         "add_new_access": "Add New Access",
-        "Access": "Access",
+        "access": "Access",
         "select_access": "Select Access",
         "add_new_camera": "Add New Camera",
         "change_theme": "Change Theme",
@@ -194,7 +194,8 @@
     "common": {
         "close": "Close",
         "save": "Save",
-        "update": "Update"
+        "update": "Update",
+        "clear_filter":"Clear Filter"
     },
     "alerts": {
         "title": "Alerts",

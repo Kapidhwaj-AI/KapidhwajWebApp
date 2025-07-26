@@ -11,7 +11,6 @@ export function TokenCheck() {
   useEffect(() => {
     const checkToken = async () => {
       const isValid = await checkLocalToken();
-      console.log(isValid)
       if (isValid) {
         removeLocalStorageItem('kapi-token')
         router.push('/login');

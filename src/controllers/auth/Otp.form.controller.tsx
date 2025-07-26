@@ -98,7 +98,6 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
       }
       let res;
       if (isProtected) {
-        console.log('is', isProtected)
         res = await protectApi(verify, 'POST', payload)
       }
       else {
@@ -125,7 +124,6 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
           router.push('/login')
         }
         else if (isProtected && handleChangePassword) {
-          console.log("hello")
           await handleChangePassword()
 
         }

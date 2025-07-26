@@ -30,7 +30,6 @@ export function ListCard({ setIsDelete, setIsEdit, setIsOpen, setName, handleNav
     };
     const handleOnDelete = () => {
         setIsDelete(true)
-        console.log(isFolder, Number(id), "setasd")
         if (isFolder) {
             setIsFolder?.(true);
             setIsOrg?.(false)

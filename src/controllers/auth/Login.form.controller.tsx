@@ -48,7 +48,7 @@ export const LoginFormController = () => {
         method: "POST",
         url: `${apiBaseUrl}/signin`,
         data: {
-          [key]: username,
+          [key]: username.trim(),
           password,
         },
       });
@@ -61,7 +61,7 @@ export const LoginFormController = () => {
         setLocalStorageItem('user', JSON.stringify(res.data.data))
         dispatch(setAuthToken(res.data.token));
 
-        router.replace("/home");
+        window.location.href = "/home";
       }
     } catch (error) {
       setIsError(true);

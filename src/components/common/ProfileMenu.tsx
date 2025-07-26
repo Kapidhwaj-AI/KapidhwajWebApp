@@ -30,7 +30,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
       removeLocalStorageItem('user')
       removeLocalStorageItem('kapi-token')
       dispatch(clearAuthToken())
-      router.push("/login");
+      router.replace("/login");
     }
   };
   const t = useTranslations()

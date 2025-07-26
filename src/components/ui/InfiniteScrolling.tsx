@@ -5,12 +5,12 @@ interface InfiniteScrollingProp<T> {
     setHasMore: (val: boolean) => void;
     hasMore: boolean;
     isLoading: boolean;
-    fetchData: ( offSet: number) => Promise<T[]>;
+    fetchData: (offSet: number) => Promise<T[]>;
     setData: (val: T[]) => void;
     divRef: React.RefObject<HTMLDivElement>;
     children: React.ReactNode;
     offset: number;
-    setOffset: (val: number) => void;
+    setOffset: React.Dispatch<React.SetStateAction<number>>
     data: T[];
 }
 
@@ -24,7 +24,7 @@ function InfiniteScrolling<T>({
     offset,
     hasMore,
     setOffset,
-    data, 
+    data,
     isLoading
 }: InfiniteScrollingProp<T>) {
     useEffect(() => {
@@ -54,7 +54,7 @@ function InfiniteScrolling<T>({
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting && hasMore && !isLoading) {
-                    setOffset(offset + 10);
+                    setOffset((prev) => prev + 10);
                 }
             },
             { threshold: 0.5 }
@@ -64,7 +64,7 @@ function InfiniteScrolling<T>({
         return () => observer.disconnect();
     }, [divRef, hasMore, isLoading, offset, setOffset]);
 
-    return children;
+    return <>{children}</>;
 }
 
 export default InfiniteScrolling;

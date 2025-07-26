@@ -16,7 +16,7 @@ const AlertsFiltersButtons = ({selectedTab, setSelectedTab}:{selectedTab:string,
         { id: 6, label: `${t("alerts.fire_smoke_detection")}`, value: 'FIRE_SMOKE_DETECTION', icon: <IconFireExtinguisher stroke={2} /> },
     ];
     return (
-        <div className="flex space-x-4 w-10/12">
+        <div className="flex space-x-4 overflow-x-auto scrollbar-hide w-full">
             {tabFilters.map((filter) => (
                 <button
                     key={filter.id}
