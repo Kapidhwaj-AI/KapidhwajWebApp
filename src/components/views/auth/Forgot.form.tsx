@@ -21,7 +21,7 @@ const ForgotForm = ({
 }) => {
   return (
     <div className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-black mb-4 sm:mb-5 md:mb-6">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center dark:text-white text-black mb-4 sm:mb-5 md:mb-6">
         Forgot Password
       </h1>
 

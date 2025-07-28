@@ -11,7 +11,7 @@ export default function AuthLayout({
       style={{ backgroundImage: 'url("/assets/images/auth-bg.png")' }}
     >
       <div className="w-full max-w-[480px] min-w-[280px] transform scale-[0.85] sm:scale-90 md:scale-95 lg:scale-100">
-        <div className="w-full bg-white rounded-[2rem] sm:rounded-[2.5rem] md:rounded-[3rem] overflow-hidden">
+        <div className="w-full bg-white dark:bg-[var(--surface-150)] rounded-[2rem] sm:rounded-[2.5rem] md:rounded-[3rem] overflow-hidden">
           {/* Logo Section */}
           <div className="flex justify-center pt-4 sm:pt-6 md:pt-8 pb-1 sm:pb-2">
             <Image
@@ -31,7 +31,7 @@ export default function AuthLayout({
               No Compromise.
             </p>
 
-            <p className="text-black font-bold text-base font-poppins">
+            <p className="text-black dark:text-white font-bold text-base font-poppins">
               No Excuse.
             </p>
 

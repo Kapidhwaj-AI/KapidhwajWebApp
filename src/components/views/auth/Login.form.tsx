@@ -30,7 +30,7 @@ export const LoginForm = ({
 }) => {
   return (
     <div className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-black mb-4 sm:mb-5 md:mb-6">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center dark:text-white text-black mb-4 sm:mb-5 md:mb-6">
         Login
       </h1>
 
@@ -64,20 +64,18 @@ export const LoginForm = ({
         >{isLoading ? <Spinner /> :
           'Sign In'}
         </button>
-        <div className="relative py-2 sm:py-3">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center">
-            <span className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex items-center justify-center text-xs sm:text-sm text-gray-500 bg-[#F6F6F6] rounded-full">
-              OR
-            </span>
-          </div>
+        <div className="flex items-center gap-3 py-2 sm:py-3">
+          <div className="w-full bg-[var(--surface-300)]  h-[1px] dark:bg-white "></div>
+
+          <span className="flex items-center justify-center text-xs sm:text-sm text-gray-500 dark:text-white   rounded-full">
+            OR
+          </span>
+          <div className="w-full bg-[var(--surface-300)]  h-[1px] dark:bg-white"></div>
         </div>
         <button
           type="button"
           onClick={redirectRegister}
-          className="w-full h-[35px] sm:h-[40px] md:h-[45px] bg-[#F6F6F6] hover:bg-gray-100 text-gray-700 text-sm sm:text-base rounded-full transition-colors"
+          className="w-full h-[35px] sm:h-[40px] md:h-[45px] dark:text-white  bg-[#F6F6F6] dark:bg-[var(--surface-300)] hover:bg-gray-100 text-gray-700 text-sm sm:text-base rounded-full transition-colors"
         >
           Register
         </button>

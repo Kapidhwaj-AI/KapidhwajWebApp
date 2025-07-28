@@ -3,9 +3,9 @@ import React from 'react'
 
 const ForgotPassword = () => {
   return (
-    <div className='h-full w-full'>
+   
       <ForgotFormController />
-    </div>
+ 
   )
 }
 

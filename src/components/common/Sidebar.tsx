@@ -1,7 +1,7 @@
 'use client'
-import React, {  useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { IconBellRinging, IconFolderStar,  IconSettings2, IconShareplay, IconSmartHome, IconUrgent } from '@tabler/icons-react';
+import { IconBellRinging, IconFolderStar, IconSettings2, IconShareplay, IconSmartHome, IconUrgent } from '@tabler/icons-react';
 import Image from 'next/image';
 
 import { usePathname } from 'next/navigation';
@@ -82,8 +82,10 @@ export default function Sidebar() {
         {/* Logo Section */}
         <div>
           <div className={cn(
-            'flex items-center mb-4',
-            shouldExpand ? 'px-4' : 'justify-center px-0'
+            'flex items-center mb-4 transition-[width] duration-1000',
+            shouldExpand
+              ? 'w-full px-3 py-2 md:px-4 md:py-3 justify-start h-12 md:h-14'
+              : 'w-12 h-12 md:w-14 md:h-14 justify-center p-0 mx-auto'
           )}>
             <div className="w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
               <Image
@@ -95,11 +97,13 @@ export default function Sidebar() {
                 className="rounded-full object-cover w-full h-full"
               />
             </div>
-            {shouldExpand && (
-              <h1 className="ml-3 font-semibold text-lg whitespace-nowrap overflow-hidden">
-                <span className="inline-block animate-text-slide">{t('home.footer.app_name')}</span>
-              </h1>
-            )}
+              {shouldExpand && (
+                <span className="font-semibold text-base md:text-lg ml-2 whitespace-nowrap overflow-hidden">
+                  Kapidhwaj AI
+                </span>
+              )}
+          
+
           </div>
 
           <nav className="flex flex-col items-center  space-y-2 md:space-y-3">

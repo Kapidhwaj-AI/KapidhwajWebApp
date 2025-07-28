@@ -41,7 +41,7 @@ export const OtpForm = ({
 }) => {
   return (
     <div className="px-3 xs:px-4 sm:px-5 md:px-6 lg:px-8 pb-2 xs:pb-2.5 sm:pb-3 md:pb-4">
-      <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-center mb-2 xs:mb-2.5 sm:mb-3 text-black">
+      <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-center mb-2 xs:mb-2.5 sm:mb-3 dark:text-white text-black">
         Enter OTP
       </h1>
 
@@ -50,7 +50,7 @@ export const OtpForm = ({
         className="space-y-1.5 xs:space-y-2 sm:space-y-2.5"
       >
         {/* OTP Field */}
-        <label className="block text-xs sm:text-sm text-black">OTP
+        <label className="block text-xs sm:text-sm text-black dark:text-white">OTP
           <span className="text-red-500 ml-1">*</span>
         </label>
         <div className="flex justify-between gap-2">
@@ -99,7 +99,7 @@ export const OtpForm = ({
           disabled={!canResendOtp && isLoading && isVerifyLoading}
           type="button"
           onClick={resendOtp}
-          className="w-full h-[35px] flex items-center justify-center text-center sm:h-[40px] md:h-[45px] bg-[#F6F6F6] hover:bg-gray-100 text-gray-700 text-sm sm:text-base rounded-full transition-colors"
+          className="w-full h-[35px] sm:h-[40px] md:h-[45px] dark:text-white  bg-[#F6F6F6] dark:bg-[var(--surface-300)] hover:bg-gray-100 text-gray-700 text-sm sm:text-base rounded-full transition-colors"
         >
           {isLoading ? <Spinner /> : (
             `Resend OTP${!canResendOtp ? ` (${resendOtpTimer})` : ""}`
