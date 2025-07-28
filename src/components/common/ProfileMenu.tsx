@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 interface ProfileMenuProps {
   isOpen: boolean;
@@ -18,16 +19,29 @@ interface ProfileMenuProps {
 export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
-  const dispatch = useDispatch <AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>()
   const handleLogoutClick = async () => {
+    try {
 
-    const res = await protectApi('/signout', "POST")
-    if(res.status === 200){
-      document.cookie = "locale=; path=/; max-age=0";
-      removeLocalStorageItem('user')
-      removeLocalStorageItem('kapi-token')
-      dispatch(clearAuthToken())
-      router.replace("/login");
+      const res = await protectApi('/signout', "POST")
+      console.log(res, "res")
+      if (res.status === 200) {
+        document.cookie = "locale=; path=/; max-age=0";
+        toast.success(res.data.message ?? 'User Logout Successfully')
+        removeLocalStorageItem('user')
+        removeLocalStorageItem('kapi-token')
+        dispatch(clearAuthToken())
+        router.replace("/login");
+      }
+    } catch (error) {
+      console.error("err", error)
+      if (error.status === 401 && error.response.data.message === "THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)") {
+        document.cookie = "locale=; path=/; max-age=0";
+        toast.error(error.response.data.message ?? 'THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)')
+        removeLocalStorageItem('user')
+        removeLocalStorageItem('kapi-token')
+        router.replace("/login");
+      }
     }
   };
   const t = useTranslations()
@@ -46,7 +60,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
           <div className="bg-[#7A73D1] rounded-lg p-2">
             <IconUser size={18} color="white" />
           </div>
-         { t('settings.profile')}
+          {t('settings.profile')}
         </button>
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}

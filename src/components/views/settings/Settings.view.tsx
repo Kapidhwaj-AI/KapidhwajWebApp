@@ -26,7 +26,7 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settingsItems, name, email,
                                 item.id === 4 ? setShowProfileDial(true) :
                                     item.id === 5 ? setShowChangePasswordDial(true) :
                                         item.id === 6 ? setShowHelpDial(true) : {}}
-                        className="w-[150px] h-[150px] lg:w-[180px] md:h-[180px] bg-[var(--surface-100)] hover:bg-[var(--surface-200)] rounded-[40px] p-6 flex flex-col items-center justify-center gap-3 transition-colors duration-200"
+                        className="w-[150px] h-[150px] lg:w-[180px] md:h-[180px] bg-[var(--surface-100)] hover:border-[var(--surface-100)] hover:bg-[var(--surface-200)] hover:border-2 rounded-[40px] p-6 flex flex-col items-center justify-center gap-3 transition-colors duration-200"
                     >
                         <div className="text-[var(--primary)]">
                             {item.icon}
