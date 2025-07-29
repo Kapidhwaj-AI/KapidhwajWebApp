@@ -175,6 +175,7 @@
     "logout": "Logout",
     "record_all_videos": "Record All Videos",
     "intrusion_detection": "Intrusion Detection",
+    "fire_smoke_detection":"Fire & Smoke Detection",
     "motion_detection": "Motion Detection",
     "people_detection": "People Count",
     "license_detection":"",

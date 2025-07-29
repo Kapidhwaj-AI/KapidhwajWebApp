@@ -8,12 +8,14 @@ import {
   IconFriends,
   IconLicense,
   IconUserScan,
+  IconFireExtinguisher,
 } from "@tabler/icons-react";
 import { useState } from "react";
 import Modal from "../ui/Modal";
 import { AxiosResponse } from "axios";
 import { ApiResponse } from "@/lib/protectApi";
 import { useTranslations } from "next-intl";
+import Spinner from "../ui/Spinner";
 
 export function StreamSettingsDialogue({
   isOpen,
@@ -24,9 +26,11 @@ export function StreamSettingsDialogue({
   people,
   license,
   face,
+  fireSmoke,
   handleAiStremToggle,
   handleMotionToggle,
-  handleRecordingToggle
+  handleRecordingToggle,
+  loading
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -36,7 +40,9 @@ export function StreamSettingsDialogue({
   people: boolean;
   license: boolean;
   face: boolean;
-  handleAiStremToggle: (key: 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
+  fireSmoke: boolean;
+  loading: boolean;
+  handleAiStremToggle: (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
 
@@ -47,7 +53,8 @@ export function StreamSettingsDialogue({
     intrusion_detection: intrusion,
     people_count: people,
     license_plate_detection: license,
-    face_detection: face
+    face_detection: face,
+    fire_smoke_detection: fireSmoke
   });
 
 
@@ -71,8 +78,8 @@ export function StreamSettingsDialogue({
   if (isOpen) {
     return (
       <Modal onClose={onClose} title={t('streams.options.settings')}>
-        {/* Settings List */}
-        <div className="space-y-3">
+
+        {loading ? <Spinner className="h-[70vh]" /> : <div className="space-y-3 ">
           {/* Record All Videos */}
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">
@@ -108,12 +115,26 @@ export function StreamSettingsDialogue({
               <div className="p-2 bg-[#2B4C88] rounded-xl">
                 <IconUserScan stroke={2} color="white" />
               </div>
-              <span>Face detection</span>
+              <span>{t('alerts.face_detection')}</span>
             </div>
 
             <Switch
               enabled={settings.face_detection}
               onChange={() => toggleSetting("face_detection", !settings.face_detection)}
+              trackColor="bg-white"
+            />
+          </div>
+          <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
+            <div className="flex gap-4 items-center">
+              <div className="p-2 bg-[#2B4C88] rounded-xl">
+                <IconFireExtinguisher stroke={2} color="white" />
+              </div>
+              <span>{t('alerts.fire_smoke_detection')}</span>
+            </div>
+
+            <Switch
+              enabled={settings.fire_smoke_detection}
+              onChange={() => toggleSetting("fire_smoke_detection", !settings.fire_smoke_detection)}
               trackColor="bg-white"
             />
           </div>
@@ -163,7 +184,7 @@ export function StreamSettingsDialogue({
               trackColor="bg-white"
             />
           </div>
-        </div>
+        </div>}
       </Modal>
     );
   }

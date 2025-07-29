@@ -23,6 +23,7 @@ export interface Camera {
   is_intrusion_active: number;
   is_motion_event_active: number;
   is_license_plate_detection_active: number;
+  is_fire_smoke_detection_active: number;
   organization_id?: string;
   room?: Room;
   site?: Site;

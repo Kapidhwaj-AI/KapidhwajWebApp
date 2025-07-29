@@ -130,7 +130,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         }
     };
 
-    const handleAiToggle = async (key: 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean,) => {
+    const handleAiToggle = async (key: 'fire_smoke_detection'| 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean,) => {
         setIsMlService(true)
         try {
             const endpoint = toggleValue ? `/camera/stream/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
@@ -177,25 +177,28 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     }
 
     const handleRecordinToggle = async (isRecord: boolean) => {
+        setIsMlService(true)
         try {
+            const url = isRecord
+                ? `/camera/recording/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
+                : `/camera/recording/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
+
+            const res = await protectApi(url, "POST", { cameraId: camera?.camera_id, serviceType: 'cloud_storage' })
+            if (res.status === 200) {
+                toast.success(`Camera stream recording ${isRecord ? 'started ' : 'stoped'} successfully`)
+                const cameraRes = await fetchCamera(id)
+                setCamera(cameraRes)
+
+            }
+            return res
 
         } catch (error) {
-
+            console.error(error)
+            toast.error(error.response.data.message)
         } finally {
-
+            setIsMlService(false)
         }
-        const url = isRecord
-            ? `/camera/recording/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
-            : `/camera/recording/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
 
-        const res = await protectApi(url, "POST", { cameraId: camera?.camera_id, serviceType: 'cloud_storage' })
-        if (res.status === 200) {
-            toast.success(`Camera stream recording ${isRecord ? 'started ' : 'stoped'} successfully`)
-            const cameraRes = await fetchCamera(id)
-            setCamera(cameraRes)
-
-        }
-        return res
     }
     const handleApplyFilter = async (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => {
         if (date && startTime && endTime) {
@@ -210,21 +213,28 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         return
     }
     const handleToggleStream = async (toggleValue: boolean) => {
+        setIsMlService(true)
+        try {
+            const url = toggleValue ? `/camera/start?action=add&hubId=${camera?.hub_id}` : `/camera/stop?action=remove&hubId=${camera?.hub_id}`
+            const payload = {
+                cameras: [
+                    {
+                        id: camera?.camera_id.toString(),
+                        macaddress: camera?.physical_address,
+                    },
+                ],
+            }
+            const res = await protectApi<unknown, typeof payload>(url, "POST", payload)
+            if (res.status === 200) {
+                toast.success(`Camera stream  ${toggleValue ? 'started ' : 'stoped'} successfully`)
+                setStream(toggleValue)
+            }
+        } catch (error) {
 
-        const url = toggleValue ? `/camera/start?action=add&hubId=${camera?.hub_id}` : `/camera/stop?action=remove&hubId=${camera?.hub_id}`
-        const payload = {
-            cameras: [
-                {
-                    id: camera?.camera_id.toString(),
-                    macaddress: camera?.physical_address,
-                },
-            ],
+        } finally {
+            setIsMlService(false)
         }
-        const res = await protectApi<unknown, typeof payload>(url, "POST", payload)
-        if (res.status === 200) {
-            toast.success(`Camera stream  ${toggleValue ? 'started ' : 'stoped'} successfully`)
-            setStream(toggleValue)
-        }
+
     }
     const handleSave = async () => {
         setIsEditLoading(true)
@@ -271,7 +281,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
     const isFullscreen = useSelector((state: RootState) => state.camera.isFullScreen)
     return (
-        <StreamPageView loading={loading} selectedTab={selectedTab} setAlertOffset={setAlertOffset} setAlerts={setAlerts} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setFormData={setFormData} setHasMore={setHasMore} setHasRecordingMore={setHasRecordingMore} setIsDateFiltered={setIsDateFiltered} setIsEdit={setIsEdit} setRecordingLoading={setRecordingLoading} setRecordingOffset={setRecordingOffset} setRecordings={setRecordings} setSelectedTab={setSelectedTab} setSettingDial={setSettingDial} setStartTime={setStartTime} settingDial={settingDial} startTime={startTime} stream={stream} isDateFiltered={isDateFiltered} isEdit={isEdit} isEditLoading={isEditLoading} isFullscreen={isFullscreen} camera={camera} cameraLocation={cameraLocation} makeFav={makeFav} toggleStreamFav={toggleStreamFav} handleAiToggle={handleAiToggle} handleApplyFilter={handleApplyFilter} handleMotionToggle={handleMotionToggle} handleRecordingToggle={handleRecordinToggle} handleSave={handleSave} handleToggleStream={handleToggleStream} hasMore={hasMore} hasRecordingMore={hasRecordingMore} fetchAlerts={fetchAlerts} fetchRecordings={fetchRecordings} filterDial={filterDial} filteredAlerts={filteredAlerts} formData={formData} recordingLoading={recordingLoading} recordingOffset={recordingOffset} recordingref={recordingref} recordings={recordings} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} date={date} endTime={endTime} organizations={organizations} />
+        <StreamPageView isAiServiceLoading={isMlService} loading={loading} selectedTab={selectedTab} setAlertOffset={setAlertOffset} setAlerts={setAlerts} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setFormData={setFormData} setHasMore={setHasMore} setHasRecordingMore={setHasRecordingMore} setIsDateFiltered={setIsDateFiltered} setIsEdit={setIsEdit} setRecordingLoading={setRecordingLoading} setRecordingOffset={setRecordingOffset} setRecordings={setRecordings} setSelectedTab={setSelectedTab} setSettingDial={setSettingDial} setStartTime={setStartTime} settingDial={settingDial} startTime={startTime} stream={stream} isDateFiltered={isDateFiltered} isEdit={isEdit} isEditLoading={isEditLoading} isFullscreen={isFullscreen} camera={camera} cameraLocation={cameraLocation} makeFav={makeFav} toggleStreamFav={toggleStreamFav} handleAiToggle={handleAiToggle} handleApplyFilter={handleApplyFilter} handleMotionToggle={handleMotionToggle} handleRecordingToggle={handleRecordinToggle} handleSave={handleSave} handleToggleStream={handleToggleStream} hasMore={hasMore} hasRecordingMore={hasRecordingMore} fetchAlerts={fetchAlerts} fetchRecordings={fetchRecordings} filterDial={filterDial} filteredAlerts={filteredAlerts} formData={formData} recordingLoading={recordingLoading} recordingOffset={recordingOffset} recordingref={recordingref} recordings={recordings} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} date={date} endTime={endTime} organizations={organizations} />
     )
 }
 
