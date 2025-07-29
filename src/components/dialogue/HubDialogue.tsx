@@ -34,8 +34,7 @@ const HubDialogue: React.FC<HubDialogueProps> = ({ onClose, onSubmit, name, setN
                 <InputField required value={password} setValue={setPassword} isPasswordField setShowPassword={setShowPassword} showPassword={showPassword} label={t('settings.password')} placeholder={t('settings.enter_password_here')} />
                 <SelectField required placeholder={t('settings.select_a_site')} label={t('settings.select_site')} value={selectedSite} setValue={setSelectedSite} data={sites}/>
                 <div className='flex justify-end gap-3 py-2'>
-
-                    <button
+                    <button type='button'
                         className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
                         onClick={onClose}
                     >

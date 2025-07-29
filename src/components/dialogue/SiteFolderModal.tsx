@@ -24,7 +24,7 @@ const SiteFolderModal: React.FC<SiteFolderModalProps> = ({ setName, isLoading, h
         <InputField value={name} setValue={setName} placeholder={t('settings.enter_name_here')} label={t('settings.name')} />
         <div className='flex justify-end gap-3'>
 
-          <button
+          <button type='button'
             className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
             onClick={onClose}
           >

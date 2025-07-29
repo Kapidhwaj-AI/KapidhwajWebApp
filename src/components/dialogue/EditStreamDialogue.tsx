@@ -56,7 +56,7 @@ const EditStreamDialogue = ({ onClose, isEditLoading, isLoading, isStream, formD
                     <SelectField label={t('settings.subfolder_optional')} placeholder={t('settings.select_subfolder')} data={subfolders?.map((item) => ({ id: item.key, name: item.value }))} value={formData.subfolder ?? ''} setValue={(e) => setFormData({ ...formData, subfolder: Number(e) })} />
 
                     <div className="flex justify-end gap-3 mt-5 pt-4 border-t border-gray-200">
-                        <button
+                        <button type='button'
                             className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
                             onClick={onClose}
                         >

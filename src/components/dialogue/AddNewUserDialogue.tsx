@@ -27,14 +27,14 @@ interface AddNewUserDialogueProps {
     selectedUser: { name: string, userId: string } | null;
     setOpen: (val: boolean) => void;
     handleSelectUser: (val: { name: string, userId: string }) => void
-    popoverRef: React.RefObject<HTMLDivElement>;
+    popoverRef: React.RefObject<HTMLDivElement | null>;
     selectedTab: string;
     setSelectedTab: (val: string) => void;
     organizations: Organization[];
     searchQuery: string;
     setSearchQuery: (val: string) => void;
-    selectedStreams: Set<number>;
-    setSelectedStreams: React.Dispatch<React.SetStateAction<Set<number>>>;
+    selectedStreams: Set<string>;
+    setSelectedStreams: React.Dispatch<React.SetStateAction<Set<string>>>;
     handleSave: () => void;
     isLoading: boolean;
     isEdit: boolean
@@ -43,8 +43,8 @@ interface AddNewUserDialogueProps {
 export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQuery, setSearchQuery, selectedStreams, handleSave, setSelectedStreams, accessLevels, selectedTab, setSelectedTab, organizations, selectedUser, popoverRef, handleSelectUser, username, setUsername, selectedAccess, setSelectedAccess, setSelectedUser, searchedUsers, open, setOpen }: AddNewUserDialogueProps) {
     const allCameras = organizations.flatMap(org => org.cameras);
     const selectedOraganizationsFolders = organizations.find((item) => item.id === selectedTab)?.folders
-    const getVisibleStreamIds = (): number[] => {
-        const visibleStreams: number[] = [];
+    const getVisibleStreamIds = (): string[] => {
+        const visibleStreams: string[] = [];
         filteredStreams.forEach(stream => {
             visibleStreams.push(stream.camera_id);
         });
@@ -66,7 +66,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
 
         return visibleStreams;
     };
-    const toggleStreamSelection = (streamId: number) => {
+    const toggleStreamSelection = (streamId: string) => {
         setSelectedStreams((prev) => {
             const newSet = new Set(prev);
             if (newSet.has(streamId)) newSet.delete(streamId);
@@ -190,7 +190,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
 
                             </div>
 
-                            <button
+                            <button type='submit'
                                 disabled={isLoading}
                                 className="w-full h-[45px] flex items-center justify-center gap-2 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base transition-colors"
                                 onClick={handleSave}

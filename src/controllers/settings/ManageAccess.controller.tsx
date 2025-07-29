@@ -30,8 +30,8 @@ const ManageAccessController = () => {
     const [selectedTab, setSelectedTab] = useState('all')
     const debouncedQuery = useDebounce(userName, 300)
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedStreams, setSelectedStreams] = useState<Set<number>>(new Set());
-    const [originalSelectedStreams, setOriginalSelectdStreams] = useState<Set<number>>(new Set())
+    const [selectedStreams, setSelectedStreams] = useState<Set<string>>(new Set());
+    const [originalSelectedStreams, setOriginalSelectdStreams] = useState<Set<string>>(new Set())
     const [originalAccessRole, setOriginalAccessRole] = useState<number>()
     const [isAccessLoading, setIsAccessLoading] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
@@ -67,10 +67,10 @@ const ManageAccessController = () => {
     }
     const fetchUserSelectedStreams = async () => {
         try {
-            const res = await protectApi<{ cameraIds: number[] }[]>(`/camera/get-shared?userId=${selectedShareableUser?.id}`)
+            const res = await protectApi<{ cameraIds: string[] }[]>(`/camera/get-shared?userId=${selectedShareableUser?.id}`)
             if (res.status === 200) {
-                const cameraIdsSet = new Set<number>()
-                res.data.data.forEach((org: { cameraIds: number[] }) => {
+                const cameraIdsSet = new Set<string>()
+                res.data.data.forEach((org: { cameraIds: string[] }) => {
                     org.cameraIds.forEach(id => cameraIdsSet.add(id));
                 });
                 setOriginalSelectdStreams(cameraIdsSet)
@@ -140,11 +140,11 @@ const ManageAccessController = () => {
         if (selectedStreams.size === 0) return;
         if (!selectedUser?.userId) return;
         setIsSaving(true);
-        const orgCam: { [key: string]: { cameraId: number }[] } = {};
-        const revokedCameras: { [key: string]: { cameraId: number }[] } = {};
+        const orgCam: { [key: string]: { cameraId: string }[] } = {};
+        const revokedCameras: { [key: string]: { cameraId: string }[] } = {};
         shareableOrg.forEach((org) => {
-            const CamerasInOrg: { cameraId: number }[] = [];
-            const RevokedCamerasInOrg: { cameraId: number }[] = [];
+            const CamerasInOrg: { cameraId: string }[] = [];
+            const RevokedCamerasInOrg: { cameraId: string }[] = [];
             org.cameras.forEach((orgCam) => {
                 if (isEdit) {
                     if (selectedStreams.has(orgCam.camera_id)) {

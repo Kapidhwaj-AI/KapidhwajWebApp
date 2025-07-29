@@ -3,8 +3,8 @@ import { Camera } from '@/models/camera';
 import React from 'react'
 
 interface StreamsCardProps {
-    selectedStreams: Set<number>;
-    toggleStreamSelection: (id: number) => void;
+    selectedStreams: Set<string>;
+    toggleStreamSelection: (id: string) => void;
     stream: Camera
 }
 

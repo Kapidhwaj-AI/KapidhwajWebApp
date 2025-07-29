@@ -14,7 +14,7 @@ export function ChangePasswordDialogue({ isOpen, onClose, handleOtpSend, isLoadi
     return (
         <Modal onClose={onClose} title={t('settings.change_password')}>
 
-            <div className="flex-1 space-y-6 dark:text-white">
+            <form onSubmit={(e) => {e.preventDefault(); handleOtpSend()}} className="flex-1 space-y-6 dark:text-white">
                 <InputField
                     value={newPassword}
                     setValue={setNewPassword}
@@ -36,14 +36,13 @@ export function ChangePasswordDialogue({ isOpen, onClose, handleOtpSend, isLoadi
 
                 {err && <span className='text-red-500 mt-2'>{err}</span>}
 
-
                 <button
                     className="px-5 py-2 w-full flex justify-center items-center bg-[#2B4C88] hover:bg-blue-600 text-white text-center rounded-full text-base"
-                    onClick={handleOtpSend}
+                    type='submit'
                 >
                     {isLoading ? <Spinner /> : <span className='flex items-center gap-2'>{t('settings.send_otp')}</span>}
                 </button>
-            </div>
+            </form>
 
         </Modal>
     );
