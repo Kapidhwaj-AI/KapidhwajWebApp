@@ -20,10 +20,10 @@ import Spinner from "../ui/Spinner";
 interface SavedCamerasProps {
     hub: Hub;
     className?: string;
-    toggleStream: (toggleVal: boolean, id: number, physical_address: string, hub_id: number) => Promise<AxiosResponse>;
+    toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: number) => Promise<AxiosResponse>;
     setIsDelete: (val: boolean) => void;
     isDelete: boolean;
-    handleDelet: (camearId: number | undefined, organizationId: string) => void;
+    handleDelet: (camearId: string | undefined, organizationId: string) => void;
     setSelectedSite: (val: string) => void;
     selectedSite: string;
     sites: Organization[];
@@ -35,7 +35,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     const [isEditCameraOpen, setIsEditCameraOpen] = useState(false);
     const [isAddCameraOpen, setIsAddCameraOpen] = useState(false);
     const [cameraToggle, setCameraToggle] = useState(false);
-    const [cameraId, setCameraId] = useState<number>()
+    const [cameraId, setCameraId] = useState<string>()
     const [organizationId, setOrganizationId] = useState('')
     const [nearbyCams, setNearbyCams] = useState<DevicesMap>()
     const [camera, setCamera] = useState<Camera>()
@@ -92,14 +92,14 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
         await fetchCameraLocation(camera.camera_id)
         setFormData((prev) => ({ ...prev, name: camera.name, people_threshold_count: camera.people_threshold_count, organizationId: camera.organization_id ?? '' }))
     };
-    const handleDeleteCamera = (id: number, orgId: string) => {
+    const handleDeleteCamera = (id: string, orgId: string) => {
 
         setIsDelete(true)
         setCameraId(id)
         setOrganizationId(orgId)
     };
 
-    const fetchCameraLocation = async (id: number) => {
+    const fetchCameraLocation = async (id: string) => {
         setEditLoading(true)
         try {
             const res = await protectApi<CameraLocation, undefined>(`/camera/cam-details?cameraId=${id}`)
@@ -236,7 +236,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                     handleSave={handleSave}
                 />
             }
-            {isDelete && <DeleteDialog<{ cameraId: number | undefined, organizationId: string }> title={t('settings.delete_camera_confirm')} handleDelete={() => handleDelet(cameraId, organizationId)} data={{ cameraId, organizationId }} onClose={() => setIsDelete(false)} />}
+            {isDelete && <DeleteDialog<{ cameraId: string | undefined, organizationId: string }> title={t('settings.delete_camera_confirm')} handleDelete={() => handleDelet(cameraId, organizationId)} data={{ cameraId, organizationId }} onClose={() => setIsDelete(false)} />}
         </>
     );
 }; 

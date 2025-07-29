@@ -123,7 +123,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     }, [alerts, selectedTab]);
 
     const toggleStreamFav = async () => {
-        const res = await protectApi<unknown, { cameraId: number }>(`/camera/fav?cameraId=${id}`, makeFav ? 'DELETE' : 'POST', { cameraId: Number(id) })
+        const res = await protectApi<unknown, { cameraId: string }>(`/camera/fav?cameraId=${id}`, makeFav ? 'DELETE' : 'POST', { cameraId: id })
         if (res.status === 200) {
             toast.success(`Stream ${makeFav ? 'Deleted from ' : 'Added in'} Favourites`)
             setMakeFav((prev) => !prev)
@@ -188,7 +188,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             ? `/camera/recording/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
             : `/camera/recording/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
 
-        const res = await protectApi(url, "POST", { cameraId: Number(camera?.camera_id), serviceType: 'cloud_storage' })
+        const res = await protectApi(url, "POST", { cameraId: camera?.camera_id, serviceType: 'cloud_storage' })
         if (res.status === 200) {
             toast.success(`Camera stream recording ${isRecord ? 'started ' : 'stoped'} successfully`)
             const cameraRes = await fetchCamera(id)

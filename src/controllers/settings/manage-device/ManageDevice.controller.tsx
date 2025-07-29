@@ -88,8 +88,8 @@ const ManageDevicesController = () => {
         const res = await protectApi<unknown, typeof payload>(url, "POST", payload)
         return res
     }
-    const handleDeleteSavedCamera = async (cameraId: number, organizationId: string) => {
-        const res = await protectApi<unknown, { cameraId: number, organizationId: string }>('/camera/delete?action=remove', 'DELETE', { cameraId, organizationId })
+    const handleDeleteSavedCamera = async (cameraId: string, organizationId: string) => {
+        const res = await protectApi<unknown, { cameraId: string, organizationId: string }>('/camera/delete?action=remove', 'DELETE', { cameraId, organizationId })
         if (res.status === 200) {
             setIsDelete(false)
         }

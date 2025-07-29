@@ -27,7 +27,7 @@ export interface ManageDeviceViewProp {
     handleCopyIp: (ip: string) => void;
     isDelete: boolean;
     setIsDelete: (val: boolean) => void;
-    handleDelete: (cameraId: number, organizationId: string) => void
+    handleDelete: (cameraId: string, organizationId: string) => void
     isHubDelete: boolean;
     setIsHubDelete: (val: boolean) => void;
     handleDeleteHub: (hubId: string) => void;
