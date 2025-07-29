@@ -13,17 +13,24 @@ export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
     data?: D, type?: string) {
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
-    const hubId = JSON.parse(getLocalStorageItem('hub')?? '{}')?.id
+    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+    const baseUrl = isValidHub
+        ? hub.isRemotely
+            ? apiBaseUrl
+            : `http://${hub.id}.local:8084`
+        : apiBaseUrl;
     const headers: Record<string, string> = {
         Authorization: `Bearer ${token}`,
         'Content-Type': type ?? 'application/json',
     };
-    if (hubId) {
-        headers['x-hub-id'] = hubId;
+    if (hub.isRemotely) {
+        headers['x-hub-id'] = hub.id;
     }
+
     return axios<ApiResponse<T>>({
         method: method ?? 'GET',
-        url: apiBaseUrl + url,
+        url: baseUrl + url,
         data: data,
         headers,
     });

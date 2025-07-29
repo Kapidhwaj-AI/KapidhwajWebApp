@@ -16,12 +16,11 @@ import { filterButtonClassname } from '@/styles/tailwind-class';
 import { StreamsPageViewProps } from '@/models/stream';
 
 
-const StreamPageView: React.FC<StreamsPageViewProps> = ({ loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit,  selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
+const StreamPageView: React.FC<StreamsPageViewProps> = ({ loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
     startTime, stream, fetchAlerts, date, fetchRecordings, filterDial, filteredAlerts, formData, recordingLoading, recordingOffset, recordingref, recordings, alertEndRef, alertOffset, alerts, alertsLoading, handleAiToggle, handleMotionToggle, handleRecordingToggle, handleSave, handleToggleStream, hasMore, hasRecordingMore, endTime, organizations, handleApplyFilter
 
 }) => {
     const t = useTranslations()
-    console.log(camera, "view")
     return (
         <div className="h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4 pt-2 md:pt-3">
             {!isFullscreen && <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
@@ -138,6 +137,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ loading, isDateFiltere
                 motion={camera ? camera?.is_motion_event_active > 0 : false}
                 license={camera ? camera?.is_license_plate_detection_active > 0 : false}
                 intrusion={camera ? camera?.is_intrusion_active > 0 : false}
+                face={camera ? camera.is_ai_stream_active > 0 : false}
                 handleAiStremToggle={handleAiToggle}
                 handleMotionToggle={handleMotionToggle}
                 handleRecordingToggle={handleRecordingToggle}

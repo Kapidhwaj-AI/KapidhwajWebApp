@@ -52,7 +52,7 @@ export function ProfileDialogue({ isOpen, isLoading, onClose, name, setName, id,
                 </div>
 
                 <div className="flex w-full justify-end gap-3 mt-5 pt-4 border-t border-gray-200">
-                    <button
+                    <button type='button'
                         className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
                         onClick={onClose}
                     >

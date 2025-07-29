@@ -95,6 +95,7 @@ export default function Sidebar() {
                 width={98}
                 height={98}
                 className="rounded-full object-cover w-full h-full"
+                priority={true}
               />
             </div>
               {shouldExpand && (

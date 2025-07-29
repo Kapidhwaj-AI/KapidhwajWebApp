@@ -6,7 +6,6 @@ export default function AppLayout({
 }: {
     children: React.ReactNode;
 }) {
-    console.log("app-protected-layout");
     return (
         <div className="flex flex-col md:flex-row h-screen md:h-[calc(100vh-2rem)] md:my-4">
             {/* Mobile Sidebar Toggle would go here */}

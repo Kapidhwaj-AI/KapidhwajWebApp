@@ -5,6 +5,7 @@ import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from
 import { Hub, ManageHub } from '@/models/settings'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 const HomeController = () => {
     const [nearbyHubs, setNearbyHubs] = useState<ManageHub[]>([])
@@ -13,7 +14,8 @@ const HomeController = () => {
     const [isSavedHubsLoading, setIsSavedHubsLoading] = useState(false)
     const [isRemotely, setIsRemotely] = useState(false)
     const [devices, setDevices] = useState(0)
-    const hub = getLocalStorageItem('hub')
+    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
     const router = useRouter()
     const fetchHubs = async () => {
         setIsHubLoading(true)
@@ -23,7 +25,7 @@ const HomeController = () => {
             setNearbyHubs(data.hubs)
         } catch (error) {
             console.error("err:", error)
-           
+
         } finally {
             setIsHubLoading(false)
         }
@@ -32,30 +34,38 @@ const HomeController = () => {
     const fetchSavedHubs = async () => {
         setIsSavedHubsLoading(true)
         try {
-            console.log("helle")
             const res = await protectApi<Hub[]>(`/devices/hub`);
             const data = res.data.data
             setDevices(res.data.data.length)
             setSavedHubs(data)
         } catch (error) {
             console.error("err:", error)
-            
+            // if (error.status === 401 && error.response.data.message === "THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)") {
+            //     document.cookie = "locale=; path=/; max-age=0";
+            //     toast.error(error.response.data.message ?? 'THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)')
+            //     removeLocalStorageItem('user')
+            //     removeLocalStorageItem('kapi-token')
+            //     removeLocalStorageItem('hub')
+            //     router.replace("/login");
+            // }
+
         } finally {
             setIsSavedHubsLoading(false)
+
         }
     }
     useEffect(() => {
         fetchHubs()
         fetchSavedHubs()
-        if (hub) {
+        if (isValidHub && hub.isRemotely) {
             setIsRemotely(true)
         }
     }, [])
     const handleAccessRemotely = (hub: Hub) => {
-        if (isRemotely) removeLocalStorageItem('hub')
-        else setLocalStorageItem('hub', JSON.stringify(hub));
-        router.refresh()
+        setLocalStorageItem('hub', JSON.stringify({ ...hub, isRemotely: !isRemotely }));
         setIsRemotely((prev) => !prev)
+        removeLocalStorageItem('kapi-token')
+        window.location.href ='/login';
     }
 
     return (

@@ -7,7 +7,7 @@ interface InfiniteScrollingProp<T> {
     isLoading: boolean;
     fetchData: (offSet: number) => Promise<T[]>;
     setData: (val: T[]) => void;
-    divRef: React.RefObject<HTMLDivElement>;
+    divRef: React.RefObject<HTMLDivElement | null>;
     children: React.ReactNode;
     offset: number;
     setOffset: React.Dispatch<React.SetStateAction<number>>

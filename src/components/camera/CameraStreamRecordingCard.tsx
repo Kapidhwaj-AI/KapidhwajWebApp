@@ -26,7 +26,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
     return (
         <div
             className={cn(
-                'w-full aspect-video bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl lg:rounded-3xl xl:rounded-4xl shadow-md lg:shadow-lg',
+                'w-full aspect-video bg-white dark:bg-gray-800 rounded shadow-md lg:shadow-lg',
                 'overflow-hidden flex items-center justify-center relative group',
                 'transition-all duration-300 hover:shadow-xl hover:scale-[1.01]'
             )}
@@ -37,10 +37,9 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
                 ref={videoRef}
                 controls
                 src={baseUrl + recording.recorded_path}
-                className="w-full h-full object-cover rounded-4xl"
+                className="w-full h-full object-cover rounded"
             />
 
-            {/* Overlay Play/Pause Button */}
             {(!isPlaying || isHovered) && (
                 <button
                     onClick={handleTogglePlay}

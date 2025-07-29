@@ -7,6 +7,7 @@ import {
   IconBounceRight,
   IconFriends,
   IconLicense,
+  IconUserScan,
 } from "@tabler/icons-react";
 import { useState } from "react";
 import Modal from "../ui/Modal";
@@ -22,6 +23,7 @@ export function StreamSettingsDialogue({
   motion,
   people,
   license,
+  face,
   handleAiStremToggle,
   handleMotionToggle,
   handleRecordingToggle
@@ -33,7 +35,8 @@ export function StreamSettingsDialogue({
   motion: boolean;
   people: boolean;
   license: boolean;
-  handleAiStremToggle: (key: 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
+  face: boolean;
+  handleAiStremToggle: (key: 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
 
@@ -44,6 +47,7 @@ export function StreamSettingsDialogue({
     intrusion_detection: intrusion,
     people_count: people,
     license_plate_detection: license,
+    face_detection: face
   });
 
 
@@ -99,7 +103,20 @@ export function StreamSettingsDialogue({
               trackColor="bg-white"
             />
           </div>
+          <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
+            <div className="flex gap-4 items-center">
+              <div className="p-2 bg-[#2B4C88] rounded-xl">
+                <IconUserScan stroke={2} color="white" />
+              </div>
+              <span>Face detection</span>
+            </div>
 
+            <Switch
+              enabled={settings.face_detection}
+              onChange={() => toggleSetting("face_detection", !settings.face_detection)}
+              trackColor="bg-white"
+            />
+          </div>
           {/* Motion Detection */}
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">

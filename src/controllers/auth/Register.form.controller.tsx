@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { OtpFormController } from "./Otp.form.controller";
+import { toast } from "react-toastify";
 
 export const RegisterFormController = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +42,7 @@ export const RegisterFormController = () => {
       });
 
       if (res.status === 200) {
+        toast.success("OTP sent successfully")
         dispatch(setUserEmail(email));
         dispatch(setUserPhone(phone));
         dispatch(allowRegisterOtpAccess());
@@ -51,6 +53,7 @@ export const RegisterFormController = () => {
     } catch (error) {
       console.error(error);
       setIsError(true);
+      toast.error(error.response?.data?.message)
       setError(error.response?.data?.message || "Registration failed")
     } finally {
       setIsLoading(false);
