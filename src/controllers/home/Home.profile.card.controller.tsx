@@ -11,13 +11,14 @@ export const HomeProfileCardController = ({ devices }: { devices: number }) => {
   const [userImage, setUserImage] = useState("");
   const [name, setName] = useState("");
   const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-  const baseUrl = hub ? `http://media.kapidhwaj.ai:${hub.static_port}/` : 'http://media.kapidhwaj.ai:3000/'
+  const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+  const baseUrl = isValidHub ? hub.isRemotely ? `http://media.kapidhwaj.ai:${hub.static_port}/` : `http://${hub.id}.local:3000/`: GOOGLE_KPH_BUCKET_URL
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
         const res = await protectApi<{ profile_image: string, name: string }>('/user')
         const data = res.data.data;
-        setUserImage(`${baseUrl}${data.profile_image}`);
+        setUserImage(`${data.profile_image ? baseUrl + data.profile_image : '/dummy-user.jpg'}`);
         setName(data.name);
 
       } catch (error) {

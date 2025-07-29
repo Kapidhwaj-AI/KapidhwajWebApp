@@ -1,7 +1,7 @@
 "use client";
 
 import { LoginForm } from "@/components/views/auth/Login.form";
-import { setLocalStorageItem } from "@/lib/storage";
+import { getLocalStorageItem, setLocalStorageItem } from "@/lib/storage";
 import { setAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
@@ -28,14 +28,21 @@ export const LoginFormController = () => {
   const phoneRegex = /^[0-9]{7,15}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+  const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+  const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setIsError(false);
     setError("");
-
     try {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+      if (isValidHub) {
+        headers['x-hub-id'] = hub.id;
+      }
       const key = emailRegex.test(username)
         ? "email"
         : phoneRegex.test(username)
@@ -49,6 +56,7 @@ export const LoginFormController = () => {
           [key]: username.trim(),
           password,
         },
+        headers
       });
 
       if (res.status === 200) {

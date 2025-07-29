@@ -24,7 +24,6 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
     try {
 
       const res = await protectApi('/signout', "POST")
-      console.log(res, "res")
       if (res.status === 200) {
         document.cookie = "locale=; path=/; max-age=0";
         toast.success(res.data.message ?? 'User Logout Successfully')
@@ -40,6 +39,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
         toast.error(error.response.data.message ?? 'THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)')
         removeLocalStorageItem('user')
         removeLocalStorageItem('kapi-token')
+        removeLocalStorageItem('hub')
         router.replace("/login");
       }
     }

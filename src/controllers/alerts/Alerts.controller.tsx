@@ -17,7 +17,7 @@ const AlertsController = () => {
     const [startTime, setStartTime] = useState<Date | undefined>();
     const [endTime, setEndTime] = useState<Date | undefined>();
     const [isDateFiltered, setIsDateFiltered] = useState(false)
-    const alertEndRef = useRef(null)
+    const alertEndRef = useRef<HTMLDivElement>(null)
     const fetchAlerts = async (offset: number, startTime?: number, endTime?: number) => {
         const endpoint = startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}` : `/alert/recent?offset=${offset}`
         const res = await protectApi<Alert[], undefined>(endpoint)

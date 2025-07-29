@@ -4,12 +4,12 @@ import LiveBadge from "./LiveBadge";
 import { cn } from "@/lib/utils";
 import { Camera } from "@/models/camera";
 import { RootState } from "@/redux/store";
-import { IconBorderCornerSquare,  IconTrash } from "@tabler/icons-react";
+import { IconBorderCornerSquare, IconTrash } from "@tabler/icons-react";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {DeleteDialog} from "../dialogue/DeleteDialog";
+import { DeleteDialog } from "../dialogue/DeleteDialog";
 import { useTranslations } from "next-intl";
 
 interface CameraStreamCardProps {
@@ -30,10 +30,21 @@ export default function CameraStreamCard({
   const hasStream = camera?.webrtc_url;
 
   useEffect(() => {
-    if (hasStream) {
+    const fetchWebrtc = async () => {
+      try {
+        const res = await fetch(camera?.webrtc_url ?? '')
+        if (res.ok) {
+          setStreamError(null)
+        }
+      }
+      catch (err) {
+        console.error(err)
+        setStreamError(err.message?? 'Some errro')
+      }
     }
-    setStreamError(null);
-  }, [hasStream, camera?.webrtc_url, camera?.rtsp_url]);
+   fetchWebrtc()
+  }, [hasStream]);
+
   const t = useTranslations()
   return (
     <div
@@ -51,19 +62,19 @@ export default function CameraStreamCard({
         <iframe
           src={camera.webrtc_url}
           allowFullScreen
-          style={{ width: "100%", maxWidth: "800px" }}
+          style={{ width: "100%", maxWidth: "800px", height: '100%' }}
         >
           Your browser does not support the video tag.
         </iframe>
       )}
-      {!streamError && hasStream && (
+      {streamError === null && hasStream && (
         <div className="absolute top-3 left-3 z-5">
           <LiveBadge />
         </div>
       )}
       {cameraDetailView !== "focused" && isFav && setIsDelete && (
         <div className="absolute top-3 right-3 z-5 text-white">
-          <button onClick={() => setIsDelete(true) } className="rounded-full p-1 bg-[#FF6868]"><IconTrash size={18} /></button>
+          <button onClick={() => setIsDelete(true)} className="rounded-full p-1 bg-[#FF6868]"><IconTrash size={18} /></button>
         </div>
       )}
       <Link

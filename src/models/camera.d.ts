@@ -5,7 +5,7 @@ import { Site } from './site';
 import { Hub } from './hub';
 
 export interface Camera {
-  camera_id: number;
+  camera_id: string;
   name: string;
   folder_id?: number | null
   physical_address: string;

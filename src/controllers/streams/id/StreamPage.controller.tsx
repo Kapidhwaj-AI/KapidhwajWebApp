@@ -11,6 +11,7 @@ import { RootState } from '@/redux/store';
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp';
 import React, { use, useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) => {
 
@@ -27,16 +28,17 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const [recordings, setRecordings] = useState<RecordedClip[]>([])
     const [hasMore, setHasMore] = useState(true)
     const [alertsLoading, setAlertsLoading] = useState(false)
-    const alertEndRef = useRef(null)
+    const alertEndRef = useRef<HTMLDivElement>(null)
     const [cameraLocation, setCameraLocation] = useState<CameraLocation>()
     const [hasRecordingMore, setHasRecordingMore] = useState(true)
     const [recordingLoading, setRecordingLoading] = useState(false)
-    const recordingref = useRef(null)
+    const recordingref = useRef<HTMLDivElement>(null)
     const [selectedTab, setSelectedTab] = useState('all')
     const [date, setDate] = useState<Date | undefined>();
     const [startTime, setStartTime] = useState<Date | undefined>();
     const [endTime, setEndTime] = useState<Date | undefined>();
     const [isDateFiltered, setIsDateFiltered] = useState(false)
+    const [isMlService, setIsMlService] = useState(false)
     const [formData, setFormData] = useState<StreamFormData>({
         name: camera?.name ?? '',
         people_threshold_count: camera?.people_threshold_count ?? NaN,
@@ -123,36 +125,76 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const toggleStreamFav = async () => {
         const res = await protectApi<unknown, { cameraId: number }>(`/camera/fav?cameraId=${id}`, makeFav ? 'DELETE' : 'POST', { cameraId: Number(id) })
         if (res.status === 200) {
+            toast.success(`Stream ${makeFav ? 'Deleted from ' : 'Added in'} Favourites`)
             setMakeFav((prev) => !prev)
         }
     };
-    const handleAiToggle = async (key: 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean,) => {
 
-        const endpoint = toggleValue ? `/camera/stream/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
-            : `/camera/stream/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`;
+    const handleAiToggle = async (key: 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean,) => {
+        setIsMlService(true)
+        try {
+            const endpoint = toggleValue ? `/camera/stream/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
+                : `/camera/stream/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`;
 
-        const res = await protectApi<unknown, { cameraId: number, serviceType: typeof key }>(endpoint, 'POST', { cameraId: Number(camera?.camera_id), serviceType: key })
-        const cameraRes = await fetchCamera(id)
-        setCamera(cameraRes)
-        return res
+            const res = await protectApi<unknown, { cameraId: string, serviceType: typeof key }>(endpoint, 'POST', { cameraId: camera?.camera_id.toString() ?? '', serviceType: key })
+            if (res.status === 200) {
+                toast.success(`Camera stream ${key} ${toggleValue ? 'started ' : 'stoped'} successfully`)
+                const cameraRes = await fetchCamera(id)
+                setCamera(cameraRes)
+
+            }
+            return res
+        } catch (error) {
+            console.error(error)
+            toast.error(error.response.data.message)
+        } finally {
+            setIsMlService(false)
+        }
+
+
+
     }
     const handleMotionToggle = async (toggleValue: boolean) => {
-        const endpoint = toggleValue ? '/camera/motion/start' : '/camera/motion/stop'
-        const res = await protectApi<unknown, { camId: number }>(endpoint, "POST", { camId: Number(camera?.camera_id) })
-        const cameraRes = await fetchCamera(id)
-        setCamera(cameraRes)
-        return res
+        setIsMlService(true)
+        try {
+            const endpoint = toggleValue ? '/camera/motion/start' : '/camera/motion/stop'
+            const res = await protectApi<unknown, { camId: string }>(endpoint, "POST", { camId: camera?.camera_id ?? '' })
+            if (res.status === 200) {
+                toast.success(`Camera streams motion detection  ${toggleValue ? 'started ' : 'stoped'} successfully`)
+                const cameraRes = await fetchCamera(id)
+                setCamera(cameraRes)
+            }
+            return res
+
+        } catch (error) {
+            console.error(error)
+            toast.error(error.response.data.message)
+        }
+        finally {
+            setIsMlService(false)
+        }
+
     }
 
     const handleRecordinToggle = async (isRecord: boolean) => {
+        try {
 
+        } catch (error) {
+
+        } finally {
+
+        }
         const url = isRecord
             ? `/camera/recording/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
             : `/camera/recording/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
 
         const res = await protectApi(url, "POST", { cameraId: Number(camera?.camera_id), serviceType: 'cloud_storage' })
-        const cameraRes = await fetchCamera(id)
-        setCamera(cameraRes)
+        if (res.status === 200) {
+            toast.success(`Camera stream recording ${isRecord ? 'started ' : 'stoped'} successfully`)
+            const cameraRes = await fetchCamera(id)
+            setCamera(cameraRes)
+
+        }
         return res
     }
     const handleApplyFilter = async (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => {
@@ -180,6 +222,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         }
         const res = await protectApi<unknown, typeof payload>(url, "POST", payload)
         if (res.status === 200) {
+            toast.success(`Camera stream  ${toggleValue ? 'started ' : 'stoped'} successfully`)
             setStream(toggleValue)
         }
     }
@@ -207,6 +250,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
             if (res.status === 200) {
                 setIsEdit(false)
+                toast.success(`Camera stream updated successfully`)
                 setFormData({
                     name: '',
                     people_threshold_count: 0,
@@ -218,11 +262,12 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
         } catch (error) {
             console.error(error)
+            toast.success(error.message ?? 'An error occured')
         } finally {
             setIsEditLoading(false)
         }
     }
-    console.log(camera, "controller")
+
 
     const isFullscreen = useSelector((state: RootState) => state.camera.isFullScreen)
     return (

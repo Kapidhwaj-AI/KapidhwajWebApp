@@ -51,7 +51,7 @@ export interface AlertViewProps {
   alertsLoading: boolean;
   hasMore: boolean;
   setHasMore: (val: boolean) => void;
-  alertEndRef: React.RefObject<HTMLDivElement>;
+  alertEndRef: React.RefObject<HTMLDivElement | nul>;
   alerts: Alert[];
   setSelectedTab: (value: string) => void;
   selectedTab: string;

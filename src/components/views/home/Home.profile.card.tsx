@@ -11,14 +11,12 @@ export const HomeProfileCard = ({
   devices: number;
 }) => {
   const t = useTranslations()
-  console.log(imagePath)
-  const src = imagePath ? imagePath: '/dummy-user.jpg'
   return (
     <div className="flex items-center gap-3">
       
       <div className="h-18 w-18 rounded-full bg-[var(--surface-100)] text-[#888888] overflow-hidden">
         <Image
-          src={src}
+          src={imagePath}
           alt="User Profile"
           width={200} 
           height={200} 

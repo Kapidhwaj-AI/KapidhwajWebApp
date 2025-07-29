@@ -47,13 +47,13 @@ export interface StreamsPageViewProps {
     recordingOffset: number;
     recordingLoading: boolean;
     recordings: RecordedClip[];
-    recordingref: React.RefObject<HTMLDivElement>;
+    recordingref: React.RefObject<HTMLDivElement | null>;
     hasRecordingMore: boolean;
     selectedTab: string;
     setSelectedTab: (val: string) => void;
     setAlerts: (val: Alert[]) => void;
     alertOffset: number;
-    alertEndRef: React.RefObject<HTMLDivElement>;
+    alertEndRef: React.RefObject<HTMLDivElement | null>;
     alerts: Alert[];
     fetchAlerts: (offSet: number) => Promise<Alert[]>;
     alertsLoading: boolean;
