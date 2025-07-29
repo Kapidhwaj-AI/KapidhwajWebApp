@@ -12,7 +12,7 @@ const NotificationsController = () => {
     const [loading, setLoading] = useState(false)
     const [hasMore, setHasMore] = useState(false)
     const [isDateFiltered, setIsDateFiltered] = useState(false)
-    const divRef = useRef(null)
+    const divRef = useRef<HTMLDivElement>(null)
 
     const fetchNotification = async (offset: number) => {
         const res = await protectApi<Notification[]>(`/user/notification?offset=${offset}`)

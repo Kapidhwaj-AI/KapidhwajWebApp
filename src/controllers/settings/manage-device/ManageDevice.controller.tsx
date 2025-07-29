@@ -75,7 +75,7 @@ const ManageDevicesController = () => {
         }
     }
 
-    const handleToggleStream = async (toggleValue: boolean, id: number, physical_address: string, hub_id: number) => {
+    const handleToggleStream = async (toggleValue: boolean, id: string, physical_address: string, hub_id: number) => {
         const url = toggleValue ? `/camera/start?action=add&hubId=${hub_id}` : `/camera/stop?action=remove&hubId=${hub_id}`
         const payload = {
             cameras: [

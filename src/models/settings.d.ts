@@ -23,7 +23,7 @@ export interface ManageDeviceViewProp {
     savedHubs: Hub[]
     isSavedHubLoading: boolean;
     fetchSavedHubs: () => void;
-    toggleStream: (toggleVal: boolean, id: number, physical_address: string, hub_id: number) => Promise<AxiosResponse>
+    toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: number) => Promise<AxiosResponse>
     handleCopyIp: (ip: string) => void;
     isDelete: boolean;
     setIsDelete: (val: boolean) => void;
@@ -64,7 +64,7 @@ export interface Profile {
     image: string;
     file: FIle | undefined;
     setFile: (val: File) => void;
-    fileInputRef: React.RefObject<HTMLInputElement>;
+    fileInputRef: React.RefObject<HTMLInputElement | null>;
     preview: string;
     setPreview: (val: string) => void;
     isOpen: boolean;
@@ -186,7 +186,7 @@ export interface SettingsViewProps {
     handleProfileSave: (e: FormEvent<HTMLFormElement>) => void;
     handleImageClick: () => void;
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    fileInputRef: React.RefObject<HTMLInputElement>;
+    fileInputRef: React.RefObject<HTMLInputElement | null>;
     showProfileDial: boolean;
     showPassword: boolean;
     setShowPassword: (val: boolean) => void;

@@ -13,10 +13,6 @@ import { Organization } from "@/models/organization";
 import { useTranslations } from "next-intl";
 import Spinner from "../ui/Spinner";
 
-
-
-
-
 interface SavedCamerasProps {
     hub: Hub;
     className?: string;

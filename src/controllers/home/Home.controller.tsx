@@ -3,9 +3,8 @@ import HomeView from '@/components/views/home/Home.view'
 import { protectApi } from '@/lib/protectApi'
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from '@/lib/storage'
 import { Hub, ManageHub } from '@/models/settings'
-import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
+
 
 const HomeController = () => {
     const [nearbyHubs, setNearbyHubs] = useState<ManageHub[]>([])
@@ -16,7 +15,6 @@ const HomeController = () => {
     const [devices, setDevices] = useState(0)
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
     const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-    const router = useRouter()
     const fetchHubs = async () => {
         setIsHubLoading(true)
         try {
