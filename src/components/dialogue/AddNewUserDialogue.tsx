@@ -7,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import clsx from 'clsx';
 import { Organization } from '@/models/organization';
 import { Checkbox } from '../ui/checkbox';
-import StreamsCard from '../views/settings/StreamsCard';
+import StreamsCard from '@/views/settings/StreamsCard';
 import Spinner from '../ui/Spinner';
 import { useTranslations } from 'next-intl';
 import SelectField from '../ui/Select.field';

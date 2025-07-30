@@ -1,5 +1,5 @@
 import Spinner from "@/components/ui/Spinner";
-import { InputField } from "../../ui/Input.field";
+import { InputField } from "@/components/ui/Input.field";
 import React from "react";
 
 export const RegisterForm = ({

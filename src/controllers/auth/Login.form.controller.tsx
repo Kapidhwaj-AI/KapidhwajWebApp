@@ -1,6 +1,6 @@
 "use client";
 
-import { LoginForm } from "@/components/views/auth/Login.form";
+import { LoginForm } from "@/views/auth/Login.form";
 import { getLocalStorageItem, setLocalStorageItem } from "@/lib/storage";
 import { setAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";

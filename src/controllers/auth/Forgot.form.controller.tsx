@@ -1,5 +1,5 @@
 'use client'
-import ForgotForm from '@/components/views/auth/Forgot.form';
+import ForgotForm from '@/views/auth/Forgot.form';
 import { apiBaseUrl } from '@/services/config';
 import axios from 'axios';
 import React, {  useState } from 'react'

@@ -1,5 +1,5 @@
 'use client'
-import StreamPageView from '@/components/views/streams/id/StreamPage.view';
+import StreamPageView from '@/views/streams/id/StreamPage.view';
 import { useOrganizations } from '@/hooks/useOrganizations';
 import { protectApi } from '@/lib/protectApi';
 import { Alert } from '@/models/alert';

@@ -1,5 +1,5 @@
 'use client'
-import AlertsView from '@/components/views/alert/Alerts.view'
+import AlertsView from '@/views/alert/Alerts.view'
 import { protectApi } from '@/lib/protectApi'
 import { Alert } from '@/models/alert'
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp'

@@ -1,5 +1,5 @@
 
-import AlertHomeView from '@/components/views/alert/Alert.home.view';
+import AlertHomeView from '@/views/alert/Alert.home.view';
 import { protectApi } from '@/lib/protectApi';
 import { Alert } from '@/models/alert';
 import React, { useEffect, useState } from 'react'

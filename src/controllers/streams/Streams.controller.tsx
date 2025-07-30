@@ -1,7 +1,7 @@
 'use client'
 import SearchBar from '@/components/common/Searchbar';
 import Spinner from '@/components/ui/Spinner';
-import StreamsView from '@/components/views/streams/Streams.view';
+import StreamsView from '@/views/streams/Streams.view';
 import { useOrganizations } from '@/hooks/useOrganizations';
 import { Camera } from '@/models/camera';
 import { Folders, Organization } from '@/models/organization';

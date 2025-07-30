@@ -1,5 +1,5 @@
 import React from 'react'
-import { InputField } from '../../ui/Input.field';
+import { InputField } from '@/components/ui/Input.field';
 import Spinner from '@/components/ui/Spinner';
 
 

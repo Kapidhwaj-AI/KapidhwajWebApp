@@ -1,7 +1,7 @@
 'use client'
 import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
 import SiteFolderModal from '@/components/dialogue/SiteFolderModal'
-import ManageSitesFolderView from '@/components/views/settings/ManageSitesFolder.view'
+import ManageSitesFolderView from '@/views/settings/ManageSitesFolder.view'
 import { protectApi } from '@/lib/protectApi'
 import { Folders, Organization } from '@/models/organization'
 import { useTranslations } from 'next-intl'

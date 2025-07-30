@@ -1,5 +1,5 @@
 'use client'
-import ManagePeopleView from '@/components/views/settings/ManagePeople.view';
+import ManagePeopleView from '@/views/settings/ManagePeople.view';
 import { protectApi } from '@/lib/protectApi';
 import { getLocalStorageItem } from '@/lib/storage';
 import { Category } from '@/models/category';

@@ -1,6 +1,6 @@
 "use client";
 
-import { RegisterForm } from "@/components/views/auth/Register.form";
+import { RegisterForm } from "@/views/auth/Register.form";
 import { setLocalStorageItem } from "@/lib/storage";
 import { allowRegisterOtpAccess } from "@/redux/slices/authSlice";
 import { setUserEmail, setUserPhone } from "@/redux/slices/userSlice";

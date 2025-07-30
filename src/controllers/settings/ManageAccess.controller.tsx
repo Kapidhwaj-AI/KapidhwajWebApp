@@ -2,7 +2,7 @@
 import { AddNewAccessDialogue } from '@/components/dialogue/AddNewAccessDialogue'
 import { AddNewUserDialogue } from '@/components/dialogue/AddNewUserDialogue'
 import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
-import ManageAccessView from '@/components/views/settings/ManageAccess.view'
+import ManageAccessView from '@/views/settings/ManageAccess.view'
 import { useDebounce } from '@/hooks/useDebounce'
 import { protectApi } from '@/lib/protectApi'
 import { Organization } from '@/models/organization'

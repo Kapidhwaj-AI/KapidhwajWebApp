@@ -1,5 +1,5 @@
 "use client"
-import FavouritesView from '@/components/views/favourites/Favourites.view';
+import FavouritesView from '@/views/favourites/Favourites.view';
 import { protectApi } from '@/lib/protectApi';
 import { Favourite } from '@/models/favourite';
 import { RootState } from '@/redux/store';

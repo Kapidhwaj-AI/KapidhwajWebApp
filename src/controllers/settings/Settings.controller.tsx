@@ -1,5 +1,5 @@
 'use client'
-import SettingsView from '@/components/views/settings/Settings.view';
+import SettingsView from '@/views/settings/Settings.view';
 import { protectApi } from '@/lib/protectApi';
 import { getLocalStorageItem, setLocalStorageItem } from '@/lib/storage';
 import { IconDevices, IconFriends, IconLanguage, IconLifebuoy, IconLockAccess, IconLockSquareRounded, IconMapPin, IconUser } from '@tabler/icons-react';

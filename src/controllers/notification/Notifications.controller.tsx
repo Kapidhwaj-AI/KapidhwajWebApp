@@ -1,5 +1,5 @@
 'use client'
-import NotificationView from '@/components/views/notification/Notification.view';
+import NotificationView from '@/views/notification/Notification.view';
 import { protectApi } from '@/lib/protectApi';
 import { Notification } from '@/models/notification';
 import React, { useEffect, useMemo, useRef, useState } from 'react'

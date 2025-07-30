@@ -1,6 +1,6 @@
 'use client'
 import HubDialogue from '@/components/dialogue/HubDialogue';
-import ManageDeviceView from '@/components/views/settings/ManageDevice.view';
+import ManageDeviceView from '@/views/settings/ManageDevice.view';
 import { protectApi } from '@/lib/protectApi';
 import { Organization } from '@/models/organization';
 import { Hub, ManageHub } from '@/models/settings';

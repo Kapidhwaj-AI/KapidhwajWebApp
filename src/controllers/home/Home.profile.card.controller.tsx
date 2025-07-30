@@ -1,6 +1,6 @@
 "use client";
 
-import { HomeProfileCard } from "@/components/views/home/Home.profile.card";
+import { HomeProfileCard } from "@/views/home/Home.profile.card";
 import { protectApi } from "@/lib/protectApi";
 import { getLocalStorageItem } from "@/lib/storage";
 import { GOOGLE_KPH_BUCKET_URL } from "@/services/config";
