@@ -94,7 +94,7 @@ const SettingsController = () => {
         }
         setOtpLoading(true)
         try {
-            const res = await protectApi<AxiosResponse, { email: string, phone: string }>('/sendOTP', 'POST', { email, phone })
+            const res = await protectApi<AxiosResponse, { email: string, phone: string }>('/sendOTP', 'POST', { email, phone }, undefined, true )
             if (res.status === 200 && !isOtpSend) {
                 setIsOtpSend(true)
             }
@@ -108,7 +108,7 @@ const SettingsController = () => {
     }
     const handleChangePassword = async () => {
         try {
-            const res = await protectApi<AxiosResponse, { email: string, newPassword: string }>('/user/changePassword', 'POST', { email, newPassword })
+            const res = await protectApi<AxiosResponse, { email: string, newPassword: string }>('/user/changePassword', 'POST', { email, newPassword }, undefined, true)
             if (res.status === 200) {
                 setIsOtpSend(false)
                 setShowChangePasswordDial(false)

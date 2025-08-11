@@ -10,7 +10,7 @@ import SearchBar from '@/components/common/Searchbar';
 import { useTranslations } from 'next-intl';
 import { filterButtonClassname } from '@/styles/tailwind-class';
 
-const AlertsView: React.FC<AlertViewProps> = ({ setAlerts, filteredAlerts, setAlertOffset, alertOffset, setFilterDial, isDateFiltered, setIsDateFiltered, isLoading, fetchAlerts, filterDial, setDate, setEndTime, setIsLoading, setStartTime, handleApplyFilter, date, startTime, endTime, alertEndRef, alerts, alertsLoading, hasMore, selectedTab, setHasMore, setSelectedTab, setAlertsLoading }) => {
+const AlertsView: React.FC<AlertViewProps> = ({ err, setAlerts, filteredAlerts, setAlertOffset, alertOffset, setFilterDial, isDateFiltered, setIsDateFiltered, isLoading, fetchAlerts, filterDial, setDate, setEndTime, setIsLoading, setStartTime, handleApplyFilter, date, startTime, endTime, alertEndRef, alerts, alertsLoading, hasMore, selectedTab, setHasMore, setSelectedTab, setAlertsLoading }) => {
     const t = useTranslations()
   return (
       <div className="h-full flex flex-col gap-4 min-h-0 p-5">
@@ -58,7 +58,7 @@ const AlertsView: React.FC<AlertViewProps> = ({ setAlerts, filteredAlerts, setAl
                                   ))}
 
                               </> :
-                                  <p className="text-center h-full flex items-center justify-center w-full">{t('alerts.no_found')}</p>
+                                  <p className="text-center h-full flex items-center justify-center w-full text-red-500">{err}</p>
                               }
                           </div>
                           {filteredAlerts.length > 0 && !isDateFiltered && <div ref={alertEndRef} className="h-2" />}

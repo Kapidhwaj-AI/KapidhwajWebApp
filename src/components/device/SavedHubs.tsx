@@ -6,6 +6,7 @@ import { useState } from "react";
 import Spinner from "../ui/Spinner";
 import { DeleteDialog } from "../dialogue/DeleteDialog";
 import { useTranslations } from "next-intl";
+import { setLocalStorageItem } from "@/lib/storage";
 
 
 interface SavedHubsProps {
@@ -30,6 +31,7 @@ export const SavedHubs: React.FC<SavedHubsProps> = ({ className = "", setIsOpen,
     const handleNavigate = (hub: Hub) => {
         onHubSelect?.(hub);
         setHubId(hub.id)
+        setLocalStorageItem('hub', JSON.stringify({ ...hub, isRemotely: true }));
     };
     const t = useTranslations()
     return (

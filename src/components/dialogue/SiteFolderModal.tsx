@@ -13,7 +13,7 @@ interface SiteFolderModalProps {
   onClose: () => void;
   handleSubmit: () => void;
   isLoading: boolean;
-  isEdit: boolean
+  isEdit?: boolean
 }
 
 const SiteFolderModal: React.FC<SiteFolderModalProps> = ({ setName, isLoading, handleSubmit, name, onClose, isFolder, isSite, isEdit }) => {

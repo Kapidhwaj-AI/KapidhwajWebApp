@@ -1,7 +1,7 @@
 "use client";
 
 import { protectApi } from "@/lib/protectApi";
-import { removeLocalStorageItem } from "@/lib/storage";
+import { getLocalStorageItem, removeLocalStorageItem } from "@/lib/storage";
 import { clearAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
 import { IconMoon, IconSun, IconUser, IconLogout2 } from "@tabler/icons-react";
@@ -20,10 +20,12 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>()
+  const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+  const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
   const handleLogoutClick = async () => {
     try {
 
-      const res = await protectApi('/signout', "POST")
+      const res = await protectApi('/signout', "POST", undefined, undefined, true)
       if (res.status === 200) {
         document.cookie = "locale=; path=/; max-age=0";
         toast.success(res.data.message ?? 'User Logout Successfully')
@@ -53,7 +55,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
       onMouseLeave={onClose}
     >
       <div className="px-3 py-2">
-        <button
+        {isValidHub && <button
           onClick={() => router.push("/settings")}
           className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
         >
@@ -61,7 +63,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
             <IconUser size={18} color="white" />
           </div>
           {t('settings.profile')}
-        </button>
+        </button>}
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           className="w-full flex items-center gap-3 px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"

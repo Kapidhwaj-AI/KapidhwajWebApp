@@ -9,6 +9,8 @@ import { RootState } from '@/redux/store';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 
 const StreamsController = () => {
     const toogleColumnValue = useSelector((state: RootState) => state?.camera?.toogleColumns);
@@ -25,13 +27,18 @@ const StreamsController = () => {
         } else if (selectedFolder) {
             setSelecteddata(selectedFolder.cameras);
         } else if (selectedOrganization) {
-            setSelecteddata(selectedOrganization.cameras.filter((item) => item.folder_id === null));
+            setSelecteddata(selectedOrganization.cameras);
         } else {
             setSelecteddata(null);
         }
     }, [selectedOrganization, selectedFolder, selectedChildFolder]);
 
-
+    useEffect(() => {
+        if (error instanceof AxiosError) {
+            toast.error(error.response?.data.error)
+        }
+    }, [error])
+    console.log(error, "errorr")
     const visibleCameras = useMemo(() => {
         return searchQuery.trim()
             ? selectedData?.filter((camera) =>
@@ -106,9 +113,9 @@ const StreamsController = () => {
         );
     }
     const cameraCount = visibleCameras?.length ?? 0;
-  return (
-    <StreamsView cameraCount={cameraCount} visibleCameras={visibleCameras ?? []} searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedChildFolder={selectedChildFolder} selectedData={selectedData} isLoading={isLoading} selectedFolder={selectedFolder}handleFolderSelect={handleFolderSelect} handleOrganizationSelect={handleOrganizationSelect} organizations={organizations} selectedOrganization={selectedOrganization } setSelectedChildFolder={setSelectedChildFolder} toogleColumnValue={toogleColumnValue}  />
-  )
+    return (
+        <StreamsView cameraCount={cameraCount} visibleCameras={visibleCameras ?? []} searchQuery={searchQuery} setSearchQuery={setSearchQuery} selectedChildFolder={selectedChildFolder} selectedData={selectedData} isLoading={isLoading} selectedFolder={selectedFolder} handleFolderSelect={handleFolderSelect} handleOrganizationSelect={handleOrganizationSelect} organizations={organizations} selectedOrganization={selectedOrganization} setSelectedChildFolder={setSelectedChildFolder} toogleColumnValue={toogleColumnValue} />
+    )
 }
 
 export default StreamsController

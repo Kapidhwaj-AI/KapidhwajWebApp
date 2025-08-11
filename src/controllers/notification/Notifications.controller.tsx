@@ -3,6 +3,8 @@ import NotificationView from '@/views/notification/Notification.view';
 import { protectApi } from '@/lib/protectApi';
 import { Notification } from '@/models/notification';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
 
 const NotificationsController = () => {
     const [offset, setOffset] = useState(0);
@@ -13,7 +15,7 @@ const NotificationsController = () => {
     const [hasMore, setHasMore] = useState(false)
     const [isDateFiltered, setIsDateFiltered] = useState(false)
     const divRef = useRef<HTMLDivElement>(null)
-
+    const didFetch = useRef(false);
     const fetchNotification = async (offset: number) => {
         const res = await protectApi<Notification[]>(`/user/notification?offset=${offset}`)
         const data = res.data.data
@@ -25,12 +27,17 @@ const NotificationsController = () => {
             try {
                 setAllNotifications(await fetchNotification(offset))
             } catch (error) {
+
+                if (error instanceof AxiosError && error.response?.status === 400) {
+                    toast.error(error.response?.data.error)
+                }
+
                 setErr(error)
             } finally {
                 setLoading(false)
             }
         }
-        if (offset === 0) loadNotification()
+        if (!didFetch.current && offset === 0 ) { loadNotification(); didFetch.current = true; }
     }, [])
     const filteredNotifications = useMemo(() => {
         return allNotifications.filter(notification => !searchQuery ||

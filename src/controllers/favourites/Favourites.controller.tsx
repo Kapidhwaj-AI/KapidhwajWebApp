@@ -5,6 +5,8 @@ import { Favourite } from '@/models/favourite';
 import { RootState } from '@/redux/store';
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 
 const FavouritesController = () => {
     const toogleColumnValue = useSelector((state: RootState) => state.camera.toogleColumns);
@@ -13,8 +15,10 @@ const FavouritesController = () => {
     const [favourites, setFavourites] = useState<Favourite[]>([])
     const [loading, setLoading] = useState(false)
     const [err, setErr] = useState('')
+
     const handleDelete = async (id: number) => {
         const res = await protectApi(`/camera/fav?cameraId=${id}`, 'DELETE')
+        const res1 = await protectApi(`/camera/fav?cameraId=${id}`, 'DELETE', undefined, undefined, true )
 
         if (res.status === 200) {
             setIsDelete(false)
@@ -29,6 +33,9 @@ const FavouritesController = () => {
             setFavourites(data)
         } catch (error) {
             setErr(error?.message)
+            if (error instanceof AxiosError && error.response?.status === 400) {
+                toast.error(error.response?.data.error)
+            }
         } finally {
             setLoading(false)
         }

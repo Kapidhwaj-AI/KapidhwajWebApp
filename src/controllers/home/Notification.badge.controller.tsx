@@ -3,7 +3,9 @@
 import { NotificationBadge } from "@/components/ui/Notification.badge";
 import { protectApi } from "@/lib/protectApi";
 import { Notification } from "@/models/notification";
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export const NotificationBadgeController = () => {
   const [notificationsCount, setNotificationsCount] = useState(0);
@@ -18,6 +20,10 @@ export const NotificationBadgeController = () => {
         setNotificationsCount(data.length);
       } catch (error) {
         console.error("Error while fetching notifications", error)
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data.error)
+
+        }
       } finally {
       }
     };

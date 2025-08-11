@@ -16,7 +16,7 @@ export const HomeProfileCardController = ({ devices }: { devices: number }) => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const res = await protectApi<{ profile_image: string, name: string }>('/user')
+        const res = await protectApi<{ profile_image: string, name: string }>('/user', "GET", undefined, undefined, true)
         const data = res.data.data;
         setUserImage(`${data.profile_image ? baseUrl + data.profile_image : '/dummy-user.jpg'}`);
         setName(data.name);

@@ -4,6 +4,9 @@ import { protectApi } from '@/lib/protectApi'
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from '@/lib/storage'
 import { Hub, ManageHub } from '@/models/settings'
 import React, { useEffect, useState } from 'react'
+import HubDialogue from '@/components/dialogue/HubDialogue'
+import { Organization } from '@/models/organization'
+import SiteFolderModal from '@/components/dialogue/SiteFolderModal'
 
 
 const HomeController = () => {
@@ -13,7 +16,17 @@ const HomeController = () => {
     const [isSavedHubsLoading, setIsSavedHubsLoading] = useState(false)
     const [isRemotely, setIsRemotely] = useState(false)
     const [devices, setDevices] = useState(0)
+    const [isAddModal, setIsAddModal] = useState(false)
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    const [isSaving, setIsSaving] = useState(false);
+    const [showPassword, setShowPassword] = useState(false)
+    const [id, setId] = useState('')
+    const [selectedSite, setSelectedSite] = useState('')
+    const [name, setName] = useState('')
+    const [password, setPassword] = useState('')
+    const [sites, setSites] = useState<Organization[]>([])
+    const [isSiteAddModal, setIsSiteAddModal] = useState(false)
+    const [siteName, setSiteName] = useState('')
     const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
     const fetchHubs = async () => {
         setIsHubLoading(true)
@@ -32,7 +45,7 @@ const HomeController = () => {
     const fetchSavedHubs = async () => {
         setIsSavedHubsLoading(true)
         try {
-            const res = await protectApi<Hub[]>(`/devices/hub`);
+            const res = await protectApi<Hub[]>(`/devices/hub`, "GET", undefined, undefined, true);
             const data = res.data.data
             setDevices(res.data.data.length)
             setSavedHubs(data)
@@ -49,23 +62,38 @@ const HomeController = () => {
 
         }
     }
+    const fetchSites = async () => {
+
+        try {
+            const res = await protectApi<{ organization: Organization }[]>('/organizations')
+            if (res.status === 200) {
+                const sites = res.data.data?.map(
+                    (item) => item.organization,
+                );
+                setSites(sites)
+            }
+        } catch (error) {
+            console.error("err:", error)
+        }
+    }
     useEffect(() => {
         fetchHubs()
         fetchSavedHubs()
         if (isValidHub && hub.isRemotely) {
             setIsRemotely(true)
         }
+        fetchSites()
     }, [])
     const handleAccessRemotely = (hub: Hub) => {
-        const findHub = nearbyHubs.find((item) => item.name === hub.id)
-        if (findHub) {
-            setLocalStorageItem('hub', JSON.stringify({ ...hub, isRemotely: !isRemotely }));
-            setIsRemotely((prev) => !prev)
-        }
-        else {
-            setLocalStorageItem('hub', JSON.stringify({ ...hub, isRemotely: true }));
-            setIsRemotely(true)
-        }
+        // const findHub = nearbyHubs.find((item) => item.name === hub.id)
+        // if (findHub) {
+        //     setLocalStorageItem('hub', JSON.stringify({ ...hub, isRemotely: !isRemotely }));
+        //     setIsRemotely((prev) => !prev)
+        // }
+        // else {
+        setLocalStorageItem('hub', JSON.stringify({ ...hub, isRemotely: true }));
+        setIsRemotely(true)
+        // }
         // removeLocalStorageItem('kapi-token')
         // window.location.href = '/login';
         window.location.reload();
@@ -74,9 +102,50 @@ const HomeController = () => {
         setLocalStorageItem('hub', JSON.stringify({ ...hub, id: hub.name, isRemotely: false }));
         window.location.reload();
     }
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsSaving(true)
+        try {
+            const res = await protectApi<unknown, { name: string, hubId: string, password: string, organizationId: string }>('/devices/hub?action=add', 'POST', { name, hubId: id, password, organizationId: selectedSite }, undefined, true)
+            if (res.status === 200) {
+                setIsAddModal(false)
+                setName('')
+                setSelectedSite('')
+                setPassword('')
+                setId('')
+            }
 
+        } catch (error) {
+            console.error("Err", error)
+        } finally {
+            setIsSaving(false)
+        }
+    }
+    const handleSubmit = async () => {
+        setIsSaving(true)
+        try {
+
+
+            const res = await protectApi<unknown, { name: string }>('/organizations', 'POST', { name: siteName }, undefined, true);
+            if (res.status === 201 || res.status === 200) {
+
+                setIsSiteAddModal(false)
+                setSiteName('')
+                await fetchSites()
+            }
+
+        } catch (err) {
+            console.error("Err:", err)
+        } finally {
+            setIsSaving(false)
+        }
+    }
     return (
-        <HomeView handleNearbyHubsAccess={handleAccessNearbyHubs} devices={devices} isRemotely={isRemotely} handleAccessRemotely={handleAccessRemotely} fetchHub={fetchHubs} savedHubs={savedHaubs} fetchSavedHubs={fetchSavedHubs} isHubLoading={isHubLoading} isSavedHubLoading={isSavedHubsLoading} nearbyHubs={nearbyHubs} />
+        <>
+            <HomeView setIsSiteAddModal={setIsSiteAddModal} setIsAddModal={setIsAddModal} handleNearbyHubsAccess={handleAccessNearbyHubs} devices={devices} isRemotely={isRemotely} handleAccessRemotely={handleAccessRemotely} fetchHub={fetchHubs} savedHubs={savedHaubs} fetchSavedHubs={fetchSavedHubs} isHubLoading={isHubLoading} isSavedHubLoading={isSavedHubsLoading} nearbyHubs={nearbyHubs} />
+            {isAddModal && <HubDialogue isLoading={isSaving} showPassword={showPassword} setShowPassword={setShowPassword} onSubmit={onSubmit} id={id} selectedSite={selectedSite} setSelectedSite={setSelectedSite} setId={setId} setName={setName} setPassword={setPassword} name={name} password={password} sites={sites} onClose={() => setIsAddModal(false)} />}
+            {isSiteAddModal && <SiteFolderModal isLoading={isSaving} setName={setSiteName} name={siteName} onClose={() => { setIsSiteAddModal(false); setSiteName('') }} handleSubmit={handleSubmit} />}
+        </>
     )
 }
 

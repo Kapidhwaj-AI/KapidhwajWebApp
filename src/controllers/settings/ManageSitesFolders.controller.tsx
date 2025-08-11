@@ -26,7 +26,7 @@ const ManageSitesFoldersController = () => {
     const fetchSites = async () => {
         setIsSiteLoading(true)
         try {
-            const res = await protectApi<{ organization: Organization }[]>('/organizations')
+            const res = await protectApi<{ organization: Organization }[]>('/organizations', undefined, undefined, undefined, true)
             if (res.status === 200) {
                 const sites = res.data.data?.map(
                     (item) => item.organization,
@@ -101,7 +101,7 @@ const ManageSitesFoldersController = () => {
                 }
             }
             const method = isEdit ? 'PUT' : 'POST';
-            const res = await protectApi<unknown, typeof payload>(url, method, payload);
+            const res = await protectApi<unknown, typeof payload>(url, method, payload, undefined, isOrgId && !isFolder);
             if (res.status === 201 || res.status === 200) {
 
                 setIsOpen(false)
@@ -128,7 +128,7 @@ const ManageSitesFoldersController = () => {
         const url = isOrgId ? `/organizations/` : `/folders/${id}?action=remove`;
         const res = await protectApi<unknown, { organizationId?: string }>(url, 'DELETE', {
             organizationId: isOrgId ? id.toString() : undefined,
-        });
+        }, undefined, isOrgId);
 
         if (res.status === 200) {
             setIsDelete(false);

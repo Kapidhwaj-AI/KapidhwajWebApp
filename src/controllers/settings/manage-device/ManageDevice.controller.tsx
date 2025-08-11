@@ -33,7 +33,7 @@ const ManageDevicesController = () => {
     const fetchSites = async () => {
 
         try {
-            const res = await protectApi<{ organization: Organization }[]>('/organizations')
+            const res = await protectApi<{ organization: Organization }[]>('/organizations', undefined, undefined, undefined, true)
             if (res.status === 200) {
                 const sites = res.data.data?.map(
                     (item) => item.organization,
@@ -61,7 +61,7 @@ const ManageDevicesController = () => {
     const fetchSavedHubs = async () => {
         setIsSavedHubsLoading(true)
         try {
-            const res = await protectApi<Hub[]>(`/devices/hub`);
+            const res = await protectApi<Hub[]>(`/devices/hub`, undefined, undefined, undefined, true);
             const data = res.data.data
             setSavedHubs(data)
             if (selectedHub) {
@@ -95,7 +95,7 @@ const ManageDevicesController = () => {
         }
     }
     const handleDeleHub = async (hubId: string) => {
-        const res = await protectApi(`/devices/hub?action=remove&hubId=${hubId}`, 'DELETE')
+        const res = await protectApi(`/devices/hub?action=remove&hubId=${hubId}`, 'DELETE', undefined,undefined, true )
         if (res.status === 200) {
             setIsHubDelete(false)
         }
@@ -109,7 +109,7 @@ const ManageDevicesController = () => {
         e.preventDefault();
         setIsSaving(true)
         try {
-            const res = await protectApi<unknown, { name: string, hubId: string, password: string, organizationId: string }>('/devices/hub?action=add', 'POST', { name, hubId: id, password, organizationId: selectedSite })
+            const res = await protectApi<unknown, { name: string, hubId: string, password: string, organizationId: string }>('/devices/hub?action=add', 'POST', { name, hubId: id, password, organizationId: selectedSite }, undefined, true)
             if (res.status === 200) {
                 setIsOpen(false)
                 setName('')

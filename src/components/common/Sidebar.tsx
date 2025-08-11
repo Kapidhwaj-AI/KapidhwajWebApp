@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { ProfileMenu } from './ProfileMenu';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { getLocalStorageItem } from '@/lib/storage';
 
 type SidebarTabs = "/home" | "/streams" | "/alerts" | "/favourites" | "/notifications" | "/settings";
 
@@ -25,6 +26,8 @@ export default function Sidebar() {
   const [isMobile, setIsMobile] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+  const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
   const t = useTranslations()
   const menuItems: MenuItemType[] = [
     { icon: <IconSmartHome stroke={2} size={24} />, label: t('home_title'), path: '/home' },
@@ -98,16 +101,16 @@ export default function Sidebar() {
                 priority={true}
               />
             </div>
-              {shouldExpand && (
-                <span className="font-semibold text-base md:text-lg ml-2 whitespace-nowrap overflow-hidden">
-                  Kapidhwaj AI
-                </span>
-              )}
-          
+            {shouldExpand && (
+              <span className="font-semibold text-base md:text-lg ml-2 whitespace-nowrap overflow-hidden">
+                Kapidhwaj AI
+              </span>
+            )}
+
 
           </div>
 
-          <nav className="flex flex-col items-center  space-y-2 md:space-y-3">
+          {isValidHub && <nav className="flex flex-col items-center  space-y-2 md:space-y-3">
             {menuItems.map((item) => (
               <Link
                 onClick={() => { if (isMobile) setIsExpanded(false) }}
@@ -135,13 +138,13 @@ export default function Sidebar() {
                 )}
               </Link>
             ))}
-          </nav>
+          </nav>}
         </div>
 
         {/* Bottom Section */}
         <div className="flex w-full  items-center justify-center  space-y-2 md:space-y-3 px-5">
           <button
-            onClick={() => setIsProfileMenuOpen(true)}
+            onClick={() => setIsProfileMenuOpen((prev) => !prev)}
             className={cn(
               'relative rounded-full flex items-center justify-center transition-[width] duration-1000 hover:ring-2 hover:ring-blue-500 ',
               shouldExpand ? 'w-full flex items-center justify-center gap-3 px-3 py-2' : 'w-full h-12  md:h-14'

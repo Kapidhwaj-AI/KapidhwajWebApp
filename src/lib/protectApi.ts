@@ -11,11 +11,11 @@ export interface ApiResponse<T> {
 
 export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
-    data?: D, type?: string) {
+    data?: D, type?: string, isNotCustomHeader?: boolean) {
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
     const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-    const baseUrl = isValidHub
+    const baseUrl = isValidHub && !isNotCustomHeader
         ? hub.isRemotely
             ? apiBaseUrl
             : `http://${hub.id}.local:8084`
@@ -24,7 +24,7 @@ export async function protectApi<T, D = undefined>(url: string,
         Authorization: `Bearer ${token}`,
         'Content-Type': type ?? 'application/json',
     };
-    if (hub.isRemotely) {
+    if (hub.isRemotely && !isNotCustomHeader) {
         headers['x-hub-id'] = hub.id;
     }
 

@@ -4,6 +4,8 @@ import { protectApi } from '@/lib/protectApi'
 import { Alert } from '@/models/alert'
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 const AlertsController = () => {
     const [alerts, setAlerts] = useState<Alert[]>([])
@@ -15,6 +17,7 @@ const AlertsController = () => {
     const [selectedTab, setSelectedTab] = useState('all')
     const [date, setDate] = useState<Date | undefined>();
     const [startTime, setStartTime] = useState<Date | undefined>();
+    const [err, setErr] = useState('')
     const [endTime, setEndTime] = useState<Date | undefined>();
     const [isDateFiltered, setIsDateFiltered] = useState(false)
     const alertEndRef = useRef<HTMLDivElement>(null)
@@ -30,6 +33,11 @@ const AlertsController = () => {
                 setAlerts(await fetchAlerts(alertOffset))
             } catch (error) {
                 console.error(error)
+                if (error instanceof AxiosError && error.response?.status === 400) {
+                    toast.error(error.response?.data.error)
+                    setErr(error.response?.data.error)
+                }
+
             } finally {
                 setIsLoading(false)
             }
@@ -90,7 +98,7 @@ const AlertsController = () => {
     }
 
     return (
-        <AlertsView setStartTime={setStartTime} isDateFiltered={isDateFiltered} isLoading={isLoading} selectedTab={selectedTab} setAlertsLoading={setAlertsLoading} setSelectedTab={setSelectedTab} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setHasMore={setHasMore} hasMore={hasMore} handleApplyFilter={handleApplyFilter} setIsDateFiltered={setIsDateFiltered} setIsLoading={setIsLoading} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} startTime={startTime} endTime={endTime} date={date} setAlertOffset={setAlertOffset} setAlerts={setAlerts} filteredAlerts={filteredAlerts} fetchAlerts={fetchAlerts} filterDial={filterDial} />
+        <AlertsView err={err} setStartTime={setStartTime} isDateFiltered={isDateFiltered} isLoading={isLoading} selectedTab={selectedTab} setAlertsLoading={setAlertsLoading} setSelectedTab={setSelectedTab} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setHasMore={setHasMore} hasMore={hasMore} handleApplyFilter={handleApplyFilter} setIsDateFiltered={setIsDateFiltered} setIsLoading={setIsLoading} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} startTime={startTime} endTime={endTime} date={date} setAlertOffset={setAlertOffset} setAlerts={setAlerts} filteredAlerts={filteredAlerts} fetchAlerts={fetchAlerts} filterDial={filterDial} />
     )
 }
 

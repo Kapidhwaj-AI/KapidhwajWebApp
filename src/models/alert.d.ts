@@ -30,6 +30,7 @@ export interface AlertVideo {
 
 
 export interface AlertViewProps {
+  err: string
   filteredAlerts: Alert[];
   setAlerts: (val: Alert[]) => void;
   setAlertOffset: React.Dispatch<React.SetStateAction<number>>;
@@ -55,5 +56,5 @@ export interface AlertViewProps {
   alerts: Alert[];
   setSelectedTab: (value: string) => void;
   selectedTab: string;
-  setAlertsLoading: (val:boolean) => void
+  setAlertsLoading: (val: boolean) => void
 }

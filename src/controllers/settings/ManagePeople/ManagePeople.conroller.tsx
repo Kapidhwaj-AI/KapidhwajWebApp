@@ -42,7 +42,7 @@ const ManagePeopleConroller = () => {
         const fetchSites = async () => {
             setIsLoading(true)
             try {
-                const res = await protectApi<{ organization: Organization }[]>('/organizations')
+                const res = await protectApi<{ organization: Organization }[]>('/organizations', undefined, undefined, undefined, true)
                 if (res.status === 200) {
                     const sitesData = res.data.data?.map(
                         (item) => item.organization,

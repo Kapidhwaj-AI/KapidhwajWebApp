@@ -10,5 +10,7 @@ export interface HomeViewProps {
     handleAccessRemotely: (hub: Hub) => void;
     isRemotely: boolean;
     devices: number;
-    handleNearbyHubsAccess: (hub: ManageHub) => void
+    handleNearbyHubsAccess: (hub: ManageHub) => void;
+    setIsAddModal: (val: boolean) => void
+    setIsSiteAddModal: (val: boolean) => void
 }
