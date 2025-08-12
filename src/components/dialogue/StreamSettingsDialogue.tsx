@@ -30,7 +30,9 @@ export function StreamSettingsDialogue({
   handleAiStremToggle,
   handleMotionToggle,
   handleRecordingToggle,
-  loading
+  loading,
+  handleToggleStream,
+  isStream
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -45,7 +47,8 @@ export function StreamSettingsDialogue({
   handleAiStremToggle: (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
-
+  handleToggleStream:(isStream: boolean) =>  void;
+  isStream: boolean
 }) {
   const [settings, setSettings] = useState({
     recordings: recordings,
@@ -80,7 +83,19 @@ export function StreamSettingsDialogue({
       <Modal onClose={onClose} title={t('streams.options.settings')}>
 
         {loading ? <Spinner className="h-[70vh]" /> : <div className="space-y-3 ">
-          {/* Record All Videos */}
+          <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
+            <div className="flex gap-4 items-center">
+              <div className="p-2 bg-[#2B4C88] rounded-xl">
+                <IconVideo stroke={2} color="white" />
+              </div>
+              <span>{t('streams.title')}</span>
+            </div>
+            <Switch
+              enabled={isStream}
+              onChange={() => handleToggleStream(!isStream)}
+              trackColor="bg-white"
+            />
+          </div>
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">
               <div className="p-2 bg-[#2B4C88] rounded-xl">

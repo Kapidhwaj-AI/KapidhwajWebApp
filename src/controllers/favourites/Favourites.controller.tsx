@@ -17,8 +17,8 @@ const FavouritesController = () => {
     const [err, setErr] = useState('')
 
     const handleDelete = async (id: number) => {
-        const res = await protectApi(`/camera/fav?cameraId=${id}`, 'DELETE')
-        const res1 = await protectApi(`/camera/fav?cameraId=${id}`, 'DELETE', undefined, undefined, true )
+        const res = await protectApi(`/camera/fav/remove?cameraId=${id}`, 'POST', { cameraId: id })
+        const res1 = await protectApi(`/camera/fav/remove?cameraId=${id}`, 'POST', { cameraId: id }, undefined, true)
 
         if (res.status === 200) {
             setIsDelete(false)

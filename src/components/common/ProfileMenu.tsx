@@ -30,6 +30,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
         document.cookie = "locale=; path=/; max-age=0";
         toast.success(res.data.message ?? 'User Logout Successfully')
         removeLocalStorageItem('user')
+        removeLocalStorageItem('hub')
         removeLocalStorageItem('kapi-token')
         dispatch(clearAuthToken())
         router.replace("/login");

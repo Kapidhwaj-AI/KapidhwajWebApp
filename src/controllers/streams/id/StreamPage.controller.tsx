@@ -48,6 +48,15 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     });
     const [isEditLoading, setIsEditLoading] = useState(false)
     const [stream, setStream] = useState(false)
+    const {
+        intrusionDetected,
+        peopleDetected,
+        peopleCountDetected,
+        motionDetected,
+        licensePlateDetected,
+        fireSmokeDetected,
+        faceDetection
+    } = useSelector((state: RootState) => state.singleCameraSetting);
     const { data: organizations } = useOrganizations();
     const fetchCamera = async (id: string) => {
         const res = await protectApi<Camera, undefined>(`/camera?cameraId=${id}`)
@@ -71,7 +80,6 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         return res.data.data
     }
 
-
     useEffect(() => {
         setLoading(true);
         Promise.allSettled([
@@ -85,7 +93,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                 const newFormData: Partial<StreamFormData> = {};
                 if (camRes.status === "fulfilled") {
                     setCamera(camRes.value);
-                    setStream(camRes.value.is_ai_stream_active !== 0);
+                    setStream(camRes.value.webrtc_url !== null && camRes.value?.rtsp_url !== null);
                     newFormData.name = camRes.value.name ?? '';
                     newFormData.people_threshold_count = camRes.value.people_threshold_count ?? 0;
                     newFormData.organizationId = camRes.value.organization_id ?? '';
@@ -123,14 +131,28 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     }, [alerts, selectedTab]);
 
     const toggleStreamFav = async () => {
-        const res = await protectApi<unknown, { cameraId: string }>(`/camera/fav?cameraId=${id}`, makeFav ? 'DELETE' : 'POST', { cameraId: id })
+        const url = !makeFav ? `/camera/fav/add?cameraId=${id}` : `/camera/fav/remove?cameraId=${id}`
+        const res = await protectApi<unknown, { cameraId: string }>(url, 'POST', { cameraId: id })
         if (res.status === 200) {
             toast.success(`Stream ${makeFav ? 'Deleted from ' : 'Added in'} Favourites`)
             setMakeFav((prev) => !prev)
         }
     };
-
-    const handleAiToggle = async (key: 'fire_smoke_detection'| 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean,) => {
+    useEffect(() => {
+        const alertFetch = async () => {
+            const res = await fetchAlerts(alertOffset)
+            setAlerts(res)
+        }
+        alertFetch()
+    }, [intrusionDetected,
+        peopleDetected,
+        peopleCountDetected,
+        motionDetected,
+        licensePlateDetected,
+        fireSmokeDetected,
+        faceDetection,
+        alertOffset])
+    const handleAiToggle = async (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean,) => {
         setIsMlService(true)
         try {
             const endpoint = toggleValue ? `/camera/stream/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`

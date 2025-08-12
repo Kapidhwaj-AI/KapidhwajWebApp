@@ -4,7 +4,7 @@ import { InputField } from '../ui/Input.field';
 import { useTranslations } from 'next-intl';
 import Spinner from '../ui/Spinner';
 
-export function ChangePasswordDialogue({ isOpen, onClose, handleOtpSend, isLoading, err, newPassword, setNewPassword, setConfirmPassword, confirmPassword, setShowPassword, showPassword }: { isOpen: boolean; onClose: () => void; handleOtpSend: () => void; isLoading: boolean; err: string; newPassword: string; setNewPassword: (val: string) => void; confirmPassword: string; setConfirmPassword: (val: string) => void; showPassword: boolean; setShowPassword: (val: boolean) => void }) {
+export function ChangePasswordDialogue({ isOpen, onClose, showConfirm, setShowConfirm, handleOtpSend, isLoading, err, newPassword, setNewPassword, setConfirmPassword, confirmPassword, setShowPassword, showPassword }: { isOpen: boolean; onClose: () => void; handleOtpSend: () => void; isLoading: boolean; err: string; newPassword: string; setNewPassword: (val: string) => void; confirmPassword: string; setConfirmPassword: (val: string) => void; showPassword: boolean; setShowPassword: (val: boolean) => void; showConfirm: boolean; setShowConfirm: (val: boolean) => void }) {
     const t = useTranslations()
 
     if (!isOpen) return null;
@@ -28,8 +28,8 @@ export function ChangePasswordDialogue({ isOpen, onClose, handleOtpSend, isLoadi
                     value={confirmPassword}
                     setValue={setConfirmPassword}
                     isPasswordField
-                    showPassword={showPassword}
-                    setShowPassword={setShowPassword}
+                    showPassword={showConfirm}
+                    setShowPassword={setShowConfirm}
                     label={t('settings.confirm_password')}
                     placeholder='Enter Confirm Password here...'
                 />

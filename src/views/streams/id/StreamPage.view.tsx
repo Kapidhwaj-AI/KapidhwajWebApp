@@ -24,11 +24,11 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, lo
     return (
         <div className="h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4 pt-2 md:pt-3">
             {!isFullscreen && <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-                {cameraLocation && <h1 className="sm:text-md flex gap-1 items-center md:text-lg lg:text-xl xl:text-2xl font-light ml-2 md:ml-5 whitespace-nowrap">
+                {cameraLocation && <h1 className="sm:text-md flex gap-1 items-center justify-between md:text-lg lg:text-xl xl:text-2xl font-light ml-2 md:ml-5 whitespace-nowrap">
                     {cameraLocation?.organization} <IconChevronRight className=" text-gray-400" /> {cameraLocation?.parantFolder === "NA" ? '' : <div className=' flex gap-2 items-center'>{cameraLocation?.parantFolder} <IconChevronRight className=" text-gray-400" /></div>}   {camera?.name}
                 </h1>}
 
-                <div className="flex items-center flex-wrap gap-2 w-full md:w-auto justify-end">
+                <div className="flex items-center flex-wrap gap-2  self-end">
                     <button className={filterButtonClassname} onClick={toggleStreamFav}>
                         <IconHeart
                             stroke={makeFav ? 0 : 1}
@@ -124,12 +124,12 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, lo
                 folders={organizations?.find((item) => item.id === formData.organizationId)?.folders.map((folder) => ({ key: folder.id.toString(), value: folder.name }))}
                 organizations={organizations?.map((item) => ({ key: item.id, value: item.name }))}
                 subfolders={organizations?.find((item) => item.id === formData.organizationId)?.folders.find((item) => item.id === formData.folderId)?.child_folders.map((folder) => ({ key: folder.id.toString(), value: folder.name }))}
-                isStream={stream}
-                handleToggleStream={handleToggleStream}
                 handleSave={handleSave}
             />}
 
             {settingDial && <StreamSettingsDialogue
+                isStream={stream}
+                handleToggleStream={handleToggleStream}
                 loading={isAiServiceLoading}
                 fireSmoke={camera ? camera?.is_fire_smoke_detection_active > 0 : false}
                 isOpen={settingDial}

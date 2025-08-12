@@ -1,14 +1,20 @@
 import { authReducer } from "./slices/authSlice";
 import { cameraReducer } from "./slices/cameraSlice";
+import { settingsReducer } from "./slices/settingsSlice";
 import { userReducer } from "./slices/userSlice";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 // Use web-compatible storage
 import { ThunkAction, Action } from "@reduxjs/toolkit";
+import { singleCameraSettingReducer } from "./slices/singleCameraSettingSlice";
+import { singelCameraReducer } from "./slices/singleCameraSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
   camera: cameraReducer,
+  settings: settingsReducer,
+  singleCameraSetting: singleCameraSettingReducer,
+  singleCamera: singelCameraReducer
 });
 
 export const store = configureStore({

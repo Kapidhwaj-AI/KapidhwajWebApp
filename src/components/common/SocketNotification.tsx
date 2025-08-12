@@ -1,0 +1,97 @@
+'use client'
+import { getLocalStorageItem } from '@/lib/storage';
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux';
+import { io } from 'socket.io-client';
+import { apiSocketUrl } from '../../services/config'
+import { setNotificationCount } from '@/redux/slices/userSlice';
+import { setPeopleCount } from '@/redux/slices/singleCameraSlice';
+import { toast } from 'react-toastify';
+import { toggleFaceDetection, toggleFireSmokeDetection, toggleIntrusionDetection, toggleLicensePlateDetection, toggleMotionDetection, togglePeopleCountDetected, togglePeopleDetection } from '@/redux/slices/singleCameraSettingSlice';
+const SocketNotification = () => {
+    const dispatch = useDispatch();
+    const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
+    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+    useEffect(() => {
+        if (token) {
+            const socket = io(isValidHub && !hub.isRemotely ? `wss://${hub.id}.local:8084` : apiSocketUrl, {
+                auth: {
+                    token,
+                },
+                transports: ['websocket','polling'],
+                reconnection: true,
+                reconnectionAttempts: 5,
+                reconnectionDelay: 4000,
+                secure: true,
+                rejectUnauthorized: false, 
+            });
+
+            socket.on('connect', () => {
+                console.log('Connected to server with ID');
+            });
+
+            socket.on('connect_error', err => {
+                console.error('Connection error:', JSON.stringify(err));
+                if (socket.io.engine?.transport?.name === 'polling') {
+                    socket.io.engine.transport.close();
+                }
+            });
+
+            socket.on('error', err => {
+                console.error('Socket error:', err);
+            });
+
+            socket.on('unseen_count', (data: any) => {
+                dispatch(setNotificationCount(data.unSeenCount));
+            });
+
+            socket.on('people_count', (data: any) => {
+                console.log(data, "people live count")
+                dispatch(setPeopleCount(data));
+            });
+
+            socket.on('notification', (notification: any) => {
+                const type = notification.type;
+                toast.info(notification);
+                if (type === 'intrusion_detected') {
+                    dispatch(toggleIntrusionDetection());
+                } else if (type === 'face_detected') {
+                    dispatch(toggleFaceDetection());
+                } else if (type === 'face_detected') {
+                    dispatch(togglePeopleDetection());
+                } else if (type === 'people_count') {
+                    dispatch(togglePeopleCountDetected());
+                } else if (type === 'license_plate_detected') {
+                    dispatch(toggleLicensePlateDetection());
+                } else if (type === 'motion_detected') {
+                    dispatch(toggleMotionDetection());
+                } else if (type === 'fire_smoke_detected') {
+                    dispatch(toggleFireSmokeDetection());
+                }
+            });
+
+            socket.on('disconnect', reason => {
+                console.log('Disconnected from server. Reason:', reason);
+                if (reason === 'io server disconnect') {
+                    socket.connect();
+                }
+            });
+
+            return () => {
+                socket.off('connect');
+                socket.off('connect_error');
+                socket.off('error');
+                socket.off('unseen_count');
+                socket.off('people_count')
+                socket.off('notification');
+                socket.off('disconnect');
+                socket.disconnect();
+            };
+        }
+        return () => { }; // Add empty cleanup function for when token is not present
+    }, [token]); // Add token as dependency to reconnect if it changes
+    return null;
+}
+
+export default SocketNotification

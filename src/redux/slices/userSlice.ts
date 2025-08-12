@@ -4,6 +4,7 @@ interface UserState {
   email: string;
   username: string;
   phone: string;
+  notificationCount: number;
 }
 
 // Initial state for the user slice
@@ -11,6 +12,7 @@ const initialState: UserState = {
   email: "",
   username: "",
   phone: "",
+  notificationCount: 0,
 };
 
 // Create the slice
@@ -27,10 +29,12 @@ const userSlice = createSlice({
     setUserPhone: (state, action: PayloadAction<string>) => {
       state.phone = action.payload;
     },
+    setNotificationCount: (state, action: PayloadAction<number>) => {
+      state.notificationCount = action.payload;
+    },
   },
 });
 
-// Export the updateUser action and reducer
-export const { setUserEmail, setUserUsername, setUserPhone } =
+export const { setUserEmail, setUserUsername, setUserPhone, setNotificationCount} =
   userSlice.actions;
 export const userReducer = userSlice.reducer;

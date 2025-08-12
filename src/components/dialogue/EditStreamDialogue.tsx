@@ -22,31 +22,16 @@ interface EditStreamDialogueProps {
     folders: KeyValue[] | undefined;
     subfolders: KeyValue[] | undefined;
     isEditLoading?: boolean
-    isStream: boolean;
-    handleToggleStream: (val: boolean) => void;
     handleSave: (formData: StreamFormData) => void;
     isLoading: boolean
 }
 
-const EditStreamDialogue = ({ onClose, isEditLoading, isLoading, isStream, formData, setFormData, handleToggleStream, handleSave, organizations, folders, subfolders }: EditStreamDialogueProps) => {
+const EditStreamDialogue = ({ onClose, isEditLoading, isLoading,  formData, setFormData,  handleSave, organizations, folders, subfolders }: EditStreamDialogueProps) => {
     const t = useTranslations()
     return (
         <Modal onClose={onClose} title={t('edit_streams_camera')}>
             {isEditLoading ? <Spinner /> :
                 <form onSubmit={(e) => { e.preventDefault(); handleSave(formData) }} className="flex overflow-y-auto flex-col gap-3 p-1 scrollbar-hide">
-                    <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
-                        <div className="flex gap-4 items-center">
-                            <div className="p-2 bg-[#2B4C88] rounded-xl">
-                                <IconVideo stroke={2} color="white" />
-                            </div>
-                            <span>{t('streams.title')}</span>
-                        </div>
-                        <Switch
-                            enabled={isStream}
-                            onChange={() => handleToggleStream(!isStream)}
-                            trackColor="bg-white"
-                        />
-                    </div>
                     <InputField value={formData.name} setValue={(e) => setFormData({ ...formData, name: e })} label={t('settings.camera_name')} placeholder={t('settings.enter_camera_name')} />
 
                     <InputField value={formData.people_threshold_count ?? NaN} type='number' setValue={(e) => setFormData({ ...formData, people_threshold_count: Number(e) })} label={t('settings.people_threshold_count')} placeholder={t('settings.enter_people_threshold_count')} />

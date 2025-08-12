@@ -20,14 +20,14 @@ const Modal: React.FC<ModalProps> = ({ onClose, children, title, className, isCa
                         <h2 className="text-[20px] md:text-[24px] font-extralight dark:text-white">{title}</h2>
                         <button
                             onClick={onClose}
-
+                            className='rounded-full p-1 hover:bg-gray-50'
                         >
                             <X className='text-red-500' />
                         </button>
                     </div>
                         : !isCancel && <button
                             onClick={onClose}
-                            className="  text-gray-500 self-end hover:text-gray-800"
+                            className="  text-red-500 self-end rounded-full p-1 hover:bg-gray-50 "
                         >
                             <X />
                         </button>
