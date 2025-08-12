@@ -19,12 +19,12 @@ const SocketNotification = () => {
                 auth: {
                     token,
                 },
-                transports: ['websocket','polling'],
+                transports: ['websocket', 'polling'],
                 reconnection: true,
                 reconnectionAttempts: 5,
                 reconnectionDelay: 4000,
                 secure: true,
-                rejectUnauthorized: false, 
+                rejectUnauthorized: false,
             });
 
             socket.on('connect', () => {
@@ -42,18 +42,21 @@ const SocketNotification = () => {
                 console.error('Socket error:', err);
             });
 
-            socket.on('unseen_count', (data: any) => {
+            socket.on('unseen_count', (data: { unSeenCount: number }) => {
                 dispatch(setNotificationCount(data.unSeenCount));
             });
 
-            socket.on('people_count', (data: any) => {
+            socket.on('people_count', (data: {
+                camera_id: string;
+                people_count: number;
+            }) => {
                 console.log(data, "people live count")
                 dispatch(setPeopleCount(data));
             });
 
-            socket.on('notification', (notification: any) => {
+            socket.on('notification', (notification: {type: string, message:string}) => {
                 const type = notification.type;
-                toast.info(notification);
+                toast.info(notification.message);
                 if (type === 'intrusion_detected') {
                     dispatch(toggleIntrusionDetection());
                 } else if (type === 'face_detected') {

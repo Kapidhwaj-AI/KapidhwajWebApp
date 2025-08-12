@@ -225,8 +225,6 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                     folders={organizations?.find((item) => item.id === formData.organizationId)?.folders.map((folder) => ({ key: folder.id.toString(), value: folder.name }))}
                     organizations={organizations?.map((item) => ({ key: item.id, value: item.name }))}
                     subfolders={organizations?.find((item) => item.id === formData.organizationId)?.folders.find((item) => item.id === formData.folderId)?.child_folders.map((folder) => ({ key: folder.id.toString(), value: folder.name }))}
-                    isStream={cameraToggle}
-                    handleToggleStream={handleSwitchToggle}
                     onClose={() => setIsEditCameraOpen(false)}
                     formData={formData}
                     handleSave={handleSave}
