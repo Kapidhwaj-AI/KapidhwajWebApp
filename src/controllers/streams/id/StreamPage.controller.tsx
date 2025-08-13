@@ -150,20 +150,17 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         motionDetected,
         licensePlateDetected,
         fireSmokeDetected,
-        faceDetection,
-        alertOffset])
+        faceDetection,])
     const handleAiToggle = async (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean,) => {
         setIsMlService(true)
         try {
             const endpoint = toggleValue ? `/camera/stream/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
                 : `/camera/stream/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`;
-
             const res = await protectApi<unknown, { cameraId: string, serviceType: typeof key }>(endpoint, 'POST', { cameraId: camera?.camera_id.toString() ?? '', serviceType: key })
             if (res.status === 200) {
                 toast.success(`Camera stream ${key} ${toggleValue ? 'started ' : 'stoped'} successfully`)
                 const cameraRes = await fetchCamera(id)
                 setCamera(cameraRes)
-
             }
             return res
         } catch (error) {
@@ -172,9 +169,6 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         } finally {
             setIsMlService(false)
         }
-
-
-
     }
     const handleMotionToggle = async (toggleValue: boolean) => {
         setIsMlService(true)

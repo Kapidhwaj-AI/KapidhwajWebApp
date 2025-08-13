@@ -42,23 +42,11 @@ const ChangePasswordController = () => {
             setLoading(false)
         }
     }
-    const handleChangePassword = async () => {
-        try {
-            const res = await protectApi<AxiosResponse, { email: string, newPassword: string }>('/user/changePassword', 'POST', { email: user.email, newPassword }, undefined, true)
-            if (res.status === 200) {
-                setIsOtpSend(false)
-                dispatch(setIsChangePasswordOpen(false))
-            }
-
-
-        } catch (error) {
-            console.error("err:", error)
-        }
-    }
+ 
     return (
         <>
             <ChangePasswordDialogue showConfirm={showConfirm} setShowConfirm={setShowConfirm} showPassword={showPassword} setShowPassword={setShowPassword} newPassword={newPassword} confirmPassword={confirmPassword} setNewPassword={setNewPassword} setConfirmPassword={setConfirmPassword} isLoading={loading} err={passwordErr} handleOtpSend={handleOtpSend} isOpen={showChangePasswordDial} onClose={() => dispatch(setIsChangePasswordOpen(false))} />
-            {isOtpSend && <OtpFormController handleChangePassword={handleChangePassword} value={user.email} isProtected={true} setIsOpen={setIsOtpSend} backKey='email' verify='/verifyOTP' resend='/sendOTP' />}
+            {isOtpSend && <OtpFormController password={newPassword} value={user.email} isProtected={true} setIsOpen={setIsOtpSend} backKey='email' verify='/changePassword' resend='/sendOTP' />}
         </>
 
     )

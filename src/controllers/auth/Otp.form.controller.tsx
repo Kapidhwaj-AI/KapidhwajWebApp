@@ -2,7 +2,7 @@
 
 import Modal from "@/components/ui/Modal";
 import { OtpForm } from "@/components/common/Otp.form";
-import {  removeLocalStorageItem, setLocalStorageItem } from "@/lib/storage";
+import { removeLocalStorageItem, setLocalStorageItem } from "@/lib/storage";
 import { setAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { protectApi } from "@/lib/protectApi";
 import { toast } from "react-toastify";
 
-export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, isForgot, password, showPassword, setShowPassword, setPassword, isProtected, handleChangePassword }: { value: string, backKey: string, verify: string, resend: string; setIsOpen: (value: boolean) => void; isForgot?: boolean, password?: string, setPassword?: (value: string) => void; showPassword?: boolean; setShowPassword?: (val: boolean) => void; isProtected?: boolean; handleChangePassword?: () => void }) => {
+export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, isForgot, password, showPassword, setShowPassword, setPassword, isProtected, }: { value: string, backKey: string, verify: string, resend: string; setIsOpen: (value: boolean) => void; isForgot?: boolean, password?: string, setPassword?: (value: string) => void; showPassword?: boolean; setShowPassword?: (val: boolean) => void; isProtected?: boolean; }) => {
   const router = useRouter();
 
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -93,13 +93,13 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
     setError('')
     try {
       const enteredOTP = otp.join("");
-      const payload = { [backKey]: value, otp: enteredOTP }
-      if (isForgot && password) {
-        payload.newPassword = password
+      const payload = { [backKey]: value, otp: Number(enteredOTP) }
+      if ((isForgot || isProtected) && password) {
+        payload.newPassword = password 
       }
       let res;
       if (isProtected) {
-        res = await protectApi(verify, 'POST', payload)
+        res = await protectApi(verify, 'POST', payload, undefined, true)
       }
       else {
         res = await axios({
@@ -117,19 +117,14 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
         dispatch(setAuthToken(res.data.token));
         toast.success("User created successfully")
         router.push('/home')
-        
+
 
 
       }
       if (res.status === 200) {
-        if (isForgot) {
+        if (isForgot || isProtected) {
           toast.success("Password changed successfully")
           router.push('/login')
-        }
-        else if (isProtected && handleChangePassword) {
-          toast.success("Password changed successfully")
-          await handleChangePassword()
-
         }
       }
     } catch (error) {
