@@ -5,9 +5,9 @@ out
 dist
 
 # Big/local content
-messages
+
 public/uploads
-scripts/dev-only
+
 
 # VCS / tooling
 .git
