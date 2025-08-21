@@ -20,7 +20,7 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
   return (
     <div
       className={cn( isFullscreen?"absolute top-0 left-0 right-0 w-full h-full overflow-hidden":
-        "h-48 sm:h-64 md:min-h-70 md:max-h-70 lg:min-h-80 lg:max-h-80 2xl:min-h-110 2xl:max-h-110 bg-white dark:bg-gray-800 rounded-xl md:rounded-3xl lg:rounded-4xl",
+        "h-full bg-white dark:bg-gray-800 rounded-xl md:rounded-3xl lg:rounded-4xl",
         "overflow-hidden flex items-center justify-center relative ring-background"
       )}
     >
@@ -28,7 +28,7 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
         src={camera?.webrtc_url}
         allowFullScreen
         
-        style={{width:'100%', maxWidth:'1500px', height:'100%'}}
+        style={{width:'100%', height:'100%'}}
       >
         Your browser does not support the video tag.
       </iframe>

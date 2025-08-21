@@ -12,7 +12,7 @@ export const HomeProfileCard = ({
 }) => {
   const t = useTranslations()
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center md:gap-3 gap-1">
       
       <div className="h-18 w-18 rounded-full bg-[var(--surface-100)] text-[#888888] overflow-hidden">
         <Image
@@ -23,10 +23,10 @@ export const HomeProfileCard = ({
           className="rounded-full object-cover"
         />
       </div>
-      <div className="flex items-center bg-[#2B4C88] rounded-full py-2 px-4 h-18 w-80">
+      <div className="flex items-center bg-[#2B4C88] rounded-full py-2 px-4 h-18 md:w-60 w-auto">
         <div className="flex flex-col gap-1 ml-3">
           <h1
-            className="text-md font-bold text-white leading-[100%]"
+            className="md:text-md text-sm font-bold text-white leading-[100%]"
             style={{ fontWeight: 700 }}
           >
             {t('home.greetings')} {name ?? 'Your Name'}

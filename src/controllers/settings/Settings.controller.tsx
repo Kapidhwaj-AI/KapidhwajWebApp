@@ -1,6 +1,6 @@
 'use client'
 import SettingsView from '@/views/settings/Settings.view';
-import { IconDevices, IconFriends, IconLanguage, IconLifebuoy, IconLockAccess, IconLockSquareRounded, IconMapPin, IconUser } from '@tabler/icons-react';
+import { IconDevices, IconFriends, IconLanguage, IconLifebuoy, IconLockAccess, IconLockSquareRounded, IconMapPin, IconNetwork, IconUser } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react'
 
@@ -9,7 +9,7 @@ const SettingsController = () => {
     const [showSelectLanguageDial, setShowSelectLanguageDial] = useState(false);
     const [showHelpDial, setShowHelpDial] = useState(false);
     const t = useTranslations()
-  
+
     const settingsItems = [
         // {
         //   id: 0,
@@ -64,6 +64,12 @@ const SettingsController = () => {
             title: t("settings.manage_access"),
             icon: <IconLockAccess size={40} />,
             path: "/settings/manage-access"
+        },
+        {
+            id: 9,
+            title: t("settings.network_configuration"),
+            icon: <IconNetwork size={40} />,
+            path: "/settings/network-configuration"
         }
     ];
     return (

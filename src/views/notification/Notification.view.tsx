@@ -6,13 +6,13 @@ import InfiniteScrolling from '@/components/ui/InfiniteScrolling'
 import Spinner from '@/components/ui/Spinner'
 import { useTranslations } from 'next-intl'
 
-const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setSearchQuery, isLoading, setIsLoading, allNotifications, filteredNotifications, error, setAllNotifications,  divRef, fetchNotification, hasMore, setHasMore, offset, setOffset }) => {
+const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setSearchQuery, isLoading, setIsLoading, allNotifications, filteredNotifications, error, setAllNotifications,  divRef, fetchNotification, hasMore, setHasMore, offset, setOffset, handleReadAll }) => {
     const t = useTranslations()
     return (
-        <div className="h-full flex flex-col gap-4 min-h-0 p-5">
-            <div className="flex justify-between items-center">
+        <div className="h-full flex flex-col gap-4 min-h-0 md:p-5">
+            <div className="flex md:flex-row flex-col justify-between md:gap-0 gap-2 md:items-center">
                 <h1 className="text-2xl font-bold">{t('notifications.title')}</h1>
-                <div className="flex justify-between items-center gap-4">
+                <div className="flex justify-end items-center gap-4">
                     <SearchBar
                         search={searchQuery}
                         setSearch={(e) => setSearchQuery(e.target.value)}
@@ -21,6 +21,7 @@ const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setSea
 
                 </div>
             </div>
+            <button className='self-end bg-[#2B4C88] p-2 text-white rounded-4xl' onClick={handleReadAll}>Read All</button>
             {isLoading ? <Spinner /> : <div className="flex-1 overflow-y-auto scrollbar-hide mt-5">
 
                 {error ? (

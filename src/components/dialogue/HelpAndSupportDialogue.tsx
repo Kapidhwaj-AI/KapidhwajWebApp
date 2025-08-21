@@ -21,9 +21,9 @@ export function HelpAndSupportDialogue({ isOpen, onClose }: { isOpen: boolean; o
                             </div>
                             <a
                                 href="tel:+919381738936"
-                                className="text-4xl hover:underline"
+                                className="md:text-4xl text-xl hover:underline"
                             >
-                                +91 9381738936
+                                +91 93817 38936
 
                             </a>
                         </div>
@@ -34,7 +34,7 @@ export function HelpAndSupportDialogue({ isOpen, onClose }: { isOpen: boolean; o
                             </div>
                             <a
                                 href="mailto:queries@kapidhwaj.ai"
-                                className="text-4xl hover:underline"
+                                className="md:text-4xl text-xl hover:underline"
                             >
                                 queries@kapidhwaj.ai
                             </a>

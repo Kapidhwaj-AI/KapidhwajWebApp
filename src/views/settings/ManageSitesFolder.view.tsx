@@ -10,7 +10,7 @@ const ManageSitesFolderView: React.FC<ManageSitesFoldersProp> = ({ sites, setIsE
     const t = useTranslations()
     return (
         <div className='grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-7 px-2 md:px-4 pb-3 h-full w-full'>
-            <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl flex flex-col  md:p-6 p-3 h-full max-h-[84vh]'>
+            <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl flex flex-col  md:p-6 p-3 overflow-auto h-full max-h-[35vh] md:max-h-[84vh]'>
                 <div className="flex items-center gap-2">
                     <IconSitemap size={24} className="text-[var(--text-color)]" />
                     <h2 className="text-sm font-bold">{t('settings.sites')}</h2>
@@ -26,7 +26,7 @@ const ManageSitesFolderView: React.FC<ManageSitesFoldersProp> = ({ sites, setIsE
                 <button onClick={() => { setIsOpen(true); setIsOrg(true); setIsFolder(false) }} className='bg-[#2B4C88] rounded-2xl px-5 py-1 self-end text-white'>{t('settings.add')}</button>
 
             </div>
-            <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl flex flex-col  md:p-6 p-3 overflow-y-auto h-full max-h-[84vh]'>
+            <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl flex flex-col  md:p-6 p-3 overflow-y-auto h-full max-h-[35vh] md:max-h-[84vh]'>
                 <div className="flex items-center gap-2">
                     <IconFolders size={24} className="text-[var(--text-color)]" />
                     <h2 className="text-sm font-bold">{t('settings.folders')}</h2>
@@ -40,7 +40,7 @@ const ManageSitesFolderView: React.FC<ManageSitesFoldersProp> = ({ sites, setIsE
                 <button disabled={!orgId} onClick={() => { if (orgId) { setIsOpen(true); setIsOrg(false); setIsFolder(true) } }} className='bg-[#2B4C88] rounded-2xl px-5 py-1 text-white self-end'>{t('settings.add')}</button>
 
             </div>
-            <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl flex flex-col  md:p-6 p-3 overflow-y-auto h-full max-h-[84vh]'>
+            <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl flex flex-col  md:p-6 p-3 overflow-y-auto h-full max-h-[35vh] md:max-h-[84vh]'>
                 <div className="flex items-center gap-2">
                     <IconFolder size={24} className="text-[var(--text-color)]" />
                     <h2 className="text-sm font-bold">{t('settings.subfolders')}</h2>

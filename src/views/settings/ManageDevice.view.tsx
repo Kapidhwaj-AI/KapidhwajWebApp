@@ -14,7 +14,7 @@ const ManageDeviceView: React.FC<ManageDeviceViewProp> = ({ setIsOpen, sites, se
   const t = useTranslations()
   return (
     <div className="h-full flex flex-col min-h-0">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 px-2 md:px-4 pt-2 md:pt-3 pb-7">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 px-2 md:px-4 pt-2 md:pt-3 pb-4">
 
         <h1 className="sm:text-md md:text-lg lg:text-xl xl:text-2xl font-bold ml-2 md:ml-5 whitespace-nowrap">
           {t('settings.manage_devices')}
@@ -36,22 +36,22 @@ const ManageDeviceView: React.FC<ManageDeviceViewProp> = ({ setIsOpen, sites, se
       </div>
 
       {/* Main Content - Fills Remaining Height */}
-      <div className="flex-1 flex flex-col lg:flex-row gap-3 md:gap-7 min-h-0 px-2 md:px-4 pb-3">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-7 h-full px-2 md:px-4 pb-3">
         {/* Left Column */}
-        <div className="flex-[3] flex flex-col gap-3 md:gap-5 min-h-0">
+        <div className="flex md:col-span-2 flex-col gap-3 md:gap-5 h-full">
           {/* Nearby Hubs Component - Exactly 50% height */}
-          <div className="flex-1 min-h-0">
+          <div className=" h-full  min-h-0">
             <NearbyHubs handleNearbyAdd={handleCopyIp} nearbyHubs={nearbyHubs} isHubLoading={isHubLoading} fetchHub={fetchHub} className="h-full" />
           </div>
 
           {/* Saved Hubs Component - Exactly 50% height */}
-          <div className="flex-1 min-h-0">
+          <div className="h-full min-h-0">
             <SavedHubs setIsOpen={setIsOpen} isDelete={isHubDelete} setIsDelete={setIsHubDelete} handleDeleteHub={handleDeleteHub} fetchSavedHubs={fetchSavedHubs} isSavedHubLoading={isSavedHubLoading} savedHubs={savedHubs} className="h-full" onHubSelect={setSelectedHub} />
           </div>
         </div>
 
         {/* Right Column */}
-        <div className="flex-[4] flex flex-col min-h-0">
+        <div className="md:col-span-3 flex flex-col min-h-0">
           <div className="h-full bg-[var(--surface-100)] rounded-2xl md:rounded-4xl">
             {selectedHub ? (
               <SavedCameras camLoading={isSavedHubLoading} fetchSavedHubs={fetchSavedHubs} sites={sites} selectedSite={selectedSite} setSelectedSite={setSelectedSite} handleDelet={handleDelete} isDelete={isDelete} toggleStream={toggleStream} hub={selectedHub} setIsDelete={setIsDelete} />

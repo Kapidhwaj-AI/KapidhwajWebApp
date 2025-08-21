@@ -40,7 +40,7 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ isAddCategoryModalOpen,
                 </div>}
             </div>
             {isLoading ? <Spinner /> : selectedId.length === 0 ? <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-                <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl flex flex-col gap-3  md:p-6 p-3 h-[79vh] max-h-[79vh]'>
+                <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl flex flex-col gap-3  md:p-6 p-3 md:h-[79vh] h-[37vh] max-h-[37vh]  md:max-h-[79vh]'>
                     <h2 className="text-lg font-bold">{t('managePeople.my_sites')}</h2>
                     {
                         mySites.length === 0 ? <div className='text-center h-full flex items-center justify-center'>{t('managePeople.no_sites_found')}</div> :
@@ -54,7 +54,7 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ isAddCategoryModalOpen,
                             ))
                     }
                 </div>
-                <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl gap-3 flex flex-col md:p-6 p-3 h-[79vh] max-h-[79vh]'>
+                <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl gap-3 flex flex-col md:p-6 p-3 md:h-[79vh] h-[37vh] max-h-[37vh]  md:max-h-[79vh]'>
                     <h2 className="text-lg font-bold">{t('managePeople.shared_with_me')}</h2>
                     {
                         sharedWithMe.length === 0 ? <div className='text-center h-full flex items-center justify-center'>{t('managePeople.no_sites_found')}</div> :

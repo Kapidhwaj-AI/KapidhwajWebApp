@@ -52,7 +52,8 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
 
   return (
     <div
-      className="absolute bottom-24 left-1/2 -translate-x-1/2 lg:left-[72px] lg:translate-x-0 w-48 bg-white dark:bg-gray-800 rounded-2xl shadow-lg py-2 z-50"
+      className="absolute bottom-21 mt-2 left-1/2 -translate-x-1/2 
+             w-48 bg-white dark:bg-gray-800 rounded-2xl shadow-lg py-2 z-50"
       onMouseLeave={onClose}
     >
       <div className="px-3 py-2">

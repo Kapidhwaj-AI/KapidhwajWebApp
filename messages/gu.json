@@ -172,7 +172,8 @@
         "people_threshold_count": "લોકોની થ્રેશોલ્ડ સંખ્યા",
         "enter_people_threshold_count": "લોકોની થ્રેશોલ્ડ સંખ્યા દાખલ કરો",
         "access": "ઍક્સેસ",
-        "select_access": "ઍક્સેસ પસંદ કરો"
+        "select_access": "ઍક્સેસ પસંદ કરો",
+        "network_configuration": "જાલ વિધાન"
     },
     "manage_devices": "ડિવાઇસ મેનેજ કરો",
     "manage_user": "વપરાશકર્તા મેનેજ કરો",

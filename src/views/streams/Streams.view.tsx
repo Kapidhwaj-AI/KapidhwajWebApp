@@ -11,10 +11,10 @@ import React from 'react'
 const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFolder, setSearchQuery, setSelectedChildFolder, selectedData, selectedFolder, visibleCameras, cameraCount, selectedOrganization, isLoading, organizations, handleFolderSelect, handleOrganizationSelect, toogleColumnValue,}) => {
     const t = useTranslations()
   return (
-      <div className="flex flex-col  gap-4 p-4">
-          <div className="flex justify-between items-center">
+      <div className="flex flex-col  scrollbar-hide gap-4 p-4">
+          <div className="flex flex-wrap justify-between items-center">
               <h1 className="text-2xl font-bold">{t('streams.title')}</h1>
-              <div className="flex gap-2">
+              <div className="flex md:flex-row flex-col gap-2">
                   <CameraDetailsViewToggleButton />
                   <ColumnDropdown />
                   <SearchBar
@@ -25,7 +25,7 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
               </div>
           </div>
           <div className="">
-              <div className="flex gap-2 items-center">
+              <div className="flex flex-wrap gap-2 items-center">
                   <p className="text-gray-400">{t('settings.sites')}:</p>
                   <OrganizationFilterButtons
                       isLoading={isLoading}
@@ -35,7 +35,7 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
                   />
               </div>
               {selectedOrganization && selectedOrganization?.folders?.length > 0 && (
-                  <div className="flex gap-2 items-center">
+                  <div className="flex flex-wrap gap-2 items-center">
                       <p className="text-gray-400">{t('settings.folders')}:</p>
                       <OrganizationFilterButtons
                           isLoading={isLoading}
@@ -46,7 +46,7 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
                   </div>
               )}
               {selectedFolder && selectedFolder && selectedFolder?.child_folders?.length > 0 && (
-                  <div className="flex gap-2 items-center">
+                  <div className="flex flex-wrap gap-2 items-center">
                       <p className="text-gray-400">{t('settings.subfolders')}:</p>
                       <OrganizationFilterButtons
                           isLoading={isLoading}
@@ -59,7 +59,7 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
           </div>
           <h4 className="text-xl dark:text-white"> {t('streams.showing_streams', { count: cameraCount })}</h4>
           {selectedData ? (
-              <div className={cn("grid grid-cols-1 gap-6 max-h-[51vh] h-auto overflow-y-auto scrollbar-hide p-2",
+              <div className={cn("grid grid-cols-1 gap-6 max-h-[51vh] h-full overflow-y-auto scrollbar-hide p-2",
                   {
                       "md:grid-cols-1": toogleColumnValue === 1,
                       "md:grid-cols-2": toogleColumnValue === 2,

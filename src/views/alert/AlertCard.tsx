@@ -22,9 +22,9 @@ export function AlertCard({ alert }: { alert: Alert }) {
 
     return (
         <div className="w-full bg-[var(--surface-200)] rounded-4xl shadow-lg overflow-hidden">
-            <div className="flex justify-between items-center px-4 pt-4">
-                <div className="flex items-center gap-3">
-                    <div className="h-14 w-14 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+            <div className="flex justify-between md:flex-row flex-col md:gap-0 gap-1 items-start md:items-center p-2 md:px-4 md:pt-4">
+                <div className="flex items-center gap-1 md:gap-3">
+                    <div className="p-2 md:p-4 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                         {[
                             { value: 'all', icon: <IconLayoutDashboard stroke={2} /> },
                             { value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={2} /> },
@@ -41,7 +41,7 @@ export function AlertCard({ alert }: { alert: Alert }) {
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-1 text-right text-xs mr-3">
+                <div className="flex flex-col gap-1 text-right text-xs self-end md:self-center ">
                     <div className="flex items-center gap-1">
                         <IconCalendar size={14} />
                         <span className="text-gray-500 dark:text-gray-400">{formattedDate}</span>

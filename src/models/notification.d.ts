@@ -8,28 +8,29 @@ export interface Notification {
     seen: boolean;
     seen_at: Date;
     user_id: string;
-    organization_id:string;
-    message:string;
-    meta_data: { camera_id : number}
+    organization_id: string;
+    message: string;
+    meta_data: { camera_id: number }
     createdAt?: Date;
     updatedAt?: Date;
-} 
+}
 
 export interface NotificationViewProps {
     searchQuery: string;
-    setSearchQuery:(val:string) => void;
+    setSearchQuery: (val: string) => void;
     isLoading: boolean;
-    setIsLoading:(val:boolean) => void;
+    setIsLoading: (val: boolean) => void;
     allNotifications: Notification[];
-    setAllNotifications:(val:Notification[]) => void;
+    setAllNotifications: (val: Notification[]) => void;
     error: Error | undefined;
     filteredNotifications: Notification[];
     isDateFiltered: boolean;
-    setIsDateFiltered:(val:boolean) => void;
+    setIsDateFiltered: (val: boolean) => void;
     divRef: React.RefObject<HTMLDivElement | null>
-    fetchNotification:(val:number) => Promise<Notification[]>
-    offset:number;
-    setOffset:(val:number) => void
+    fetchNotification: (val: number) => Promise<Notification[]>
+    offset: number;
+    setOffset: (val: number) => void
     hasMore: boolean;
-    setHasMore:(val:boolean) => void
+    setHasMore: (val: boolean) => void
+    handleReadAll: () => void
 }

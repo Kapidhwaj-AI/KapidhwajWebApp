@@ -10,10 +10,10 @@ const HomeView: React.FC<HomeViewProps> = ({ handleNearbyHubsAccess, setIsSiteAd
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col gap-4 min-h-0">
-            <div className="flex items-center justify-between px-4">
+            <div className="flex flex-col md:flex-row md:items-center gap-2  items-start justify-between md:px-4 ">
                 <HomeProfileCardController devices={devices} />
 
-                <div className="relative flex gap-3">
+                <div className="relative flex md:gap-3 self-end gap-1">
                     <button onClick={() => { setIsSiteAddModal(true) }} className='bg-[#2B4C88] rounded-full self-center p-2 px-3 text-white'>{t('settings.add_site')}</button>
                     <NotificationBadgeController />
                 </div>

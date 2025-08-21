@@ -155,7 +155,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     const t = useTranslations()
     return (
         <>
-            <div className={`flex flex-col h-full px-8  ${className}`}>
+            <div className={`flex flex-col h-full px-8 ${className}`}>
                 <div className="flex justify-between items-center pt-6 pb-5 flex-shrink-0">
                     <div>
                         <h2 className="text-sm font-bold">{hub.name}</h2>

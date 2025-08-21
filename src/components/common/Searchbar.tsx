@@ -3,7 +3,7 @@ import { IconSearch } from "@tabler/icons-react";
 
 const SearchBar = ({ search, setSearch, placeholder }: { search: string; setSearch: (e: React.ChangeEvent<HTMLInputElement>) => void; placeholder: string; }) => {
     return (
-        <div className="relative">
+        <div className="relative self-end">
             <Input name={`search ${placeholder}`}
                 type="text"
                 value={search}

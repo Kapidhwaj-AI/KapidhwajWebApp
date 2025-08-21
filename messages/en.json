@@ -153,7 +153,8 @@
         "camera_name": "Camera Name",
         "enter_camera_name": "Enter Camera Name",
         "people_threshold_count": "People Threshold Count",
-        "enter_people_threshold_count": "Enter People Threshold Count"
+        "enter_people_threshold_count": "Enter People Threshold Count",
+        "network_configuration":"Network Configuration"
     },
     "manage_user": "Manage User",
     "manage_devices": "Manage Devices",

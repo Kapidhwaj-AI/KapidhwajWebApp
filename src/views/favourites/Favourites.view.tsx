@@ -11,10 +11,10 @@ import React from 'react'
 const FavouritesView: React.FC<FavouriteViewProps> = ({search, setSearch, setIsDelete, isDelete, loading, err, filteredFavourites, toogleColumnValue, handleDelete}) => {
     const t = useTranslations()
   return (
-      <div className="h-full flex flex-col gap-4 min-h-0 p-5">
-          <div className="flex justify-between items-center">
+      <div className="h-full flex flex-col gap-4 min-h-0 md:p-5">
+          <div className="flex flex-wrap justify-between items-center">
               <h1 className="text-2xl font-bold">{t('favourites.title')}</h1>
-              <div className="flex justify-between items-center gap-4">
+              <div className="flex flex-wrap justify-between items-center gap-4">
                   <CameraDetailsViewToggleButton />
                   <ColumnDropdown />
                   <SearchBar search={search} setSearch={(e) => setSearch(e.target.value)} placeholder={t('favourites.search_placeholder')} />

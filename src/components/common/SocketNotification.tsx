@@ -9,6 +9,7 @@ import { setPeopleCount } from '@/redux/slices/singleCameraSlice';
 import { toast } from 'react-toastify';
 import { toggleFaceDetection, toggleFireSmokeDetection, toggleIntrusionDetection, toggleLicensePlateDetection, toggleMotionDetection, togglePeopleCountDetected, togglePeopleDetection } from '@/redux/slices/singleCameraSettingSlice';
 const SocketNotification = () => {
+    console.log("api", apiSocketUrl)
     const dispatch = useDispatch();
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
@@ -54,7 +55,7 @@ const SocketNotification = () => {
                 dispatch(setPeopleCount(data));
             });
 
-            socket.on('notification', (notification: {type: string, message:string}) => {
+            socket.on('notification', (notification: { type: string, message: string }) => {
                 const type = notification.type;
                 toast.info(notification.message);
                 if (type === 'intrusion_detected') {

@@ -19,7 +19,7 @@ export const NearbyHubs: React.FC<NearbyHubsProps> = ({ className = "", isHubLoa
     const t= useTranslations()
 
     return (
-        <div className={`flex flex-col bg-[var(--surface-100)] px-8 rounded-2xl md:rounded-4xl ${className}`}>
+        <div className={`flex flex-col bg-[var(--surface-100)] h-[36vh] max-h-[36vh] md:max-h-auto px-8 rounded-2xl md:rounded-4xl ${className}`}>
             {/* Header - Fixed height */}
             <div className="flex justify-between items-center pt-4 pb-2 flex-shrink-0">
                 <div className="flex items-center gap-2">

@@ -10,7 +10,7 @@ const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col min-h-0">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 px-2 md:px-4 pt-2 md:pt-3 pb-6">
+            <div className="flex flex-row justify-between items-start md:items-center gap-3 px-2 md:px-4 pt-2 md:pt-3 pb-4">
                 <h1 className="sm:text-md md:text-lg lg:text-xl xl:text-2xl font-medium ml-2 md:ml-5 whitespace-nowrap">
                     {t('settings.manage_access')}
                 </h1>
@@ -32,7 +32,7 @@ const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit
                 </div>
             </div>
             <div className='grid grid-cols-1 lg:grid-cols-4 gap-4'>
-                <div className={`scrollbar-hide w-full lg:col-span-3 bg-[var(--surface-100)] h-[76vh] rounded-2xl md:rounded-4xl   gap-4 max-h-[76vh] p-4 md:px-4 overflow-y-auto`}>
+                <div className={`scrollbar-hide w-full lg:col-span-3 bg-[var(--surface-100)]  rounded-2xl md:rounded-4xl   gap-4 md:h-[76vh] h-[37vh] max-h-[37vh]  md:max-h-[76vh] p-4 md:px-4 overflow-y-auto`}>
                     {isLoading ? <Spinner /> : sharedUser.length === 0 ? <p className='text-center flex items-center justify-center w-full h-full '>{t('no_user_data')}</p> :
                         <div className='grid grid-cols-1  md:grid-cols-2 w-full h-full'>
                             {sharedUser.map((user) => (
@@ -77,7 +77,7 @@ const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit
                         </div>
                     }
                 </div>
-                <div className="scrollbar-hide flex flex-col md:p-6  scrollbar-hide bg-[var(--surface-100)] md:col-span-1 h-full rounded-2xl md:rounded-4xl  gap-4 max-h-[76vh] p-4 md:px-4 overflow-y-auto">
+                <div className="scrollbar-hide flex flex-col md:p-6  scrollbar-hide bg-[var(--surface-100)] md:col-span-1 rounded-2xl md:rounded-4xl  gap-4 md:h-[76vh] h-[37vh] max-h-[37vh]  md:max-h-[76vh] p-4 md:px-4 overflow-y-auto">
                     {isLoading ? <Spinner /> : accessLevels.length === 0 ? <p className='text-center flex h-full w-full items-center justify-center'>{t('no_access_data')}</p> :
                         accessLevels.map((access) => (
                             <div key={access.id} className="flex items-center p-3 bg-white dark:bg-[var(--surface-200)] hover:bg-gray-50 dark:hover:bg-[var(--surface-300)] rounded-[12px] transition-colors">

@@ -18,10 +18,10 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settingsItems, setShowHelpD
     const t = useTranslations()
     const dispatch = useDispatch<AppDispatch>();
     return (
-        <div className="p-6">
+        <div className="md:p-6">
             <h1 className="text-3xl font-bold mb-6">{t('settings.title')}</h1>
 
-            <div className="flex flex-wrap gap-7">
+            <div className="flex flex-col md:flex-row md:flex-wrap md:gap-7 gap-2 ">
                 {settingsItems.map((item) => (
                     <Link
                         key={item.id}
@@ -31,7 +31,7 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settingsItems, setShowHelpD
                                 item.id === 4 ? dispatch(setIsProfileOpen(true)) :
                                     item.id === 5 ? dispatch(setIsChangePasswordOpen(true)) :
                                         item.id === 6 ? setShowHelpDial(true) : {}}
-                        className="w-[150px] h-[150px] lg:w-[180px] md:h-[180px] bg-[var(--surface-100)] hover:border-[var(--surface-100)] hover:bg-[var(--surface-200)] hover:border-2 rounded-[40px] p-6 flex flex-col items-center justify-center gap-3 transition-colors duration-200"
+                        className="md:w-[150px] w-full h-auto lg:w-[180px] md:h-[180px] bg-[var(--surface-100)] hover:border-[var(--surface-100)] hover:bg-[var(--surface-200)] hover:border-2 md:rounded-[40px] rounded-xl md:p-6 p-3.5 flex md:flex-col flex-row items-center md:justify-center gap-3 transition-colors duration-200"
                     >
                         <div className="text-[var(--primary)]">
                             {item.icon}

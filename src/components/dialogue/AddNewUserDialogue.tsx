@@ -137,10 +137,16 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
     return (
         <div className="fixed inset-0 bg-black/20 dark:bg-white/20 flex items-center justify-center z-50 p-3">
             <div className="bg-white dark:bg-gray-800 rounded-[32px] w-[98%] h-[90vh] shadow-xl flex flex-col">
-                <div className="grid lg:grid-cols-7 grid-cols-1 h-full">
-                    <div className="w-full lg:col-span-2 p-6  flex flex-col border-b  border-gray-200 dark:border-gray-700">
+                <div className="grid md:grid-cols-7 grid-cols-1 h-full">
+                    <div className="w-full md:col-span-2 p-6  flex flex-col border-b  border-gray-200 dark:border-gray-700">
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-xl font-medium dark:text-white">{isEdit ? t('update_user') : t('add_new_user')}</h2>
+                            <button
+                                onClick={onClose}
+                                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 md:hidden flex"
+                            >
+                                <IconX size={20} className="text-red-500" />
+                            </button>
                         </div>
                         <div className="flex-1">
                             <div className="mb-4">
@@ -209,7 +215,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
                     </div>
 
                     {/* Right Section - Streams */}
-                    <div className="w-full lg:col-span-5 lg:rounded-r-[32px] px-6  py-3 lg:py-6 overflow-hidden flex flex-col">
+                    <div className="w-full md:col-span-5 lg:rounded-r-[32px] px-6  py-3 lg:py-6 overflow-hidden flex flex-col">
                         {/* Tabs */}
                         <div className='flex items-center  mb-5 justify-between'>
                             <div className="flex gap-2 overflow-x-auto scrollbar-hide">
@@ -238,7 +244,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
                             </div>
                             <button
                                 onClick={onClose}
-                                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 hidden md:flex"
                             >
                                 <IconX size={20} className="text-red-500" />
                             </button>

@@ -166,7 +166,8 @@
         "people_threshold_count": "लोगों की सीमा संख्या",
         "enter_people_threshold_count": "लोगों की सीमा संख्या दर्ज करें",
         "access": "प्रबंधित",
-        "select_access": "प्रबंधित चुनें"
+        "select_access": "प्रबंधित चुनें",
+        "network_configuration": "नेटवर्क कॉन्फ़िगरेशन"
     },
     "manage_devices": "डिवाइस प्रबंधित करें",
     "manage_user": "उपयोगकर्ता प्रबंधित करें",

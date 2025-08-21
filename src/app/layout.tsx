@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Kapidhwaj AI",
   description: "",
   icons:{
-    icon:'/assets/images/logo-sqaure.png'
+    icon:'/assets/images/logo-square.png'
   }
 };
 

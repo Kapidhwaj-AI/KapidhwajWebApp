@@ -13,7 +13,7 @@ import { filterButtonClassname } from '@/styles/tailwind-class';
 const AlertsView: React.FC<AlertViewProps> = ({ err, setAlerts, filteredAlerts, setAlertOffset, alertOffset, setFilterDial, isDateFiltered, setIsDateFiltered, isLoading, fetchAlerts, filterDial, setDate, setEndTime, setIsLoading, setStartTime, handleApplyFilter, date, startTime, endTime, alertEndRef, alerts, alertsLoading, hasMore, selectedTab, setHasMore, setSelectedTab, setAlertsLoading }) => {
     const t = useTranslations()
   return (
-      <div className="h-full flex flex-col gap-4 min-h-0 p-5">
+      <div className="h-full flex flex-col gap-4 min-h-0 md:p-5">
           <div className="flex justify-between items-center">
               <h1 className="text-2xl font-bold">{t('alerts.title')}</h1>
               <div className="flex items-center gap-4">

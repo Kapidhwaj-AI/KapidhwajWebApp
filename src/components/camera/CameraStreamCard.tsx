@@ -39,10 +39,10 @@ export default function CameraStreamCard({
       }
       catch (err) {
         console.error(err)
-        setStreamError(err.message?? 'Some errro')
+        setStreamError(err.message ?? 'Some errro')
       }
     }
-   fetchWebrtc()
+    fetchWebrtc()
   }, [hasStream]);
 
   const t = useTranslations()
@@ -80,21 +80,21 @@ export default function CameraStreamCard({
       <Link
         href={`/streams/${camera?.camera_id}`}
         className={cn(
-          "w-full px-4 pb-4 absolute bottom-0",
+          "w-full px-4 pb-4 absolute bottom-0 z-20",
           cameraDetailView === "focused" && "hidden"
         )}
       >
-        <div className="backdrop-blur-md bg-black/30 dark:bg-gray-500/30 rounded-full py-2 px-4 shadow-lg">
+        <div className="backdrop-blur-md bg-black/30 dark:bg-gray-500/30 rounded-full py-1 md:py-2 px-4 shadow-lg">
           <div className="flex justify-between items-center">
             <div className="flex flex-col text-white ml-2">
               <span className="font-bold text-md">{camera?.name}</span>
             </div>
-            <div className="h-14 w-14 rounded-full bg-black flex items-center justify-center">
+            <div className="rounded-full bg-black p-2 flex items-center justify-center">
               <IconBorderCornerSquare
                 className="rotate-90"
                 color="white"
                 stroke={4}
-                size={15}
+                size={12}
               />
             </div>
           </div>

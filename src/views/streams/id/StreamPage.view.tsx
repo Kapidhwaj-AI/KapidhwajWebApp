@@ -14,6 +14,7 @@ import EditStreamDialogue from '@/components/dialogue/EditStreamDialogue';
 import { StreamSettingsDialogue } from '@/components/dialogue/StreamSettingsDialogue';
 import { filterButtonClassname } from '@/styles/tailwind-class';
 import { StreamsPageViewProps } from '@/models/stream';
+import { cn } from '@/lib/utils';
 
 
 const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
@@ -22,7 +23,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, lo
 }) => {
     const t = useTranslations()
     return (
-        <div className="h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4 pt-2 md:pt-3">
+        <div className="h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4">
             {!isFullscreen && <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                 {cameraLocation && <h1 className="sm:text-md flex gap-1 items-center justify-between md:text-lg lg:text-xl xl:text-2xl font-light ml-2 md:ml-5 whitespace-nowrap">
                     {cameraLocation?.organization} <IconChevronRight className=" text-gray-400" /> {cameraLocation?.parantFolder === "NA" ? '' : <div className=' flex gap-2 items-center'>{cameraLocation?.parantFolder} <IconChevronRight className=" text-gray-400" /></div>}   {camera?.name}
@@ -58,49 +59,99 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, lo
                 </div>
             </div>}
             {loading ? <Spinner /> :
-                <div className={isFullscreen ? "relative top-0 left-0 right-0 w-full h-full" : "grid grid-cols-1 lg:grid-cols-6 gap-3 md:gap-4 min-h-0"}>
-                    <div className="lg:col-span-4  flex flex-col gap-3 md:gap-5 h-full overflow-y-auto scrollbar-hide">
-                        <div className={isFullscreen ? 'w-full h-full' : "flex flex-col gap-3 md:gap-5 h-full "}>
-                            <CameraStreamCardMedium camera={camera} camLocation={cameraLocation} />
-                            {!isFullscreen && <div className="flex  flex-col p-3 md:p-6 rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
-                                <h3 className="text-sm md:text-md flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-                                    <IconVideo stroke={2} size={18} />
-                                    <span>{t('alerts.recordings')}</span>
-                                </h3>
-                                <InfiniteScrolling<RecordedClip> setData={setRecordings} fetchData={fetchRecordings} setHasMore={setHasRecordingMore} setIsLoading={setRecordingLoading} setOffset={setRecordingOffset} offset={recordingOffset} isLoading={recordingLoading} data={recordings} divRef={recordingref} hasMore={hasRecordingMore}   >
-                                    {recordings.length === 0 ? <p className="flex items-center justify-center w-full h-full">{t('streams.no_recordings')}</p> : <div className="grid grid-cols-1 sm:grid-cols-3  gap-3 md:gap-6">
-                                        {recordings.map((item, index) => (
-                                            <CameraStreamRecordingCard recording={item} key={index} />
-                                        ))}
+                <div className={isFullscreen ? "relative top-0 left-0 right-0 w-full h-full rounded-2xl" : "grid grid-cols-1 lg:grid-cols-6 gap-3 md:gap-4  h-full overflow-y-auto scrollbar-hide"}>
+                    <div className="lg:col-span-4 flex flex-col gap-3 md:gap-5 h-full">
+                        <div className={isFullscreen ? "w-full h-full" : "flex flex-col gap-3 md:gap-5 h-full"}>
+                            {/* Camera */}
+                            <div
+                                className={cn(
+                                    "overflow-y-auto scrollbar-hide rounded-2xl",
+                                    isFullscreen
+                                        ? "h-full"
+                                        : "h-[33vh] lg:flex-[1]" // mobile fixed 33vh, desktop grow ratio 3
+                                )}
+                            >
+                                <CameraStreamCardMedium camera={camera} camLocation={cameraLocation} />
+                            </div>
+                            {/* Recordings */}
+                            {!isFullscreen && (
+                                <div
+                                    className={cn(
+                                        "flex flex-col p-3 md:p-6 rounded-2xl md:rounded-4xl bg-[var(--surface-100)] overflow-y-auto scrollbar-hide",
+                                        "h-[33vh] lg:flex-[1/2]"
+                                    )}
+                                >                                    <h3 className="text-sm md:text-md flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                                        <IconVideo stroke={2} size={18} />
+                                        <span>{t("alerts.recordings")}</span>
+                                    </h3>
 
-                                    </div>}
-                                    {recordings.length > 0 && <div ref={recordingref} className="h-1" />}
-                                </InfiniteScrolling>
-                                {recordingLoading && <div className="text-center"><Spinner /></div>}
-                                {!recordingLoading && !hasRecordingMore && <p className="text-center">{t('no_more_data')}</p>}
-                            </div>}
+                                    <InfiniteScrolling<RecordedClip>
+                                        setData={setRecordings}
+                                        fetchData={fetchRecordings}
+                                        setHasMore={setHasRecordingMore}
+                                        setIsLoading={setRecordingLoading}
+                                        setOffset={setRecordingOffset}
+                                        offset={recordingOffset}
+                                        isLoading={recordingLoading}
+                                        data={recordings}
+                                        divRef={recordingref}
+                                        hasMore={hasRecordingMore}
+                                    >
+                                        {recordings.length === 0 ? (
+                                            <p className="flex items-center justify-center w-full h-full">
+                                                {t("streams.no_recordings")}
+                                            </p>
+                                        ) : (
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-6">
+                                                {recordings.map((item, index) => (
+                                                    <CameraStreamRecordingCard recording={item} key={index} />
+                                                ))}
+                                            </div>
+                                        )}
+                                        {recordings.length > 0 && <div ref={recordingref} className="h-1" />}
+                                    </InfiniteScrolling>
+
+                                    {recordingLoading && <div className="text-center"><Spinner /></div>}
+                                    {!recordingLoading && !hasRecordingMore && <p className="text-center">{t("no_more_data")}</p>}
+                                </div>
+                            )}
                         </div>
                     </div>
 
-                    {!isFullscreen && <div className="lg:col-span-2 flex flex-col md:p-5 rounded-2xl overflow-y-auto scrollbar-hide md:rounded-4xl bg-[var(--surface-100)]">
+                    {!isFullscreen && <div className="lg:col-span-2 flex flex-col p-2 md:p-5 rounded-2xl overflow-y-auto  md:h-full h-[35vh] scrollbar-hide md:rounded-4xl bg-[var(--surface-100)]">
                         <AlertsFiltersButtonAtStream selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
 
-                        <div className="grid grid-cols-1 gap-3 md:gap-6 w-full ">
-                            <InfiniteScrolling<Alert> setData={setAlerts} setOffset={setAlertOffset} offset={alertOffset} divRef={alertEndRef} data={alerts} fetchData={fetchAlerts} isLoading={alertsLoading} setIsLoading={setAlertsLoading} setHasMore={setHasMore} hasMore={hasMore}>
-
-                                {filteredAlerts.length > 0 ? <>
-
-                                    {filteredAlerts.map((item, index) => (
-                                        <AlertCard alert={item} key={index} />
-                                    ))}
-                                    {!isDateFiltered && <div ref={alertEndRef} className="h-1" />}
-                                </> :
-                                    <p className="text-center h-full w-full flex items-center justify-center">{t('alerts.no_found')}</p>
-                                }
+                        <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
+                            <InfiniteScrolling<Alert>
+                                setData={setAlerts}
+                                setOffset={setAlertOffset}
+                                offset={alertOffset}
+                                divRef={alertEndRef}
+                                data={alerts}
+                                fetchData={fetchAlerts}
+                                isLoading={alertsLoading}
+                                setIsLoading={setAlertsLoading}
+                                setHasMore={setHasMore}
+                                hasMore={hasMore}
+                            >
+                                {filteredAlerts.length > 0 ? (
+                                    <>
+                                        {filteredAlerts.map((item, index) => (
+                                            <AlertCard alert={item} key={index} />
+                                        ))}
+                                        {!isDateFiltered && <div ref={alertEndRef} className="h-1" />}
+                                    </>
+                                ) : (
+                                    <p className="text-center h-full w-full flex items-center justify-center">
+                                        {t("alerts.no_found")}
+                                    </p>
+                                )}
                             </InfiniteScrolling>
 
                             {alertsLoading && <div className="text-center"><Spinner /></div>}
-                            {!alertsLoading && !hasMore && filteredAlerts.length > 0 && <p className="text-center">{t('no_more_data')}</p>}
+                            {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (
+                                <p className="text-center">{t("no_more_data")}</p>
+                            )}
                         </div>
                     </div>}
                 </div>
