@@ -1,0 +1,23 @@
+# Node / Next
+node_modules
+.next
+out
+dist
+
+# Big/local content
+
+public/uploads
+
+
+# VCS / tooling
+.git
+.github
+.vscode
+.idea
+*.log
+.DS_Store
+
+# Env (pass via --env-file at runtime)
+.env
+.env.*
+!.env.example
