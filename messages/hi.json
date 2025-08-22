@@ -167,7 +167,20 @@
         "enter_people_threshold_count": "लोगों की सीमा संख्या दर्ज करें",
         "access": "प्रबंधित",
         "select_access": "प्रबंधित चुनें",
-        "network_configuration": "नेटवर्क कॉन्फ़िगरेशन"
+        "network_configuration": "नेटवर्क कॉन्फ़िगरेशन",
+        "network": {
+            "dhcp": "डीएचसीपी",
+            "ipv4": "IPv4 पता",
+            "subnetmask": "IPv4 सबनेट मास्क",
+            "default_gateway": "IPv4 डिफ़ॉल्ट गेटवे",
+            "mac_address": "मैक पता",
+            "mtu": "एमटीयू (बाइट्स)",
+            "route": "डिफ़ॉल्ट मार्ग",
+            "autDns": "DNS स्वचालित रूप से प्राप्त करें",
+            "pdns": "पसंदीदा DNS सर्वर",
+            "adns": "बदलाव DNS सर्वर",
+            "apply": "लागू करो"
+        }
     },
     "manage_devices": "डिवाइस प्रबंधित करें",
     "manage_user": "उपयोगकर्ता प्रबंधित करें",

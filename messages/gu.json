@@ -173,7 +173,20 @@
         "enter_people_threshold_count": "લોકોની થ્રેશોલ્ડ સંખ્યા દાખલ કરો",
         "access": "ઍક્સેસ",
         "select_access": "ઍક્સેસ પસંદ કરો",
-        "network_configuration": "જાલ વિધાન"
+        "network_configuration": "જાલ વિધાન",
+        "network": {
+            "dhcp": "ડીએચસીપી",
+            "ipv4": "IPv4 સરનામું",
+            "subnetmask": "IPv4 સબનેટ માસ્ક",
+            "default_gateway": "IPv4 ડિફોલ્ટ ગેટવે",
+            "mac_address": "મૅક એડ્રેસ",
+            "mtu": "એમટીઉ (બાઇટ્સ)",
+            "route": "ડિફોલ્ટ માર્ગ",
+            "autDns": "ઓટો સંગ્રહિત DNS",
+            "pdns": "પસંદગીની DNS સર્વર",
+            "adns": "વિકલ્પ DNS સર્વર",
+            "apply": "અરજી કરો"
+        }
     },
     "manage_devices": "ડિવાઇસ મેનેજ કરો",
     "manage_user": "વપરાશકર્તા મેનેજ કરો",

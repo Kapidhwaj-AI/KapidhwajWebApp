@@ -77,7 +77,7 @@ export const InputField = ({
           onKeyDown={(e) => handleOnKeyDown && handleOnKeyDown(e, index)}
           onPaste={handleOnPaste}
           maxLength={isOtp ? 1 : undefined}
-          className={`w-full h-[35px] sm:h-[40px] md:h-[45px] p-2 px-4 ${disabled ?'bg-gray-100' :'bg-transparent'} z-50 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none  rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] text-gray-600 dark:text-white`}
+          className={`w-full h-[35px] sm:h-[40px] md:h-[45px] p-2 px-4 ${disabled ?'bg-gray-200' :'bg-transparent'} z-50 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none  rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] text-gray-600 dark:text-white`}
         />
         {isPasswordField && setShowPassword && <button type="button" className="absolute inset-y-0 cursor-pointer top-1/2 right-3 transform -translate-y-1/2 text-gray-600"
           onClick={() => setShowPassword(!showPassword)}
