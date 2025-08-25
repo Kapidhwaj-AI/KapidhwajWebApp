@@ -7,13 +7,11 @@ import { Profile } from '@/models/settings';
 import Spinner from '../ui/Spinner';
 import { useTranslations } from 'next-intl';
 import { InputField } from '../ui/Input.field';
-import { getLocalStorageItem } from '@/lib/storage';
 
 export function ProfileDialogue({ isOpen, isLoading, onClose, name, setName, id, setId, handleSave, handleImageChange, handleImageClick, email, setEmail, phone, setPhone,   preview, fileInputRef }: Profile) {
     const t = useTranslations()
     if (!isOpen) return null;
     
-   
     return (
         <Modal onClose={onClose} title={t('settings.profile')}>
             <form onSubmit={handleSave} className='flex flex-col gap-3 justify-center items-center'>
