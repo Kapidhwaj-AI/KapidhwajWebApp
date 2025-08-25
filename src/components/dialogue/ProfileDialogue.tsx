@@ -2,7 +2,6 @@
 import { IconCameraPlus, IconCheck, IconX } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
 import Image from 'next/image';
-import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
 import { Profile } from '@/models/settings';
 import Spinner from '../ui/Spinner';
 import { useTranslations } from 'next-intl';
@@ -11,7 +10,6 @@ export function ProfileDialogue({ isOpen, isLoading, onClose, name, setName, id,
     const t = useTranslations()
     if (!isOpen) return null;
     
-   
     return (
         <Modal onClose={onClose} title={t('settings.profile')}>
             <form onSubmit={handleSave} className='flex flex-col gap-3 justify-center items-center'>

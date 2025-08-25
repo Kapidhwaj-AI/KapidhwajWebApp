@@ -168,6 +168,7 @@
         "access": "प्रबंधित",
         "select_access": "प्रबंधित चुनें",
         "network_configuration": "नेटवर्क कॉन्फ़िगरेशन",
+        "custom_services": "कस्टम सेवा",
         "network": {
             "dhcp": "डीएचसीपी",
             "ipv4": "IPv4 पता",
@@ -366,7 +367,7 @@
         "read_all": "सभी पढ़ें",
         "search_notification": "सूचनाएं खोजें"
     },
-    "custom_service": {
+    "custom_services": {
         "title": "कस्टम सेवा",
         "attendance": "उपस्थिति",
         "license": "वाहन नंबर प्लेट"
