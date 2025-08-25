@@ -54,6 +54,7 @@ const HomeController = () => {
             if (error.status === 401 && error.response.data.message === "THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)") {
                 document.cookie = "locale=; path=/; max-age=0";
                 removeLocalStorageItem('kapi-token')
+                removeLocalStorageItem('hub')
                 window.location.href = '/login';
             }
 

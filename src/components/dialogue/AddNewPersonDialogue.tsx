@@ -29,9 +29,6 @@ export function AddNewPersonDialogue({ isOpen, onClose, formData, setFormData, h
 
     const t = useTranslations()
 
-
-
-
     if (!isOpen) return null;
 
     return (

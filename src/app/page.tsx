@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { getLocalStorageItem } from '@/lib/storage'
+import { getLocalStorageItem, removeLocalStorageItem } from '@/lib/storage'
 
 export default function RootRedirector() {
   const router = useRouter()
@@ -11,7 +11,10 @@ export default function RootRedirector() {
 
   useEffect(() => {
     if (token) router.push('/home')
-    else router.push('/login')
+    else {
+      removeLocalStorageItem('hub')
+      router.push('/login')
+    }
   }, [token, router])
 
 

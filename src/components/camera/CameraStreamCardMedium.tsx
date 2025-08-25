@@ -28,7 +28,7 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
         src={camera?.webrtc_url}
         allowFullScreen
         
-        style={{width:'100%', height:'100%'}}
+        style={{width:'105%', height:'105%'}}
       >
         Your browser does not support the video tag.
       </iframe>
