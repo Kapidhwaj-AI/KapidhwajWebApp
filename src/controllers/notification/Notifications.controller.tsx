@@ -26,7 +26,7 @@ const NotificationsController = () => {
 
             const resp = await protectApi('/user/notification/all', 'POST');
             if (resp.status === 200) {
-                fetchNotification(0)
+                setAllNotifications(await fetchNotification(0))
             }
 
         } catch (err) {

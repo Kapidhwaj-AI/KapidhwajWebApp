@@ -80,7 +80,7 @@ export default function CameraStreamCard({
       <Link
         href={`/streams/${camera?.camera_id}`}
         className={cn(
-          "w-full px-4 pb-4 absolute bottom-0 z-20",
+          "w-full px-4 absolute bottom-2 z-20",
           cameraDetailView === "focused" && "hidden"
         )}
       >
@@ -89,7 +89,7 @@ export default function CameraStreamCard({
             <div className="flex flex-col text-white ml-2">
               <span className="font-bold text-md">{camera?.name}</span>
             </div>
-            <div className="rounded-full bg-black p-2 flex items-center justify-center">
+            <div className="rounded-full bg-black p-4 flex items-center justify-center">
               <IconBorderCornerSquare
                 className="rotate-90"
                 color="white"

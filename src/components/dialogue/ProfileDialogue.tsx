@@ -7,18 +7,20 @@ import { Profile } from '@/models/settings';
 import Spinner from '../ui/Spinner';
 import { useTranslations } from 'next-intl';
 import { InputField } from '../ui/Input.field';
+import { getLocalStorageItem } from '@/lib/storage';
 
-export function ProfileDialogue({ isOpen, isLoading, onClose, name, setName, id, setId, handleSave, handleImageChange, handleImageClick, email, setEmail, phone, setPhone, image,  preview, fileInputRef }: Profile) {
+export function ProfileDialogue({ isOpen, isLoading, onClose, name, setName, id, setId, handleSave, handleImageChange, handleImageClick, email, setEmail, phone, setPhone,   preview, fileInputRef }: Profile) {
     const t = useTranslations()
     if (!isOpen) return null;
-
+    
+   
     return (
         <Modal onClose={onClose} title={t('settings.profile')}>
             <form onSubmit={handleSave} className='flex flex-col gap-3 justify-center items-center'>
 
                 <div className="relative w-40 h-40 group rounded-full cursor-pointer overflow-hidden">
                     <Image
-                        src={preview ? preview : GOOGLE_KPH_BUCKET_URL + image}
+                        src={preview}
                         alt={name}
                         width={1000}
                         height={1000}

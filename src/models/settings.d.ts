@@ -62,7 +62,6 @@ export interface Profile {
     setId: (val: string) => void;
     email: string;
     setEmail: (val: string) => void;
-    image: string;
     file: FIle | undefined;
     setFile: (val: File) => void;
     fileInputRef: React.RefObject<HTMLInputElement | null>;

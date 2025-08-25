@@ -24,12 +24,11 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, lo
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4">
-            {!isFullscreen && <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+            {!isFullscreen && <div className="flex flex-col md:flex-row justify-between items-start  gap-3">
                 {cameraLocation && <h1 className="sm:text-md flex gap-1 items-center justify-between md:text-lg lg:text-xl xl:text-2xl font-light ml-2 md:ml-5 whitespace-nowrap">
                     {cameraLocation?.organization} <IconChevronRight className=" text-gray-400" /> {cameraLocation?.parantFolder === "NA" ? '' : <div className=' flex gap-2 items-center'>{cameraLocation?.parantFolder} <IconChevronRight className=" text-gray-400" /></div>}   {camera?.name}
                 </h1>}
-
-                <div className="flex items-center flex-wrap gap-2  self-end">
+                <div className="flex items-center flex-wrap gap-2 justify-end  self-end">
                     <button className={filterButtonClassname} onClick={toggleStreamFav}>
                         <IconHeart
                             stroke={makeFav ? 0 : 1}

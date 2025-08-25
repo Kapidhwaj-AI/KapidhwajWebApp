@@ -156,7 +156,7 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ isAddCategoryModalOpen,
                                         <h3 className="text-sm font-medium">{category.name}</h3>
 
                                     </div>
-                                    <div className="flex gap-2">
+                                    <div className="flex lg:flex-row sm:flex-col flex-row lg:gap-2">
                                         <button
                                             onClick={() => handleEditCategory(category)}
                                             className="p-1.5 hover:bg-gray-100 dark:hover:bg-[var(--surface-400)] rounded-lg transition-colors"

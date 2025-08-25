@@ -13,6 +13,7 @@ export function TokenCheck() {
       const isValid = await checkLocalToken();
       if (isValid) {
         removeLocalStorageItem('kapi-token')
+        removeLocalStorageItem('hub')
         router.push('/login');
       }
     };
