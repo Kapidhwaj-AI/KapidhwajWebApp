@@ -269,7 +269,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         };
         try {
             const res = await protectApi<unknown, Partial<StreamFormData>>(
-                `camera?action=update&cameraId=${camera?.camera_id}`,
+                `/camera?action=update&cameraId=${camera?.camera_id}`,
                 'PUT',
                 payload
             );
@@ -284,11 +284,12 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                     folderId: -1,
                     subfolder: -1
                 })
+                fetchCamera(id)
             }
 
         } catch (error) {
             console.error(error)
-            toast.success(error.message ?? 'An error occured')
+            toast.error(error.message ?? 'An error occured')
         } finally {
             setIsEditLoading(false)
         }

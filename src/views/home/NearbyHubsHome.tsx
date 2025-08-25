@@ -1,4 +1,5 @@
 import Spinner from '@/components/ui/Spinner';
+import { getLocalStorageItem } from '@/lib/storage';
 import { ManageHub } from '@/models/settings';
 import { IconRefresh, IconRouter } from '@tabler/icons-react';
 import React from 'react'
@@ -11,6 +12,8 @@ interface NearbyHubsProps {
 }
 const NearbyHubsHome: React.FC<NearbyHubsProps> = ({ isHubLoading, fetchHub, nearbyHubs, handleAccessRemotely }) => {
     const t = useTranslations()
+    const storedHub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+
     return (
         <div className={`flex flex-col bg-[var(--surface-100)] px-8 rounded-2xl md:rounded-4xl`}>
             {/* Header - Fixed height */}
@@ -30,15 +33,13 @@ const NearbyHubsHome: React.FC<NearbyHubsProps> = ({ isHubLoading, fetchHub, nea
                     />
                 </button>
             </div>
-
-            {/* Scrollable Content */}
             {isHubLoading ? <Spinner /> : nearbyHubs.length === 0 ? <div className="flex justify-center items-center w-full h-full">
                 {t(`manage_hubs.couldn't_get_nearby_hubs`)}
             </div> :
                 <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-5rem)] pb-4 scrollbar-hide">
                     <div className="space-y-3">
                         {nearbyHubs?.map((hub) => (
-                            <div key={hub.ip} className="flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors">
+                            <div key={hub.ip} className={`${hub.name === storedHub.id ? 'border-2 border-[#2B4C88] ' : ''} flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors`}>
                                 <div className="w-10 h-10 bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
                                     <IconRouter size={20} className="text-[#888888]" />
                                 </div>

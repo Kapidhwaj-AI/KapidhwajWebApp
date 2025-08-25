@@ -4,10 +4,10 @@
     "choose_language": "Choose language...",
     "close": "Close",
     "save": "Save",
-    "home_title":"Home",
-    "light_mode":"Light Mode",
+    "home_title": "Home",
+    "light_mode": "Light Mode",
     "dark_mode": "Dark Mode",
-    "your_profile":"Your Profile",
+    "your_profile": "Your Profile",
     "cancel": "Cancel",
     "no_data_found": "No Data Found.",
     "focused": "Focused",
@@ -17,10 +17,10 @@
     "start_time": "Start Time",
     "end_time": "End Time",
     "back": "Back",
-    "delete_title":"Are you sure?",
+    "delete_title": "Are you sure?",
     "delete_desc": "This process is irreversible, confirm if it is what you are proceeding",
-    "yes":"Yes",
-    "no":"No",
+    "yes": "Yes",
+    "no": "No",
     "settings": {
         "title": "Settings",
         "profile": "Profile",
@@ -58,9 +58,9 @@
         "customer_id": "Customer ID",
         "name": "Name",
         "email": "Email",
-        "enter_email":"Enter email",
+        "enter_email": "Enter email",
         "phone": "Phone",
-        "enter_phone":"Enter Phone No.",
+        "enter_phone": "Enter Phone No.",
         "age": "Age",
         "save": "Save",
         "query": "For any questions or issues, please reach out to the contact number provided below.",
@@ -111,9 +111,9 @@
         "manage_hubs": "Manage Hubs",
         "delete_camera_confirm": "Are you sure you want to delete this camera?",
         "delete_hub_confirm": "Are you sure you want to delete this hub?",
-        "delete_site":"Are you sure you want to delete this site?",
-        "delete_folder":"Are you sure you want to delete this folder?",
-        "delete_subfolder":"Are you sure you want to delete this Subfolder?",
+        "delete_site": "Are you sure you want to delete this site?",
+        "delete_folder": "Are you sure you want to delete this folder?",
+        "delete_subfolder": "Are you sure you want to delete this Subfolder?",
         "add": "Add",
         "saved_cameras": "Saved Cameras",
         "add_hub": "Add Hub",
@@ -154,13 +154,14 @@
         "enter_camera_name": "Enter Camera Name",
         "people_threshold_count": "People Threshold Count",
         "enter_people_threshold_count": "Enter People Threshold Count",
-        "network_configuration":"Network Configuration"
+        "network_configuration": "Network Configuration",
+        "custom_services": "Custom Services"
     },
     "manage_user": "Manage User",
     "manage_devices": "Manage Devices",
     "add_new_user": "Add New User",
-    "no_user_data":" No users available",
-    "no_access_data":"No access data found",
+    "no_user_data": " No users available",
+    "no_access_data": "No access data found",
     "update_user": "Update User",
     "manage_site_folders": "Manage Sites & Folder",
     "main_settings": "Main Settings",
@@ -176,10 +177,10 @@
     "logout": "Logout",
     "record_all_videos": "Record All Videos",
     "intrusion_detection": "Intrusion Detection",
-    "fire_smoke_detection":"Fire & Smoke Detection",
+    "fire_smoke_detection": "Fire & Smoke Detection",
     "motion_detection": "Motion Detection",
     "people_detection": "People Count",
-    "license_detection":"",
+    "license_detection": "",
     "audio": "Audio",
     "manage_sites": "Manage Sites",
     "manage_folders": "Manage Folders",
@@ -187,7 +188,7 @@
     "no_sites": "No sites available",
     "no_folders": "No folders available",
     "no_sub_folders": "No sub folders available",
-    "no_more_data":"No more data.",
+    "no_more_data": "No more data.",
     "add": "Add",
     "siteModal": {
         "addTitle": "Add Site",
@@ -197,7 +198,7 @@
         "close": "Close",
         "save": "Save",
         "update": "Update",
-        "clear_filter":"Clear Filter"
+        "clear_filter": "Clear Filter"
     },
     "alerts": {
         "title": "Alerts",
@@ -209,7 +210,7 @@
         "face_detection": "Face Detection",
         "motion_detection": "Motion Detection",
         "license_plate_detection": "License Plate Detection",
-        "fire_smoke_detection":"Fire & Smoke Detection",
+        "fire_smoke_detection": "Fire & Smoke Detection",
         "select_date": "Select Date",
         "start_time": "Select Start Time",
         "end_time": "Seletc End Time",
@@ -243,8 +244,8 @@
         "search_placeholder": "Search streams...",
         "showing_streams": "Showing {count} streams",
         "no_streams": "No streams found",
-        "no_recordings":"No recordings found",
-        "single_streams_page":"Single Stream Page",
+        "no_recordings": "No recordings found",
+        "single_streams_page": "Single Stream Page",
         "filter_modal": {
             "title": "Apply Filter",
             "person": "Person",
@@ -256,7 +257,6 @@
             "close": "✕ Close",
             "apply": "✔ Apply"
         },
-        
         "options": {
             "favourite": "Favourite",
             "edit_details": "Edit Details",
@@ -273,7 +273,7 @@
         "no_people_found": "No people found",
         "add": "Add",
         "unknown_person": "Unknown Person",
-        "delete_access_user" :"Are you sure you want to delete this user",
+        "delete_access_user": "Are you sure you want to delete this user",
         "delete_modal": {
             "title": "Are you sure?",
             "message": "Are you sure you want to delete this person?",
@@ -333,10 +333,15 @@
         }
     },
     "notifications": {
-        "no_data":"No notifications found",
+        "no_data": "No notifications found",
         "title": "Notifications",
         "read_all": "Read All",
         "search_notification": "Search Notification"
+    },
+    "custom_services": {
+        "title": "Custom Service",
+        "attendance": "Attendance",
+        "license": "License Plate"
     },
     "manage_hubs": {
         "select_hub_to_view_cameras": "Select a hub to view its cameras",

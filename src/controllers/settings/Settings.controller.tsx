@@ -1,6 +1,6 @@
 'use client'
 import SettingsView from '@/views/settings/Settings.view';
-import { IconDevices, IconFriends, IconLanguage, IconLifebuoy, IconLockAccess, IconLockSquareRounded, IconMapPin, IconNetwork, IconUser } from '@tabler/icons-react';
+import { IconDevices, IconFriends, IconLanguage, IconLifebuoy, IconLockAccess, IconLockSquareRounded, IconMapPin, IconNetwork, IconPlus, IconUser } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react'
 
@@ -67,10 +67,10 @@ const SettingsController = () => {
         },
         {
             id: 9,
-            title: t("settings.network_configuration"),
-            icon: <IconNetwork size={40} />,
-            path: "/settings/network-configuration"
-        }
+            title: t("settings.custom_services"),
+            icon: <IconPlus size={40} />,
+            path: "/settings/custom-services"
+        },
     ];
     return (
         <SettingsView

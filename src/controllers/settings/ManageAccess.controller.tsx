@@ -61,7 +61,7 @@ const ManageAccessController = () => {
 
         } catch (error) {
             console.error("Error: ", error)
-        }finally{
+        } finally {
             setIsAccessLoading(false)
         }
     }
@@ -84,7 +84,7 @@ const ManageAccessController = () => {
     const fetchSearchedUser = async () => {
         if (debouncedQuery.trim().length < 3) return;
         try {
-            const res = await protectApi<{ userId: string }>(`/user/exists?username=${debouncedQuery}`)
+            const res = await protectApi<{ userId: string }>(`/user/exists?username=${debouncedQuery}`, undefined, undefined, undefined, true)
             if (res.status === 200) {
                 setSearchedUsers([{ name: debouncedQuery, userId: res.data.data.userId }])
                 setOpen(true)
@@ -223,7 +223,7 @@ const ManageAccessController = () => {
         });
 
         try {
-           
+
             for (const org of shareableOrg) {
                 const cameraIds = JSON.stringify(orgCam[org.id]);
                 if (cameraIds.length === 0) continue;
@@ -234,7 +234,7 @@ const ManageAccessController = () => {
                     cameraIds: string;
                     revokeIds?: string;
                 }>(
-                    `${isEdit ? '/camera/update-shared':'/camera/shareMany'}?action=share&organizationId=${org.id}`,
+                    `${isEdit ? '/camera/update-shared' : '/camera/shareMany'}?action=share&organizationId=${org.id}`,
                     isEdit ? "PUT" : 'POST',
                     {
                         roleId: selectedAccess,
@@ -256,9 +256,9 @@ const ManageAccessController = () => {
 
         } catch (error) {
             console.error("Camera sharing failed:", error);
-            
 
-        }finally{
+
+        } finally {
             setIsSaving(false);
         }
     };

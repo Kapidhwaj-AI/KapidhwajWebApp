@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Camera } from "./camera";
 import { Folders, Organization } from "./organization";
+import { Category } from "./category";
 
 export interface ManageHub {
     name: string;
@@ -174,4 +175,22 @@ export interface SettingsViewProps {
         icon: JSX.Element;
         path: string;
     }[]
+}
+
+//custom services
+
+export interface CustomServicesViewProps {
+    menuItems: {
+        id: number;
+        title: string;
+        icon: JSX.Element;
+        path: string;
+    }[]
+}
+
+export interface AttendanceViewProps {
+    loading: boolean;
+    sites: Organization[];
+    categories: Category[]
+    setIsStartModal: (val: boolean) => void;
 }
