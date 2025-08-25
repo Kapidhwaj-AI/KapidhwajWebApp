@@ -1,6 +1,6 @@
 'use client'
 import SettingsView from '@/views/settings/Settings.view';
-import { IconDevices, IconFriends, IconLanguage, IconLifebuoy, IconLockAccess, IconLockSquareRounded, IconMapPin, IconNetwork, IconPlus, IconUser } from '@tabler/icons-react';
+import { IconDevices, IconFriends, IconLanguage, IconLifebuoy, IconLockAccess, IconLockSquareRounded, IconMapPin, IconPlus, IconUser } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react'
 

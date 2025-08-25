@@ -61,7 +61,7 @@ const ManageDevicesController = () => {
     const fetchSavedHubs = async () => {
         setIsSavedHubsLoading(true)
         try {
-            const res = await protectApi<Hub[]>(`/devices/hub`, undefined, undefined, undefined, true);
+            const res = await protectApi<Hub[]>(`/devices/hub`, undefined, undefined, undefined, false);
             const data = res.data.data
             setSavedHubs(data)
             if (selectedHub) {

@@ -9,7 +9,7 @@ const AttendanceView: React.FC<AttendanceViewProps> = ({ setIsStartModal }) => {
         <div className='flex flex-col h-full justify-between p-3'>
             <div className="overflow-y-auto max-h-[90vh] flex flex-col  pb-4 scrollbar-hide">
                 {[{ id: 1, name: 'Shwetkamal', ip: 'any' }]?.map((hub, index) => (
-                    <div className={` group flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] border rounded-xl transition-colors`}>
+                    <div key={index} className={` group flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] border rounded-xl transition-colors`}>
 
                         <div className="ml-3 flex-1 min-w-0">
                             <h3 className="text-sm font-medium truncate">{hub.name}</h3>
