@@ -3,7 +3,7 @@ import dnssd from 'dnssd';
 let isPublished = false;
 
 export function startAIPublisher() {
-    if (isPublished) return;
+    // if (isPublished) return;
     isPublished = true;
 
     console.log("📡 Publishing Simulated AI Hub...");

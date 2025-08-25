@@ -154,20 +154,8 @@
         "enter_camera_name": "Enter Camera Name",
         "people_threshold_count": "People Threshold Count",
         "enter_people_threshold_count": "Enter People Threshold Count",
-        "network_configuration": "Network Configuration",
-        "network": {
-            "dhcp": "DHCP",
-            "ipv4": "IPv4 Address",
-            "subnetmask": "IPv4 Subnet Mask",
-            "default_gateway": "IPv4 Default Gateway",
-            "mac_address": "MAC Address",
-            "mtu":"MTU(Bytes)",
-            "route":"Default Route",
-            "autDns":"Auto Obtain DNS",
-            "pdns":"Preferred DNS Server",
-            "adns":"Alternate DNS Server",
-            "apply":"Apply"
-        }
+        "network_configuration":"Network Configuration",
+        "custom_services": "Custom Services"
     },
     "manage_user": "Manage User",
     "manage_devices": "Manage Devices",
@@ -349,6 +337,11 @@
         "title": "Notifications",
         "read_all": "Read All",
         "search_notification": "Search Notification"
+    },
+    "custom_services": {
+        "title": "Custom Service",
+        "attendance": "Attendance",
+        "license": "License Plate"
     },
     "manage_hubs": {
         "select_hub_to_view_cameras": "Select a hub to view its cameras",

@@ -359,6 +359,11 @@
         "read_all": "બધું વાંચો",
         "search_notification":"સૂચનાઓ શોધો"
     },
+    "custom_service": {
+        "title": "કસ્ટમ સેવા",
+        "attendance": "હાજરતી",
+        "license":"વાહન નંબર પ્લેટ"
+    },
     "manage_hubs": {
         "select_hub_to_view_cameras": "તેના કેમેરા જોવા માટે હબ પસંદ કરો",
         "title": "હબ્સનું સંચાલન કરો",

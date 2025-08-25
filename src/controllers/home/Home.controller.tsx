@@ -63,7 +63,6 @@ const HomeController = () => {
         }
     }
     const fetchSites = async () => {
-
         try {
             const res = await protectApi<{ organization: Organization }[]>('/organizations')
             if (res.status === 200) {
@@ -124,11 +123,8 @@ const HomeController = () => {
     const handleSubmit = async () => {
         setIsSaving(true)
         try {
-
-
             const res = await protectApi<unknown, { name: string }>('/organizations', 'POST', { name: siteName }, undefined, true);
             if (res.status === 201 || res.status === 200) {
-
                 setIsSiteAddModal(false)
                 setSiteName('')
                 await fetchSites()

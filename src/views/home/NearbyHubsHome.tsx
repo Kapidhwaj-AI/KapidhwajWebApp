@@ -38,7 +38,7 @@ const NearbyHubsHome: React.FC<NearbyHubsProps> = ({ isHubLoading, fetchHub, nea
                 <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-5rem)] pb-4 scrollbar-hide">
                     <div className="space-y-3">
                         {nearbyHubs?.map((hub) => (
-                            <div key={hub.ip} className={`${hub.name === storedHub.id && !storedHub.isRemotely ? 'border-2 border-[#2B4C88] ' : ''} flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors`}>
+                            <div key={hub.ip} className={`${hub.name === storedHub.id ? 'border-2 border-[#2B4C88] ' : ''} flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors`}>
                                 <div className="w-10 h-10 bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
                                     <IconRouter size={20} className="text-[#888888]" />
                                 </div>

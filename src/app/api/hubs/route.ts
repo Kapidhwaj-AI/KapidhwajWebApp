@@ -33,7 +33,7 @@ export async function GET() {
         setTimeout(() => {
             browser.stop();
             resolve(hubs);
-        }, 2000);
+        }, 15000);
     });
 
     return NextResponse.json({ hubs: hubsData });

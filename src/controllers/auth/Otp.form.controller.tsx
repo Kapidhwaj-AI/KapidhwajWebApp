@@ -1,5 +1,4 @@
 "use client";
-
 import Modal from "@/components/ui/Modal";
 import { OtpForm } from "@/components/common/Otp.form";
 import { removeLocalStorageItem, setLocalStorageItem } from "@/lib/storage";
@@ -15,7 +14,6 @@ import { toast } from "react-toastify";
 
 export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, isForgot, password, showPassword, setShowPassword, setPassword, isProtected, }: { value: string, backKey: string, verify: string, resend: string; setIsOpen: (value: boolean) => void; isForgot?: boolean, password?: string, setPassword?: (value: string) => void; showPassword?: boolean; setShowPassword?: (val: boolean) => void; isProtected?: boolean; }) => {
   const router = useRouter();
-
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -36,7 +34,6 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
       }
     }
   };
-
   const handleOtpKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === "Backspace") {
       e.preventDefault();
@@ -93,7 +90,7 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
     setError('')
     try {
       const enteredOTP = otp.join("");
-      const payload = { [backKey]: value, otp: Number(enteredOTP) }
+      const payload = { [backKey]: value, otp: enteredOTP }
       if ((isForgot || isProtected) && password) {
         payload.newPassword = password 
       }
