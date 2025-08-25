@@ -15,13 +15,12 @@ export async function protectApi<T, D = undefined>(url: string,
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
     const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-    console.log(hub,"hub")
     const baseUrl = isValidHub && !isNotCustomHeader
         ? hub.isRemotely
             ? apiBaseUrl
             : `http://${hub.id}.local:8084`
         : apiBaseUrl;
-    console.log(hub, "hub", baseUrl, isNotCustomHeader)
+    console.log(hub, "hub", baseUrl, !isNotCustomHeader)
     const headers: Record<string, string> = {
         Authorization: `Bearer ${token}`,
         'Content-Type': type ?? 'application/json',

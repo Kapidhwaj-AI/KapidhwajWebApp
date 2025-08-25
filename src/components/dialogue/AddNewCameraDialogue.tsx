@@ -62,8 +62,8 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, i
                 physicalAddress: mac,
                 folderId: Number(folderToSend),
                 hubId, username, password, ipaddress: ipAddress,
-            })
-            if (res.status === 200) {
+            }, undefined, false)
+            if (res.status === 201) {
                 onClose()
                 await fetchSavedHubs()
             }

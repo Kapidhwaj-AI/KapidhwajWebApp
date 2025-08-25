@@ -17,7 +17,7 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ isAddCategoryModalOpen,
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
     const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
     const baseUrl = isValidHub ? hub.isRemotely ? `http://media.kapidhwaj.ai:${hub.static_port}/` : `http://${hub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
-
+    console.log(baseUrl, "base")
     return (
         <div className="h-full flex flex-col gap-3 min-h-0 px-2 md:px-4">
             {/* Header Section */}
