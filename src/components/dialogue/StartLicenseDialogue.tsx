@@ -22,7 +22,7 @@ const StartLicense = ({ onClose, isEdit, sites, categories }: { onClose: () => v
           const isStartSelected = selectedStartCameras.has(cam.camera_id);
           const isEndSelected = selectedEndCameras.has(cam.camera_id)
           return (
-            <div className='flex items-center gap-2'>
+            <div key={cam.camera_id} className='flex items-center gap-2'>
               <Checkbox
                 disabled={(isStart && isEndSelected) || (!isStart && isStartSelected)}
                 checked={(isStartSelected && isStart) || (isEndSelected && !isStart)}
