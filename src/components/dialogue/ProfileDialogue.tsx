@@ -2,7 +2,6 @@
 import { IconCameraPlus, IconCheck, IconX } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
 import Image from 'next/image';
-import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
 import { Profile } from '@/models/settings';
 import Spinner from '../ui/Spinner';
 import { useTranslations } from 'next-intl';

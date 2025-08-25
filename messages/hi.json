@@ -167,7 +167,8 @@
         "enter_people_threshold_count": "लोगों की सीमा संख्या दर्ज करें",
         "access": "प्रबंधित",
         "select_access": "प्रबंधित चुनें",
-        "network_configuration": "नेटवर्क कॉन्फ़िगरेशन"
+        "network_configuration": "नेटवर्क कॉन्फ़िगरेशन",
+        "custom_services":"कस्टम सेवा"
     },
     "manage_devices": "डिवाइस प्रबंधित करें",
     "manage_user": "उपयोगकर्ता प्रबंधित करें",
@@ -353,9 +354,10 @@
         "read_all": "सभी पढ़ें",
         "search_notification": "सूचनाएं खोजें"
     },
-    "custom_service": {
+    "custom_services": {
         "title": "कस्टम सेवा",
-        "attendance": "उपस्थिति"
+        "attendance": "उपस्थिति",
+        "license": "वाहन नंबर प्लेट"
     },
     "manage_hubs": {
         "select_hub_to_view_cameras": "इसके कैमरे देखने के लिए एक हब चुनें",

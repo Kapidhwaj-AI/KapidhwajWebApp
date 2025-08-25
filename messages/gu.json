@@ -173,7 +173,8 @@
         "enter_people_threshold_count": "લોકોની થ્રેશોલ્ડ સંખ્યા દાખલ કરો",
         "access": "ઍક્સેસ",
         "select_access": "ઍક્સેસ પસંદ કરો",
-        "network_configuration": "જાલ વિધાન"
+        "network_configuration": "જાલ વિધાન",
+        "custom_services":"કસ્ટમ સેવા"
     },
     "manage_devices": "ડિવાઇસ મેનેજ કરો",
     "manage_user": "વપરાશકર્તા મેનેજ કરો",
@@ -346,8 +347,9 @@
         "read_all": "બધું વાંચો",
         "search_notification":"સૂચનાઓ શોધો"
     },
-    "custom_service": {
+    "custom_services": {
         "title": "કસ્ટમ સેવા",
+        "license": "વાહન નંબર પ્લેટ",
         "attendance": "હાજરતી"
     },
     "manage_hubs": {
