@@ -40,9 +40,6 @@ export const LoginFormController = () => {
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
       };
-      // if (isValidHub) {
-      //   headers['x-hub-id'] = hub.id;
-      // }
       const key = emailRegex.test(username)
         ? "email"
         : phoneRegex.test(username)
@@ -76,6 +73,7 @@ export const LoginFormController = () => {
         setError(
           error.response?.data?.message || "An error occurred during login"
         );
+        console.error("Err:",error)
       } else {
         setError("An unexpected error occurred");
       }
