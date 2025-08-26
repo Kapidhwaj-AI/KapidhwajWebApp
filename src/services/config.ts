@@ -2,7 +2,7 @@ export const isOnPrem = false;
 export const onPremApiBaseUrl = "http://34.134.189.134:10023";
 export const cloudApiBaseUrl = "https://api.kapidhwaj.ai/api-backend";
 // export const apiBaseUrl = isOnPrem ? onPremApiBaseUrl : cloudApiBaseUrl;
-export const apiBaseUrl = "https://api.kapidhwaj.ai/api_backend_naveen";
+export const apiBaseUrl = "http://localhost:8084";
 export const apiSocketUrl = "ws://api.kapidhwaj.ai:8085";
 export const apiSocketPath = "/api-backend/socket.io";
 

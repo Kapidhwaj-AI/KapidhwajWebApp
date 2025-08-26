@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { ProfileMenu } from './ProfileMenu';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { getLocalStorageItem } from '@/lib/storage';
+// import { getLocalStorageItem } from '@/lib/storage';
 
 type SidebarTabs = "/home" | "/streams" | "/alerts" | "/favourites" | "/notifications" | "/settings";
 
@@ -25,8 +25,8 @@ export default function Sidebar() {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}');
-  const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+  // const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}');
+  // const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
 
   const t = useTranslations();
 
@@ -52,11 +52,11 @@ export default function Sidebar() {
   }, []);
 
   const shouldExpand = isMobile ? isExpanded : (isExpanded || isHovering);
-  useEffect(()=>{
-    if(!isHovering || !isExpanded){
+  useEffect(() => {
+    if (!isHovering || !isExpanded) {
       setIsProfileMenuOpen(false)
     }
-  },[isHovering, isExpanded])
+  }, [isHovering, isExpanded])
   return (
     <>
       {isMobile && (
@@ -75,7 +75,7 @@ export default function Sidebar() {
             onClick={() => { setIsMobileMenuOpen(!isMobileMenuOpen); setIsProfileMenuOpen(false) }}
             className="p-2 rounded-lg bg-[var(--surface-300)]"
           >
-             <IconMenu2 size={24} />
+            <IconMenu2 size={24} />
           </button>
         </div>
       )}
@@ -112,7 +112,7 @@ export default function Sidebar() {
                 </button>
               </div>
               <nav className="flex flex-col gap-2">
-                {isValidHub &&
+                {
                   menuItems.map((item) => (
                     <Link
                       key={item.label}
@@ -196,7 +196,7 @@ export default function Sidebar() {
             </div>
 
             {/* Nav */}
-            {isValidHub && <nav className="flex flex-col items-center px-5 space-y-3">
+            {<nav className="flex flex-col items-center px-5 space-y-3">
               {menuItems.map((item) => (
                 <Link
                   key={item.label}
@@ -244,7 +244,7 @@ export default function Sidebar() {
               )}
             </button>
 
-         
+
             <ProfileMenu
               isOpen={isProfileMenuOpen}
               onClose={() => setIsProfileMenuOpen(false)}

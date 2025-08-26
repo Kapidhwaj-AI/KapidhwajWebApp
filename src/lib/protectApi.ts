@@ -20,7 +20,6 @@ export async function protectApi<T, D = undefined>(url: string,
             ? apiBaseUrl
             : `http://${hub.id}.local:8084`
         : apiBaseUrl;
-    console.log(hub, "hub", baseUrl, !isNotCustomHeader)
     const headers: Record<string, string> = {
         Authorization: `Bearer ${token}`,
         'Content-Type': type ?? 'application/json',

@@ -1,6 +1,7 @@
 import React from 'react'
 import { InputField } from '@/components/ui/Input.field';
 import Spinner from '@/components/ui/Spinner';
+import Link from 'next/link';
 
 
 const ForgotForm = ({
@@ -25,7 +26,7 @@ const ForgotForm = ({
         Forgot Password
       </h1>
 
-      <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
+      <form onSubmit={onSubmit} className="space-y-3 flex flex-col sm:space-y-4">
         {/* Email/Phone Field */}
         <InputField
           label="Email / Phone"
@@ -43,14 +44,18 @@ const ForgotForm = ({
           </div>
         )}
 
-        {/* Sign In Button */}
+
         <button
           type="submit"
           className="w-full h-[35px] sm:h-[40px] md:h-[45px] bg-[#2B4C88] hover:bg-blue-700 text-white text-sm sm:text-base rounded-full transition-colors"
         >
           {isLoading ? <Spinner /> : ' Send OTP'}
         </button>
-
+        <Link href={'/login'}
+          className="text-xs sm:text-lg font-medium hover:underline self-end text-gray-500 hover:text-gray-700"
+        >
+          Go to Signin
+        </Link>
 
       </form>
 
