@@ -17,6 +17,12 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/**',
+      },
+      {
         protocol: 'https',
         hostname: 'images.unsplash.com',
         pathname: '/**',
@@ -78,6 +84,10 @@ const nextConfig: NextConfig = {
       {
         source: '/video:port*/:path*',
         destination: 'https://media.kapidhwaj.ai:port*/:path*',
+      },
+      {
+        source: '/video:8889/:path*',
+        destination: 'http://localhost:8889/:path*',
       },
       {
         source: '/video/:path*',
