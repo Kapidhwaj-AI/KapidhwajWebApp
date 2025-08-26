@@ -64,7 +64,7 @@ export const LoginFormController = () => {
         setLocalStorageItem('user', JSON.stringify(res.data.data))
         dispatch(setAuthToken(res.data.token));
 
-        window.location.href = "/home";
+        window.location.href = "/streams";
       }
     } catch (error) {
       setIsError(true);

@@ -23,7 +23,7 @@ const ManageSitesFolderView: React.FC<ManageSitesFoldersProp> = ({ sites, setIsE
                     }
                 </div>
 
-                <button onClick={() => { setIsOpen(true); setIsOrg(true); setIsFolder(false) }} className='bg-[#2B4C88] rounded-2xl px-5 py-1 self-end text-white'>{t('settings.add')}</button>
+                {/* <button onClick={() => { setIsOpen(true); setIsOrg(true); setIsFolder(false) }} className='bg-[#2B4C88] rounded-2xl px-5 py-1 self-end text-white'>{t('settings.add')}</button> */}
 
             </div>
             <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl flex flex-col  md:p-6 p-3 overflow-y-auto h-full max-h-[35vh] md:max-h-[84vh]'>

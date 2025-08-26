@@ -37,8 +37,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
                    {required && <span className='text-red-500'>*</span>}
                     </SelectLabel>}
                 <SelectTrigger
-                    className="w-full min-h-[35px] sm:min-h-[40px] md:min-h-[45px] bg-transparent  px-4  rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] dark:text-gray-400">
-                    <SelectValue className='text-gray-500' placeholder={placeholder} />
+                    className="w-full min-h-[35px] sm:min-h-[40px] md:min-h-[45px] bg-transparent  px-4  rounded-full focus:outline-none border-2 border-[#2B4C88] dark:text-gray-400">
+                    <SelectValue className='text-gray-500 placeholder-gray-400 focus:placeholder-gray-600' placeholder={placeholder} />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>

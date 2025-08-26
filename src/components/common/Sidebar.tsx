@@ -31,7 +31,7 @@ export default function Sidebar() {
   const t = useTranslations();
 
   const menuItems: MenuItemType[] = [
-    { icon: <IconSmartHome />, label: t('home_title'), path: '/home' },
+    // { icon: <IconSmartHome />, label: t('home_title'), path: '/home' },
     { icon: <IconShareplay />, label: t('streams.title'), path: '/streams' },
     { icon: <IconUrgent />, label: t('alerts.title'), path: '/alerts' },
     { icon: <IconFolderStar />, label: t('favourites.title'), path: '/favourites' },

@@ -63,7 +63,7 @@ const IPv4Input: React.FC<IPv4InputProps> = ({
             <div
                 className={`w-full flex justify-between items-center h-[40px] px-4 rounded-full 
           ${disabled ? "bg-gray-200" : "bg-transparent"} 
-          ring-2 ring-[#2B4C88] text-gray-600 dark:text-white`}
+          border-2 border-[#2B4C88] text-gray-600 dark:text-white`}
             >
                 {segments.map((seg, idx) => (
                     <React.Fragment key={idx}>

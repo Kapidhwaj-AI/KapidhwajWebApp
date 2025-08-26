@@ -72,13 +72,13 @@ export const LoginForm = ({
           </span>
           <div className="w-full bg-[var(--surface-300)]  h-[1px] dark:bg-white"></div>
         </div>
-        <button
+        {/* <button
           type="button"
           onClick={redirectRegister}
           className="w-full h-[35px] sm:h-[40px] md:h-[45px] dark:text-white  bg-[#F6F6F6] dark:bg-[var(--surface-300)] hover:bg-gray-100 text-gray-700 text-sm sm:text-base rounded-full transition-colors"
         >
           Register
-        </button>
+        </button> */}
       </form>
     </div>
   );
