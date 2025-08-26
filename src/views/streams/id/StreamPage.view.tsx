@@ -124,7 +124,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, lo
                                 setSelectedTab={setSelectedTab}
                             />
                         </div>
-                        <div className="flex-1 overflow-y-auto scrollbar-hide md:h-full h-[35vh]">
+                        <div className="flex-1 overflow-y-auto scrollbar-hide md:h-[60vh] h-[35vh]">
                             <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
                                 <InfiniteScrolling<Alert>
                                     setData={setAlerts}
