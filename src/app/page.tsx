@@ -10,7 +10,7 @@ export default function RootRedirector() {
   const token = getLocalStorageItem('kapi-token')
 
   useEffect(() => {
-    if (token) router.push('/home')
+    if (token) router.push('/streams')
     else {
       removeLocalStorageItem('hub')
       router.push('/login')
