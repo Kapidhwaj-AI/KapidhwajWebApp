@@ -1,4 +1,4 @@
-import {  IconDeviceCctvFilled,  IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconDeviceCctvFilled, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { AddNewCameraDialogue } from '@/components/dialogue/AddNewCameraDialogue';
 import { useEffect, useState } from "react";
 import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
@@ -37,7 +37,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     const [camera, setCamera] = useState<Camera>()
     const [loading, setLoading] = useState(false)
     const [editLoading, setEditLoading] = useState(false)
-    const { data: organizations,  } = useOrganizations();
+    const { data: organizations, } = useOrganizations();
     const [formData, setFormData] = useState<StreamFormData>({
         name: '',
         people_threshold_count: -1,
@@ -102,7 +102,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
             setFormData((prev) => ({
                 ...prev, folderId: res.data.data.parantFolderId !== "NA"
                     ? Number(res.data.data.parantFolderId)
-                    : null, subfolder: res.data.data.folderId !== "NA"
+                    : Number(res.data.data.folderId), subfolder: res.data.data.folderId !== "NA" && res.data.data.parantFolderId !== "NA"
                         ? Number(res.data.data.folderId)
                         : null
             }))
@@ -117,12 +117,12 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     const handleSave = async () => {
         setLoading(true)
         const fallbackFolderId =
-            formData.folderId && Number(formData.folderId) > 0
-                ? formData.folderId
-                : formData.subfolder && Number(formData.subfolder) > 0
-                    ? formData.subfolder
+            formData.subfolder && Number(formData.subfolder) > 0
+                ? formData.subfolder
+                : formData.folderId && Number(formData.folderId) > 0
+                    ? formData.folderId
                     : null;
-
+        console.log(formData.subfolder, "sub")
         const payload: Partial<StreamFormData> = {
             name: formData.name,
             people_threshold_count: formData.people_threshold_count,

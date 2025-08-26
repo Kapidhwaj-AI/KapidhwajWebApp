@@ -17,7 +17,8 @@ const HomeController = () => {
     const [isRemotely, setIsRemotely] = useState(false)
     const [devices, setDevices] = useState(0)
     const [isAddModal, setIsAddModal] = useState(false)
-    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    const storedHub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    const tempHub = JSON.parse(getLocalStorageItem('temphub') ?? '{}')
     const [isSaving, setIsSaving] = useState(false);
     const [showPassword, setShowPassword] = useState(false)
     const [id, setId] = useState('')
@@ -27,7 +28,7 @@ const HomeController = () => {
     const [sites, setSites] = useState<Organization[]>([])
     const [isSiteAddModal, setIsSiteAddModal] = useState(false)
     const [siteName, setSiteName] = useState('')
-    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+    const isValidHub = storedHub && typeof storedHub === 'object' && 'id' in storedHub && 'isRemotely' in storedHub;
     const fetchHubs = async () => {
         setIsHubLoading(true)
         try {
@@ -55,6 +56,7 @@ const HomeController = () => {
                 document.cookie = "locale=; path=/; max-age=0";
                 removeLocalStorageItem('kapi-token')
                 removeLocalStorageItem('hub')
+                removeLocalStorageItem('temphub')
                 window.location.href = '/login';
             }
 
@@ -73,13 +75,16 @@ const HomeController = () => {
                 setSites(sites)
             }
         } catch (error) {
+            if (error.status === 400 && error.response.data.message === `Hub with ID ${storedHub.id} is not connected`) {
+                setLocalStorageItem("hub", JSON.stringify(tempHub))
+            }
             console.error("err:", error)
         }
     }
     useEffect(() => {
         fetchHubs()
         fetchSavedHubs()
-        if (isValidHub && hub.isRemotely) {
+        if (isValidHub && storedHub.isRemotely) {
             setIsRemotely(true)
         }
         fetchSites()
@@ -91,7 +96,13 @@ const HomeController = () => {
         //     setIsRemotely((prev) => !prev)
         // }
         // else {
+
         setLocalStorageItem('hub', JSON.stringify({ ...hub, isRemotely: true }));
+        if (storedHub) {
+            setLocalStorageItem('temphub', JSON.stringify(storedHub))
+        } else {
+            setLocalStorageItem('temphub', JSON.stringify({ ...hub, isRemotely: true }))
+        }
         setIsRemotely(true)
         // }
         // removeLocalStorageItem('kapi-token')
