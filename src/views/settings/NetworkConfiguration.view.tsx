@@ -49,8 +49,8 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
                 value={newData?.ipv4?.address ?? ""}
                 onChange={(val) =>
                     setNewData((prev) => ({
-                        ...prev!,
-                        ipv4: { ...prev!.ipv4, address: val },
+                        ...prev,
+                        ipv4: { ...prev?.ipv4, address: val },
                     }))
                 }
             />
@@ -60,8 +60,8 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
                 value={newData?.ipv4?.gateway ?? ""}
                 onChange={(val) =>
                     setNewData((prev) => ({
-                        ...prev!,
-                        ipv4: { ...prev!.ipv4, gateway: val },
+                        ...prev,
+                        ipv4: { ...prev?.ipv4, gateway: val },
                     }))
                 }
             />
@@ -71,8 +71,8 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
                 value={newData?.ipv4?.subnetMask ?? ""}
                 onChange={(val) =>
                     setNewData((prev) => ({
-                        ...prev!,
-                        ipv4: { ...prev!.ipv4, mask: val },
+                        ...prev,
+                        ipv4: { ...prev?.ipv4, mask: val },
                     }))
                 }
             />
@@ -97,8 +97,8 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
                 value={newData?.dns?.preferrd ?? ""}
                 onChange={(val) =>
                     setNewData((prev) => ({
-                        ...prev!,
-                        dns: { ...prev!.dns, primary: val },
+                        ...prev,
+                        dns: { ...prev?.dns, primary: val },
                     }))
                 }
             />
@@ -108,8 +108,8 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
                 value={newData?.dns?.alternate ?? ""}
                 onChange={(val) =>
                     setNewData((prev) => ({
-                        ...prev!,
-                        dns: { ...prev!.dns, secondary: val },
+                        ...prev,
+                        dns: { ...prev?.dns, secondary: val },
                     }))
                 }
             />
