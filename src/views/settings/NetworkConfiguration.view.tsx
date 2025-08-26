@@ -22,7 +22,7 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
     }, [newData]);
 
     return (
-        <form onSubmit={(e) => { e.preventDefault(); handleSave(newData) }} className="space-y-5 md:w-[40rem] w-full self-center p-6 bg-white flex flex-col py-3 px-4 rounded-2xl border">
+        <form onSubmit={(e) => { e.preventDefault(); handleSave(newData) }} className="space-y-5 md:w-[40rem] w-full self-center p-6 bg-[var(--surface-200)] dark:bg-gray-800 flex flex-col py-3 px-4 rounded-2xl border">
             <div className="flex justify-between items-center py-3 px-4 rounded-2xl border ">
                 <span className="font-medium">{t('settings.network.dhcp')}</span>
                 <Switch
