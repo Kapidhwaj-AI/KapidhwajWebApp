@@ -117,40 +117,46 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, lo
                         </div>
                     </div>
 
-                    {!isFullscreen && <div className="lg:col-span-2 flex flex-col p-2 md:p-5 rounded-2xl overflow-y-auto  md:h-full h-[35vh] scrollbar-hide md:rounded-4xl bg-[var(--surface-100)]">
-                        <AlertsFiltersButtonAtStream selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+                    {!isFullscreen && <div className="lg:col-span-2 flex flex-col p-2 md:p-5 rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
+                        <div className="flex-none">
+                            <AlertsFiltersButtonAtStream
+                                selectedTab={selectedTab}
+                                setSelectedTab={setSelectedTab}
+                            />
+                        </div>
+                        <div className="flex-1 overflow-y-auto scrollbar-hide md:h-full h-[35vh]">
+                            <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
+                                <InfiniteScrolling<Alert>
+                                    setData={setAlerts}
+                                    setOffset={setAlertOffset}
+                                    offset={alertOffset}
+                                    divRef={alertEndRef}
+                                    data={alerts}
+                                    fetchData={fetchAlerts}
+                                    isLoading={alertsLoading}
+                                    setIsLoading={setAlertsLoading}
+                                    setHasMore={setHasMore}
+                                    hasMore={hasMore}
+                                >
+                                    {filteredAlerts.length > 0 ? (
+                                        <>
+                                            {filteredAlerts.map((item, index) => (
+                                                <AlertCard alert={item} key={index} />
+                                            ))}
+                                            {!isDateFiltered && <div ref={alertEndRef} className="h-1" />}
+                                        </>
+                                    ) : (
+                                        <p className="text-center h-full w-full flex items-center justify-center">
+                                            {t("alerts.no_found")}
+                                        </p>
+                                    )}
+                                </InfiniteScrolling>
 
-                        <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
-                            <InfiniteScrolling<Alert>
-                                setData={setAlerts}
-                                setOffset={setAlertOffset}
-                                offset={alertOffset}
-                                divRef={alertEndRef}
-                                data={alerts}
-                                fetchData={fetchAlerts}
-                                isLoading={alertsLoading}
-                                setIsLoading={setAlertsLoading}
-                                setHasMore={setHasMore}
-                                hasMore={hasMore}
-                            >
-                                {filteredAlerts.length > 0 ? (
-                                    <>
-                                        {filteredAlerts.map((item, index) => (
-                                            <AlertCard alert={item} key={index} />
-                                        ))}
-                                        {!isDateFiltered && <div ref={alertEndRef} className="h-1" />}
-                                    </>
-                                ) : (
-                                    <p className="text-center h-full w-full flex items-center justify-center">
-                                        {t("alerts.no_found")}
-                                    </p>
+                                {alertsLoading && <div className="text-center"><Spinner /></div>}
+                                {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (
+                                    <p className="text-center">{t("no_more_data")}</p>
                                 )}
-                            </InfiniteScrolling>
-
-                            {alertsLoading && <div className="text-center"><Spinner /></div>}
-                            {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (
-                                <p className="text-center">{t("no_more_data")}</p>
-                            )}
+                            </div>
                         </div>
                     </div>}
                 </div>
