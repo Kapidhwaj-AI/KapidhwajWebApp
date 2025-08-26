@@ -6,7 +6,7 @@ import { Category } from '@/models/category';
 import { Organization } from '@/models/organization';
 import { Person } from '@/models/person';
 import { PersonFormaData } from '@/models/settings';
-import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
+// import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
 import React, { useEffect, useState } from 'react'
 
 const ManagePeopleConroller = () => {
@@ -39,9 +39,9 @@ const ManagePeopleConroller = () => {
     const [personId, setPersonId] = useState(NaN)
     const [isPersonEdit, setIsPersonEdit] = useState(false)
     const [isPersonDelete, setIsPersonDelete] = useState(false);
-    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-    const baseUrl = isValidHub ? hub.isRemotely ? `http://media.kapidhwaj.ai:${hub.static_port}/` : `http://${hub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
+    // const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    // const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+    const baseUrl = `http://localhost:3000/` 
     const fetchSites = async () => {
         setIsLoading(true)
         try {

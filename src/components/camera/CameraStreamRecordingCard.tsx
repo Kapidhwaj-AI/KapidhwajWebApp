@@ -3,14 +3,14 @@ import {  IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { RecordedClip } from "@/models/clip";
 import { useRef, useState } from "react";
-import { getLocalStorageItem } from "@/lib/storage";
+// import { getLocalStorageItem } from "@/lib/storage";
 
 export default function CameraStreamRecordingCard({ recording }: { recording: RecordedClip }) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const  baseUrl = hub ? `http://media.kapidhwaj.ai:${hub.static_port}/` : 'http://media.kapidhwaj.ai:3000/'
+    // const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    const  baseUrl = `http://localhost:3000/`
     const handleTogglePlay = () => {
         const video = videoRef.current;
         if (!video) return;

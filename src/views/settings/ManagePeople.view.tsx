@@ -3,21 +3,20 @@ import { AddNewPersonDialogue } from '@/components/dialogue/AddNewPersonDialogue
 import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
 import { Button } from '@/components/ui/button'
 import Spinner from '@/components/ui/Spinner'
-import { getLocalStorageItem } from '@/lib/storage'
+// import { getLocalStorageItem } from '@/lib/storage'
 import { ManagePeopleProps } from '@/models/person'
-import { GOOGLE_KPH_BUCKET_URL } from '@/services/config'
+// import { GOOGLE_KPH_BUCKET_URL } from '@/services/config'
 import { IconCake, IconCategory2, IconChevronRight, IconGenderMale, IconPencil, IconTrash, IconUserPlus } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
-import Image from 'next/image'
+// import Image from 'next/image'
 import React from 'react'
 
 const ManagePeopleView: React.FC<ManagePeopleProps> = ({ isAddCategoryModalOpen, handleCatSubmit, isAddPersonModalOpen, isCatDelete, isCatEdit, isPersonDelete, isPersonEdit, handleDelete, handleImageUpload, handleOnSubmit, selectedImage, setCategoryData, setFormData, setIsCatEdit, setIsPersonEdit, formData, catId, categoryData, personId, isSaving, selectedId, setCatId, setAddCategoryModalOpen, setAddPersonModalOpen, setIsCateDelete, setIsPersonDelete, setPersonId, setSelectedId, sharedWithMe, people, categories, isLoading, mySites, handleEditCategory, handleEditePerson, getAge,
 }) => {
     const t = useTranslations()
-    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-    const baseUrl = isValidHub ? hub.isRemotely ? `http://media.kapidhwaj.ai:${hub.static_port}/` : `http://${hub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
-    console.log(baseUrl, "base")
+    // const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    // const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+    const baseUrl = `http://localhost:3000/` 
     return (
         <div className="h-full flex flex-col gap-3 min-h-0 px-2 md:px-4">
             {/* Header Section */}

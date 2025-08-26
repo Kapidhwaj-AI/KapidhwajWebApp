@@ -3,7 +3,7 @@ import { protectApi } from '@/lib/protectApi';
 import { getLocalStorageItem, setLocalStorageItem } from '@/lib/storage';
 import { setIsProfileOpen } from '@/redux/slices/settingsSlice';
 import { AppDispatch, RootState } from '@/redux/store';
-import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
+// import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
 import { AxiosResponse } from 'axios';
 import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,8 +12,8 @@ const ProfileController = () => {
     const [file, setFile] = useState<File>()
     const [isLoading, setIsLoading] = useState(false);
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-    const baseUrl = isValidHub ? hub.isRemotely ? `http://media.kapidhwaj.ai:${hub.static_port}/` : `http://${hub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
+    // const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+    const baseUrl = `http://localhost:3000/`
     const user = JSON.parse(getLocalStorageItem('user') ?? '{}')
     const [preview, setPreview] = useState(baseUrl + user.profile_image)
     const [name, setName] = useState(user.name ?? '');

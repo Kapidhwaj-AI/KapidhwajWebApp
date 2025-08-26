@@ -32,7 +32,7 @@ export default function CameraStreamCard({
   useEffect(() => {
     const fetchWebrtc = async () => {
       try {
-        const res = await fetch(camera?.webrtc_url ?? '')
+        const res = await fetch(`http://localhost:8889/${camera?.camera_id}`)
         if (res.ok) {
           setStreamError(null)
         }
@@ -60,7 +60,7 @@ export default function CameraStreamCard({
     >
       {hasStream && (
         <iframe
-          src={camera.webrtc_url}
+          src={`http://localhost:8889/${camera?.camera_id}`}
           allowFullScreen
           style={{ width: "100%", maxWidth: "800px", height: '100%' }}
         >

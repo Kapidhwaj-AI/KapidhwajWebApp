@@ -25,7 +25,7 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
       )}
     >
       <iframe
-        src={camera?.webrtc_url}
+        src={`http://localhost:8889/${camera?.camera_id}`}
         allowFullScreen
         
         style={{width:'105%', height:'105%'}}

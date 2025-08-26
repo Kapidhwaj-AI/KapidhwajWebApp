@@ -5,15 +5,14 @@ import Image from "next/image";
 import { getLocalStorageItem } from "@/lib/storage";
 import { useState } from "react";
 import AlertPreviewDialogue from "@/components/dialogue/AlertPreviewDialogue";
-import { GOOGLE_KPH_BUCKET_URL } from "@/services/config";
+
 
 export function AlertCard({ alert }: { alert: Alert }) {
     const [isPreview, setIsPreview] = useState(false);
     const timestamp = alert?.timestamp || 0
     const alertTimestamp = new Date(timestamp * 1000);
-    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-    const baseUrl = isValidHub ? hub.isRemotely ? `http://media.kapidhwaj.ai:${hub.static_port}/` : `http://${hub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
+    // const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    const baseUrl =  `http://localhost:3000/`
     const formattedDate = alertTimestamp.toLocaleDateString("en-GB");
     const formattedTime = alertTimestamp.toLocaleTimeString("en-GB", {
         hour: '2-digit',
