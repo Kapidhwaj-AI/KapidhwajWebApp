@@ -64,6 +64,7 @@ const ManageDevicesController = () => {
             const res = await protectApi<Hub[]>(`/devices/hub`, undefined, undefined, undefined, false);
             const data = res.data.data
             setSavedHubs(data)
+            setSelectedHub(data[0])
             if (selectedHub) {
                 const updated = data.find(h => h.id === selectedHub.id);
                 if (updated) setSelectedHub(updated);
