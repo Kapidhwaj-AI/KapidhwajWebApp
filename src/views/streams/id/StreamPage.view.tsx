@@ -124,37 +124,39 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, lo
                                 setSelectedTab={setSelectedTab}
                             />
                         </div>
-                        <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
-                            <InfiniteScrolling<Alert>
-                                setData={setAlerts}
-                                setOffset={setAlertOffset}
-                                offset={alertOffset}
-                                divRef={alertEndRef}
-                                data={alerts}
-                                fetchData={fetchAlerts}
-                                isLoading={alertsLoading}
-                                setIsLoading={setAlertsLoading}
-                                setHasMore={setHasMore}
-                                hasMore={hasMore}
-                            >
-                                {filteredAlerts.length > 0 ? (
-                                    <>
-                                        {filteredAlerts.map((item, index) => (
-                                            <AlertCard alert={item} key={index} />
-                                        ))}
-                                        {!isDateFiltered && <div ref={alertEndRef} className="h-1" />}
-                                    </>
-                                ) : (
-                                    <p className="text-center h-full w-full flex items-center justify-center">
-                                        {t("alerts.no_found")}
-                                    </p>
-                                )}
-                            </InfiniteScrolling>
+                        <div className='flex-1 md:max-h-[65vh] max-h-[35vh] overflow-auto scrollbar-hide'>
+                            <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
+                                <InfiniteScrolling<Alert>
+                                    setData={setAlerts}
+                                    setOffset={setAlertOffset}
+                                    offset={alertOffset}
+                                    divRef={alertEndRef}
+                                    data={alerts}
+                                    fetchData={fetchAlerts}
+                                    isLoading={alertsLoading}
+                                    setIsLoading={setAlertsLoading}
+                                    setHasMore={setHasMore}
+                                    hasMore={hasMore}
+                                >
+                                    {filteredAlerts.length > 0 ? (
+                                        <>
+                                            {filteredAlerts.map((item, index) => (
+                                                <AlertCard alert={item} key={index} />
+                                            ))}
+                                            {!isDateFiltered && <div ref={alertEndRef} className="h-1" />}
+                                        </>
+                                    ) : (
+                                        <p className="text-center h-full w-full flex items-center justify-center">
+                                            {t("alerts.no_found")}
+                                        </p>
+                                    )}
+                                </InfiniteScrolling>
 
-                            {alertsLoading && <div className="text-center"><Spinner /></div>}
-                            {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (
-                                <p className="text-center">{t("no_more_data")}</p>
-                            )}
+                                {alertsLoading && <div className="text-center"><Spinner /></div>}
+                                {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (
+                                    <p className="text-center">{t("no_more_data")}</p>
+                                )}
+                            </div>
                         </div>
                     </div>}
                 </div>
