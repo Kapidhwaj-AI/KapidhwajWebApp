@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
-import { jakarta } from "@/lib/fonts";
+import { jakarta, notoGuj, notoHindi } from "@/lib/fonts";
+
 import { Providers } from "@/providers/Providers";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
@@ -9,8 +10,8 @@ import SocketNotification from "@/components/common/SocketNotification";
 export const metadata: Metadata = {
   title: "Kapidhwaj AI",
   description: "",
-  icons:{
-    icon:'/assets/images/logo-square.png'
+  icons: {
+    icon: '/assets/images/logo-square.png'
   }
 };
 
@@ -24,14 +25,14 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${jakarta.variable} antialiased bg-[var(--surface-150)]`}
+        className={`${jakarta.variable} ${notoGuj.variable} ${notoHindi.variable} antialiased bg-[var(--surface-150)]`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
-            <SocketNotification/>
-            {children} 
+            <SocketNotification />
+            {children}
           </Providers>
-          <ToastContainer/>
+          <ToastContainer />
         </NextIntlClientProvider>
       </body>
     </html>
