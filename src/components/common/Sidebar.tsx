@@ -25,8 +25,9 @@ export default function Sidebar() {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}');
-  const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+  const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
+  const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
+  const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
 
   const t = useTranslations();
 
@@ -52,11 +53,11 @@ export default function Sidebar() {
   }, []);
 
   const shouldExpand = isMobile ? isExpanded : (isExpanded || isHovering);
-  useEffect(()=>{
-    if(!isHovering || !isExpanded){
+  useEffect(() => {
+    if (!isHovering || !isExpanded) {
       setIsProfileMenuOpen(false)
     }
-  },[isHovering, isExpanded])
+  }, [isHovering, isExpanded])
   return (
     <>
       {isMobile && (
@@ -75,7 +76,7 @@ export default function Sidebar() {
             onClick={() => { setIsMobileMenuOpen(!isMobileMenuOpen); setIsProfileMenuOpen(false) }}
             className="p-2 rounded-lg bg-[var(--surface-300)]"
           >
-             <IconMenu2 size={24} />
+            <IconMenu2 size={24} />
           </button>
         </div>
       )}
@@ -244,7 +245,7 @@ export default function Sidebar() {
               )}
             </button>
 
-         
+
             <ProfileMenu
               isOpen={isProfileMenuOpen}
               onClose={() => setIsProfileMenuOpen(false)}

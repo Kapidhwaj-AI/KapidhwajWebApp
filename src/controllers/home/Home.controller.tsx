@@ -11,14 +11,15 @@ import SiteFolderModal from '@/components/dialogue/SiteFolderModal'
 
 const HomeController = () => {
     const [nearbyHubs, setNearbyHubs] = useState<ManageHub[]>([])
-    const [savedHaubs, setSavedHubs] = useState<Hub[]>([])
+    const [savedHubs, setSavedHubs] = useState<Hub[]>([])
+    const [commonHubs, setCommonHubs] = useState<Hub[]>([])
     const [isHubLoading, setIsHubLoading] = useState(false)
     const [isSavedHubsLoading, setIsSavedHubsLoading] = useState(false)
-    const [isRemotely, setIsRemotely] = useState(false)
+   
     const [devices, setDevices] = useState(0)
     const [isAddModal, setIsAddModal] = useState(false)
-    const storedHub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const tempHub = JSON.parse(getLocalStorageItem('temphub') ?? '{}')
+    const storedHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+    const tempHub = JSON.parse(getLocalStorageItem('Remotetemphub') ?? '{}')
     const [isSaving, setIsSaving] = useState(false);
     const [showPassword, setShowPassword] = useState(false)
     const [id, setId] = useState('')
@@ -28,13 +29,14 @@ const HomeController = () => {
     const [sites, setSites] = useState<Organization[]>([])
     const [isSiteAddModal, setIsSiteAddModal] = useState(false)
     const [siteName, setSiteName] = useState('')
-    const isValidHub = storedHub && typeof storedHub === 'object' && 'id' in storedHub && 'isRemotely' in storedHub;
+   
     const fetchHubs = async () => {
         setIsHubLoading(true)
         try {
             const res = await fetch('/api/hubs');
             const data = await res.json();
             setNearbyHubs(data.hubs)
+
         } catch (error) {
             console.error("err:", error)
 
@@ -81,14 +83,18 @@ const HomeController = () => {
             console.error("err:", error)
         }
     }
+   
     useEffect(() => {
-        fetchHubs()
-        fetchSavedHubs()
-        if (isValidHub && storedHub.isRemotely) {
-            setIsRemotely(true)
+        if (nearbyHubs.length > 0 && savedHubs.length > 0) {
+            const commonHubs = savedHubs.filter(saved =>
+                nearbyHubs.some(nearby => nearby.name === saved.id)
+            );
+            setCommonHubs(commonHubs)
+            if (commonHubs.length === 1) {
+                setLocalStorageItem('Localhub', JSON.stringify(commonHubs[0]))
+            }
         }
-        fetchSites()
-    }, [])
+    }, [savedHubs, nearbyHubs])
     const handleAccessRemotely = (hub: Hub) => {
         // const findHub = nearbyHubs.find((item) => item.name === hub.id)
         // if (findHub) {
@@ -97,20 +103,18 @@ const HomeController = () => {
         // }
         // else {
 
-        setLocalStorageItem('hub', JSON.stringify({ ...hub, isRemotely: true }));
+        setLocalStorageItem('Remotehub', JSON.stringify(hub));
+        removeLocalStorageItem('Localhub')
         if (storedHub) {
-            setLocalStorageItem('temphub', JSON.stringify(storedHub))
+            setLocalStorageItem('Remotetemphub', JSON.stringify(storedHub))
         } else {
-            setLocalStorageItem('temphub', JSON.stringify({ ...hub, isRemotely: true }))
+            setLocalStorageItem('Remotetemphub', JSON.stringify(hub))
         }
-        setIsRemotely(true)
-        // }
-        // removeLocalStorageItem('kapi-token')
-        // window.location.href = '/login';
         window.location.reload();
     }
     const handleAccessNearbyHubs = (hub: ManageHub) => {
-        setLocalStorageItem('hub', JSON.stringify({ ...hub, id: hub.name, isRemotely: false }));
+        setLocalStorageItem('Localhub', JSON.stringify(commonHubs.find((item) => item.id === hub.name)));
+        removeLocalStorageItem('Remotehub')
         window.location.reload();
     }
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -150,7 +154,7 @@ const HomeController = () => {
     }
     return (
         <>
-            <HomeView setIsSiteAddModal={setIsSiteAddModal} setIsAddModal={setIsAddModal} handleNearbyHubsAccess={handleAccessNearbyHubs} devices={devices} isRemotely={isRemotely} handleAccessRemotely={handleAccessRemotely} fetchHub={fetchHubs} savedHubs={savedHaubs} fetchSavedHubs={fetchSavedHubs} isHubLoading={isHubLoading} isSavedHubLoading={isSavedHubsLoading} nearbyHubs={nearbyHubs} />
+            <HomeView commonHubs={commonHubs} setIsSiteAddModal={setIsSiteAddModal} setIsAddModal={setIsAddModal} handleNearbyHubsAccess={handleAccessNearbyHubs} devices={devices} handleAccessRemotely={handleAccessRemotely} fetchHub={fetchHubs} savedHubs={savedHubs} fetchSavedHubs={fetchSavedHubs} isHubLoading={isHubLoading} isSavedHubLoading={isSavedHubsLoading} nearbyHubs={nearbyHubs} />
             {isAddModal && <HubDialogue isLoading={isSaving} showPassword={showPassword} setShowPassword={setShowPassword} onSubmit={onSubmit} id={id} selectedSite={selectedSite} setSelectedSite={setSelectedSite} setId={setId} setName={setName} setPassword={setPassword} name={name} password={password} sites={sites} onClose={() => setIsAddModal(false)} />}
             {isSiteAddModal && <SiteFolderModal isLoading={isSaving} setName={setSiteName} name={siteName} onClose={() => { setIsSiteAddModal(false); setSiteName('') }} handleSubmit={handleSubmit} />}
         </>

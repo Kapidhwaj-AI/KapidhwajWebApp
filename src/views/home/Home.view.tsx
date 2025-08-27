@@ -6,7 +6,7 @@ import SavedHubsHome from './SavedHubsHome'
 import { HomeViewProps } from '@/models/home'
 import { useTranslations } from 'next-intl'
 
-const HomeView: React.FC<HomeViewProps> = ({ handleNearbyHubsAccess, setIsSiteAddModal, setIsAddModal, devices, isRemotely, isHubLoading, isSavedHubLoading, nearbyHubs, savedHubs, fetchHub, fetchSavedHubs, handleAccessRemotely }) => {
+const HomeView: React.FC<HomeViewProps> = ({ handleNearbyHubsAccess, setIsSiteAddModal, commonHubs, setIsAddModal, devices,  isHubLoading, isSavedHubLoading, nearbyHubs, savedHubs, fetchHub, fetchSavedHubs, handleAccessRemotely }) => {
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col gap-4 min-h-0">
@@ -20,8 +20,8 @@ const HomeView: React.FC<HomeViewProps> = ({ handleNearbyHubsAccess, setIsSiteAd
             </div>
 
             <div className="grid grid-cols-1 h-full flex-grow md:grid-cols-2 gap-4 min-h-0">
-                <NearbyHubsHome handleAccessRemotely={handleNearbyHubsAccess} isHubLoading={isHubLoading} fetchHub={fetchHub} nearbyHubs={nearbyHubs} />
-                <SavedHubsHome setIsAddModal={setIsAddModal} isRemotely={isRemotely} handleAccessRemotely={handleAccessRemotely} isSavedHubLoading={isSavedHubLoading} fetchSavedHubs={fetchSavedHubs} savedHubs={savedHubs} />
+                <NearbyHubsHome commonHubs={commonHubs} handleAccessRemotely={handleNearbyHubsAccess} isHubLoading={isHubLoading} fetchHub={fetchHub} nearbyHubs={nearbyHubs} />
+                <SavedHubsHome setIsAddModal={setIsAddModal}  handleAccessRemotely={handleAccessRemotely} isSavedHubLoading={isSavedHubLoading} fetchSavedHubs={fetchSavedHubs} savedHubs={savedHubs} />
             </div>
         </div>
     )

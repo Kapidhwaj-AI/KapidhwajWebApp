@@ -10,9 +10,11 @@ import { useEffect, useState } from "react";
 export const HomeProfileCardController = ({ devices }: { devices: number }) => {
   const [userImage, setUserImage] = useState("");
   const [name, setName] = useState("");
-  const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-  const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-  const baseUrl = isValidHub ? hub.isRemotely ? `http://media.kapidhwaj.ai:${hub.static_port}/` : `http://${hub.id}.local:3000/`: GOOGLE_KPH_BUCKET_URL
+  const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+  const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+  const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
+  console.log("isValid", isValidHub, localHub, remoteHub)
+  const baseUrl = isValidHub ? remoteHub ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/`: GOOGLE_KPH_BUCKET_URL
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {

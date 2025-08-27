@@ -20,8 +20,9 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>()
-  const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-  const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+  const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+  const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+  const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
   const handleLogoutClick = async () => {
     try {
 
@@ -30,7 +31,8 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
         document.cookie = "locale=; path=/; max-age=0";
         toast.success(res.data.message ?? 'User Logout Successfully')
         removeLocalStorageItem('user')
-        removeLocalStorageItem('hub')
+        removeLocalStorageItem('Remotehub')
+        removeLocalStorageItem('Localhub')
         removeLocalStorageItem('kapi-token')
         dispatch(clearAuthToken())
         router.replace("/login");

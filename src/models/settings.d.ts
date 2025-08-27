@@ -176,6 +176,31 @@ export interface SettingsViewProps {
     }[]
 }
 
+//network 
+
+interface NetworkData {
+    mode?: "static" | "dhcp";
+    nic?: string;
+    ipVersion?: string;
+    ipv4?: {
+        address?: string,
+        subnetMask?: string,
+        gateway?: string
+    },
+    dns?: {
+        preferrd?: string,
+        alternate?: string
+    },
+    autoDns?: boolean,
+    mtu?: number
+}
+
+interface NetworkViewProps {
+    networkData?: NetworkData;
+    loading: boolean;
+    handleSave: (val: NetworkData | undefined) => void
+}
+
 //custom services
 
 export interface CustomServicesViewProps {

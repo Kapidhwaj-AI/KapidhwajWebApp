@@ -8,9 +8,9 @@ export interface HomeViewProps {
     isSavedHubLoading: boolean;
     fetchSavedHubs: () => void;
     handleAccessRemotely: (hub: Hub) => void;
-    isRemotely: boolean;
     devices: number;
     handleNearbyHubsAccess: (hub: ManageHub) => void;
     setIsAddModal: (val: boolean) => void
-    setIsSiteAddModal: (val: boolean) => void
+    setIsSiteAddModal: (val: boolean) => void;
+    commonHubs: Hub[]
 }

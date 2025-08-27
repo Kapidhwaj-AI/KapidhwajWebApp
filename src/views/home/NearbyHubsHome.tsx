@@ -1,6 +1,6 @@
 import Spinner from '@/components/ui/Spinner';
 import { getLocalStorageItem } from '@/lib/storage';
-import { ManageHub } from '@/models/settings';
+import { Hub, ManageHub } from '@/models/settings';
 import { IconRefresh, IconRouter } from '@tabler/icons-react';
 import React from 'react'
 import { useTranslations } from 'use-intl';
@@ -9,10 +9,11 @@ interface NearbyHubsProps {
     fetchHub: () => void;
     nearbyHubs: ManageHub[];
     handleAccessRemotely: (hub: ManageHub) => void
+    commonHubs: Hub[]
 }
-const NearbyHubsHome: React.FC<NearbyHubsProps> = ({ isHubLoading, fetchHub, nearbyHubs, handleAccessRemotely }) => {
+const NearbyHubsHome: React.FC<NearbyHubsProps> = ({ isHubLoading, fetchHub, nearbyHubs, handleAccessRemotely, commonHubs }) => {
     const t = useTranslations()
-    const storedHub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    const storedHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
 
     return (
         <div className={`flex flex-col bg-[var(--surface-100)] px-8 rounded-2xl md:rounded-4xl`}>
@@ -47,7 +48,7 @@ const NearbyHubsHome: React.FC<NearbyHubsProps> = ({ isHubLoading, fetchHub, nea
                                     <h3 className="text-sm font-medium truncate">{hub.name}</h3>
                                     <p className="text-xs text-gray-500 truncate">{hub.ip}</p>
                                 </div>
-                                <button onClick={() => handleAccessRemotely(hub)} className='bg-[#2B4C88] rounded-lg p-2 text-white'>Access Locally</button>
+                                {commonHubs.find((item) => item.id === hub.name) && <button onClick={() => handleAccessRemotely(hub)} className='bg-[#2B4C88] rounded-lg p-2 text-white'>Access Locally</button>}
 
                             </div>
                         ))}

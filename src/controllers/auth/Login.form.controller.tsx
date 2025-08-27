@@ -28,9 +28,6 @@ export const LoginFormController = () => {
   const phoneRegex = /^[0-9]{7,15}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-  const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);

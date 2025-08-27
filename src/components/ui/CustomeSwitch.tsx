@@ -3,14 +3,17 @@ export function Switch({
   enabled,
   onChange,
   trackColor = "bg-white",
+  disabled
 }: {
   enabled: boolean;
   onChange: () => void;
   trackColor: string;
+  disabled?: boolean
 }) {
   return (
     <button
       type="button"
+      disabled={disabled}
       className={`relative inline-flex h-[33px] w-[51px] items-center rounded-[30px]
     focus:outline-none ${trackColor} dark:bg-[#444444]`}
       onClick={onChange}

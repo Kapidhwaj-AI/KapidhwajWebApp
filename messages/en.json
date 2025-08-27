@@ -155,7 +155,20 @@
         "people_threshold_count": "People Threshold Count",
         "enter_people_threshold_count": "Enter People Threshold Count",
         "network_configuration": "Network Configuration",
-        "custom_services": "Custom Services"
+        "custom_services": "Custom Services",
+        "network": {
+            "dhcp": "DHCP",
+            "ipv4": "IPv4 Address",
+            "subnetmask": "IPv4 Subnet Mask",
+            "default_gateway": "IPv4 Default Gateway",
+            "mac_address": "MAC Address",
+            "mtu": "MTU(Bytes)",
+            "route": "Default Route",
+            "autDns": "Auto Obtain DNS",
+            "pdns": "Preferred DNS Server",
+            "adns": "Alternate DNS Server",
+            "apply": "Apply"
+        }
     },
     "manage_user": "Manage User",
     "manage_devices": "Manage Devices",

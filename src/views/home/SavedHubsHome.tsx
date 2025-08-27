@@ -10,13 +10,12 @@ interface SavedHubsProps {
     isSavedHubLoading: boolean;
     fetchSavedHubs: () => void;
     handleAccessRemotely: (hub: Hub) => void;
-    isRemotely: boolean;
     setIsAddModal: (val: boolean) => void
 }
 
-const SavedHubsHome: React.FC<SavedHubsProps> = ({ savedHubs, setIsAddModal, isSavedHubLoading, fetchSavedHubs, handleAccessRemotely, isRemotely }) => {
+const SavedHubsHome: React.FC<SavedHubsProps> = ({ savedHubs, setIsAddModal, isSavedHubLoading, fetchSavedHubs, handleAccessRemotely, }) => {
     const t = useTranslations()
-    const storedHub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    const storedHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     return (
         <div className={`flex flex-col bg-[var(--surface-100)] px-8 pb-4 rounded-2xl md:rounded-4xl `}>
             <div className="flex justify-between items-center pt-4 pb-2 flex-shrink-0">

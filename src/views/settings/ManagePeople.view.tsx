@@ -14,10 +14,11 @@ import React from 'react'
 const ManagePeopleView: React.FC<ManagePeopleProps> = ({ isAddCategoryModalOpen, handleCatSubmit, isAddPersonModalOpen, isCatDelete, isCatEdit, isPersonDelete, isPersonEdit, handleDelete, handleImageUpload, handleOnSubmit, selectedImage, setCategoryData, setFormData, setIsCatEdit, setIsPersonEdit, formData, catId, categoryData, personId, isSaving, selectedId, setCatId, setAddCategoryModalOpen, setAddPersonModalOpen, setIsCateDelete, setIsPersonDelete, setPersonId, setSelectedId, sharedWithMe, people, categories, isLoading, mySites, handleEditCategory, handleEditePerson, getAge,
 }) => {
     const t = useTranslations()
-    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-    const baseUrl = isValidHub ? hub.isRemotely ? `http://media.kapidhwaj.ai:${hub.static_port}/` : `http://${hub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
-    console.log(baseUrl, "base")
+    const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+    const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+    const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
+    const baseUrl = isValidHub ? remoteHub ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
+
     return (
         <div className="h-full flex flex-col gap-3 min-h-0 px-2 md:px-4">
             {/* Header Section */}

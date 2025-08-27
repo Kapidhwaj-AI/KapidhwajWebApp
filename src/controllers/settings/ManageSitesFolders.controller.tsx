@@ -26,7 +26,7 @@ const ManageSitesFoldersController = () => {
     const fetchSites = async () => {
         setIsSiteLoading(true)
         try {
-            const res = await protectApi<{ organization: Organization }[]>('/organizations', undefined, undefined, undefined, true)
+            const res = await protectApi<{ organization: Organization }[]>('/organizations', undefined, undefined, undefined, false)
             if (res.status === 200) {
                 const sites = res.data.data?.map(
                     (item) => item.organization,
