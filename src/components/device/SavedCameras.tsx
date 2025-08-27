@@ -122,7 +122,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                 : formData.folderId && Number(formData.folderId) > 0
                     ? formData.folderId
                     : null;
-        console.log(formData.subfolder, "sub")
+
         const payload: Partial<StreamFormData> = {
             name: formData.name,
             people_threshold_count: formData.people_threshold_count,
@@ -138,6 +138,18 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
 
             if (res.status === 200) {
                 setIsEditCameraOpen(false)
+                await fetchSavedHubs()
+                setFormData({
+                    name: '',
+                    people_threshold_count: 0,
+                    organizationId: '',
+                    folderId: -1,
+                    subfolder: -1
+                })
+            }
+            if (res.status === 201) {
+                setIsEditCameraOpen(false)
+                handleSwitchToggle(true)
                 await fetchSavedHubs()
                 setFormData({
                     name: '',
