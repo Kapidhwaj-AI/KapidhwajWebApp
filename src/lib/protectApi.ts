@@ -30,7 +30,7 @@ export async function protectApi<T, D = undefined>(url: string,
 
     return axios<ApiResponse<T>>({
         method: method ?? 'GET',
-        url: 'http://localhost:8084' + url,
+        url: 'http://KPH21550931.local:8084' + url,
         data: data,
         headers,
     });

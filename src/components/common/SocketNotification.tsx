@@ -16,7 +16,7 @@ const SocketNotification = () => {
     const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
     useEffect(() => {
         if (token) {
-            const socket = io(isValidHub && !hub.isRemotely ? `wss://${hub.id}.local:8084` : apiSocketUrl, {
+            const socket = io(isValidHub && !hub.isRemotely ? `ws://${hub.id}.local:8084` : apiSocketUrl, {
                 auth: {
                     token,
                 },

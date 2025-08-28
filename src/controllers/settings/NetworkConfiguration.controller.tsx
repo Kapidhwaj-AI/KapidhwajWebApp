@@ -20,17 +20,18 @@ const NetworkConfigurationController = () => {
   }
   const handleSave = async (data: NetworkData) => {
     if (data.mode === 'static') {
-      if (!data.ipv4?.address || !data.ipv4.gateway || !data.ipv4.subnetMask || !data.dns?.alternate || !data.dns.preferrd) {
+      if (!data.ipv4?.address || !data.ipv4.gateway || !data.ipv4.subnetMask ) {
+        console.error("error", data)
         toast.error('Please Fill all the feilds')
         return
       }
     }
-    if (!data.autoDns) {
-      if (!data.dns?.alternate || !data.dns.preferrd) {
-        toast.error('Please Fill all the feilds')
-        return
-      }
-    }
+    // if (!data.autoDns) {
+    //   if (!data.dns?.alternate || !data.dns.preferrd) {
+    //     toast.error('Please Fill all the feilds')
+    //     return
+    //   }
+    // }
     setLoading(true)
     console.log("Hello")
     try {

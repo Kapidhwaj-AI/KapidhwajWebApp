@@ -14,13 +14,19 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
     const [newData, setNewData] = useState<NetworkData | undefined>(networkData)
     const t = useTranslations()
     useEffect(() => {
-        setNewData(networkData);
+        if (networkData) {
+
+            setNewData(networkData);
+        }
+        else {
+            setNewData((prev) => ({ ...prev, mode: "dhcp" }))
+        }
     }, [networkData]);
 
     useEffect(() => {
         console.log("newData updated:", newData);
     }, [newData]);
-
+    console.log(networkData, "netw")
     return (
         <form onSubmit={(e) => { e.preventDefault(); handleSave(newData) }} className="space-y-5 md:w-[40rem] w-full self-center p-6 bg-[var(--surface-200)] dark:bg-gray-800 flex flex-col py-3 px-4 rounded-2xl border">
             <div className="flex justify-between items-center py-3 px-4 rounded-2xl border ">
@@ -28,16 +34,8 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
                 <Switch
                     enabled={newData?.mode === "dhcp"}
                     onChange={() => {
-                        setNewData((prev) =>
-                            prev
-                                ? { ...prev, mode: prev.mode === "dhcp" ? "static" : "dhcp" }
-                                : undefined
-                        )
-                        setNewData((prev) =>
-                            prev
-                                ? { ...prev, autoDns: prev.mode === "dhcp" ? true : false }
-                                : undefined
-                        )
+                        setNewData((prev) => ({ ...prev, mode: prev?.mode === "dhcp" ? "static" : "dhcp" }))
+                        setNewData((prev) => ({ ...prev, autoDns: prev?.mode === "dhcp" ? true : false }))
                     }
                     }
                     trackColor='bg-gray-300'
@@ -72,7 +70,7 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
                 onChange={(val) =>
                     setNewData((prev) => ({
                         ...prev,
-                        ipv4: { ...prev?.ipv4, mask: val },
+                        ipv4: { ...prev?.ipv4, subnetMask: val },
                     }))
                 }
             />

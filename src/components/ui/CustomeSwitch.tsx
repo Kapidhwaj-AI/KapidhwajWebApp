@@ -12,7 +12,7 @@ export function Switch({
 }) {
   return (
     <button
-      disabled={disabled}
+      disabled={disabled ? disabled: false}
       type="button"
       className={`relative inline-flex h-[33px] w-[51px] items-center rounded-[30px] 
     focus:outline-none ${trackColor} dark:bg-[#444444]`}
