@@ -138,6 +138,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
 
             if (res.status === 200) {
                 setIsEditCameraOpen(false)
+                handleSwitchToggle(true)
                 await fetchSavedHubs()
                 setFormData({
                     name: '',

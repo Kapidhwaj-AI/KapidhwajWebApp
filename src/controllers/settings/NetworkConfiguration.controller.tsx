@@ -16,7 +16,7 @@ const NetworkConfigurationController = () => {
       const nicRes = await protectApi<NicsData[]>('/network/nics')
       setNetworkData(res.data.data)
       setNics(nicRes.data.data)
-      setNic(nicRes.data.data.find((item) => item.id === 'eth0')?.id ?? '')
+      setNic((nicRes.data.data.find((item) => item.id === 'eth0')?.id || res.data.data.nic) ?? '')
     } catch (err) {
       console.error(err, "Error")
     } finally {

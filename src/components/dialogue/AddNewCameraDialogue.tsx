@@ -202,7 +202,7 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, i
                                             <p className="text-xs text-gray-500 truncate">{device.ipaddress}</p>
                                         </div>
                                         <button type='button'
-                                            onClick={() => { setName(device.name); setIpAddress(device.ipaddress); setMac(mac) }}
+                                            onClick={() => {  setIpAddress(device.ipaddress); setMac(mac) }}
                                             className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
                                         >
                                             <IconCopyPlus size={16} className="text-gray-600" />
