@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 interface IPv4InputProps {
     value?: string;
@@ -18,9 +18,10 @@ const IPv4Input: React.FC<IPv4InputProps> = ({
     const initial = value.split(".").concat(Array(4).fill("")).slice(0, 4);
     const [segments, setSegments] = useState(initial);
 
-    // Store refs for all 4 inputs
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-
+    useEffect(() => {
+        setSegments(value.split(".").concat(Array(4).fill("")).slice(0, 4));
+    }, [value]);
     const handleChange = (index: number, val: string) => {
         if (!/^\d*$/.test(val)) return;
         const newSegments = [...segments];

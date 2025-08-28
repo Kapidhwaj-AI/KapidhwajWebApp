@@ -16,7 +16,6 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
     const t = useTranslations()
     useEffect(() => {
         if (networkData) {
-
             setNewData(networkData);
         }
         else {
