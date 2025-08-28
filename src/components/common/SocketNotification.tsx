@@ -12,11 +12,10 @@ const SocketNotification = () => {
     console.log("api", apiSocketUrl)
     const dispatch = useDispatch();
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
-    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+
     useEffect(() => {
         if (token) {
-            const socket = io(isValidHub && !hub.isRemotely ? `ws://${hub.id}.local:8084` : apiSocketUrl, {
+            const socket = io(apiSocketUrl, {
                 auth: {
                     token,
                 },
