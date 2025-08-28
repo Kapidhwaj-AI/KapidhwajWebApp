@@ -38,7 +38,7 @@ const NetworkConfigurationController = () => {
     //   }
     // }
     setLoading(true)
-    console.log("Hello")
+    data.nic = nic
     try {
       const res = await protectApi<unknown, NetworkData>('/network', 'PUT', data)
       if (res.status === 200) {
