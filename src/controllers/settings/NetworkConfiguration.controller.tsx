@@ -1,6 +1,6 @@
 'use client'
 import { protectApi } from '@/lib/protectApi'
-import { NetworkData } from '@/models/settings'
+import { NetworkData, NicsData } from '@/models/settings'
 import NetworkConfigurationView from '@/views/settings/NetworkConfiguration.view'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
@@ -8,10 +8,14 @@ import { toast } from 'react-toastify'
 const NetworkConfigurationController = () => {
   const [loading, setLoading] = useState(false)
   const [newtworkData, setNetworkData] = useState<NetworkData>()
+  const [nics, setNics] = useState<NicsData[]>([])
+  const [nic, setNic] = useState('')
   const getNetwork = async () => {
     try {
       const res = await protectApi<NetworkData>(`/network`)
+      const nicRes = await protectApi<NicsData[]>('/network/nics')
       setNetworkData(res.data.data)
+      setNics(nicRes.data.data)
     } catch (err) {
       console.error(err, "Error")
     } finally {
@@ -20,7 +24,7 @@ const NetworkConfigurationController = () => {
   }
   const handleSave = async (data: NetworkData) => {
     if (data.mode === 'static') {
-      if (!data.ipv4?.address || !data.ipv4.gateway || !data.ipv4.subnetMask ) {
+      if (!data.ipv4?.address || !data.ipv4.gateway || !data.ipv4.subnetMask) {
         console.error("error", data)
         toast.error('Please Fill all the feilds')
         return
@@ -54,7 +58,7 @@ const NetworkConfigurationController = () => {
   }, [])
   return (
     <>
-      <NetworkConfigurationView loading={loading} networkData={newtworkData} handleSave={handleSave} />
+      <NetworkConfigurationView nic={nic} setNic={setNic} nicsData={nics} loading={loading} networkData={newtworkData} handleSave={handleSave} />
     </>
   )
 }

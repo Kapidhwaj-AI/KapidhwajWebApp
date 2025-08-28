@@ -195,12 +195,19 @@ interface NetworkData {
     mtu?: number
 }
 
-interface NetworkViewProps {
+export interface NetworkViewProps {
     networkData?: NetworkData;
     loading: boolean;
     handleSave: (val: NetworkData | undefined) => void
+    nicsData: NicsData[]
+    nic: string;
+    setNic: (val: string) => void;
 }
-
+export interface NicsData {
+    id: string;
+    label: string;
+    mac: string
+}
 //custom services
 
 export interface CustomServicesViewProps {
