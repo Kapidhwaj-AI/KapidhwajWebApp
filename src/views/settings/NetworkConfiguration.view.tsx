@@ -30,7 +30,7 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
     console.log(networkData, "netw")
     return (
         <form onSubmit={(e) => { e.preventDefault(); handleSave(newData) }} className="space-y-5 md:w-[40rem] w-full self-center p-6 bg-[var(--surface-200)] dark:bg-gray-800 flex flex-col py-3 px-4 rounded-2xl border">
-            <SelectField value={nic} setValue={setNic} data={nicsData.map((item) => ({ id: item.id, name: item.label }))} label={t('settings.select_type')} placeholder={'Select Network interface'} />
+            <SelectField value={nic} setValue={setNic} data={nicsData.map((item) => ({ id: item.id, name: item.id }))} label={t('settings.select_type')} placeholder={'Select Network interface'} />
             <div className="flex justify-between items-center py-3 px-4 rounded-2xl border ">
                 <span className="font-medium">{t('settings.network.dhcp')}</span>
                 <Switch
