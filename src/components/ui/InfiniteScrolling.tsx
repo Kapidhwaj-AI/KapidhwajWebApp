@@ -30,6 +30,7 @@ function InfiniteScrolling<T>({
     useEffect(() => {
         const loadItems = async () => {
             setIsLoading(true);
+            console.log(isLoading,"isLoad")
             try {
                 const newData = await fetchData(offset);
                 if (newData.length === 0) {

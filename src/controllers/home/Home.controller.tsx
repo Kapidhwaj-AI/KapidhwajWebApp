@@ -15,7 +15,7 @@ const HomeController = () => {
     const [commonHubs, setCommonHubs] = useState<Hub[]>([])
     const [isHubLoading, setIsHubLoading] = useState(false)
     const [isSavedHubsLoading, setIsSavedHubsLoading] = useState(false)
-   
+
     const [devices, setDevices] = useState(0)
     const [isAddModal, setIsAddModal] = useState(false)
     const storedHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
@@ -29,7 +29,7 @@ const HomeController = () => {
     const [sites, setSites] = useState<Organization[]>([])
     const [isSiteAddModal, setIsSiteAddModal] = useState(false)
     const [siteName, setSiteName] = useState('')
-   
+
     const fetchHubs = async () => {
         setIsHubLoading(true)
         try {
@@ -83,7 +83,10 @@ const HomeController = () => {
             console.error("err:", error)
         }
     }
-   
+    useEffect(() => {
+        fetchHubs()
+        fetchSavedHubs()
+    }, [])
     useEffect(() => {
         if (nearbyHubs.length > 0 && savedHubs.length > 0) {
             const commonHubs = savedHubs.filter(saved =>
