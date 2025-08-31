@@ -36,7 +36,7 @@
     "hls.js": "^1.6.7",
     "local-devices": "^4.0.0",
     "lucide-react": "^0.528.0",
-    "next": "15.4.4",
+    "next": "15.4.7",
     "next-intl": "^4.3.4",
     "next-themes": "^0.4.6",
     "node-fetch": "^3.3.2",
