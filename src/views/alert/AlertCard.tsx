@@ -12,7 +12,7 @@ export function AlertCard({ alert }: { alert: Alert }) {
     const timestamp = alert?.timestamp || 0
     const alertTimestamp = new Date(timestamp * 1000);
     // const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const baseUrl =  `http://kph07722362.local:3000/`
+    const baseUrl =  `http://localhost:3000/`
     const formattedDate = alertTimestamp.toLocaleDateString("en-GB");
     const formattedTime = alertTimestamp.toLocaleTimeString("en-GB", {
         hour: '2-digit',
