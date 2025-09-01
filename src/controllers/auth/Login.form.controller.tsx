@@ -9,6 +9,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 export const LoginFormController = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -73,6 +74,7 @@ export const LoginFormController = () => {
         setError(
           error.response?.data?.message || "An error occurred during login"
         );
+        toast.error(error.message)
         console.error("Err:",error)
       } else {
         setError("An unexpected error occurred");
