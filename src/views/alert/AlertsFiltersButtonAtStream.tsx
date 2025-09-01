@@ -28,21 +28,21 @@ function AlertsFiltersButtonAtStream({ selectedTab, changeTab, }: { selectedTab:
                     key={index}
                     onClick={() => changeTab(tf.value)}
                     className={cn(
-                        'flex flex-col items-center justify-center',
+                        'flex  items-center justify-center gap-2',
                         'px-3 rounded-lg md:rounded-xl hover:bg-white hover:text-black',
                         selectedTab === tf.value
                             ? 'bg-[#2B4C88] text-white'
                             : 'bg-[var(--surface-350)] text-[#888888]'
                     )}
                 >
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center flex-col justify-center">
                         {React.cloneElement(tf.icon, { size: 16 })}
-                    </div>
                     <span className="text-xs mt-1">{tf.label}</span>
-                    {tf.value === 'PEOPLE_COUNT' && isPeople && (<div className={`rounded-full p-2 ${selectedTab === tf.value
+                    </div>
+                    {tf.value === 'PEOPLE_COUNT' && (<div className={`rounded-full flex px-1 justify-center items-center ${selectedTab === tf.value
                         ? ' bg-[#888888]'
                         : ' bg-white'}`}>
-                        <span> {!Number.isNaN(peopleCount?.people_count) ? peopleCount?.people_count : 0}</span>
+                        <span className="text-xs text-center self-center "> {!Number.isNaN(peopleCount?.people_count) ? peopleCount?.people_count : 0}</span>
                     </div>)}
                 </button>
             ))}
