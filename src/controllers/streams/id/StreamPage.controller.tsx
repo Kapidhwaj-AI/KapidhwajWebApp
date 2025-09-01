@@ -7,11 +7,12 @@ import { Camera, CameraLocation } from '@/models/camera';
 import { RecordedClip } from '@/models/clip';
 
 import { StreamFormData } from '@/models/stream';
-import { RootState } from '@/redux/store';
+import { AppDispatch, RootState } from '@/redux/store';
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp';
 import React, { use, useEffect, useMemo, useRef, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { setIsPeople } from '@/redux/slices/singleCameraSlice';
 
 const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) => {
 
@@ -47,6 +48,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         folderId: cameraLocation?.parantFolderId ?? NaN,
         subfolder: cameraLocation?.folderId ?? NaN
     });
+    const dispatch = useDispatch<AppDispatch>();
     const [isEditLoading, setIsEditLoading] = useState(false)
     const [stream, setStream] = useState(false)
     const {
@@ -95,6 +97,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                 if (camRes.status === "fulfilled") {
                     setCamera(camRes.value);
                     setStream(camRes.value.webrtc_url !== null && camRes.value?.rtsp_url !== null);
+                    dispatch(setIsPeople(camRes.value.is_people_count_active !== 0))
                     newFormData.name = camRes.value.name ?? '';
                     newFormData.people_threshold_count = camRes.value.people_threshold_count ?? 0;
                     newFormData.organizationId = camRes.value.organization_id ?? '';
@@ -121,7 +124,13 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                 setFormData((prev) => ({ ...prev, ...newFormData }));
             })
             .finally(() => setLoading(false));
-    }, [id]);
+    }, [id, intrusionDetected,
+        peopleDetected,
+        peopleCountDetected,
+        motionDetected,
+        licensePlateDetected,
+        fireSmokeDetected,
+        faceDetection]);
 
 
 
