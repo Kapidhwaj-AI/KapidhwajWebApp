@@ -39,10 +39,10 @@ function AlertsFiltersButtonAtStream({ selectedTab, changeTab, }: { selectedTab:
                         {React.cloneElement(tf.icon, { size: 16 })}
                     <span className="text-xs mt-1">{tf.label}</span>
                     </div>
-                    {tf.value === 'PEOPLE_COUNT' && (<div className={`rounded-full flex px-1 justify-center items-center ${selectedTab === tf.value
+                    {tf.value === 'PEOPLE_COUNT' && isPeople && (<div className={`rounded-full flex px-1 justify-center items-center ${selectedTab === tf.value
                         ? ' bg-[#888888]'
                         : ' bg-white'}`}>
-                        <span className="text-xs text-center self-center "> {!Number.isNaN(peopleCount?.people_count) ? peopleCount?.people_count : 0}</span>
+                        <span className="text-xs text-center self-center "> {  peopleCount?.people_count }</span>
                     </div>)}
                 </button>
             ))}

@@ -51,7 +51,6 @@ const SocketNotification = () => {
                 people_count: number;
             }) => {
                 console.log(data, "people live count")
-                toast.info(data.people_count+'peoples')
                 dispatch(setPeopleCount(data));
             });
 
