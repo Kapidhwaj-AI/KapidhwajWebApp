@@ -71,12 +71,12 @@ const SettingsController = () => {
             icon: <IconPlus size={40} />,
             path: "/settings/custom-services"
         },
-        {
-            id: 10,
-            title: t("settings.network_configuration"),
-            icon: <IconNetwork size={40} />,
-            path: "/settings/network-configuration"
-        },
+        // {
+        //     id: 10,
+        //     title: t("settings.network_configuration"),
+        //     icon: <IconNetwork size={40} />,
+        //     path: "/settings/network-configuration"
+        // },
     ];
     return (
         <SettingsView
