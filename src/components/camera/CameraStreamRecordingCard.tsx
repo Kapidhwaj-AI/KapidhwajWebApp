@@ -10,7 +10,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
     const [isPlaying, setIsPlaying] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     // const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const  baseUrl = `http://localhost:3000/`
+    const baseUrl = `http://kph07722362.local:3000/`
     const handleTogglePlay = () => {
         const video = videoRef.current;
         if (!video) return;

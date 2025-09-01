@@ -40,7 +40,7 @@ export interface AlertViewProps {
   setIsDateFiltered: (val: boolean) => void;
   isLoading: boolean;
   setIsLoading: (val: boolean) => void;
-  fetchAlerts: (val: number) => Promise<Alert[]>;
+  fetchAlerts: (val: number, serviceType: string | null) => Promise<Alert[]>;
   setDate: (val: Date | undefined) => void;
   setStartTime: (val: Date | undefined) => void;
   setEndTime: (val: Date | undefined) => void;
@@ -54,7 +54,8 @@ export interface AlertViewProps {
   setHasMore: (val: boolean) => void;
   alertEndRef: React.RefObject<HTMLDivElement | nul>;
   alerts: Alert[];
-  setSelectedTab: (value: string) => void;
   selectedTab: string;
   setAlertsLoading: (val: boolean) => void
+  changeTab: (val:string) => void
+  serviceType: string | null
 }

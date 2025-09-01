@@ -15,7 +15,7 @@ const SocketNotification = () => {
 
     useEffect(() => {
         if (token) {
-            const socket = io(apiSocketUrl, {
+            const socket = io('ws://localhost:8084', {
                 auth: {
                     token,
                 },
@@ -76,9 +76,6 @@ const SocketNotification = () => {
 
             socket.on('disconnect', reason => {
                 console.log('Disconnected from server. Reason:', reason);
-                if (reason === 'io server disconnect') {
-                    socket.connect();
-                }
             });
 
             return () => {

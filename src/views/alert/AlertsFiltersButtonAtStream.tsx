@@ -2,8 +2,16 @@ import { cn } from '@/lib/utils';
 import { IconBounceRight, IconFireExtinguisher, IconFriends, IconLayoutDashboard, IconLicense, IconTreadmill, IconUserScan } from '@tabler/icons-react';
 import React from 'react'
 import { useTranslations } from "next-intl";
-function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selectedTab: string, setSelectedTab: (val: string) => void }) {
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+function AlertsFiltersButtonAtStream({ selectedTab, changeTab, }: { selectedTab: string, changeTab: (val: string) => void }) {
     const t = useTranslations()
+    const isPeople = useSelector(
+        (state: RootState) => state.singleCamera.isPeople,
+    );
+    const peopleCount = useSelector(
+        (state: RootState) => state.singleCamera.peopleCount,
+    );
     const tabFilters = [
         { id: 0, label: `${t("alerts.all")}`, value: 'all', icon: <IconLayoutDashboard stroke={2} /> },
         { id: 1, label: `${t("alerts.intrusion_detection")}`, value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={2} /> },
@@ -18,7 +26,7 @@ function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selected
             {tabFilters.map((tf, index) => (
                 <button
                     key={index}
-                    onClick={() => setSelectedTab(tf.value)}
+                    onClick={() => changeTab(tf.value)}
                     className={cn(
                         'flex flex-col items-center justify-center',
                         'px-3 rounded-lg md:rounded-xl hover:bg-white hover:text-black',
@@ -31,6 +39,11 @@ function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selected
                         {React.cloneElement(tf.icon, { size: 16 })}
                     </div>
                     <span className="text-xs mt-1">{tf.label}</span>
+                    {tf.value === 'PEOPLE_COUNT' && isPeople && (<div className={`rounded-full p-2 ${selectedTab === tf.value
+                        ? ' bg-[#888888]'
+                        : ' bg-white'}`}>
+                        <span> {!Number.isNaN(peopleCount?.people_count) ? peopleCount?.people_count : 0}</span>
+                    </div>)}
                 </button>
             ))}
         </div>

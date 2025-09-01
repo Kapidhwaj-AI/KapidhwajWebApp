@@ -12,7 +12,7 @@ export function AlertCard({ alert }: { alert: Alert }) {
     const timestamp = alert?.timestamp || 0
     const alertTimestamp = new Date(timestamp * 1000);
     // const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const baseUrl =  `http://localhost:3000/`
+    const baseUrl =  `http://kph07722362.local:3000/`
     const formattedDate = alertTimestamp.toLocaleDateString("en-GB");
     const formattedTime = alertTimestamp.toLocaleTimeString("en-GB", {
         hour: '2-digit',
@@ -55,7 +55,7 @@ export function AlertCard({ alert }: { alert: Alert }) {
             {/* Image Area */}
             <div className="relative aspect-video m-4 rounded-xl flex items-center justify-center"
             >
-                {alert?.frame_url && <Image src={baseUrl + alert?.frame_url} alt={alert?.alertType} width={1000} height={1000} className="object-cover w-auto h-auto rounded-2xl" />}
+                {alert?.frame_url && <img src={baseUrl + alert?.frame_url} alt={alert?.alertType} width={1000} height={1000} className="object-cover w-auto h-auto rounded-2xl" />}
 
                 <button onClick={() => setIsPreview(true)} className="absolute h-14 w-14 rounded-full bg-neutral-400/20 dark:bg-black/20 backdrop-blur-[32px] flex items-center justify-center">
                     <IconMovie stroke={2} className="text-gray-600 dark:text-gray-300" size={24} />

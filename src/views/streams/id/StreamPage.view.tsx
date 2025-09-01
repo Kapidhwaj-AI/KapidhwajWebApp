@@ -17,11 +17,13 @@ import { StreamsPageViewProps } from '@/models/stream';
 import { cn } from '@/lib/utils';
 
 
-const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
+
+const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, changeTab, setSettingDial, setStartTime, settingDial,
     startTime, stream, fetchAlerts, date, fetchRecordings, filterDial, filteredAlerts, formData, recordingLoading, recordingOffset, recordingref, recordings, alertEndRef, alertOffset, alerts, alertsLoading, handleAiToggle, handleMotionToggle, handleRecordingToggle, handleSave, handleToggleStream, hasMore, hasRecordingMore, endTime, organizations, handleApplyFilter
 
 }) => {
     const t = useTranslations()
+ 
     return (
         <div className="h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4">
             {!isFullscreen && <div className="flex flex-col md:flex-row justify-between items-start  gap-3">
@@ -118,13 +120,13 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, lo
                     </div>
 
                     {!isFullscreen && <div className="lg:col-span-2 flex flex-col p-2 md:p-5 rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
-                        
-                            <AlertsFiltersButtonAtStream
-                                selectedTab={selectedTab}
-                                setSelectedTab={setSelectedTab}
-                            />
-                        
-                        <div className='flex-1 md:max-h-[70vh] max-h-[35vh] overflow-auto scrollbar-hide'>
+
+                        <AlertsFiltersButtonAtStream
+                            selectedTab={selectedTab}
+                            changeTab={changeTab}
+                        />
+
+                        <div className='flex-1 md:max-h-[59vh] max-h-[35vh] overflow-auto scrollbar-hide'>
                             <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
                                 <InfiniteScrolling<Alert>
                                     setData={setAlerts}
@@ -132,6 +134,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, lo
                                     offset={alertOffset}
                                     divRef={alertEndRef}
                                     data={alerts}
+                                    serviceType={serviceType}
                                     fetchData={fetchAlerts}
                                     isLoading={alertsLoading}
                                     setIsLoading={setAlertsLoading}
@@ -139,17 +142,15 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, lo
                                     hasMore={hasMore}
                                 >
                                     {filteredAlerts.length > 0 ? (
-                                        <>
-                                            {filteredAlerts.map((item, index) => (
-                                                <AlertCard alert={item} key={index} />
-                                            ))}
-                                            {!isDateFiltered && <div ref={alertEndRef} className="h-1" />}
-                                        </>
+                                        filteredAlerts.map((item, index) => (
+                                            <AlertCard alert={item} key={index} />
+                                        ))
                                     ) : (
                                         <p className="text-center h-full w-full flex items-center justify-center">
                                             {t("alerts.no_found")}
                                         </p>
                                     )}
+                                    <div ref={alertEndRef} className="h-3" />
                                 </InfiniteScrolling>
 
                                 {alertsLoading && <div className="text-center"><Spinner /></div>}

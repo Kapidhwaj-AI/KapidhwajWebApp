@@ -5,7 +5,8 @@ interface InfiniteScrollingProp<T> {
     setHasMore: (val: boolean) => void;
     hasMore: boolean;
     isLoading: boolean;
-    fetchData: (offSet: number) => Promise<T[]>;
+    fetchData: (offSet: number, serviceType?: string | null) => Promise<T[]>;
+    serviceType?: string | null;
     setData: (val: T[]) => void;
     divRef: React.RefObject<HTMLDivElement | null>;
     children: React.ReactNode;
@@ -25,13 +26,14 @@ function InfiniteScrolling<T>({
     hasMore,
     setOffset,
     data,
-    isLoading
+    isLoading,
+    serviceType
 }: InfiniteScrollingProp<T>) {
     useEffect(() => {
         const loadItems = async () => {
             setIsLoading(true);
             try {
-                const newData = await fetchData(offset);
+                const newData = await fetchData(offset, serviceType);
                 if (newData.length === 0) {
                     setHasMore(false);
                 } else {
@@ -45,10 +47,11 @@ function InfiniteScrolling<T>({
         };
 
         if (offset > 0) loadItems();
-    }, [offset]);
+    }, [offset, serviceType]);
 
     useEffect(() => {
         const target = divRef.current;
+        console.log(target,"target")
         if (!target) return;
 
         const observer = new IntersectionObserver(

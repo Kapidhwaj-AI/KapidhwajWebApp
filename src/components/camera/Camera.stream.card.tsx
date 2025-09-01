@@ -25,7 +25,7 @@ export const CameraStreamCard = ({
    
     >
       <iframe
-        src={camera?.webrtc_url}
+        src={`http://kph07722362.local:8889/${camera?.camera_id}/?net=offline`}
         allowFullScreen
         className="w-[100%] h-[100%] rounded-4xl"
       >

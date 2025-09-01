@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { IconBounceRight, IconFireExtinguisher, IconFriends, IconLayoutDashboard, IconLicense, IconTreadmill, IconUserScan } from "@tabler/icons-react";
 
-const AlertsFiltersButtons = ({selectedTab, setSelectedTab}:{selectedTab:string, setSelectedTab:(value:string) => void}) => {
+const AlertsFiltersButtons = ({selectedTab,  changeTab}:{selectedTab:string,  changeTab:(val:string) => void}) => {
     const t = useTranslations()
     const tabFilters = [
         { id: 0, label: `${t("alerts.all")}`, value: 'all', icon: <IconLayoutDashboard stroke={2} /> },
@@ -20,7 +20,7 @@ const AlertsFiltersButtons = ({selectedTab, setSelectedTab}:{selectedTab:string,
             {tabFilters.map((filter) => (
                 <button
                     key={filter.id}
-                    onClick={() => setSelectedTab(filter.value)}
+                    onClick={() => { changeTab(filter.value)}}
                     className={cn(
                         "flex items-center space-x-2 rounded-full px-1.5 py-1.5 transition-all w-full",
                         selectedTab === filter.value

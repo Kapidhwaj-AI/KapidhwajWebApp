@@ -30,9 +30,10 @@ export interface StreamsViewProps {
 
 export interface StreamsPageViewProps {
     loading: boolean;
+    serviceType: string | null;
     isFullscreen: boolean;
     cameraLocation: CameraLocation | undefined;
-    camera: Camera | undefined ;
+    camera: Camera | undefined;
     setIsEdit: (val: boolean) => void;
     setSettingDial: (val: boolean) => void;
     setFilterDial: (val: boolean) => void;
@@ -50,19 +51,19 @@ export interface StreamsPageViewProps {
     recordingref: React.RefObject<HTMLDivElement | null>;
     hasRecordingMore: boolean;
     selectedTab: string;
-    setSelectedTab: (val: string) => void;
+    changeTab: (val: string) => void;
     setAlerts: (val: Alert[]) => void;
     alertOffset: number;
     alertEndRef: React.RefObject<HTMLDivElement | null>;
     alerts: Alert[];
-    fetchAlerts: (offSet: number) => Promise<Alert[]>;
+    fetchAlerts: (offSet: number, serviceType?: string | null) => Promise<Alert[]>;
     alertsLoading: boolean;
     setAlertsLoading: (val: boolean) => void;
     setHasMore: (val: boolean) => void;
     hasMore: boolean;
     filteredAlerts: Alert[];
     isDateFiltered: boolean;
-    setIsDateFiltered:(val:boolean) => void;
+    setIsDateFiltered: (val: boolean) => void;
     date: Date | undefined;
     startTime: Date | undefined;
     endTime: Date | undefined;

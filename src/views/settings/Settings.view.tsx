@@ -33,7 +33,7 @@ const SettingsView: React.FC<SettingsViewProps> = ({ settingsItems, setShowHelpD
                                 item.id === 4 ? dispatch(setIsProfileOpen(true)) :
                                     item.id === 5 ? dispatch(setIsChangePasswordOpen(true)) :
                                         item.id === 6 ? setShowHelpDial(true) : {}}
-                        className={`${ hub.isRemotely && item.id === 10 ? 'hidden' : ''} md:w-[150px] w-full h-auto lg:w-[180px] md:h-[180px] bg-[var(--surface-100)] hover:border-[var(--surface-100)] hover:bg-[var(--surface-200)] hover:border-2 md:rounded-[40px] rounded-xl md:p-6 p-3.5 flex md:flex-col flex-row items-center md:justify-center gap-3 transition-colors duration-200`}
+                        className={` md:w-[150px] w-full h-auto lg:w-[180px] md:h-[180px] bg-[var(--surface-100)] hover:border-[var(--surface-100)] hover:bg-[var(--surface-200)] hover:border-2 md:rounded-[40px] rounded-xl md:p-6 p-3.5 flex md:flex-col flex-row items-center md:justify-center gap-3 transition-colors duration-200`}
                     >
                         <div className="text-[var(--primary)]">
                             {item.icon}

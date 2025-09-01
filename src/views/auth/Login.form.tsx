@@ -64,14 +64,14 @@ export const LoginForm = ({
         >{isLoading ? <Spinner /> :
           'Sign In'}
         </button>
-        <div className="flex items-center gap-3 py-2 sm:py-3">
+        {/* <div className="flex items-center gap-3 py-2 sm:py-3">
           <div className="w-full bg-[var(--surface-300)]  h-[1px] dark:bg-white "></div>
 
           <span className="flex items-center justify-center text-xs sm:text-sm text-gray-500 dark:text-white   rounded-full">
             OR
           </span>
           <div className="w-full bg-[var(--surface-300)]  h-[1px] dark:bg-white"></div>
-        </div>
+        </div> */}
         {/* <button
           type="button"
           onClick={redirectRegister}
