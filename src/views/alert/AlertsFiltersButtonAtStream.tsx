@@ -42,7 +42,7 @@ function AlertsFiltersButtonAtStream({ selectedTab, changeTab, }: { selectedTab:
                     {tf.value === 'PEOPLE_COUNT' && isPeople && (<div className={`rounded-full flex px-1 justify-center items-center ${selectedTab === tf.value
                         ? ' bg-[#888888]'
                         : ' bg-white'}`}>
-                        <span className="text-xs text-center self-center "> {  peopleCount?.people_count }</span>
+                        <span className="text-xs text-center self-center "> {peopleCount?.people_count}</span>
                     </div>)}
                 </button>
             ))}

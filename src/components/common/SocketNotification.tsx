@@ -48,7 +48,7 @@ const SocketNotification = () => {
 
             socket.on('people_count', (data: {
                 camera_id: string;
-                people_count: number;
+                people_count: string;
             }) => {
                 console.log(data, "people live count")
                 dispatch(setPeopleCount(data));
