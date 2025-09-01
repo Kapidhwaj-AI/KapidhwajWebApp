@@ -12,7 +12,7 @@ import { getUtcTimestamp } from '@/utils/getUTCTimestamp';
 import React, { use, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { setIsPeople } from '@/redux/slices/singleCameraSlice';
+import { setCurrentCameraId, setIsPeople } from '@/redux/slices/singleCameraSlice';
 
 const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) => {
 
@@ -98,6 +98,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                     setCamera(camRes.value);
                     setStream(camRes.value.webrtc_url !== null && camRes.value?.rtsp_url !== null);
                     dispatch(setIsPeople(camRes.value.is_people_count_active !== 0))
+                    dispatch(setCurrentCameraId({ id: camRes.value.camera_id }));
                     newFormData.name = camRes.value.name ?? '';
                     newFormData.people_threshold_count = camRes.value.people_threshold_count ?? 0;
                     newFormData.organizationId = camRes.value.organization_id ?? '';
