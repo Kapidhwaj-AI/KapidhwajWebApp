@@ -22,31 +22,50 @@ const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setIsM
                 </div>
             </div>
             <button className='self-end bg-[#2B4C88] p-2 text-white rounded-4xl' onClick={handleReadAll}>Read All</button>
-            {isLoading ? <Spinner /> : <div className="flex-1 overflow-y-auto scrollbar-hide mt-5">
+            <div className="flex-1 flex flex-col gap-2 mb-2 overflow-y-auto scrollbar-hide">
+                {isLoading ? <Spinner /> :
+                    <>
+                        {error ? (
+                            <div className="col-span-full h-full flex items-center justify-center w-full text-center text-red-500">Error loading notifications: {error.message}</div>
+                        ) : filteredNotifications.length === 0 ? (
+                            <div className="col-span-full h-full flex items-center justify-center w-full text-center text-gray-500">{t("notifications.no_data")}</div>
+                        ) : (
+                            <div className='flex-1 md:max-h-[82vh] max-h-[35vh] w-full overflow-auto scrollbar-hide'>
+                                <div className={filteredNotifications.length > 0 ? "grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid grid-cols-1 h-full w-full"}>
+                                    <InfiniteScrolling<Notification>
+                                        setData={setAllNotifications}
+                                        setOffset={setOffset}
+                                        offset={offset}
+                                        divRef={divRef}
+                                        data={allNotifications}
+                                        fetchData={fetchNotification}
+                                        isLoading={isMoreLoading}
+                                        setIsLoading={setIsMoreLoading}
+                                        setHasMore={setHasMore}
+                                        hasMore={hasMore}
+                                    >
+                                        {filteredNotifications.length > 0
+                                            ? filteredNotifications.map((item, index) => (
+                                                <NotificationCard notification={item} key={index} />
+                                            ))
+                                            : (
+                                                <p className="text-center w-full">
+                                                    {t("notifications.no_data")}
+                                                </p>
+                                            )
+                                        }
+                                        {filteredNotifications.length > 0 && (
+                                            <div ref={divRef} className="h-10" />
+                                        )}
+                                    </InfiniteScrolling>
 
-                {error ? (
-                    <div className="col-span-full h-full flex items-center justify-center w-full text-center text-red-500">Error loading notifications: {error.message}</div>
-                ) : filteredNotifications.length === 0 ? (
-                    <div className="col-span-full h-full flex items-center justify-center w-full text-center text-gray-500">{t("notifications.no_data")}</div>
-                ) : (
-
-                    <InfiniteScrolling<Notification> setData={setAllNotifications} setOffset={setOffset} offset={offset} divRef={divRef} data={allNotifications} fetchData={fetchNotification} isLoading={isMoreLoading} setIsLoading={setIsMoreLoading} setHasMore={setHasMore} hasMore={hasMore}>
-
-                        <div className={filteredNotifications.length > 0 ? "grid grid-cols-1 gap-6  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid grid-cols-1"}>
-                            {filteredNotifications.length > 0 ? <>
-
-                                {filteredNotifications.map((item, index) => (
-                                    <NotificationCard notification={item} key={index} />
-                                ))}
-
-                            </> :
-                                <p className="text-center w-full"> No more notifications found</p>
-                            }
-                        </div>
-                        {filteredNotifications.length > 0 && <div ref={divRef} className="h-2" />}
-                    </InfiniteScrolling>
-                )}
-            </div>}
+                                </div>
+                                {isMoreLoading && <div className="text-center"><Spinner /></div>}
+                                {!isMoreLoading && !hasMore && filteredNotifications.length > 0 && <p className="text-center">{t('no_more_data')}</p>}
+                            </div>
+                        )}
+                    </>}
+            </div>
 
         </div>
     )
