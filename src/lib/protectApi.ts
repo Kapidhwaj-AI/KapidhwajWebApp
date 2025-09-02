@@ -14,10 +14,11 @@ export async function protectApi<T, D = undefined>(url: string,
     data?: D, type?: string, isNotCustomHeader?: boolean) {
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
-    const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+    const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
     const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-    const baseUrl = isValidHub && !isNotCustomHeader
-        ? remoteHub
+    
+    const baseUrl = isValidHub 
+        ? remoteHub.id
             ? apiBaseUrl
             : `http://${localHub.id}.local:8084`
         : apiBaseUrl;

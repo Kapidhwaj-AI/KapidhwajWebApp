@@ -38,6 +38,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const [startTime, setStartTime] = useState<Date | undefined>();
     const [endTime, setEndTime] = useState<Date | undefined>();
     const [isDateFiltered, setIsDateFiltered] = useState(false)
+    const [serviceType, setServiceType] = useState<string | null>(null)
     const [isMlService, setIsMlService] = useState(false)
     const [formData, setFormData] = useState<StreamFormData>({
         name: camera?.name ?? '',
@@ -66,8 +67,8 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         const res = await protectApi<CameraLocation, undefined>(`/camera/cam-details?cameraId=${id}`)
         return res.data.data
     }
-    const fetchAlerts = async (offset: number, startTime?: number, endTime?: number) => {
-        const endpoint = startTime ? `/alert/recent?offset=${offset}&cameraId=${id}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}` : `/alert/recent?offset=${offset}&cameraId=${id}`
+    const fetchAlerts = async (offset: number, serviceType: string | null, startTime?: number, endTime?: number) => {
+        const endpoint = serviceType !== null ? startTime ? `/alert/recent?offset=${offset}&cameraId=${id}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&cameraId=${id}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&cameraId=${id}`
         const res = await protectApi<Alert[]>(endpoint)
         return res.data.data
     }
@@ -84,7 +85,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         setLoading(true);
         Promise.allSettled([
             fetchCamera(id),
-            fetchAlerts(alertOffset),
+            fetchAlerts(alertOffset, serviceType),
             fetchRecordings(recordingOffset),
             fetchIsFav(id),
             fetchCameraLocation()
@@ -140,7 +141,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     };
     useEffect(() => {
         const alertFetch = async () => {
-            const res = await fetchAlerts(alertOffset)
+            const res = await fetchAlerts(alertOffset, serviceType)
             setAlerts(res)
         }
         alertFetch()
@@ -150,7 +151,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         motionDetected,
         licensePlateDetected,
         fireSmokeDetected,
-        faceDetection,])
+        faceDetection, serviceType])
     const handleAiToggle = async (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean,) => {
         setIsMlService(true)
         try {
@@ -220,7 +221,8 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         if (date && startTime && endTime) {
             const start = getUtcTimestamp(date, startTime)
             const end = getUtcTimestamp(date, endTime)
-            const res = await fetchAlerts(alertOffset, start, end)
+            const res = await fetchAlerts(alertOffset, serviceType
+                , start, end)
 
             setIsDateFiltered(true)
             setAlerts(res)
@@ -295,10 +297,36 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         }
     }
 
+    const changeTab = async (tab: string) => {
+        setAlerts([]);
+        if (tab === 'ALL') {
+            setServiceType(null);
+        } else if (tab === 'INTRUSION_DETECTION') {
+            setServiceType('intrusion_detection');
 
+        } else if (tab === 'PEOPLE_COUNT') {
+            setServiceType('people_count');
+
+        } else if (tab === 'FACE_DETECTION') {
+            setServiceType('face_detection');
+
+        } else if (tab === 'MOTION_DETECTION') {
+            setServiceType('motion_detection');
+
+        } else if (tab === 'LICENSE_PLATE_DETECTION') {
+            setServiceType('license_plate_detection');
+        } else if (tab === 'FIRE_SMOKE_DETECTION') {
+            setServiceType('fire_smoke_detection');
+        } else {
+            setServiceType(null);
+        }
+        setSelectedTab(tab);
+        setAlertOffset(0)
+        setHasMore(true)
+    };
     const isFullscreen = useSelector((state: RootState) => state.camera.isFullScreen)
     return (
-        <StreamPageView isAiServiceLoading={isMlService} loading={loading} selectedTab={selectedTab} setAlertOffset={setAlertOffset} setAlerts={setAlerts} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setFormData={setFormData} setHasMore={setHasMore} setHasRecordingMore={setHasRecordingMore} setIsDateFiltered={setIsDateFiltered} setIsEdit={setIsEdit} setRecordingLoading={setRecordingLoading} setRecordingOffset={setRecordingOffset} setRecordings={setRecordings} setSelectedTab={setSelectedTab} setSettingDial={setSettingDial} setStartTime={setStartTime} settingDial={settingDial} startTime={startTime} stream={stream} isDateFiltered={isDateFiltered} isEdit={isEdit} isEditLoading={isEditLoading} isFullscreen={isFullscreen} camera={camera} cameraLocation={cameraLocation} makeFav={makeFav} toggleStreamFav={toggleStreamFav} handleAiToggle={handleAiToggle} handleApplyFilter={handleApplyFilter} handleMotionToggle={handleMotionToggle} handleRecordingToggle={handleRecordinToggle} handleSave={handleSave} handleToggleStream={handleToggleStream} hasMore={hasMore} hasRecordingMore={hasRecordingMore} fetchAlerts={fetchAlerts} fetchRecordings={fetchRecordings} filterDial={filterDial} filteredAlerts={filteredAlerts} formData={formData} recordingLoading={recordingLoading} recordingOffset={recordingOffset} recordingref={recordingref} recordings={recordings} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} date={date} endTime={endTime} organizations={organizations} />
+        <StreamPageView isAiServiceLoading={isMlService} loading={loading} selectedTab={selectedTab} setAlertOffset={setAlertOffset} setAlerts={setAlerts} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setFormData={setFormData} setHasMore={setHasMore} setHasRecordingMore={setHasRecordingMore} setIsDateFiltered={setIsDateFiltered} setIsEdit={setIsEdit} setRecordingLoading={setRecordingLoading} setRecordingOffset={setRecordingOffset} setRecordings={setRecordings} setSelectedTab={changeTab} setSettingDial={setSettingDial} setStartTime={setStartTime} settingDial={settingDial} startTime={startTime} stream={stream} isDateFiltered={isDateFiltered} isEdit={isEdit} isEditLoading={isEditLoading} isFullscreen={isFullscreen} camera={camera} cameraLocation={cameraLocation} makeFav={makeFav} toggleStreamFav={toggleStreamFav} handleAiToggle={handleAiToggle} handleApplyFilter={handleApplyFilter} handleMotionToggle={handleMotionToggle} handleRecordingToggle={handleRecordinToggle} serviceType={serviceType} handleSave={handleSave} handleToggleStream={handleToggleStream} hasMore={hasMore} hasRecordingMore={hasRecordingMore} fetchAlerts={fetchAlerts} fetchRecordings={fetchRecordings} filterDial={filterDial} filteredAlerts={filteredAlerts} formData={formData} recordingLoading={recordingLoading} recordingOffset={recordingOffset} recordingref={recordingref} recordings={recordings} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} date={date} endTime={endTime} organizations={organizations} />
     )
 }
 

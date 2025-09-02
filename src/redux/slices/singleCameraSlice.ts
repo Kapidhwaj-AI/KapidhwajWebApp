@@ -15,7 +15,7 @@ interface SingleCameraState {
     currentCameraIsRecording: boolean;
     currentCameraIsIntrusion: boolean;
     currentCameraIsFaceDetection: boolean;
-    peopleCount: { camera_id: string; people_count: number, } | null;
+    peopleCount: { camera_id: string; people_count: string, } | null;
     currentCameraIsMotionDetection: boolean;
     currentCameraIsLicenseDetection: boolean;
     currentCameraIsFireDetection: boolean;
@@ -34,7 +34,7 @@ const initialState: SingleCameraState = {
     currentCameraIsMotionDetection: false,
     currentCameraIsLicenseDetection: false,
     currentCameraIsFireDetection: false,
-    peopleCount: { camera_id: '', people_count: NaN, },
+    peopleCount: { camera_id: '', people_count: '0', },
     currentCameraName: '',
     isMoveable: true,
     storage_type: '',
@@ -70,7 +70,7 @@ const singelCameraSlice = createSlice({
         setActiveTabRedux(state, action) {
             state.activeTab = action.payload;
         },
-        setPeopleCount(state, action: PayloadAction<{ camera_id: string; people_count: number, }>) {
+        setPeopleCount(state, action: PayloadAction<{ camera_id: string; people_count: string, }>) {
             if (state.currentCameraId === action.payload.camera_id) {
                 state.peopleCount = action.payload;
             } else {
