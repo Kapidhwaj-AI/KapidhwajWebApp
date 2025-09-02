@@ -14,6 +14,7 @@ const NotificationsController = () => {
     const [loading, setLoading] = useState(false)
     const [hasMore, setHasMore] = useState(true)
     const [isDateFiltered, setIsDateFiltered] = useState(false)
+    const [isMoreLoading, setIsMoreLoading] = useState(false)
     const divRef = useRef<HTMLDivElement>(null)
     const didFetch = useRef(false);
     const fetchNotification = async (offset: number) => {
@@ -56,7 +57,7 @@ const NotificationsController = () => {
             notification.title.toLowerCase().includes(searchQuery.toLowerCase()))
     }, [allNotifications, searchQuery])
 
-    return <NotificationView handleReadAll={handleReadAll} offset={offset} filteredNotifications={filteredNotifications} error={err} divRef={divRef} isDateFiltered={isDateFiltered} setIsDateFiltered={setIsDateFiltered} setIsLoading={setLoading} setAllNotifications={setAllNotifications} setOffset={setOffset} searchQuery={searchQuery} setSearchQuery={setSearchQuery} allNotifications={allNotifications} fetchNotification={fetchNotification} isLoading={loading} setHasMore={setHasMore} hasMore={hasMore} />
+    return <NotificationView setIsMoreLoading={setIsMoreLoading} isMoreLoading={isMoreLoading} handleReadAll={handleReadAll} offset={offset} filteredNotifications={filteredNotifications} error={err} divRef={divRef} isDateFiltered={isDateFiltered} setIsDateFiltered={setIsDateFiltered} setIsLoading={setLoading} setAllNotifications={setAllNotifications} setOffset={setOffset} searchQuery={searchQuery} setSearchQuery={setSearchQuery} allNotifications={allNotifications} fetchNotification={fetchNotification} isLoading={loading} setHasMore={setHasMore} hasMore={hasMore} />
 }
 
 export default NotificationsController

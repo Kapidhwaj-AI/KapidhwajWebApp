@@ -32,5 +32,7 @@ export interface NotificationViewProps {
     setOffset: (val: number) => void
     hasMore: boolean;
     setHasMore: (val: boolean) => void
-    handleReadAll: () => void
+    handleReadAll: () => void;
+    setIsMoreLoading: (val: boolean) => void;
+    isMoreLoading: boolean;
 }

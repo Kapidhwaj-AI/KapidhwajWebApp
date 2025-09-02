@@ -6,7 +6,7 @@ import InfiniteScrolling from '@/components/ui/InfiniteScrolling'
 import Spinner from '@/components/ui/Spinner'
 import { useTranslations } from 'next-intl'
 
-const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setSearchQuery, isLoading, setIsLoading, allNotifications, filteredNotifications, error, setAllNotifications,  divRef, fetchNotification, hasMore, setHasMore, offset, setOffset, handleReadAll }) => {
+const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setIsMoreLoading, isMoreLoading, setSearchQuery, isLoading, setIsLoading, allNotifications, filteredNotifications, error, setAllNotifications, divRef, fetchNotification, hasMore, setHasMore, offset, setOffset, handleReadAll }) => {
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col gap-4 min-h-0 md:p-5">
@@ -30,7 +30,7 @@ const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setSea
                     <div className="col-span-full h-full flex items-center justify-center w-full text-center text-gray-500">{t("notifications.no_data")}</div>
                 ) : (
 
-                    <InfiniteScrolling<Notification> setData={setAllNotifications} setOffset={setOffset} offset={offset} divRef={divRef} data={allNotifications} fetchData={fetchNotification} isLoading={isLoading} setIsLoading={setIsLoading} setHasMore={setHasMore} hasMore={hasMore}>
+                    <InfiniteScrolling<Notification> setData={setAllNotifications} setOffset={setOffset} offset={offset} divRef={divRef} data={allNotifications} fetchData={fetchNotification} isLoading={isMoreLoading} setIsLoading={setIsMoreLoading} setHasMore={setHasMore} hasMore={hasMore}>
 
                         <div className={filteredNotifications.length > 0 ? "grid grid-cols-1 gap-6  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid grid-cols-1"}>
                             {filteredNotifications.length > 0 ? <>
