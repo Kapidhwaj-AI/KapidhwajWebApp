@@ -125,13 +125,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                 setFormData((prev) => ({ ...prev, ...newFormData }));
             })
             .finally(() => setLoading(false));
-    }, [id, intrusionDetected,
-        peopleDetected,
-        peopleCountDetected,
-        motionDetected,
-        licensePlateDetected,
-        fireSmokeDetected,
-        faceDetection]);
+    }, [id]);
 
 
 

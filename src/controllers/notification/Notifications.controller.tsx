@@ -12,7 +12,7 @@ const NotificationsController = () => {
     const [allNotifications, setAllNotifications] = useState<Notification[]>([]);
     const [err, setErr] = useState<Error>()
     const [loading, setLoading] = useState(false)
-    const [hasMore, setHasMore] = useState(false)
+    const [hasMore, setHasMore] = useState(true)
     const [isDateFiltered, setIsDateFiltered] = useState(false)
     const divRef = useRef<HTMLDivElement>(null)
     const didFetch = useRef(false);
