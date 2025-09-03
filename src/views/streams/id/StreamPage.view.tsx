@@ -143,7 +143,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, se
                                             {t("alerts.no_found")}
                                         </p>
                                     )}
-                                    {!isDateFiltered && <div ref={alertEndRef} className="h-1" />}
+                                    {!isDateFiltered && filteredAlerts.length > 0 && <div ref={alertEndRef} className="h-1" />}
                                 </InfiniteScrolling>
                                 {alertsLoading && <div className="text-center"><Spinner /></div>}
                                 {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (

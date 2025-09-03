@@ -60,28 +60,14 @@ const AlertsController = () => {
         if (alertOffset === 0) {
             loaddata()
         }
-    }, [])
-    useEffect(() => {
-        const onAlert = async () => {
-            try {
-                setAlerts(await fetchAlerts(alertOffset, serviceType))
-            } catch (error) {
-                console.error(error)
-                if (error instanceof AxiosError && error.response?.status === 400) {
-                    toast.error(error.response?.data.error)
-                    setErr(error.response?.data.error)
-                }
-
-            }
-        }
-        onAlert()
-    }, [intrusionDetected,
+    }, [intrusionDetected, serviceType,
         peopleDetected,
         peopleCountDetected,
         motionDetected,
         licensePlateDetected,
         fireSmokeDetected,
         faceDetection])
+   
     const changeTab = async (tab: string) => {
         if (tab === 'ALL') {
             setServiceType(null);
