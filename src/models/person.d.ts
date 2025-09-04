@@ -1,12 +1,12 @@
-import {Alert} from './alert';
-import {Camera} from './camera';
-import {Category} from './category';
-import {Organization} from './organization';
+import { Alert } from './alert';
+import { Camera } from './camera';
+import { Category } from './category';
+import { Organization } from './organization';
 import { PersonFormaData } from './settings';
 
 export interface Person {
   id: number;
-  name: string ;
+  name: string;
   dob: string | Date;
   category_id: number;
   gcp_image_path?: string;
@@ -26,24 +26,33 @@ export interface Person {
 }
 
 export interface ManagePeopleProps {
+  divRef: React.RefObject<HTMLDivElement | null>;
+  offset: number;
+  setPersonLoading: (val: boolean) => void;
+  setHasMore: (val: boolean) => void;
+  personLoading: boolean;
+  hasMore: boolean
+  setOffset: (val: number) => void;
+  setPerson: (val: Person[]) => void;
+  handleSelectSite: (offset: number) => Promise<Person[]>
   selectedId: string;
   setAddPersonModalOpen: (val: boolean) => void;
-  setSelectedId:(val: string) => void;
+  setSelectedId: (val: string) => void;
   setAddCategoryModalOpen: (val: boolean) => void;
   isLoading: boolean;
-  mySites:Organization[];
+  mySites: Organization[];
   sharedWithMe: Organization[];
   people: Person[];
   handleEditePerson: (val: Person) => void;
   setPersonId: (val: number) => void;
   setIsPersonDelete: (val: boolean) => void;
   categories: Category[]
-  getAge:(val: Date) => number;
+  getAge: (val: Date) => number;
   handleEditCategory: (val: Category) => void;
   setIsCateDelete: (val: boolean) => void;
   setCatId: (val: number) => void;
   setIsPersonEdit: (val: boolean) => void;
-  setFormData:(val:PersonFormaData) => void;
+  setFormData: (val: PersonFormaData) => void;
   formData: PersonFormaData;
   isAddPersonModalOpen: boolean;
   isPersonEdit: boolean;
@@ -61,8 +70,8 @@ export interface ManagePeopleProps {
     colorCode: string;
   }>>;
   handleOnSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  handleDelete: (val: number|string) => void;
-  catId: number; 
+  handleDelete: (val: number | string) => void;
+  catId: number;
   personId: number;
   isCatDelete: boolean;
   isPersonDelete: boolean;

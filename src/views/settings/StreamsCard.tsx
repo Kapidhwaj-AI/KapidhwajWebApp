@@ -1,4 +1,5 @@
 import { Checkbox } from '@/components/ui/checkbox';
+import { BASE_URL } from '@/lib/protectApi';
 import { Camera } from '@/models/camera';
 import React from 'react'
 
@@ -15,7 +16,7 @@ const StreamsCard: React.FC<StreamsCardProps> = ({ selectedStreams, toggleStream
         >
             <div className="aspect-video relative">
                 <iframe
-                    src={stream.webrtc_url}
+                    src={`http://${BASE_URL}:8889/${stream?.camera_id}/?net=offline`}
                     allowFullScreen
                     style={{ width: "100%", maxWidth: "800px" }}
                     className='rounded-xl'

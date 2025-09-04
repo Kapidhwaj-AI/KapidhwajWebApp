@@ -1,5 +1,8 @@
+import { getLocalStorageItem } from "@/lib/storage";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from 'next-intl/plugin';
+
+const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
 
 const nextConfig: NextConfig = {
   images: {
@@ -19,6 +22,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'http',
         hostname: 'localhost',
+        port: '3000',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: localHub?.id?.toString() ?? '**',
         port: '3000',
         pathname: '/**',
       },

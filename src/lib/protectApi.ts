@@ -27,7 +27,7 @@ export const BASE_URL = getApiBaseUrl()
 const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
 export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
-    data?: D, type?: string, isNotCustomHeader?: boolean) {
+    data?: D, type?: string, isNotCustomHeader?: boolean, params?:unknown) {
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
     const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
     const baseUrl = isValidHub && !isNotCustomHeader
@@ -48,29 +48,31 @@ export async function protectApi<T, D = undefined>(url: string,
             url: BASE_URL + url,
             data: data,
             headers,
+            params
         });
         return response
     } catch (err) {
-        // if (err?.response?.status === 401) {
-        //     console.log("Token expired, trying refresh...");
-        //     const refreshed = await fetchRefreshToken();
-        //     if (refreshed) {
-        //         const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
-        //         const headers: Record<string, string> = {
-        //             Authorization: `Bearer ${token}`,
-        //             'Content-Type': type ?? 'application/json',
-        //         };
-        //         return axios<ApiResponse<T>>({
-        //             method: method ?? "GET",
-        //             url: BASE_URL + url,
-        //             data: data,
-        //             headers: headers,
-        //         });
-        //     }
-        //     else {
-        //         removeLocalStorageItem('kapi-token')
-        //     }
-        // }
+        if (err?.response?.status === 401) {
+            console.log("Token expired, trying refresh...");
+            const refreshed = await fetchRefreshToken();
+            if (refreshed) {
+                const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
+                const headers: Record<string, string> = {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': type ?? 'application/json',
+                };
+                return axios<ApiResponse<T>>({
+                    method: method ?? "GET",
+                    url: BASE_URL + url,
+                    data: data,
+                    headers: headers,
+                    params
+                });
+            }
+            else {
+                removeLocalStorageItem('kapi-token')
+            }
+        }
         console.error(err, "err from protectApi")
         throw err;
     }
