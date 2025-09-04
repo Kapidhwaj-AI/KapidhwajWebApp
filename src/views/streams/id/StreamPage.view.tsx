@@ -17,7 +17,7 @@ import { StreamsPageViewProps } from '@/models/stream';
 import { cn } from '@/lib/utils';
 
 
-const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
+const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
     startTime, stream, fetchAlerts, date, fetchRecordings, filterDial, filteredAlerts, formData, recordingLoading, recordingOffset, recordingref, recordings, alertEndRef, alertOffset, alerts, alertsLoading, handleAiToggle, handleMotionToggle, handleRecordingToggle, handleSave, handleToggleStream, hasMore, hasRecordingMore, endTime, organizations, handleApplyFilter
 
 }) => {
@@ -119,7 +119,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, se
 
                     {!isFullscreen && <div className="lg:col-span-2 flex flex-col p-2 md:p-5 md:max-h-[82vh] max-h-[35vh] overflow-auto scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
                         <AlertsFiltersButtonAtStream selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-                        <div className='flex-1 '>
+                        {isAllAlertLoading ? <Spinner /> : <div className='flex-1 '>
                             <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
                                 <InfiniteScrolling<Alert>
                                     setData={setAlerts}
@@ -143,14 +143,14 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, se
                                             {t("alerts.no_found")}
                                         </p>
                                     )}
-                                    {!isDateFiltered && filteredAlerts.length > 0 && <div ref={alertEndRef} className="h-1" />}
+                                    {filteredAlerts.length > 0 && <div ref={alertEndRef} className="h-1" />}
                                 </InfiniteScrolling>
                                 {alertsLoading && <div className="text-center"><Spinner /></div>}
                                 {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (
                                     <p className="text-center">{t("no_more_data")}</p>
                                 )}
                             </div>
-                        </div>
+                        </div>}
                     </div>}
                 </div>
             }

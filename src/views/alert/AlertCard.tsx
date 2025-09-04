@@ -20,12 +20,13 @@ export function AlertCard({ alert }: { alert: Alert }) {
         hour: '2-digit',
         minute: '2-digit'
     });
-
+    console.log("alertlog", alert)
     return (
         <div className="w-full bg-[var(--surface-200)] rounded-4xl shadow-lg overflow-hidden">
             <div className="flex justify-between md:flex-row flex-col md:gap-0 gap-1 items-start md:items-center p-2 md:px-4 md:pt-4">
                 <div className="flex items-center gap-1 md:gap-3">
-                    <div className="p-2 md:p-4 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                    {alert.alertType === 'FACE_DETECTION' && alert?.persons && <img className="rounded-full w-12 h-12" src={baseUrl + `/${alert?.persons[0].gcp_image_path}`} />}
+                    {alert.alertType !== 'FACE_DETECTION' && <div className="p-2 md:p-4 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                         {[
                             { value: 'all', icon: <IconLayoutDashboard stroke={2} /> },
                             { value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={2} /> },
@@ -35,7 +36,8 @@ export function AlertCard({ alert }: { alert: Alert }) {
                             { value: 'LICENSE_PLATE_DETECTION', icon: <IconLicense stroke={2} /> },
                             { value: 'FIRE_SMOKE_DETECTION', icon: <IconFireExtinguisher stroke={2} /> },
                         ].find((item) => item.value === alert?.alertType)?.icon}
-                    </div>
+                        
+                    </div>}
                     <div className="flex flex-col gap-1">
                         <h3 className="text-xs">{alert?.alertType}</h3>
                         <p className="text-xs text-gray-500 dark:text-gray-400">{alert?.camera?.name} </p>

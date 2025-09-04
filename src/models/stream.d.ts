@@ -29,6 +29,7 @@ export interface StreamsViewProps {
 }
 
 export interface StreamsPageViewProps {
+    isAllAlertLoading: boolean
     loading: boolean;
     isFullscreen: boolean;
     cameraLocation: CameraLocation | undefined;
