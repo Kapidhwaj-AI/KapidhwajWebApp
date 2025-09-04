@@ -85,5 +85,6 @@ export interface StreamsPageViewProps {
     handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void;
-    isAiServiceLoading: boolean
+    isAiServiceLoading: boolean;
+    isAllAlertLoading: boolean
 }

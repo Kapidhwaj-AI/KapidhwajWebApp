@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 
 
 
-const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, changeTab, setSettingDial, setStartTime, settingDial,
+const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, changeTab, setSettingDial, setStartTime, settingDial,
     startTime, stream, fetchAlerts, date, fetchRecordings, filterDial, filteredAlerts, formData, recordingLoading, recordingOffset, recordingref, recordings, alertEndRef, alertOffset, alerts, alertsLoading, handleAiToggle, handleMotionToggle, handleRecordingToggle, handleSave, handleToggleStream, hasMore, hasRecordingMore, endTime, organizations, handleApplyFilter
 
 }) => {
@@ -126,7 +126,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, se
                             changeTab={changeTab}
                         />
 
-                        <div className='flex-1 md:max-h-[59vh] max-h-[35vh] overflow-auto scrollbar-hide'>
+                        {isAllAlertLoading ? <Spinner /> : <div className='flex-1 md:max-h-[59vh] max-h-[35vh] overflow-auto scrollbar-hide'>
                             <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
                                 <InfiniteScrolling<Alert>
                                     setData={setAlerts}
@@ -158,7 +158,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAiServiceLoading, se
                                     <p className="text-center">{t("no_more_data")}</p>
                                 )}
                             </div>
-                        </div>
+                        </div>}
                     </div>}
                 </div>
             }

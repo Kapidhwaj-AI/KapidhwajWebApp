@@ -45,7 +45,6 @@ export const LoginForm = ({
           label="Password"
           placeholder="Enter password here..."
           isPasswordField
-          showForgotPasswordLabel
           value={password}
           setValue={setPassword}
           setShowPassword={setShowPassword}

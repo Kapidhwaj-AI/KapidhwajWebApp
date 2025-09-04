@@ -1,6 +1,7 @@
 import axios, { Method } from "axios"
-import { getLocalStorageItem } from "./storage"
-import { apiBaseUrl } from "@/services/config"
+import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage"
+import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config"
+import { headers } from "next/headers";
 
 
 export interface ApiResponse<T> {
@@ -9,10 +10,24 @@ export interface ApiResponse<T> {
     message?: string;
 }
 
+export const getApiBaseUrl = () => {
+    if (typeof window === "undefined") return "";
+
+    const { hostname } = window.location;
+
+    // When running on the hub itself
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
+        return "http://localhost:8084";
+    }
+
+    // When accessed from another machine (IP or domain)
+    return `http://${hostname}:8084`;
+};
+export const BASE_URL = getApiBaseUrl()
+const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
 export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
     data?: D, type?: string, isNotCustomHeader?: boolean) {
-    const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
     const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
     const baseUrl = isValidHub && !isNotCustomHeader
@@ -27,12 +42,65 @@ export async function protectApi<T, D = undefined>(url: string,
     if (hub.isRemotely && !isNotCustomHeader) {
         headers['x-hub-id'] = hub.id;
     }
-
-    return axios<ApiResponse<T>>({
-        method: method ?? 'GET',
-        url: 'http://localhost:8084' + url,
-        data: data,
-        headers,
-    });
+    try {
+        const response = axios<ApiResponse<T>>({
+            method: method ?? 'GET',
+            url: BASE_URL + url,
+            data: data,
+            headers,
+        });
+        return response
+    } catch (err) {
+        if (err?.response?.status === 401) {
+            console.log("Token expired, trying refresh...");
+            const refreshed = await fetchRefreshToken();
+            if (refreshed) {
+                const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
+                const headers: Record<string, string> = {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': type ?? 'application/json',
+                };
+                return axios<ApiResponse<T>>({
+                    method: method ?? "GET",
+                    url: BASE_URL + url,
+                    data: data,
+                    headers: headers,
+                });
+            }
+            else {
+                removeLocalStorageItem('kapi-token')
+            }
+        }
+        console.error(err, "err from protectApi")
+        throw err;
+    }
 }
+
+
+export const fetchRefreshToken = async () => {
+
+    try {
+        const res = await axios.post(
+            `${BASE_URL}/refresh`, {
+                headers
+                    : {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+        }
+        );
+        console.log("Refresh API response:", res.status, res.data);
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + 7);
+        setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.access_token, expiresAt: expiresAt.toISOString() }))
+        return true;
+
+    } catch (refreshErr: any) {
+        console.error("Refresh token failed:", refreshErr.message, refreshErr?.response?.data);
+        return false;
+    }
+}
+
+
+
 

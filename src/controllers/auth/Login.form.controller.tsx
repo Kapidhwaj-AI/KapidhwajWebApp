@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { BASE_URL } from "@/lib/protectApi";
 
 export const LoginFormController = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +50,7 @@ export const LoginFormController = () => {
 
       const res = await axios({
         method: "POST",
-        url: `http://localhost:8084/signin`,
+        url: `${BASE_URL}/signin`,
         data: {
           [key]: username.trim(),
           password,

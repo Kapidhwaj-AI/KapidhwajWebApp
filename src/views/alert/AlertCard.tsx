@@ -1,10 +1,8 @@
 import { Alert } from "@/models/alert";
 import { IconClock, IconCalendar, IconMovie, IconTreadmill, IconLayoutDashboard, IconBounceRight, IconFriends, IconUserScan, IconLicense, IconFireExtinguisher } from "@tabler/icons-react";
-import Image from "next/image";
-
-import { getLocalStorageItem } from "@/lib/storage";
 import { useState } from "react";
 import AlertPreviewDialogue from "@/components/dialogue/AlertPreviewDialogue";
+import Link from "next/link";
 
 
 export function AlertCard({ alert }: { alert: Alert }) {
@@ -12,7 +10,7 @@ export function AlertCard({ alert }: { alert: Alert }) {
     const timestamp = alert?.timestamp || 0
     const alertTimestamp = new Date(timestamp * 1000);
     // const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const baseUrl =  `http://localhost:3000/`
+    const baseUrl = `http://localhost:3000/`
     const formattedDate = alertTimestamp.toLocaleDateString("en-GB");
     const formattedTime = alertTimestamp.toLocaleTimeString("en-GB", {
         hour: '2-digit',
@@ -23,17 +21,17 @@ export function AlertCard({ alert }: { alert: Alert }) {
         <div className="w-full bg-[var(--surface-200)] rounded-4xl shadow-lg overflow-hidden">
             <div className="flex justify-between md:flex-row flex-col md:gap-0 gap-1 items-start md:items-center p-2 md:px-4 md:pt-4">
                 <div className="flex items-center gap-1 md:gap-3">
-                    <div className="p-2 md:p-4 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                        {[
-                            { value: 'all', icon: <IconLayoutDashboard stroke={2} /> },
-                            { value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={2} /> },
-                            { value: 'MOTION_DETECTION', icon: <IconBounceRight stroke={2} /> },
-                            { value: 'PEOPLE_COUNT', icon: <IconFriends stroke={2} /> },
-                            { value: 'FACE_DETECTION', icon: <IconUserScan stroke={2} /> },
-                            { value: 'LICENSE_PLATE_DETECTION', icon: <IconLicense stroke={2} /> },
-                            { value: 'FIRE_SMOKE_DETECTION', icon: <IconFireExtinguisher stroke={2} /> },
-                        ].find((item) => item.value === alert?.alertType)?.icon}
-                    </div>
+                    {alert.alertType === 'FACE_DETECTION' && alert?.persons && <Link href={`/person-details/${alert?.person_ids[0]}`}><img className="rounded-full w-12 h-12" src={baseUrl + `/${alert?.persons[0].gcp_image_path}`} /></Link> }
+                    {alert.alertType !== 'FACE_DETECTION' && <div className="p-2 md:p-4 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">               {[
+                        { value: 'all', icon: <IconLayoutDashboard stroke={2} /> },
+                        { value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={2} /> },
+                        { value: 'MOTION_DETECTION', icon: <IconBounceRight stroke={2} /> },
+                        { value: 'PEOPLE_COUNT', icon: <IconFriends stroke={2} /> },
+                        { value: 'FACE_DETECTION', icon: <IconUserScan stroke={2} /> },
+                        { value: 'LICENSE_PLATE_DETECTION', icon: <IconLicense stroke={2} /> },
+                        { value: 'FIRE_SMOKE_DETECTION', icon: <IconFireExtinguisher stroke={2} /> },
+                    ].find((item) => item.value === alert?.alertType)?.icon}
+                    </div>}
                     <div className="flex flex-col gap-1">
                         <h3 className="text-xs">{alert?.alertType}</h3>
                         <p className="text-xs text-gray-500 dark:text-gray-400">{alert?.camera?.name} </p>
