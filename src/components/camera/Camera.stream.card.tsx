@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/lib/protectApi";
 import { cn } from "@/lib/utils";
 import { Camera, CameraLocation } from "@/models/camera";
 import { IconBorderCornerSquare } from "@tabler/icons-react";
@@ -25,7 +26,7 @@ export const CameraStreamCard = ({
    
     >
       <iframe
-        src={`http://kph07722362.local:8889/${camera?.camera_id}/?net=offline`}
+        src={`http://${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
         allowFullScreen
         className="w-[100%] h-[100%] rounded-4xl"
       >

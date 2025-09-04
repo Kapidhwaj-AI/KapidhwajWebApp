@@ -11,6 +11,7 @@ import {
 } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsFullScreenMode } from "@/redux/slices/cameraSlice";
+import { BASE_URL } from "@/lib/protectApi";
 
 
 export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {
@@ -25,7 +26,7 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
       )}
     >
       <iframe
-        src={`http://localhost:8889/${camera?.camera_id}/?net=offline`}
+        src={`http://${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
         allowFullScreen
         
         style={{width:'105%', height:'105%'}}

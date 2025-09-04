@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { DeleteDialog } from "../dialogue/DeleteDialog";
 import { useTranslations } from "next-intl";
+import { BASE_URL } from "@/lib/protectApi";
 
 interface CameraStreamCardProps {
   camera: Camera | null;
@@ -28,11 +29,10 @@ export default function CameraStreamCard({
   );
   const [streamError, setStreamError] = useState<string | null>(null);
   const hasStream = camera?.webrtc_url;
-
   useEffect(() => {
     const fetchWebrtc = async () => {
       try {
-        const res = await fetch(`http://localhost:8889/${camera?.camera_id}/?net=offline`)
+        const res = await fetch(`http://${BASE_URL}:8889/${camera?.camera_id}/?net=offline`)
         if (res.ok) {
           setStreamError(null)
         }
@@ -60,7 +60,7 @@ export default function CameraStreamCard({
     >
       {hasStream && (
         <iframe
-          src={`http://localhost:8889/${camera?.camera_id}/?net=offline`}
+          src={`http://${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
           allowFullScreen
           style={{ width: "100%", maxWidth: "800px", height: '100%' }}
         >

@@ -27,7 +27,7 @@ export const BASE_URL = getApiBaseUrl()
 const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
 export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
-    data?: D, type?: string, isNotCustomHeader?: boolean) {
+    data?: D, type?: string, isNotCustomHeader?: boolean, params?:unknown) {
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
     const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
     const baseUrl = isValidHub && !isNotCustomHeader
@@ -48,6 +48,7 @@ export async function protectApi<T, D = undefined>(url: string,
             url: BASE_URL + url,
             data: data,
             headers,
+            params
         });
         return response
     } catch (err) {
@@ -65,6 +66,7 @@ export async function protectApi<T, D = undefined>(url: string,
                     url: BASE_URL + url,
                     data: data,
                     headers: headers,
+                    params
                 });
             }
             else {

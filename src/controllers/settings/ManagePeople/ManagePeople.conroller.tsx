@@ -1,13 +1,13 @@
 'use client'
 import ManagePeopleView from '@/views/settings/ManagePeople.view';
-import { protectApi } from '@/lib/protectApi';
+import { BASE_URL, protectApi } from '@/lib/protectApi';
 import { getLocalStorageItem } from '@/lib/storage';
 import { Category } from '@/models/category';
 import { Organization } from '@/models/organization';
 import { Person } from '@/models/person';
 import { PersonFormaData } from '@/models/settings';
-// import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
-import React, { useEffect, useState } from 'react'
+import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
+import React, { useEffect, useRef, useState } from 'react'
 
 const ManagePeopleConroller = () => {
     const [isAddPersonModalOpen, setAddPersonModalOpen] = useState(false);
@@ -39,9 +39,10 @@ const ManagePeopleConroller = () => {
     const [personId, setPersonId] = useState(NaN)
     const [isPersonEdit, setIsPersonEdit] = useState(false)
     const [isPersonDelete, setIsPersonDelete] = useState(false);
-    // const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    // const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-    const baseUrl = `http://localhost:3000/` 
+    const [offset, setOffset] = useState(0)
+    const divRef = useRef<HTMLDivElement>(null)
+    const [hasMore, setHasMore] = useState(true)
+    const [personLoading, setPersonLoading] = useState(false)
     const fetchSites = async () => {
         setIsLoading(true)
         try {
@@ -72,19 +73,14 @@ const ManagePeopleConroller = () => {
     useEffect(() => {
         fetchSites()
     }, [])
-    const handleOnSiteSelect = async () => {
-        setIsLoading(true)
-        try {
-            const res = await protectApi<Person[]>(`/person?organizationId=${selectedId}`)
-            if (res.status === 200) {
-                setPeople(res.data.data)
-            }
-        } catch (error) {
-            console.error('Err:', error)
+    const handleOnSiteSelect = async (offset: number) => {
 
-        } finally {
-            setIsLoading(false)
-        }
+        const res = await protectApi<Person[]>(`/person?organizationId=${selectedId}&offset=${offset}`)
+
+        return res.data.data
+
+
+
     }
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -113,7 +109,7 @@ const ManagePeopleConroller = () => {
                 setAddPersonModalOpen(false)
                 setFormData({ name: '', category: '', dob: undefined, file: undefined, gender: '' })
                 setSelectedImage('')
-                await handleOnSiteSelect()
+                setPeople(await handleOnSiteSelect(offset))
                 setIsPersonEdit(false)
                 setPersonId(NaN)
             }
@@ -142,10 +138,14 @@ const ManagePeopleConroller = () => {
         }
     }
     useEffect(() => {
-        if (selectedId) {
-            handleOnSiteSelect()
-            fetchCat()
+        const loadData = async () => {
+
+            if (selectedId) {
+                setPeople(await handleOnSiteSelect(offset))
+                await fetchCat()
+            }
         }
+        loadData()
     }, [selectedId])
 
     const handleEditCategory = (cat: Category) => {
@@ -159,7 +159,7 @@ const ManagePeopleConroller = () => {
         setAddPersonModalOpen(true)
         setPersonId(person.id)
         setFormData({ name: person.name, gender: person.gender ?? '', category: person.category_id.toString(), dob: new Date(person.dob), file: undefined })
-        setSelectedImage(baseUrl + person.gcp_image_path)
+        setSelectedImage(BASE_URL + person.gcp_image_path)
     }
     const getAge = (date: Date): number => {
         const today = new Date();
@@ -178,7 +178,7 @@ const ManagePeopleConroller = () => {
             try {
                 const res = await protectApi(`/person?personId=${personId}&organizationId=${selectedId}`, 'DELETE')
                 if (res.status === 200) {
-                    await handleOnSiteSelect();
+                    setPeople(await handleOnSiteSelect(offset))
                 }
             } catch (e) {
                 console.error("Err: ", e)
@@ -199,7 +199,7 @@ const ManagePeopleConroller = () => {
         setIsPersonDelete(false)
     }
     return (
-        <ManagePeopleView isAddCategoryModalOpen={isAddCategoryModalOpen} isAddPersonModalOpen={isAddPersonModalOpen} isCatDelete={isCatDelete} isCatEdit={isCatEdit} isLoading={isLoading} isPersonDelete={isPersonDelete} isPersonEdit={isPersonEdit} isSaving={isSaving} selectedId={selectedId} selectedImage={selectedImage ?? ''} setAddCategoryModalOpen={setAddCategoryModalOpen} setAddPersonModalOpen={setAddPersonModalOpen} setCatId={setCatId} setCategoryData={setCategoryData} setFormData={setFormData} formData={formData} setIsCatEdit={setIsCatEdit} setIsCateDelete={setIsCateDelete} setIsPersonDelete={setIsPersonDelete} setIsPersonEdit={setIsPersonEdit} setPersonId={setPersonId} setSelectedId={setSelectedId} sharedWithMe={sharedWithMe} catId={catId} categories={categories} categoryData={categoryData} mySites={mySites} people={people} personId={personId} handleCatSubmit={handleCatSubmit} handleDelete={handleDelete} handleEditCategory={handleEditCategory} handleEditePerson={handleEditePerson} handleImageUpload={handleImageUpload} handleOnSubmit={handleOnSubmit} getAge={getAge}
+        <ManagePeopleView hasMore={hasMore} setHasMore={setHasMore} personLoading={personLoading} setPersonLoading={setPersonLoading} handleSelectSite={handleOnSiteSelect} setPerson={setPeople} divRef={divRef} offset={offset} setOffset={setOffset} isAddCategoryModalOpen={isAddCategoryModalOpen} isAddPersonModalOpen={isAddPersonModalOpen} isCatDelete={isCatDelete} isCatEdit={isCatEdit} isLoading={isLoading} isPersonDelete={isPersonDelete} isPersonEdit={isPersonEdit} isSaving={isSaving} selectedId={selectedId} selectedImage={selectedImage ?? ''} setAddCategoryModalOpen={setAddCategoryModalOpen} setAddPersonModalOpen={setAddPersonModalOpen} setCatId={setCatId} setCategoryData={setCategoryData} setFormData={setFormData} formData={formData} setIsCatEdit={setIsCatEdit} setIsCateDelete={setIsCateDelete} setIsPersonDelete={setIsPersonDelete} setIsPersonEdit={setIsPersonEdit} setPersonId={setPersonId} setSelectedId={setSelectedId} sharedWithMe={sharedWithMe} catId={catId} categories={categories} categoryData={categoryData} mySites={mySites} people={people} personId={personId} handleCatSubmit={handleCatSubmit} handleDelete={handleDelete} handleEditCategory={handleEditCategory} handleEditePerson={handleEditePerson} handleImageUpload={handleImageUpload} handleOnSubmit={handleOnSubmit} getAge={getAge}
         />
     )
 }

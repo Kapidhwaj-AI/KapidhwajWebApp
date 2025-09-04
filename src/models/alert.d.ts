@@ -11,6 +11,11 @@ export interface Alert {
   alertType: string;
   createdAt?: Date;
   updatedAt?: Date;
+  meta_data: {
+    DETECTED_PLATE?: string;
+    DETECTED_FIRE_SMOKE?: string;
+    PEOPLE_COUNT?: number | string
+  }
 }
 
 export interface AlertVideo {
