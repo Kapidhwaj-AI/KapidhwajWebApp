@@ -16,7 +16,7 @@ const StreamsCard: React.FC<StreamsCardProps> = ({ selectedStreams, toggleStream
         >
             <div className="aspect-video relative">
                 <iframe
-                    src={`http://${BASE_URL}:8889/${stream?.camera_id}/?net=offline`}
+                    src={`${BASE_URL}:8889/${stream?.camera_id}/?net=offline`}
                     allowFullScreen
                     style={{ width: "100%", maxWidth: "800px" }}
                     className='rounded-xl'

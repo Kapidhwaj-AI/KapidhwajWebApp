@@ -26,7 +26,7 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
       )}
     >
       <iframe
-        src={`http://${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
+        src={`${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
         allowFullScreen
         
         style={{width:'105%', height:'105%'}}

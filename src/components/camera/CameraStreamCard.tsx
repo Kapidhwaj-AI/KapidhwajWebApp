@@ -60,7 +60,7 @@ export default function CameraStreamCard({
     >
       {hasStream && (
         <iframe
-          src={`http://${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
+          src={`${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
           allowFullScreen
           style={{ width: "100%", maxWidth: "800px", height: '100%' }}
         >
