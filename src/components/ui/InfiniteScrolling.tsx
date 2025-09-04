@@ -46,7 +46,7 @@ function InfiniteScrolling<T>({
             }
         };
 
-        loadItems();
+       if(offset !==0)  loadItems();
     }, [offset, serviceType]);
 
     useEffect(() => {
