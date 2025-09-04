@@ -1,7 +1,7 @@
-import axios, { AxiosError, Method } from "axios"
+import axios, {  Method } from "axios"
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage"
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config"
-import { headers } from "next/headers";
+
 
 
 export interface ApiResponse<T> {
