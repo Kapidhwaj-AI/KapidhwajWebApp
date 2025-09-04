@@ -1,4 +1,4 @@
-import axios, { Method } from "axios"
+import axios, { AxiosError, Method } from "axios"
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage"
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config"
 import { headers } from "next/headers";
@@ -95,7 +95,7 @@ export const fetchRefreshToken = async () => {
         setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.access_token, expiresAt: expiresAt.toISOString() }))
         return true;
 
-    } catch (refreshErr: any) {
+    } catch (refreshErr) {
         console.error("Refresh token failed:", refreshErr.message, refreshErr?.response?.data);
         return false;
     }
