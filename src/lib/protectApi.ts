@@ -1,4 +1,4 @@
-import axios, {  Method } from "axios"
+import axios, { Method } from "axios"
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage"
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config"
 
@@ -17,17 +17,17 @@ export const getApiBaseUrl = () => {
 
     // When running on the hub itself
     if (hostname === "localhost" || hostname === "127.0.0.1") {
-        return "http://localhost:8084";
+        return "http://localhost";
     }
 
     // When accessed from another machine (IP or domain)
-    return `http://${hostname}:8084`;
+    return `http://${hostname}`;
 };
 export const BASE_URL = getApiBaseUrl()
 const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
 export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
-    data?: D, type?: string, isNotCustomHeader?: boolean, params?:unknown) {
+    data?: D, type?: string, isNotCustomHeader?: boolean, params?: unknown) {
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
     const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
     const baseUrl = isValidHub && !isNotCustomHeader
@@ -45,7 +45,7 @@ export async function protectApi<T, D = undefined>(url: string,
     try {
         const response = axios<ApiResponse<T>>({
             method: method ?? 'GET',
-            url: BASE_URL + url,
+            url: BASE_URL + ':8084' + url,
             data: data,
             headers,
             params
@@ -63,7 +63,7 @@ export async function protectApi<T, D = undefined>(url: string,
                 };
                 return axios<ApiResponse<T>>({
                     method: method ?? "GET",
-                    url: BASE_URL + url,
+                    url: BASE_URL + ':8084' + url,
                     data: data,
                     headers: headers,
                     params
@@ -83,12 +83,12 @@ export const fetchRefreshToken = async () => {
 
     try {
         const res = await axios.post(
-            `${BASE_URL}/refresh`, {
-                headers
-                    : {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }
+            `${BASE_URL}:8084/refresh`, {
+            headers
+                : {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
         }
         );
         console.log("Refresh API response:", res.status, res.data);

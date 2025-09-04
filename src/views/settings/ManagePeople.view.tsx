@@ -113,7 +113,7 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ offset, setHasMore, set
                                                         {/* Image Container */}
                                                         <div className="w-[106px] 2xl:w-[120px] 4xl:w-[151px] h-full flex-shrink-0">
                                                             <img
-                                                                src={person.gcp_image_path ? (BASE_URL + person.gcp_image_path) : '/dummy-user.jpg'}
+                                                                src={person.gcp_image_path ? (BASE_URL + ':3000' + person.gcp_image_path) : '/dummy-user.jpg'}
                                                                 alt={person.name}
                                                                 width={151}
                                                                 height={199}

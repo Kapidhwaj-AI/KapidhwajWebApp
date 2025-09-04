@@ -159,7 +159,7 @@ const ManagePeopleConroller = () => {
         setAddPersonModalOpen(true)
         setPersonId(person.id)
         setFormData({ name: person.name, gender: person.gender ?? '', category: person.category_id.toString(), dob: new Date(person.dob), file: undefined })
-        setSelectedImage(BASE_URL + person.gcp_image_path)
+        setSelectedImage(BASE_URL+':3000' + person.gcp_image_path)
     }
     const getAge = (date: Date): number => {
         const today = new Date();
