@@ -35,7 +35,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
             <video
                 ref={videoRef}
                 controls
-                src={BASE_URL + recording.recorded_path}
+                src={BASE_URL + '3000/' + recording.recorded_path}
                 className="w-full h-full object-cover rounded"
             />
 

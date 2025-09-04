@@ -59,13 +59,13 @@ export function AlertCard({ alert }: { alert: Alert }) {
             {/* Image Area */}
             <div className="relative aspect-video m-4 rounded-xl flex items-center justify-center"
             >
-                {alert?.frame_url && <img src={BASE_URL + ':3000' + alert?.frame_url} alt={alert?.alertType} width={1000} height={1000} className="object-cover w-auto h-auto rounded-2xl" />}
+                {alert?.frame_url && <img src={BASE_URL + ':3000/' + alert?.frame_url} alt={alert?.alertType} width={1000} height={1000} className="object-cover w-auto h-auto rounded-2xl" />}
 
                 <button onClick={() => setIsPreview(true)} className="absolute h-14 w-14 rounded-full bg-neutral-400/20 dark:bg-black/20 backdrop-blur-[32px] flex items-center justify-center">
                     <IconMovie stroke={2} className="text-gray-600 dark:text-gray-300" size={24} />
                 </button>
             </div>
-            {isPreview && <AlertPreviewDialogue onClose={() => setIsPreview(false)} imageUrl={BASE_URL + ':3000' + alert.frame_url} alertType={alert.alertType} />}
+            {isPreview && <AlertPreviewDialogue onClose={() => setIsPreview(false)} imageUrl={BASE_URL + ':3000/' + alert.frame_url} alertType={alert.alertType} />}
         </div>
     );
 }
