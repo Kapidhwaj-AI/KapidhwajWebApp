@@ -1,7 +1,6 @@
-import axios, { AxiosError, Method } from "axios"
-import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage"
+import axios, {  Method } from "axios"
+import { getLocalStorageItem,  setLocalStorageItem } from "./storage"
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config"
-import { headers } from "next/headers";
 
 
 export interface ApiResponse<T> {
@@ -29,12 +28,12 @@ export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
     data?: D, type?: string, isNotCustomHeader?: boolean, params?:unknown) {
     const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-    const baseUrl = isValidHub && !isNotCustomHeader
-        ? hub.isRemotely
-            ? apiBaseUrl
-            : `http://${hub.id}.local:8084`
-        : apiBaseUrl;
+    // const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
+    // const baseUrl = isValidHub && !isNotCustomHeader
+    //     ? hub.isRemotely
+    //         ? apiBaseUrl
+    //         : `http://${hub.id}.local:8084`
+    //     : apiBaseUrl;
     const headers: Record<string, string> = {
         Authorization: `Bearer ${token}`,
         'Content-Type': type ?? 'application/json',
