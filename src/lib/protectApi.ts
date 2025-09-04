@@ -52,27 +52,27 @@ export async function protectApi<T, D = undefined>(url: string,
         });
         return response
     } catch (err) {
-        if (err?.response?.status === 401) {
-            console.log("Token expired, trying refresh...");
-            const refreshed = await fetchRefreshToken();
-            if (refreshed) {
-                const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
-                const headers: Record<string, string> = {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': type ?? 'application/json',
-                };
-                return axios<ApiResponse<T>>({
-                    method: method ?? "GET",
-                    url: BASE_URL + url,
-                    data: data,
-                    headers: headers,
-                    params
-                });
-            }
-            else {
-                removeLocalStorageItem('kapi-token')
-            }
-        }
+        // if (err?.response?.status === 401) {
+        //     console.log("Token expired, trying refresh...");
+        //     const refreshed = await fetchRefreshToken();
+        //     if (refreshed) {
+        //         const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
+        //         const headers: Record<string, string> = {
+        //             Authorization: `Bearer ${token}`,
+        //             'Content-Type': type ?? 'application/json',
+        //         };
+        //         return axios<ApiResponse<T>>({
+        //             method: method ?? "GET",
+        //             url: BASE_URL + url,
+        //             data: data,
+        //             headers: headers,
+        //             params
+        //         });
+        //     }
+        //     else {
+        //         removeLocalStorageItem('kapi-token')
+        //     }
+        // }
         console.error(err, "err from protectApi")
         throw err;
     }
