@@ -24,6 +24,7 @@ const Breadcrumbs = () => {
     }
     const style = 'sm:text-md md:text-lg lg:text-xl xl:text-2xl font-medium whitespace-nowrap'
     const t = useTranslations()
+    console.log(paths,"paths")
     return (
         <div className='flex gap-2 items-center flex-wrap'>
             <BackButton />
@@ -33,7 +34,7 @@ const Breadcrumbs = () => {
                 <div className='flex items-center gap-2' key={index}>
                     <ChevronRight size={20} className=" text-gray-400" />
                     <Link className={style} href={buildHref(index)}>{
-                        paths[index - 1] !== 'streams' ?
+                            paths[index - 1] !== 'streams' ?
                             index === 0 ?
                                 t(`${simplifiedString(item).toLocaleLowerCase()}.title`) :
                                 t(`${simplifiedString(paths[index - 1]).toLocaleLowerCase()}.${simplifiedString(item).toLocaleLowerCase()}`) :

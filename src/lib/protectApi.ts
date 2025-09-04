@@ -1,4 +1,4 @@
-import axios, { Method } from "axios"
+import axios, { AxiosRequestConfig, Method } from "axios"
 import { getLocalStorageItem } from "./storage"
 import { apiBaseUrl } from "@/services/config"
 
@@ -11,7 +11,7 @@ export interface ApiResponse<T> {
 
 export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
-    data?: D, type?: string, isNotCustomHeader?: boolean) {
+    data?: D, type?: string, isNotCustomHeader?: boolean, params?:unknown) {
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
@@ -26,7 +26,7 @@ export async function protectApi<T, D = undefined>(url: string,
         Authorization: `Bearer ${token}`,
         'Content-Type': type ?? 'application/json',
     };
-    if (remoteHub && !isNotCustomHeader) {
+    if (remoteHub.id && !isNotCustomHeader) {
         headers['x-hub-id'] = remoteHub.id;
     }
 
@@ -35,6 +35,7 @@ export async function protectApi<T, D = undefined>(url: string,
         url: baseUrl + url,
         data: data,
         headers,
+        params,
     });
 }
 

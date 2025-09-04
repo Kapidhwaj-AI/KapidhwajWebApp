@@ -41,12 +41,12 @@ const ManagePeopleConroller = () => {
     const [isPersonDelete, setIsPersonDelete] = useState(false);
     const [offset, setOffset] = useState(0)
     const divRef = useRef<HTMLDivElement>(null)
-    const[hasMore, setHasMore] = useState(false)
+    const[hasMore, setHasMore] = useState(true)
     const [personLoading, setPersonLoading] = useState(false)
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
-    const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+    const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
     const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-    const baseUrl = isValidHub ? remoteHub ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
+    const baseUrl = isValidHub ? remoteHub.id ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
     const fetchSites = async () => {
         setIsLoading(true)
         try {
@@ -150,7 +150,7 @@ const ManagePeopleConroller = () => {
             }
         }
         loadData()
-    }, [selectedId, offset])
+    }, [selectedId])
 
     const handleEditCategory = (cat: Category) => {
         setIsCatEdit(true);

@@ -1,9 +1,10 @@
+import { getLocalStorageItem } from "@/lib/storage";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from 'next-intl/plugin';
-
+const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
 const nextConfig: NextConfig = {
   images: {
-    domains: ['storage.googleapis.com'],
+    domains: ['storage.googleapis.com', '**'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -14,6 +15,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'storage.googleapis.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: localHub?.id?.toString() ?? '**',
+        port: '3000',
         pathname: '/**',
       },
       {

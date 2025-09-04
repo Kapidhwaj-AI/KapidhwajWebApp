@@ -19,7 +19,7 @@ const StreamsController = () => {
     const [selectedChildFolder, setSelectedChildFolder] = useState<Folders | null>(null)
     const [selectedData, setSelecteddata] = useState<Camera[] | null>(null)
     const [searchQuery, setSearchQuery] = useState("");
-
+    
     const { data: organizations, isLoading, error } = useOrganizations();
     useEffect(() => {
         if (selectedChildFolder) {

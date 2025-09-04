@@ -35,7 +35,9 @@ function InfiniteScrolling<T>({
             setIsLoading(true);
             try {
                 const newData = await fetchData(offset, serviceType);
-                if (newData.length === 0) {
+                console.log(data,newData,"New data")
+                if (newData.length <= 0) {
+                    console.log(newData.length,"in empty")
                     setHasMore(false);
                 } else {
                     setData([...data, ...newData]);
@@ -47,12 +49,13 @@ function InfiniteScrolling<T>({
             }
         };
 
-        loadItems();
+        if (offset > 0) loadItems();
     }, [offset, serviceType]);
 
     useEffect(() => {
         const target = divRef.current;
         if (!target) return;
+        console.log(hasMore, target, "target")
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting && hasMore && !isLoading) {
@@ -64,8 +67,8 @@ function InfiniteScrolling<T>({
 
         observer.observe(target);
         return () => observer.disconnect();
-    }, [divRef, hasMore, isLoading, offset, setOffset]);
-    console.log(offset)
+    }, [divRef, hasMore, isLoading]);
+    console.log(offset,"offset")
     return <>{children}</>;
 }
 
