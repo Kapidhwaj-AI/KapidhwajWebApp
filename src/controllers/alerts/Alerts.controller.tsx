@@ -68,6 +68,9 @@ const AlertsController = () => {
         fireSmokeDetected,
         faceDetection])
     const changeTab = async (tab: string) => {
+        if(tab === selectedTab){
+            return
+        }
         if (tab === 'ALL') {
             setServiceType(null);
         } else if (tab === 'INTRUSION_DETECTION') {
