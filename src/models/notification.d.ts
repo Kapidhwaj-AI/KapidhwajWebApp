@@ -33,4 +33,7 @@ export interface NotificationViewProps {
     hasMore: boolean;
     setHasMore: (val: boolean) => void
     handleReadAll: () => void
+    setIsMoreLoading:(val: boolean) => void
+    isMoreLoading: boolean;
+    
 }

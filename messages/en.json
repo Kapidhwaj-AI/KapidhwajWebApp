@@ -276,6 +276,10 @@
             "settings": "Settings"
         }
     },
+    "person_details":{
+        "title":"Person Details",
+        "single_streams_page": "Single Person Details Page"
+    },
     "managePeople": {
         "my_sites": "My Sites",
         "shared_with_me": "Shared With Me",

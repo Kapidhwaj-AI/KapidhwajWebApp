@@ -13,12 +13,12 @@ const SocketNotification = () => {
     const dispatch = useDispatch();
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
-    const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+    const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
     const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
 
     useEffect(() => {
         if (token) {
-            const socket = io(isValidHub && !remoteHub ? `wss://${localHub.id}.local:8084` : apiSocketUrl, {
+            const socket = io(isValidHub && !remoteHub.id ? `ws://${localHub.id}.local:8084` : apiSocketUrl, {
                 auth: {
                     token,
                 },
@@ -51,9 +51,8 @@ const SocketNotification = () => {
 
             socket.on('people_count', (data: {
                 camera_id: string;
-                people_count: number;
+                people_count: string;
             }) => {
-                console.log(data, "people live count")
                 dispatch(setPeopleCount(data));
             });
 
@@ -77,11 +76,8 @@ const SocketNotification = () => {
                 }
             });
 
-            socket.on('disconnect', reason => {
+            socket.on('disconnect', (reason) => {
                 console.log('Disconnected from server. Reason:', reason);
-                if (reason === 'io server disconnect') {
-                    socket.connect();
-                }
             });
 
             return () => {

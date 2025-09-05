@@ -6,13 +6,16 @@ export interface Alert {
   frame_url: string;
   timestamp: number;
   person_ids: number[];
-  persons: number[];
-
   camera?: Camera;
   persons?: Person[];
   alertType: string;
   createdAt?: Date;
   updatedAt?: Date;
+  meta_data:{
+    DETECTED_PLATE?: string;
+    DETECTED_FIRE_SMOKE?: string;
+    PEOPLE_COUNT?: number|string
+  }
 }
 
 export interface AlertVideo {
@@ -40,7 +43,7 @@ export interface AlertViewProps {
   setIsDateFiltered: (val: boolean) => void;
   isLoading: boolean;
   setIsLoading: (val: boolean) => void;
-  fetchAlerts: (val: number) => Promise<Alert[]>;
+  fetchAlerts: (val: number, serviceType: string | null) => Promise<Alert[]>;
   setDate: (val: Date | undefined) => void;
   setStartTime: (val: Date | undefined) => void;
   setEndTime: (val: Date | undefined) => void;
@@ -56,5 +59,6 @@ export interface AlertViewProps {
   alerts: Alert[];
   setSelectedTab: (value: string) => void;
   selectedTab: string;
-  setAlertsLoading: (val: boolean) => void
+  setAlertsLoading: (val: boolean) => void;
+  serviceType: string | null
 }

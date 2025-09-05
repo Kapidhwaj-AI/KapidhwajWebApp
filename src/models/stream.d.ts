@@ -29,6 +29,7 @@ export interface StreamsViewProps {
 }
 
 export interface StreamsPageViewProps {
+    isAllAlertLoading: boolean
     loading: boolean;
     isFullscreen: boolean;
     cameraLocation: CameraLocation | undefined;
@@ -55,7 +56,7 @@ export interface StreamsPageViewProps {
     alertOffset: number;
     alertEndRef: React.RefObject<HTMLDivElement | null>;
     alerts: Alert[];
-    fetchAlerts: (offSet: number) => Promise<Alert[]>;
+    fetchAlerts: (offSet: number, serviceType: string|null) => Promise<Alert[]>;
     alertsLoading: boolean;
     setAlertsLoading: (val: boolean) => void;
     setHasMore: (val: boolean) => void;
@@ -84,5 +85,6 @@ export interface StreamsPageViewProps {
     handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void;
-    isAiServiceLoading: boolean
+    isAiServiceLoading: boolean;
+    serviceType: string | null
 }

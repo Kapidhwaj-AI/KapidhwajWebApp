@@ -1,4 +1,4 @@
-import axios, { Method } from "axios"
+import axios, { AxiosRequestConfig, Method } from "axios"
 import { getLocalStorageItem } from "./storage"
 import { apiBaseUrl } from "@/services/config"
 
@@ -13,17 +13,18 @@ export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
     data?: D, type?: string, isNotCustomHeader?: boolean) {
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
-    const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+    const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
     const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-    const baseUrl = isValidHub && !isNotCustomHeader
-        ? remoteHub
+    
+    const baseUrl = isValidHub 
+        ? remoteHub.id
             ? apiBaseUrl
             : `http://${localHub.id}.local:8084`
         : apiBaseUrl;
     const headers: Record<string, string> = {
         'Content-Type': type ?? 'application/json',
     };
-    if (remoteHub && !isNotCustomHeader) {
+    if (remoteHub.id && !isNotCustomHeader) {
         headers['x-hub-id'] = remoteHub.id;
     }
 

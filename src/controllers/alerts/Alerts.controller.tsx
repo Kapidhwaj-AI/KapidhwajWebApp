@@ -6,6 +6,8 @@ import { getUtcTimestamp } from '@/utils/getUTCTimestamp'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
+import { RootState } from '@/redux/store'
+import { useSelector } from 'react-redux'
 
 const AlertsController = () => {
     const [alerts, setAlerts] = useState<Alert[]>([])
@@ -14,23 +16,35 @@ const AlertsController = () => {
     const [alertsLoading, setAlertsLoading] = useState(false)
     const [alertOffset, setAlertOffset] = useState(0)
     const [filterDial, setFilterDial] = useState(false);
-    const [selectedTab, setSelectedTab] = useState('all')
+    const [selectedTab, setSelectedTab] = useState('all');
+    const [search, setSearch] = useState('')
     const [date, setDate] = useState<Date | undefined>();
     const [startTime, setStartTime] = useState<Date | undefined>();
     const [err, setErr] = useState('')
     const [endTime, setEndTime] = useState<Date | undefined>();
     const [isDateFiltered, setIsDateFiltered] = useState(false)
+    const [serviceType, setServiceType] = useState<string | null>(null)
     const alertEndRef = useRef<HTMLDivElement>(null)
-    const fetchAlerts = async (offset: number, startTime?: number, endTime?: number) => {
-        const endpoint = startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}` : `/alert/recent?offset=${offset}`
+    const fetchAlerts = async (offset: number, serviceType: string | null, startTime?: number, endTime?: number,) => {
+        const endpoint = serviceType !== null ? startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}`
         const res = await protectApi<Alert[], undefined>(endpoint)
         return res.data.data
     }
+    const {
+        intrusionDetected,
+        peopleDetected,
+        peopleCountDetected,
+        motionDetected,
+        licensePlateDetected,
+        fireSmokeDetected,
+        faceDetection
+    } = useSelector
+            ((state: RootState) => state.singleCameraSetting);
     useEffect(() => {
         const loaddata = async () => {
             setIsLoading(true)
             try {
-                setAlerts(await fetchAlerts(alertOffset))
+                setAlerts(await fetchAlerts(alertOffset, serviceType))
             } catch (error) {
                 console.error(error)
                 if (error instanceof AxiosError && error.response?.status === 400) {
@@ -46,50 +60,51 @@ const AlertsController = () => {
         if (alertOffset === 0) {
             loaddata()
         }
-    }, [])
-    useEffect(() => {
-        const loadAlerts = async () => {
-            setAlertsLoading(true)
-            try {
-                const newAlerts = await fetchAlerts(alertOffset)
-                if (newAlerts.length === 0) {
-                    setHasMore(false);
-                } else {
-                    setAlerts(prev => [...prev, ...newAlerts]);
-                }
-            } catch (error) {
-                console.error(error)
-            }
-            finally {
-                setAlertsLoading(false)
-            }
+    }, [intrusionDetected, serviceType,
+        peopleDetected,
+        peopleCountDetected,
+        motionDetected,
+        licensePlateDetected,
+        fireSmokeDetected,
+        faceDetection])
+   
+    const changeTab = async (tab: string) => {
+        if (tab === 'ALL') {
+            setServiceType(null);
+        } else if (tab === 'INTRUSION_DETECTION') {
+            setServiceType('intrusion_detection');
+
+        } else if (tab === 'PEOPLE_COUNT') {
+            setServiceType('people_count');
+
+        } else if (tab === 'FACE_DETECTION') {
+            setServiceType('face_detection');
+
+        } else if (tab === 'MOTION_DETECTION') {
+            setServiceType('motion_detection');
+
+        } else if (tab === 'LICENSE_PLATE_DETECTION') {
+            setServiceType('license_plate_detection');
+        } else if (tab === 'FIRE_SMOKE_DETECTION') {
+            setServiceType('fire_smoke_detection');
+        } else {
+            setServiceType(null);
         }
-        if (alertOffset > 0) loadAlerts()
-    }, [alertOffset]);
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting && hasMore) {
-                    setAlertOffset((prev) => prev + 10);
-                }
-            },
-            { threshold: 0.5 }
-        );
+        setSelectedTab(tab);
+        setAlertOffset(0)
+        setHasMore(true)
+    };
 
-        if (alertEndRef.current) observer.observe(alertEndRef.current);
-
-        return () => observer.disconnect();
-    }, [alertEndRef.current]);
     const filteredAlerts = useMemo(() => {
-        if (selectedTab === "all") return alerts;
+        if (search === "") return alerts;
 
-        return alerts.filter((alert) => alert.alertType === selectedTab);
-    }, [alerts, selectedTab]);
+        return alerts.filter((alert) => alert.alertType.includes(search ?? ''));
+    }, [alerts, search]);
     const handleApplyFilter = async (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => {
         if (date && startTime && endTime) {
             const start = getUtcTimestamp(date, startTime)
             const end = getUtcTimestamp(date, endTime)
-            const res = await fetchAlerts(alertOffset, start, end)
+            const res = await fetchAlerts(alertOffset, serviceType, start, end)
             setIsDateFiltered(true)
             setAlerts(res)
             setFilterDial(false)
@@ -98,7 +113,7 @@ const AlertsController = () => {
     }
 
     return (
-        <AlertsView err={err} setStartTime={setStartTime} isDateFiltered={isDateFiltered} isLoading={isLoading} selectedTab={selectedTab} setAlertsLoading={setAlertsLoading} setSelectedTab={setSelectedTab} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setHasMore={setHasMore} hasMore={hasMore} handleApplyFilter={handleApplyFilter} setIsDateFiltered={setIsDateFiltered} setIsLoading={setIsLoading} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} startTime={startTime} endTime={endTime} date={date} setAlertOffset={setAlertOffset} setAlerts={setAlerts} filteredAlerts={filteredAlerts} fetchAlerts={fetchAlerts} filterDial={filterDial} />
+        <AlertsView serviceType={serviceType} err={err} setStartTime={setStartTime} isDateFiltered={isDateFiltered} isLoading={isLoading} selectedTab={selectedTab} setAlertsLoading={setAlertsLoading} setSelectedTab={changeTab} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setHasMore={setHasMore} hasMore={hasMore} handleApplyFilter={handleApplyFilter} setIsDateFiltered={setIsDateFiltered} setIsLoading={setIsLoading} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} startTime={startTime} endTime={endTime} date={date} setAlertOffset={setAlertOffset} setAlerts={setAlerts} filteredAlerts={filteredAlerts} fetchAlerts={fetchAlerts} filterDial={filterDial} />
     )
 }
 

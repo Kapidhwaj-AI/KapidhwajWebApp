@@ -15,10 +15,10 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ offset, setHasMore, set
 }) => {
     const t = useTranslations()
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
-    const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+    const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
     const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-    const baseUrl = isValidHub ? remoteHub ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
-
+    const baseUrl = isValidHub ? remoteHub.id ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
+    console.log("people",people)
     return (
         <div className="h-full flex flex-col gap-3 min-h-0 px-2 md:px-4">
             {/* Header Section */}
@@ -85,7 +85,7 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ offset, setHasMore, set
                         className={`px-4 py-2 self-start rounded-full transition-all bg-[#2B4C88] text-white shadow-md`}
                         onClick={() => {
                             setSelectedId('');
-
+                            setOffset(0)
                         }}
                     >
                         {t('settings.back_to_site')}

@@ -2,8 +2,16 @@ import { cn } from '@/lib/utils';
 import { IconBounceRight, IconFireExtinguisher, IconFriends, IconLayoutDashboard, IconLicense, IconTreadmill, IconUserScan } from '@tabler/icons-react';
 import React from 'react'
 import { useTranslations } from "next-intl";
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selectedTab: string, setSelectedTab: (val: string) => void }) {
     const t = useTranslations()
+    const isPeople = useSelector(
+        (state: RootState) => state.singleCamera.isPeople,
+    );
+    const peopleCount = useSelector(
+        (state: RootState) => state.singleCamera.peopleCount,
+    );
     const tabFilters = [
         { id: 0, label: `${t("alerts.all")}`, value: 'all', icon: <IconLayoutDashboard stroke={2} /> },
         { id: 1, label: `${t("alerts.intrusion_detection")}`, value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={2} /> },
@@ -13,7 +21,7 @@ function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selected
         { id: 5, label: `${t("alerts.license_plate_detection")}`, value: 'LICENSE_PLATE_DETECTION', icon: <IconLicense stroke={2} /> },
         { id: 6, label: `${t("alerts.fire_smoke_detection")}`, value: 'FIRE_SMOKE_DETECTION', icon: <IconFireExtinguisher stroke={2} /> },
     ];
-
+console.log(selectedTab, "hello")
     return (
         <div className="flex gap-2 md:gap-4 min-h-min overflow-x-auto w-full scrollbar-hide p-2 pb-4 px-4 justify-start md:justify-normal">
             {tabFilters.map((tf, index) => (
@@ -32,6 +40,11 @@ function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selected
                         {React.cloneElement(tf.icon, { size: 16 })}
                     </div>
                     <span className="text-xs mt-1">{tf.label}</span>
+                    {tf.value === 'PEOPLE_COUNT' && isPeople && (<div className={`rounded-full p-2 ${selectedTab === tf.value
+                        ? ' bg-[#888888]'
+                        : ' bg-white'}`}>
+                        <span> {peopleCount?.people_count}</span>
+                    </div>)}
                 </button>
             ))}
         </div>
