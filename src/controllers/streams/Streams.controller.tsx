@@ -11,6 +11,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const StreamsController = () => {
     const toogleColumnValue = useSelector((state: RootState) => state?.camera?.toogleColumns);
@@ -19,7 +20,7 @@ const StreamsController = () => {
     const [selectedChildFolder, setSelectedChildFolder] = useState<Folders | null>(null)
     const [selectedData, setSelecteddata] = useState<Camera[] | null>(null)
     const [searchQuery, setSearchQuery] = useState("");
-
+    const router = useRouter()
     const { data: organizations, isLoading, error, refetch } = useOrganizations();
     useEffect(() => {
         if (selectedChildFolder) {
@@ -34,7 +35,7 @@ const StreamsController = () => {
     }, [selectedOrganization, selectedFolder, selectedChildFolder]);
     useEffect(() => {
         refetch()
-    }, [])
+    }, [router])
     useEffect(() => {
         if (error instanceof AxiosError) {
             toast.error(error.response?.data.error)

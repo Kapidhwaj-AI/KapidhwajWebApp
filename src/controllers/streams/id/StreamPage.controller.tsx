@@ -70,7 +70,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         const res = await protectApi<CameraLocation, undefined>(`/camera/cam-details?cameraId=${id}`)
         return res.data.data
     }
-    const fetchAlerts = async (offset: number, serviceType: string | null,  startTime?: number, endTime?: number) => {
+    const fetchAlerts = async (offset: number, serviceType: string | null, startTime?: number, endTime?: number) => {
         const endpoint = serviceType !== null ? startTime ? `/alert/recent?offset=${offset}&cameraId=${id}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&cameraId=${id}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&cameraId=${id}`
         const res = await protectApi<Alert[]>(endpoint)
         return res.data.data
@@ -306,7 +306,9 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         }
     }
     const changeTab = async (tab: string) => {
-        setAlerts([]);
+        if(tab === selectedTab){
+            return
+        }
         if (tab === 'ALL') {
             setServiceType(null);
         } else if (tab === 'INTRUSION_DETECTION') {
