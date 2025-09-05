@@ -3,6 +3,7 @@ import CameraStreamCard from '@/components/camera/CameraStreamCard'
 import ColumnDropdown from '@/components/camera/ColumnDropdown'
 import OrganizationFilterButtons from '@/components/camera/OrganizationFilterButtons'
 import SearchBar from '@/components/common/Searchbar'
+import { fetchRefreshToken } from '@/lib/protectApi'
 import { cn } from '@/lib/utils'
 import { StreamsViewProps } from '@/models/stream'
 import { useTranslations } from 'next-intl'
@@ -22,6 +23,7 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
                       setSearch={(e) => setSearchQuery(e.target.value)}
                       placeholder={t("streams.search_placeholder")}
                   />
+                  <button onClick={fetchRefreshToken}>Refresh Token</button>
               </div>
           </div>
           <div className="">

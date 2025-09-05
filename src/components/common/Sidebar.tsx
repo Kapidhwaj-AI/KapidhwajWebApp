@@ -28,7 +28,7 @@ export default function Sidebar() {
   const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
   const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
   const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-
+  console.log()
   const t = useTranslations();
 
   const menuItems: MenuItemType[] = [
