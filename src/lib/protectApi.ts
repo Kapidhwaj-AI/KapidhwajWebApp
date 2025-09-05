@@ -73,7 +73,7 @@ export async function protectApi<T, D = undefined>(url: string,
                 headers['Authorization'] = `Bearer ${newtoken}`
                 return axios<ApiResponse<T>>({
                     method: method ?? "GET",
-                    url: 'http://' + BASE_URL + ':8084' + url,
+                    url:  BASE_URL + ':8084' + url,
                     data: data,
                     headers: headers,
                     params
@@ -98,7 +98,7 @@ export const fetchRefreshToken = async () => {
 
     try {
         const res = await axios.post(
-            `http://${BASE_URL}:8084/refresh`, {
+            `${BASE_URL}:8084/refresh`, {
             headers
                 : {
                 Authorization: `Bearer ${token}`,
