@@ -179,9 +179,9 @@ const ManagePeopleConroller = () => {
     const handleDelete = async () => {
         if (isPersonDelete && personId) {
             try {
-                const res = await protectApi(`/person?personId=${personId}&organizationId=${selectedId}`, 'DELETE')
+                const res = await protectApi(`/gcp/image?action=manage&personId=${personId}&organizationId=${selectedId}`, 'DELETE', { personId })
                 if (res.status === 200) {
-                    setPeople(await handleOnSiteSelect(offset))
+                    setPeople(await handleOnSiteSelect(0))
                 }
             } catch (e) {
                 console.error("Err: ", e)
