@@ -60,7 +60,7 @@ export const LoginFormController = () => {
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7);
 
-        // setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.token, expiresAt: expiresAt.toISOString() }))
+        setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.access_token, expiresAt: expiresAt.toISOString() }))
         setLocalStorageItem('user', JSON.stringify(res.data.data))
         dispatch(setAuthToken(res.data.token));
 
