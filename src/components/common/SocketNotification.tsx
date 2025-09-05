@@ -8,6 +8,7 @@ import { setNotificationCount } from '@/redux/slices/userSlice';
 import { setPeopleCount } from '@/redux/slices/singleCameraSlice';
 import { toast } from 'react-toastify';
 import { toggleFaceDetection, toggleFireSmokeDetection, toggleIntrusionDetection, toggleLicensePlateDetection, toggleMotionDetection, togglePeopleCountDetected, togglePeopleDetection } from '@/redux/slices/singleCameraSettingSlice';
+import { getSocketApiBaseUrl } from '@/lib/protectApi';
 const SocketNotification = () => {
     console.log("api", apiSocketUrl)
     const dispatch = useDispatch();
@@ -15,7 +16,7 @@ const SocketNotification = () => {
 
     useEffect(() => {
         if (token) {
-            const socket = io('ws://localhost:8084', {
+            const socket = io(getSocketApiBaseUrl(), {
                 auth: {
                     token,
                 },

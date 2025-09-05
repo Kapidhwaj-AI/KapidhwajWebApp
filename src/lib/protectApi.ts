@@ -23,6 +23,19 @@ export const getApiBaseUrl = () => {
     // When accessed from another machine (IP or domain)
     return `http://${hostname}`;
 };
+export const getSocketApiBaseUrl = () => {
+    if (typeof window === "undefined") return "";
+
+    const { hostname } = window.location;
+
+    // When running on the hub itself
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
+        return "ws://localhost:8084";
+    }
+
+    // When accessed from another machine (IP or domain)
+    return `ws://${hostname}:8084`;
+};
 export const BASE_URL = getApiBaseUrl()
 const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
 export async function protectApi<T, D = undefined>(url: string,
@@ -45,7 +58,7 @@ export async function protectApi<T, D = undefined>(url: string,
     try {
         const response = axios<ApiResponse<T>>({
             method: method ?? 'GET',
-            url: BASE_URL + ':8084' + url,
+            url: 'http://' + BASE_URL + ':8084' + url,
             data: data,
             headers,
             params
@@ -60,15 +73,19 @@ export async function protectApi<T, D = undefined>(url: string,
                 headers['Authorization'] = `Bearer ${newtoken}`
                 return axios<ApiResponse<T>>({
                     method: method ?? "GET",
-                    url: BASE_URL + ':8084' + url,
+                    url: 'http://' + BASE_URL + ':8084' + url,
                     data: data,
                     headers: headers,
                     params
                 });
             }
             else {
-                removeLocalStorageItem('kapi-token')
-                window.location.href = '/login'
+                removeLocalStorageItem(LOCALSTORAGE_KEY);
+                removeLocalStorageItem('user')
+                removeLocalStorageItem('Localhub')
+                removeLocalStorageItem('Remotehub')
+                removeLocalStorageItem('Remotetemphub')
+                window.location.assign('/login');
             }
         }
         console.error(err, "err from protectApi")
@@ -81,7 +98,7 @@ export const fetchRefreshToken = async () => {
 
     try {
         const res = await axios.post(
-            `${BASE_URL}:8084/refresh`, {
+            `http://${BASE_URL}:8084/refresh`, {
             headers
                 : {
                 Authorization: `Bearer ${token}`,
