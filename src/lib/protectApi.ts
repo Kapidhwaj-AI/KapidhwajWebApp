@@ -56,11 +56,8 @@ export async function protectApi<T, D = undefined>(url: string,
             console.log("Token expired, trying refresh...");
             const refreshed = await fetchRefreshToken();
             if (refreshed) {
-                const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
-                const headers: Record<string, string> = {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': type ?? 'application/json',
-                };
+                const newtoken = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
+                headers['Authorization'] = `Bearer ${newtoken}`
                 return axios<ApiResponse<T>>({
                     method: method ?? "GET",
                     url: BASE_URL + ':8084' + url,
@@ -71,6 +68,7 @@ export async function protectApi<T, D = undefined>(url: string,
             }
             else {
                 removeLocalStorageItem('kapi-token')
+                window.location.href = '/login'
             }
         }
         console.error(err, "err from protectApi")

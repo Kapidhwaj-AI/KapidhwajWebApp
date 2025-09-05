@@ -20,7 +20,7 @@ const StreamsController = () => {
     const [selectedData, setSelecteddata] = useState<Camera[] | null>(null)
     const [searchQuery, setSearchQuery] = useState("");
 
-    const { data: organizations, isLoading, error } = useOrganizations();
+    const { data: organizations, isLoading, error, refetch } = useOrganizations();
     useEffect(() => {
         if (selectedChildFolder) {
             setSelecteddata(selectedChildFolder.cameras);
@@ -32,7 +32,9 @@ const StreamsController = () => {
             setSelecteddata(null);
         }
     }, [selectedOrganization, selectedFolder, selectedChildFolder]);
-
+    useEffect(() => {
+        refetch()
+    }, [])
     useEffect(() => {
         if (error instanceof AxiosError) {
             toast.error(error.response?.data.error)
