@@ -20,7 +20,7 @@ const FavouritesController = () => {
         const res = await protectApi(`/camera/fav/remove?cameraId=${id}`, 'POST', { cameraId: id })
         const res1 = await protectApi(`/camera/fav/remove?cameraId=${id}`, 'POST', { cameraId: id }, undefined, true)
 
-        if (res.status === 200) {
+        if (res?.status === 200) {
             setIsDelete(false)
         }
         fetchFav()
@@ -29,8 +29,8 @@ const FavouritesController = () => {
         setLoading(true)
         try {
             const res = await protectApi<Favourite[], undefined>('/camera/fav')
-            const data = res.data.data
-            setFavourites(data)
+            const data = res?.data.data
+            setFavourites(data ?? [])
         } catch (error) {
             setErr(error?.message)
             if (error instanceof AxiosError && error.response?.status === 400) {

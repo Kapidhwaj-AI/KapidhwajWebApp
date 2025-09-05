@@ -48,7 +48,7 @@ const ManagePeopleConroller = () => {
         setIsLoading(true)
         try {
             const res = await protectApi<{ organization: Organization }[]>('/organizations', undefined, undefined, undefined, true)
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 const sitesData = res.data.data?.map(
                     (item) => item.organization,
                 );
@@ -66,7 +66,7 @@ const ManagePeopleConroller = () => {
     const fetchCat = async () => {
         try {
             const res = await protectApi<Category[]>(`/category?organizationId=${selectedId}`)
-            setCategories(res.data.data)
+            setCategories(res?.data.data ?? [])
         } catch (error) {
             console.error("Err", error)
         }
@@ -75,13 +75,8 @@ const ManagePeopleConroller = () => {
         fetchSites()
     }, [])
     const handleOnSiteSelect = async (offset: number) => {
-
         const res = await protectApi<Person[]>(`/person?organizationId=${selectedId}&offset=${offset}`)
-
-        return res.data.data
-
-
-
+        return res?.data.data
     }
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -107,11 +102,11 @@ const ManagePeopleConroller = () => {
                 imageData.append('image', formData?.file)
             }
             const res = await protectApi(url, isPersonEdit ? 'PUT' : 'POST', !selectedImage?.startsWith("https://") ? imageData : undefined, !selectedImage?.startsWith("https://") ? 'multipart/form-data' : undefined)
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setAddPersonModalOpen(false)
                 setFormData({ name: '', category: '', dob: undefined, file: undefined, gender: '' })
                 setSelectedImage('')
-                setPeople(await handleOnSiteSelect(0))
+                setPeople(await handleOnSiteSelect(0) ?? [])
                 setIsPersonEdit(false)
                 setPersonId(NaN)
             }
@@ -126,7 +121,7 @@ const ManagePeopleConroller = () => {
         setIsSaving(true)
         try {
             const res = await protectApi<unknown, { colorCode: string; organizationId: string; categoryId?: number; name?: string; newName?: string }>('/category?action=manage', !isCatEdit ? 'POST' : 'PUT', { name: !isCatEdit ? categoryData.name : undefined, newName: isCatEdit ? categoryData.name : undefined, colorCode: categoryData.colorCode, categoryId: isCatEdit ? catId : undefined, organizationId: selectedId });
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setAddCategoryModalOpen(false)
                 fetchCat()
                 setCategoryData({ name: '', colorCode: '' })
@@ -143,7 +138,7 @@ const ManagePeopleConroller = () => {
         const loadData = async () => {
 
             if (selectedId) {
-                setPeople(await handleOnSiteSelect(offset))
+                setPeople(await handleOnSiteSelect(offset) ?? [])
                 await fetchCat()
             }
         }
@@ -180,8 +175,8 @@ const ManagePeopleConroller = () => {
         if (isPersonDelete && personId) {
             try {
                 const res = await protectApi(`/gcp/image?action=manage&personId=${personId}&organizationId=${selectedId}`, 'DELETE', { personId })
-                if (res.status === 200) {
-                    setPeople(await handleOnSiteSelect(0))
+                if (res?.status === 200) {
+                    setPeople(await handleOnSiteSelect(0) ?? [])
                 }
             } catch (e) {
                 console.error("Err: ", e)
@@ -190,7 +185,7 @@ const ManagePeopleConroller = () => {
         else if (catId && isCatDelete) {
             try {
                 const res = await protectApi(`/category?action=manage&categoryId=${catId}&organizationId=${selectedId}`, 'DELETE')
-                if (res.status === 200) {
+                if (res?.status === 200) {
 
                     await fetchCat()
                 }

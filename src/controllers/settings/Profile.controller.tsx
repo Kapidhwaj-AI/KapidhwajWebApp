@@ -49,7 +49,7 @@ const ProfileController = () => {
                 formData.append('image', file);
             }
             const res = await protectApi<AxiosResponse, typeof formData>(`/user/updateUser`, "PUT", formData, 'multipart/form-data')
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setLocalStorageItem('user', JSON.stringify(res.data.data))
                 dispatch(setIsProfileOpen(false))
             }

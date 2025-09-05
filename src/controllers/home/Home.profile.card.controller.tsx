@@ -17,9 +17,9 @@ export const HomeProfileCardController = ({ devices }: { devices: number }) => {
     const fetchUserDetails = async () => {
       try {
         const res = await protectApi<{ profile_image: string, name: string }>('/user', "GET", undefined, undefined, true)
-        const data = res.data.data;
-        setUserImage(`${data.profile_image ? baseUrl + data.profile_image : '/dummy-user.jpg'}`);
-        setName(data.name);
+        const data = res?.data.data;
+        setUserImage(`${data?.profile_image ? baseUrl + data.profile_image : '/dummy-user.jpg'}`);
+        setName(data?.name ?? 'Your Name');
 
       } catch (error) {
         console.error("Error while fetching user", error)

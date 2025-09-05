@@ -28,7 +28,7 @@ const AlertsController = () => {
     const fetchAlerts = async (offset: number, serviceType: string | null, startTime?: number, endTime?: number,) => {
         const endpoint = serviceType !== null ? startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}`
         const res = await protectApi<Alert[], undefined>(endpoint)
-        return res.data.data
+        return res?.data.data
     }
     const {
         intrusionDetected,
@@ -44,7 +44,7 @@ const AlertsController = () => {
         const loaddata = async () => {
             setIsLoading(true)
             try {
-                setAlerts(await fetchAlerts(alertOffset, serviceType, undefined, undefined))
+                setAlerts(await fetchAlerts(alertOffset, serviceType, undefined, undefined) ?? [])
             } catch (error) {
                 console.error(error)
                 if (error instanceof AxiosError && error.response?.status === 400) {
@@ -140,7 +140,7 @@ const AlertsController = () => {
             const end = getUtcTimestamp(date, endTime)
             const res = await fetchAlerts(alertOffset, serviceType, start, end)
             setIsDateFiltered(true)
-            setAlerts(res)
+            setAlerts(res ?? [])
             setFilterDial(false)
         }
         return

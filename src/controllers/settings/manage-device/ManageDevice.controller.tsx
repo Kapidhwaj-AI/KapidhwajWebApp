@@ -34,7 +34,7 @@ const ManageDevicesController = () => {
 
         try {
             const res = await protectApi<{ organization: Organization }[]>('/organizations', undefined, undefined, undefined, true)
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 const sites = res.data.data?.map(
                     (item) => item.organization,
                 );
@@ -62,11 +62,11 @@ const ManageDevicesController = () => {
         setIsSavedHubsLoading(true)
         try {
             const res = await protectApi<Hub[]>(`/devices/hub`, undefined, undefined, undefined, false);
-            const data = res.data.data
-            setSavedHubs(data)
-            setSelectedHub(data[0])
+            const data = res?.data.data
+            setSavedHubs(data ?? [])
+            setSelectedHub(data?.[0] ?? null )
             if (selectedHub) {
-                const updated = data.find(h => h.id === selectedHub.id);
+                const updated = data?.find(h => h.id === selectedHub.id);
                 if (updated) setSelectedHub(updated);
             }
         } catch (error) {
@@ -91,13 +91,13 @@ const ManageDevicesController = () => {
     }
     const handleDeleteSavedCamera = async (cameraId: string, organizationId: string) => {
         const res = await protectApi<unknown, { cameraId: string, organizationId: string }>('/camera/delete?action=remove', 'DELETE', { cameraId, organizationId })
-        if (res.status === 200) {
+        if (res?.status === 200) {
             setIsDelete(false)
         }
     }
     const handleDeleHub = async (hubId: string) => {
         const res = await protectApi(`/devices/hub?action=remove&hubId=${hubId}`, 'DELETE', undefined,undefined, true )
-        if (res.status === 200) {
+        if (res?.status === 200) {
             setIsHubDelete(false)
         }
     }
@@ -111,7 +111,7 @@ const ManageDevicesController = () => {
         setIsSaving(true)
         try {
             const res = await protectApi<unknown, { name: string, hubId: string, password: string, organizationId: string }>('/devices/hub?action=add', 'POST', { name, hubId: id, password, organizationId: selectedSite }, undefined, true)
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setIsOpen(false)
                 setName('')
                 setSelectedSite('')

@@ -56,7 +56,7 @@ export async function protectApi<T, D = undefined>(url: string,
         headers['x-hub-id'] = hub.id;
     }
     try {
-        const response = axios<ApiResponse<T>>({
+        const response = await axios<ApiResponse<T>>({
             method: method ?? 'GET',
             url: BASE_URL + ':8084' + url,
             data: data,
@@ -71,7 +71,7 @@ export async function protectApi<T, D = undefined>(url: string,
             if (refreshed) {
                 const newtoken = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
                 headers['Authorization'] = `Bearer ${newtoken}`
-                return axios<ApiResponse<T>>({
+                return await axios<ApiResponse<T>>({
                     method: method ?? "GET",
                     url:  BASE_URL + ':8084' + url,
                     data: data,

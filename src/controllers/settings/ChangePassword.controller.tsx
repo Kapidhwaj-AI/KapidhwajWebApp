@@ -32,7 +32,7 @@ const ChangePasswordController = () => {
         setLoading(true)
         try {
             const res = await protectApi<AxiosResponse, { email: string, phone: string }>('/sendOTP', 'POST', { email: user.email, phone: user.phone }, undefined, true)
-            if (res.status === 200 && !isOtpSend) {
+            if (res?.status === 200 && !isOtpSend) {
                 setIsOtpSend(true)
             }
 

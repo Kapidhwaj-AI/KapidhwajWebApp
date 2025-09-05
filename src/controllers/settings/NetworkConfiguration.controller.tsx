@@ -14,9 +14,9 @@ const NetworkConfigurationController = () => {
     try {
       const res = await protectApi<NetworkData>(`/network`)
       const nicRes = await protectApi<NicsData[]>('/network/nics')
-      setNetworkData(res.data.data)
-      setNics(nicRes.data.data)
-      setNic((nicRes.data.data.find((item) => item.id === 'eth0')?.id || res.data.data.nic) ?? '')
+      setNetworkData(res?.data.data)
+      setNics(nicRes?.data.data ??[])
+      setNic((nicRes?.data.data.find((item) => item.id === 'eth0')?.id || res?.data.data.nic) ?? '')
     } catch (err) {
       console.error(err, "Error")
     } finally {
@@ -41,9 +41,9 @@ const NetworkConfigurationController = () => {
     data.nic = nic
     try {
       const res = await protectApi<unknown, NetworkData>('/network', 'PUT', data)
-      if (res.status === 200) {
+      if (res?.status === 200) {
         const res = await protectApi<unknown>('/network/apply', 'POST')
-        if (res.status === 200) {
+        if (res?.status === 200) {
           getNetwork()
         }
       }

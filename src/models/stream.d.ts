@@ -41,7 +41,7 @@ export interface StreamsPageViewProps {
     setRecordings: (val: RecordedClip[]) => void;
     makeFav: boolean;
     toggleStreamFav: () => void;
-    fetchRecordings: (offSet: number) => Promise<RecordedClip[]>;
+    fetchRecordings: (offSet: number) => Promise<RecordedClip[] | undefined>;
     setHasRecordingMore: (val: boolean) => void;
     setRecordingLoading: (val: boolean) => void;
     setRecordingOffset: (val: number) => void;
@@ -56,7 +56,7 @@ export interface StreamsPageViewProps {
     alertOffset: number;
     alertEndRef: React.RefObject<HTMLDivElement | null>;
     alerts: Alert[];
-    fetchAlerts: (offSet: number, serviceType?: string | null) => Promise<Alert[]>;
+    fetchAlerts: (offSet: number, serviceType?: string | null) => Promise<Alert[] | undefined>;
     alertsLoading: boolean;
     setAlertsLoading: (val: boolean) => void;
     setHasMore: (val: boolean) => void;

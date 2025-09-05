@@ -34,7 +34,7 @@ export interface ManagePeopleProps {
   hasMore: boolean
   setOffset: (val: number) => void;
   setPerson: (val: Person[]) => void;
-  handleSelectSite: (offset: number) => Promise<Person[]>
+  handleSelectSite: (offset: number) => Promise<Person[] | undefined>
   selectedId: string;
   setAddPersonModalOpen: (val: boolean) => void;
   setSelectedId: (val: string) => void;

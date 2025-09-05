@@ -17,7 +17,7 @@ const AlertsHomeViewController = ({
         const fetchAlerts = async () => {
             try {
                 const res = await protectApi<Alert[]>('/alert/recent')
-                setAlerts(res.data?.data)
+                setAlerts(res?.data?.data ?? [])
             } catch (error) {
                 console.error(error)
             } finally {

@@ -14,7 +14,7 @@ export const CameraStreamCardController = ({
     const fetchCameraLocation = async () => {
       try {
         const res = await protectApi<CameraLocation>(`/camera/cam-details?cameraId=${camera.camera_id}`)
-        const data = res.data.data
+        const data = res?.data.data
 
         setCameraLocation(data)
       } catch (err) {

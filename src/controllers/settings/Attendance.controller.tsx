@@ -15,7 +15,7 @@ const AttendanceController = () => {
         setLoading(true)
         try {
             const res = await protectApi<{ organization: Organization }[]>('/organizations', undefined, undefined, undefined, false)
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 const sites = res.data.data?.map(
                     (item) => item.organization,
                 );
@@ -30,7 +30,7 @@ const AttendanceController = () => {
     const fetchCat = async () => {
         try {
             const res = await protectApi<Category[]>(`/category?organizationId=${sites[0].id}`)
-            setCategories(res.data.data)
+            setCategories(res?.data.data ??[])
         } catch (error) {
             console.error("Err", error)
         }

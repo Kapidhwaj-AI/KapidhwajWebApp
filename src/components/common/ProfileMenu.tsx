@@ -25,23 +25,25 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
     try {
 
       const res = await protectApi('/signout', "POST", undefined, undefined, true)
-      if (res.status === 200) {
+      if (res?.status === 200) {
         document.cookie = "locale=; path=/; max-age=0";
         toast.success(res.data.message ?? 'User Logout Successfully')
         removeLocalStorageItem('user')
-        removeLocalStorageItem('hub')
+        removeLocalStorageItem('Localhub')
+        removeLocalStorageItem('Remotehub')
         removeLocalStorageItem('kapi-token')
         dispatch(clearAuthToken())
         router.replace("/login");
       }
     } catch (error) {
       console.error("err", error)
-      if (error.status === 401 && error.response.data.message === "THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)") {
+      if (error.status === 401) {
         document.cookie = "locale=; path=/; max-age=0";
         toast.error(error.response.data.message ?? 'THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)')
         removeLocalStorageItem('user')
         removeLocalStorageItem('kapi-token')
         removeLocalStorageItem('hub')
+        dispatch(clearAuthToken())
         router.replace("/login");
       }
     }

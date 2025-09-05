@@ -33,15 +33,15 @@ const PersonsDetailsController = () => {
         }
 
         const res = await protectApi<Alert[]>('/alert/person', "GET", undefined, undefined, false, params)
-        console.log('Alertsbypersonid', res.data.data)
-        return res.data.data
+        console.log('Alertsbypersonid', res?.data.data)
+        return res?.data.data
 
     }
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true)
             try {
-                setPersonDetails(await fetchAlertsByPersonId(offset))
+                setPersonDetails(await fetchAlertsByPersonId(offset) ?? [])
             } catch (error) {
                 console.error(error)
             } finally {
@@ -57,7 +57,7 @@ const PersonsDetailsController = () => {
             const end = getUtcTimestamp(date, endTime)
             const res = await fetchAlertsByPersonId(offset, start, end)
             setIsDateFiltered(true)
-            setPersonDetails(res)
+            setPersonDetails(res ?? [])
             setFilterDial(false)
         }
         return

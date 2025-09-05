@@ -19,15 +19,15 @@ const NotificationsController = () => {
     const didFetch = useRef(false);
     const fetchNotification = async (offset: number) => {
         const res = await protectApi<Notification[]>(`/user/notification?offset=${offset}`)
-        const data = res.data.data
+        const data = res?.data.data
         return data
     }
     const handleReadAll = async () => {
         try {
 
             const resp = await protectApi('/user/notification/all', 'POST');
-            if (resp.status === 200) {
-                setAllNotifications(await fetchNotification(0))
+            if (resp?.status === 200) {
+                setAllNotifications(await fetchNotification(0) ?? [])
             }
 
         } catch (err) {
@@ -38,7 +38,7 @@ const NotificationsController = () => {
         const loadNotification = async () => {
             setLoading(true)
             try {
-                setAllNotifications(await fetchNotification(offset))
+                setAllNotifications(await fetchNotification(offset) ?? [])
             } catch (error) {
 
                 if (error instanceof AxiosError && error.response?.status === 400) {

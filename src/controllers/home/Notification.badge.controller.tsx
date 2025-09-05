@@ -17,7 +17,7 @@ export const NotificationBadgeController = () => {
         const res = await protectApi<Notification[]>('/user/notification',)
 
         const data = res?.data.data;
-        setNotificationsCount(data.length);
+        setNotificationsCount(data?.length ?? 0);
       } catch (error) {
         console.error("Error while fetching notifications", error)
         if (error instanceof AxiosError) {

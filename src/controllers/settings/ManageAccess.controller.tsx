@@ -41,7 +41,7 @@ const ManageAccessController = () => {
         setIsLoading(true)
         try {
             const res = await protectApi<User[], undefined>('/user/added')
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 const data = res.data.data
                 setSharedUser(data)
             }
@@ -55,7 +55,7 @@ const ManageAccessController = () => {
         setIsAccessLoading(true)
         try {
             const res = await protectApi<AccessLevel[]>('/organizations/roles')
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setAccessLevels(res.data.data)
             }
 
@@ -68,7 +68,7 @@ const ManageAccessController = () => {
     const fetchUserSelectedStreams = async () => {
         try {
             const res = await protectApi<{ cameraIds: string[] }[]>(`/camera/get-shared?userId=${selectedShareableUser?.id}`)
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 const cameraIdsSet = new Set<string>()
                 res.data.data.forEach((org: { cameraIds: string[] }) => {
                     org.cameraIds.forEach(id => cameraIdsSet.add(id));
@@ -85,7 +85,7 @@ const ManageAccessController = () => {
         if (debouncedQuery.trim().length < 3) return;
         try {
             const res = await protectApi<{ userId: string }>(`/user/exists?username=${debouncedQuery}`, undefined, undefined, undefined, true)
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setSearchedUsers([{ name: debouncedQuery, userId: res.data.data.userId }])
                 setOpen(true)
             }
@@ -96,7 +96,7 @@ const ManageAccessController = () => {
     const fetchSharedOrg = async () => {
         try {
             const res = await protectApi<Organization[]>('/organizations/getShareable')
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setShareableOrg(res.data.data)
             }
         } catch (error) {
@@ -124,7 +124,7 @@ const ManageAccessController = () => {
     const handleRemoveUser = async () => {
         try {
             const res = await protectApi<AxiosResponse, { userId: string, roleId: number }>('/organizations/removeUser?action=remove', "POST", { userId: selectedShareableUser?.id ?? '', roleId: selectedShareableUser?.role_id ?? NaN })
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 fetchUser()
             }
         } catch (err) {

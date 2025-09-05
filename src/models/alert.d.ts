@@ -43,7 +43,7 @@ export interface AlertViewProps {
   setIsDateFiltered: (val: boolean) => void;
   isLoading: boolean;
   setIsLoading: (val: boolean) => void;
-  fetchAlerts: (val: number, serviceType: string | null) => Promise<Alert[]>;
+  fetchAlerts: (val: number, serviceType: string | null) => Promise<Alert[] | undefined>;
   setDate: (val: Date | undefined) => void;
   setStartTime: (val: Date | undefined) => void;
   setEndTime: (val: Date | undefined) => void;

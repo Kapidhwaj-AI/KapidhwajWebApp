@@ -5,7 +5,7 @@ interface InfiniteScrollingProp<T> {
     setHasMore: (val: boolean) => void;
     hasMore: boolean;
     isLoading: boolean;
-    fetchData: (offSet: number, serviceType?: string | null) => Promise<T[]>;
+    fetchData: (offSet: number, serviceType?: string | null) => Promise<T[] | undefined>;
     serviceType?: string | null;
     setData: (val: T[]) => void;
     divRef: React.RefObject<HTMLDivElement | null>;
@@ -34,10 +34,10 @@ function InfiniteScrolling<T>({
             setIsLoading(true);
             try {
                 const newData = await fetchData(offset, serviceType);
-                if (newData.length === 0) {
+                if (newData?.length === 0 && newData) {
                     setHasMore(false);
                 } else {
-                    setData([...data, ...newData]);
+                    if(newData) setData([...data, ...newData]);
                 }
             } catch (error) {
                 console.error('Failed to fetch:', error);

@@ -64,24 +64,24 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const { data: organizations } = useOrganizations();
     const fetchCamera = async (id: string) => {
         const res = await protectApi<Camera, undefined>(`/camera?cameraId=${id}`)
-        return res.data.data
+        return res?.data.data
     }
     const fetchCameraLocation = async () => {
         const res = await protectApi<CameraLocation, undefined>(`/camera/cam-details?cameraId=${id}`)
-        return res.data.data
+        return res?.data.data
     }
     const fetchAlerts = async (offset: number, serviceType: string | null, startTime?: number, endTime?: number) => {
         const endpoint = serviceType !== null ? startTime ? `/alert/recent?offset=${offset}&cameraId=${id}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&cameraId=${id}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&cameraId=${id}`
         const res = await protectApi<Alert[]>(endpoint)
-        return res.data.data
+        return res?.data.data
     }
     const fetchRecordings = async (offset: number) => {
         const res = await protectApi<RecordedClip[]>(`/recorded-clip?cameraId=${id}&offset=${offset}`)
-        return res.data.data
+        return res?.data.data
     }
     const fetchIsFav = async (id: string) => {
         const res = await protectApi<{ is_fav: boolean }>(`/camera/fav-status?cameraId=${id}`)
-        return res.data.data
+        return res?.data.data
     }
 
     useEffect(() => {
@@ -97,20 +97,20 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                 const newFormData: Partial<StreamFormData> = {};
                 if (camRes.status === "fulfilled") {
                     setCamera(camRes.value);
-                    setStream(camRes.value.webrtc_url !== null && camRes.value?.rtsp_url !== null);
-                    dispatch(setIsPeople(camRes.value.is_people_count_active !== 0))
-                    dispatch(setCurrentCameraId({ id: camRes.value.camera_id }));
-                    newFormData.name = camRes.value.name ?? '';
-                    newFormData.people_threshold_count = camRes.value.people_threshold_count ?? 0;
-                    newFormData.organizationId = camRes.value.organization_id ?? '';
+                    setStream(camRes?.value?.webrtc_url !== null && camRes.value?.rtsp_url !== null);
+                    dispatch(setIsPeople(camRes?.value?.is_people_count_active !== 0))
+                    dispatch(setCurrentCameraId({ id: camRes?.value?.camera_id }));
+                    newFormData.name = camRes?.value?.name ?? '';
+                    newFormData.people_threshold_count = camRes?.value?.people_threshold_count ?? 0;
+                    newFormData.organizationId = camRes?.value?.organization_id ?? '';
 
                 }
 
-                if (alertsRes.status === "fulfilled") setAlerts(alertsRes.value);
+                if (alertsRes.status === "fulfilled") setAlerts(alertsRes?.value ?? []);
 
-                if (recRes.status === "fulfilled") setRecordings(recRes.value);
+                if (recRes.status === "fulfilled") setRecordings(recRes?.value ?? []);
 
-                if (isFav.status === "fulfilled") setMakeFav(isFav.value.is_fav);
+                if (isFav.status === "fulfilled") setMakeFav(isFav?.value?.is_fav ?? false);
                 if (location.status === 'fulfilled') {
                     setCameraLocation(location.value);
                     newFormData.folderId =
@@ -137,7 +137,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const toggleStreamFav = async () => {
         const url = !makeFav ? `/camera/fav/add?cameraId=${id}` : `/camera/fav/remove?cameraId=${id}`
         const res = await protectApi<unknown, { cameraId: string }>(url, 'POST', { cameraId: id })
-        if (res.status === 200) {
+        if (res?.status === 200) {
             toast.success(`Stream ${makeFav ? 'Deleted from ' : 'Added in'} Favourites`)
             setMakeFav((prev) => !prev)
         }
@@ -147,7 +147,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             setIsAllAlertLoading(true)
             try {
                 const res = await fetchAlerts(alertOffset, serviceType)
-                setAlerts(res)
+                setAlerts(res ?? [])
             } catch (error) {
                 console.error(error, "Err")
             } finally {
@@ -168,7 +168,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             const endpoint = toggleValue ? `/camera/stream/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
                 : `/camera/stream/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`;
             const res = await protectApi<unknown, { cameraId: string, serviceType: typeof key }>(endpoint, 'POST', { cameraId: camera?.camera_id.toString() ?? '', serviceType: key })
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 toast.success(`Camera stream ${key} ${toggleValue ? 'started ' : 'stoped'} successfully`)
                 const cameraRes = await fetchCamera(id)
                 setCamera(cameraRes)
@@ -186,7 +186,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         try {
             const endpoint = toggleValue ? '/camera/motion/start' : '/camera/motion/stop'
             const res = await protectApi<unknown, { camId: string }>(endpoint, "POST", { camId: camera?.camera_id ?? '' })
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 toast.success(`Camera streams motion detection  ${toggleValue ? 'started ' : 'stoped'} successfully`)
                 const cameraRes = await fetchCamera(id)
                 setCamera(cameraRes)
@@ -211,7 +211,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                 : `/camera/recording/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
 
             const res = await protectApi(url, "POST", { cameraId: camera?.camera_id, serviceType: 'cloud_storage' })
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 toast.success(`Camera stream recording ${isRecord ? 'started ' : 'stoped'} successfully`)
                 const cameraRes = await fetchCamera(id)
                 setCamera(cameraRes)
@@ -234,7 +234,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             const res = await fetchAlerts(alertOffset, serviceType, start, end)
 
             setIsDateFiltered(true)
-            setAlerts(res)
+            setAlerts(res ?? [])
             setFilterDial(false)
         }
         return
@@ -252,7 +252,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                 ],
             }
             const res = await protectApi<unknown, typeof payload>(url, "POST", payload)
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 toast.success(`Camera stream  ${toggleValue ? 'started ' : 'stoped'} successfully`)
                 setStream(toggleValue)
             }
@@ -285,7 +285,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                 payload
             );
 
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setIsEdit(false)
                 toast.success(`Camera stream updated successfully`)
                 setFormData({

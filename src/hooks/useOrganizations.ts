@@ -12,10 +12,11 @@ export const useOrganizations = (organizationId?: string) => {
           ? `/organizations?organizationId=${organizationId}`
           : `/organizations`
       );
-      return res.data.data.map((item: { organization: Organization }) => item.organization);
+      return res?.data.data.map((item: { organization: Organization }) => item.organization) ?? [];
     },
-    gcTime: 10 * 60 * 1000, // 10 minutes
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, 
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: true 
   });
 
   return {

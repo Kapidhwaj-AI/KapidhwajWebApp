@@ -34,7 +34,7 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, setAlerts, serviceType, fil
                         setIsLoading(true);
                         try {
                             const freshAlerts = await fetchAlerts(0, serviceType);
-                            setAlerts(freshAlerts);
+                            setAlerts(freshAlerts ?? []);
                         } finally {
                             setIsLoading(false);
                         }

@@ -46,9 +46,9 @@ const HomeController = () => {
         setIsSavedHubsLoading(true)
         try {
             const res = await protectApi<Hub[]>(`/devices/hub`, "GET", undefined, undefined, true);
-            const data = res.data.data
-            setDevices(res.data.data.length)
-            setSavedHubs(data)
+            const data = res?.data.data
+            setDevices(res?.data?.data?.length ?? 0)
+            setSavedHubs(data ?? [])
         } catch (error) {
             console.error("err:", error)
             if (error.status === 401 && error.response.data.message === "THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)") {
@@ -66,7 +66,7 @@ const HomeController = () => {
     const fetchSites = async () => {
         try {
             const res = await protectApi<{ organization: Organization }[]>('/organizations')
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 const sites = res.data.data?.map(
                     (item) => item.organization,
                 );
@@ -107,7 +107,7 @@ const HomeController = () => {
         setIsSaving(true)
         try {
             const res = await protectApi<unknown, { name: string, hubId: string, password: string, organizationId: string }>('/devices/hub?action=add', 'POST', { name, hubId: id, password, organizationId: selectedSite }, undefined, true)
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setIsAddModal(false)
                 setName('')
                 setSelectedSite('')
@@ -125,7 +125,7 @@ const HomeController = () => {
         setIsSaving(true)
         try {
             const res = await protectApi<unknown, { name: string }>('/organizations', 'POST', { name: siteName }, undefined, true);
-            if (res.status === 201 || res.status === 200) {
+            if (res?.status === 201 || res?.status === 200) {
                 setIsSiteAddModal(false)
                 setSiteName('')
                 await fetchSites()

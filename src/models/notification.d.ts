@@ -27,7 +27,7 @@ export interface NotificationViewProps {
     isDateFiltered: boolean;
     setIsDateFiltered: (val: boolean) => void;
     divRef: React.RefObject<HTMLDivElement | null>
-    fetchNotification: (val: number) => Promise<Notification[]>
+    fetchNotification: (val: number) => Promise<Notification[] |undefined>
     offset: number;
     setOffset: (val: number) => void
     hasMore: boolean;
