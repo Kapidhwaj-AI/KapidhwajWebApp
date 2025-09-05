@@ -13,7 +13,8 @@ export async function protectApi<T, D = undefined>(
     method: Method = "GET",
     data?: D,
     type?: string,
-    isNotCustomHeader?: boolean
+    isNotCustomHeader?: boolean,
+    params?:unknown
 ) {
     const remoteHub = JSON.parse(getLocalStorageItem("Remotehub") ?? "{}");
     const localHub = JSON.parse(getLocalStorageItem("Localhub") ?? "{}");
@@ -44,6 +45,7 @@ export async function protectApi<T, D = undefined>(
             url: baseUrl + url,
             data,
             headers,
+            params
         });
         return response;
     } catch (err: any) {
@@ -70,7 +72,6 @@ export async function protectApi<T, D = undefined>(
     }
 }
 
-// 🔄 Refresh token helper
 export const fetchRefreshToken = async () => {
     try {
         const res = await axios.post(`${apiBaseUrl}/refresh`);

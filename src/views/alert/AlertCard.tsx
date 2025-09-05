@@ -22,7 +22,6 @@ export function AlertCard({ alert }: { alert: Alert }) {
         hour: '2-digit',
         minute: '2-digit'
     });
-    console.log("alertlog", alert)
     return (
         <div className="w-full bg-[var(--surface-200)] rounded-4xl shadow-lg overflow-hidden">
             <div className="flex justify-between md:flex-row flex-col md:gap-0 gap-1 items-start md:items-center p-2 md:px-4 md:pt-4">
