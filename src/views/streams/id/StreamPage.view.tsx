@@ -3,7 +3,7 @@ import CameraStreamRecordingCard from '@/components/camera/CameraStreamRecording
 import InfiniteScrolling from '@/components/ui/InfiniteScrolling';
 import Spinner from '@/components/ui/Spinner';
 import { RecordedClip } from '@/models/clip';
-import { IconChevronRight, IconFilter, IconHeart, IconPencil, IconSettings, IconVideo } from '@tabler/icons-react';
+import { IconChevronRight, IconFilter, IconFilterX, IconHeart, IconPencil, IconSettings, IconVideo } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import React from 'react'
 import AlertsFiltersButtonAtStream from '../../alert/AlertsFiltersButtonAtStream';
@@ -17,7 +17,7 @@ import { StreamsPageViewProps } from '@/models/stream';
 import { cn } from '@/lib/utils';
 
 
-const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
+const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
     startTime, stream, fetchAlerts, date, fetchRecordings, filterDial, filteredAlerts, formData, recordingLoading, recordingOffset, recordingref, recordings, alertEndRef, alertOffset, alerts, alertsLoading, handleAiToggle, handleMotionToggle, handleRecordingToggle, handleSave, handleToggleStream, hasMore, hasRecordingMore, endTime, organizations, handleApplyFilter
 
 }) => {
@@ -48,13 +48,30 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, isA
                         <IconSettings stroke={1} size={24} />
                         <span className="hidden sm:inline">{t('streams.options.settings')}</span>
                     </button>
-                    <button
+                    {!isDateFiltered && <button
                         className={filterButtonClassname}
                         onClick={() => { setFilterDial(true); setAlertOffset(0) }}
                     >
                         <IconFilter stroke={1} size={24} />
                         <span className="hidden sm:inline">{t('alerts.filter')}</span>
-                    </button>
+                    </button>}
+                    {isDateFiltered && <button onClick={async () => {
+                        setDate(undefined);
+                        setStartTime(undefined);
+                        setEndTime(undefined);
+                        setIsDateFiltered(false);
+                        setAlertOffset(0);
+                        setIsAllAlertsLoading(true);
+                        try {
+                            const freshAlerts = await fetchAlerts(0, serviceType);
+                            setAlerts(freshAlerts);
+                        } finally {
+                            setIsAllAlertsLoading(false);
+                        }
+                    }} className="bg-[#2B4C88] text-white font-medium py-1 md:py-2 px-2 md:px-4 rounded-full shadow-sm transition-all duration-200 flex items-center gap-1">
+                        <IconFilterX stroke={1} size={24} />
+                        <span className="hidden sm:inline">{t('common.clear_filter')}</span>
+                    </button>}
                 </div>
             </div>}
             {loading ? <Spinner /> :

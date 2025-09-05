@@ -64,7 +64,12 @@ export async function protectApi<T, D = undefined>(
                     headers,
                 });
             } else {
-                window.location.href = "/login";
+                removeLocalStorageItem(LOCALSTORAGE_KEY);
+                removeLocalStorageItem('user')
+                removeLocalStorageItem('Localhub')
+                removeLocalStorageItem('Remotehub')
+                removeLocalStorageItem('Remotetemphub')
+                window.location.assign('/login');
             }
         }
         console.error(err, "err from protectApi");
@@ -91,7 +96,7 @@ export const fetchRefreshToken = async () => {
         return true;
     } catch (refreshErr: any) {
         console.error("Refresh token failed:", refreshErr.message, refreshErr?.response?.data);
-        removeLocalStorageItem(LOCALSTORAGE_KEY);
+        
         return false;
     }
 };

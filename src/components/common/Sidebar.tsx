@@ -24,13 +24,15 @@ export default function Sidebar() {
   const [isHovering, setIsHovering] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const [isValidHub, setIsValidHub] = useState(false)
   const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
   const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
-  const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-  console.log()
-  const t = useTranslations();
 
+  const t = useTranslations();
+  useEffect(() => {
+    setIsValidHub((remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub))
+  }, [localStorage, localHub, remoteHub])
+  console.log("isValid", isValidHub, localHub)
   const menuItems: MenuItemType[] = [
     { icon: <IconSmartHome />, label: t('home_title'), path: '/home' },
     { icon: <IconShareplay />, label: t('streams.title'), path: '/streams' },
