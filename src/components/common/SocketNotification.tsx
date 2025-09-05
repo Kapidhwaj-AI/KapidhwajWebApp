@@ -16,7 +16,7 @@ const SocketNotification = () => {
 
     useEffect(() => {
         if (token) {
-            const socket = io('ws://KPH1825018.local:8084', {
+            const socket = io(getSocketApiBaseUrl(), {
                 auth: {
                     token,
                 },
