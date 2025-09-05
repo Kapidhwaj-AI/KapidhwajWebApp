@@ -58,7 +58,7 @@ export async function protectApi<T, D = undefined>(url: string,
     try {
         const response = axios<ApiResponse<T>>({
             method: method ?? 'GET',
-            url: 'http://' + BASE_URL + ':8084' + url,
+            url: BASE_URL + ':8084' + url,
             data: data,
             headers,
             params
