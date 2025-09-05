@@ -8,6 +8,7 @@ import { Person } from '@/models/person';
 import { PersonFormaData } from '@/models/settings';
 import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
 import React, { useEffect, useRef, useState } from 'react'
+import { format } from 'date-fns';
 
 const ManagePeopleConroller = () => {
     const [isAddPersonModalOpen, setAddPersonModalOpen] = useState(false);
@@ -99,7 +100,8 @@ const ManagePeopleConroller = () => {
         e.preventDefault();
         setIsSaving(true)
         try {
-            const url = isPersonEdit ? `/person?action=manage&personId=${personId}&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${formData.dob}&gender=${formData.gender}` : `/gcp/image?action=manage&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${formData.dob}&gender=${formData.gender}`
+            const dob = format(formData.dob ?? '', "yyyy-MM-dd")
+            const url = isPersonEdit ? `/person?action=manage&personId=${personId}&personName=${dob}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${formData.dob}&gender=${formData.gender}` : `/gcp/image?action=manage&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${dob}&gender=${formData.gender}`
             const imageData = new FormData();
             if (formData.file) {
                 imageData.append('image', formData?.file)
@@ -109,7 +111,7 @@ const ManagePeopleConroller = () => {
                 setAddPersonModalOpen(false)
                 setFormData({ name: '', category: '', dob: undefined, file: undefined, gender: '' })
                 setSelectedImage('')
-                setPeople(await handleOnSiteSelect(offset))
+                setPeople(await handleOnSiteSelect(0))
                 setIsPersonEdit(false)
                 setPersonId(NaN)
             }
@@ -155,6 +157,7 @@ const ManagePeopleConroller = () => {
         setCatId(cat.id)
     };
     const handleEditePerson = (person: Person) => {
+   
         setIsPersonEdit(true)
         setAddPersonModalOpen(true)
         setPersonId(person.id)
