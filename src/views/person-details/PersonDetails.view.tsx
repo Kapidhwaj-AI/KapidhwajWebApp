@@ -58,7 +58,7 @@ const PersonDetailsView: React.FC<PersonDetailsViewProps> = ({ personDetails, of
                             setHasMore(true)
                             try {
                                 const freshAlerts = await fetchAlertsByPersonId(0);
-                                setPersonDetails(freshAlerts);
+                                setPersonDetails(freshAlerts ?? []);
                             } finally {
                                 setIsLoading(false);
                             }

@@ -16,7 +16,7 @@ import Spinner from "../ui/Spinner";
 interface SavedCamerasProps {
     hub: Hub;
     className?: string;
-    toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: number) => Promise<AxiosResponse>;
+    toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: number) => Promise<AxiosResponse | undefined>;
     setIsDelete: (val: boolean) => void;
     isDelete: boolean;
     handleDelet: (camearId: string | undefined, organizationId: string) => void;
@@ -53,7 +53,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                 camera.physical_address,
                 camera.hub_id
             );
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 setCameraToggle(newToggle)
             }
         }
