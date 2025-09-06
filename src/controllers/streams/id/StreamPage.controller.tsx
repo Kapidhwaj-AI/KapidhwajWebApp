@@ -64,6 +64,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const { data: organizations } = useOrganizations();
     const fetchCamera = async (id: string) => {
         const res = await protectApi<Camera, undefined>(`/camera?cameraId=${id}`)
+        dispatch(setIsPeople(res?.data.data.is_people_count_active !== 0))
         return res?.data.data
     }
     const fetchCameraLocation = async () => {
@@ -306,7 +307,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         }
     }
     const changeTab = async (tab: string) => {
-        if(tab === selectedTab){
+        if (tab === selectedTab) {
             return
         }
         if (tab === 'ALL') {
