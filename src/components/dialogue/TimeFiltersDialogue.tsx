@@ -34,8 +34,8 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                                 mode="single"
                                 selected={date}
                                 onSelect={setDate}
-                                initialFocus
-                                className="rounded-xl"
+                                autoFocus
+                                className="rounded-md border shadow-sm w-sm"
                             />
                         </PopoverContent>
                     </Popover>

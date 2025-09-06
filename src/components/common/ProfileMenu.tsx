@@ -39,12 +39,14 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
       }
     } catch (error) {
       console.error("err", error)
-      if (error.status === 401 && error.response.data.message === "THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)") {
+      if (error.status === 401) {
         document.cookie = "locale=; path=/; max-age=0";
         toast.error(error.response.data.message ?? 'THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)')
         removeLocalStorageItem('user')
         removeLocalStorageItem('kapi-token')
-        removeLocalStorageItem('hub')
+        removeLocalStorageItem('Localhub')
+        removeLocalStorageItem('Remotehub')
+        dispatch(clearAuthToken())
         router.replace("/login");
       }
     }
