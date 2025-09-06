@@ -34,7 +34,7 @@ export const DOBPicker =({
                     startMonth={new Date(1920, 0)}
                     endMonth={new Date(new Date().getFullYear(), 0)}
                     disabled={(date) => date > new Date()}
-                    className="rounded-lg border"
+                    className="rounded-md border shadow-sm w-sm"
                 />
             </PopoverContent>
         </Popover>
