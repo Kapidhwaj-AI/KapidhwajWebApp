@@ -73,7 +73,7 @@ export async function protectApi<T, D = undefined>(url: string,
                 headers['Authorization'] = `Bearer ${newtoken}`
                 return await axios<ApiResponse<T>>({
                     method: method ?? "GET",
-                    url:  BASE_URL + ':8084' + url,
+                    url: BASE_URL + ':8084' + url,
                     data: data,
                     headers: headers,
                     params
@@ -104,7 +104,9 @@ export const fetchRefreshToken = async () => {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             }
-        }
+
+        },
+        { withCredentials: true }
         );
         console.log("Refresh API response:", res.status, res.data);
         const expiresAt = new Date();
