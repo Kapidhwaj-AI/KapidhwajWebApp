@@ -22,6 +22,9 @@
     "yes": "Yes",
     "no": "No",
     "settings": {
+        "detection_sensitivity": "Detection Sensitivity",
+        "overlap_sensitivity": "Overlap Sensitivity",
+        "scene_density": "Scene Density",
         "title": "Settings",
         "profile": "Profile",
         "new_password": "New Password",

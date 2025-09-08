@@ -41,6 +41,9 @@
         }
     },
     "settings": {
+        "detection_sensitivity": "डिटेक्शन संवेदनशीलता",
+        "overlap_sensitivity": "ओवरलैप संवेदनशीलता",
+        "scene_density": "दृश्य घनत्व",
         "delete": "हटाएं",
         "title": "सेटिंग्स",
         "profile": "प्रोफ़ाइल",

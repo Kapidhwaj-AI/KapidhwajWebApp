@@ -1,24 +1,34 @@
 'use client'
 import { getLocalStorageItem } from '@/lib/storage';
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import { apiSocketUrl } from '../../services/config'
 import { setNotificationCount } from '@/redux/slices/userSlice';
 import { setPeopleCount } from '@/redux/slices/singleCameraSlice';
 import { toast } from 'react-toastify';
 import { toggleFaceDetection, toggleFireSmokeDetection, toggleIntrusionDetection, toggleLicensePlateDetection, toggleMotionDetection, togglePeopleCountDetected, togglePeopleDetection } from '@/redux/slices/singleCameraSettingSlice';
+import { RootState } from '@/redux/store';
 const SocketNotification = () => {
     console.log("api", apiSocketUrl)
     const dispatch = useDispatch();
-    const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
-    const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
+    const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
+    const reduxLocal = useSelector((state: RootState) => state.hub.localHub)
+    const reduxRemote = useSelector((state: RootState) => state.hub.remoteHub)
+    const [isValid, setIsValid] = useState(false)
+    useEffect(() => {
+        if (((reduxLocal !== null || reduxRemote !== null) && (reduxLocal?.id || reduxRemote?.id)) || (remoteHub?.id || localHub.id)) {
+            setIsValid(true)
+        }
+    }, [reduxLocal, reduxRemote])
+
+    const baseUrl = isValid && (!remoteHub.id || !reduxRemote?.id) ? `ws://${localHub.id}.local:8084` : apiSocketUrl
 
     useEffect(() => {
         if (token) {
-            const socket = io(isValidHub && !remoteHub.id ? `ws://${localHub.id}.local:8084` : apiSocketUrl, {
+            const socket = io(baseUrl, {
                 auth: {
                     token,
                 },
@@ -92,7 +102,7 @@ const SocketNotification = () => {
             };
         }
         return () => { }; // Add empty cleanup function for when token is not present
-    }, [token]); // Add token as dependency to reconnect if it changes
+    }, [token, isValid]); // Add token as dependency to reconnect if it changes
     return null;
 }
 

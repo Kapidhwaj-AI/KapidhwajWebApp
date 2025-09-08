@@ -1,8 +1,10 @@
 import Spinner from '@/components/ui/Spinner';
 import { getLocalStorageItem } from '@/lib/storage';
 import { Hub, ManageHub } from '@/models/settings';
+import { RootState } from '@/redux/store';
 import { IconRefresh, IconRouter } from '@tabler/icons-react';
 import React from 'react'
+import { useSelector } from 'react-redux';
 import { useTranslations } from 'use-intl';
 interface NearbyHubsProps {
     isHubLoading: boolean;
@@ -13,8 +15,8 @@ interface NearbyHubsProps {
 }
 const NearbyHubsHome: React.FC<NearbyHubsProps> = ({ isHubLoading, fetchHub, nearbyHubs, handleAccessRemotely, commonHubs }) => {
     const t = useTranslations()
-    const storedHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
-
+    const storedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
+    const storedHub = useSelector((state: RootState) => state.hub.localHub)
     return (
         <div className={`flex flex-col bg-[var(--surface-100)] px-8 rounded-2xl md:rounded-4xl`}>
             {/* Header - Fixed height */}
@@ -40,7 +42,7 @@ const NearbyHubsHome: React.FC<NearbyHubsProps> = ({ isHubLoading, fetchHub, nea
                 <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-5rem)] pb-4 scrollbar-hide">
                     <div className="space-y-3">
                         {nearbyHubs?.map((hub) => (
-                            <div key={hub.ip} className={`${hub.name === storedHub.id && !storedHub.isRemotely ? 'border-2 border-[#2B4C88] ' : ''} flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors`}>
+                            <div key={hub.ip} className={`${hub.name === (storedHub?.id || storedLocalHub.id) ? 'border-2 border-[#2B4C88] ' : ''} flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors`}>
                                 <div className="w-10 h-10 bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
                                     <IconRouter size={20} className="text-[#888888]" />
                                 </div>
@@ -48,7 +50,7 @@ const NearbyHubsHome: React.FC<NearbyHubsProps> = ({ isHubLoading, fetchHub, nea
                                     <h3 className="text-sm font-medium truncate">{hub.name}</h3>
                                     <p className="text-xs text-gray-500 truncate">{hub.ip}</p>
                                 </div>
-                                {commonHubs.find((item) => item.id === hub.name) && <button onClick={() => handleAccessRemotely(hub)} className='bg-[#2B4C88] rounded-lg p-2 text-white'>Access Locally</button>}
+                                { <button onClick={() => handleAccessRemotely(hub)} className='bg-[#2B4C88] rounded-lg p-2 text-white'>Access Locally</button>}
 
                             </div>
                         ))}

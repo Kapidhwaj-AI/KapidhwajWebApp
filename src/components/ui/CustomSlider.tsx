@@ -42,10 +42,10 @@ const CustomSlider = ({
                     if (newVal > max) newVal = max;
                     setValue(newVal);
                 }}
-                className="w-20 text-center border-[#2B4C88] focus-visible:ring-[#2B4C88]"
+                className="w-20 text-center border-[#2B4C88] focus-visible:ring-[#2B4C88]  [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
         </div>
     );
 };
 
-
+export default CustomSlider

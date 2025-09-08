@@ -1,9 +1,11 @@
 import Spinner from '@/components/ui/Spinner';
 import { getLocalStorageItem } from '@/lib/storage';
 import { Hub } from '@/models/settings';
+import { RootState } from '@/redux/store';
 import { IconRefresh, IconRouter } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import React from 'react'
+import { useSelector } from 'react-redux';
 
 interface SavedHubsProps {
     savedHubs: Hub[];
@@ -15,7 +17,8 @@ interface SavedHubsProps {
 
 const SavedHubsHome: React.FC<SavedHubsProps> = ({ savedHubs, setIsAddModal, isSavedHubLoading, fetchSavedHubs, handleAccessRemotely, }) => {
     const t = useTranslations()
-    const storedHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+    const storedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+    const storedHub = useSelector((state: RootState) => state.hub.remoteHub)
     return (
         <div className={`flex flex-col bg-[var(--surface-100)] px-8 pb-4 rounded-2xl md:rounded-4xl `}>
             <div className="flex justify-between items-center pt-4 pb-2 flex-shrink-0">
@@ -40,7 +43,7 @@ const SavedHubsHome: React.FC<SavedHubsProps> = ({ savedHubs, setIsAddModal, isS
                 <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-5rem)]  pb-4 scrollbar-hide">
                     <div className="space-y-3">
                         {savedHubs?.map((hub, index) => (
-                            <div key={index} className={`${hub.id === storedHub.id ?'border-2 border-[#2B4C88] ':''}  group flex items-center p-3  bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors`}>
+                            <div key={index} className={`${hub.id === (storedHub?.id || storedRemoteHub.id) ?'border-2 border-[#2B4C88] ':''}  group flex items-center p-3  bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors`}>
                                 <div className="w-10 h-10 bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
                                     <IconRouter size={20} className="text-[#888888]" />
                                 </div>

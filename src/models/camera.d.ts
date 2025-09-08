@@ -32,7 +32,9 @@ export interface Camera {
   organization?: Organization;
   recordedClips?: RecordedClip[];
   alerts?: Alert[];
-
+  obj_thresh: number;
+  nms_thresh: number;
+  topk_pre_nms: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

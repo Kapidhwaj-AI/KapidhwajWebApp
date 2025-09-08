@@ -15,7 +15,6 @@ import { setIsFullScreenMode } from "@/redux/slices/cameraSlice";
 
 export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {
   const isFullscreen = useSelector((state:RootState)=> state.camera.isFullScreen)
- 
   const dispatch = useDispatch<AppDispatch>()
   return (
     <div
@@ -32,9 +31,9 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
       >
         Your browser does not support the video tag.
       </iframe>
-      <div className="absolute top-2 left-2 md:top-3 md:left-3">
+     {camera?.webrtc_url && <div className="absolute top-2 left-2 md:top-3 md:left-3">
         <LiveBadge />
-      </div>
+      </div>}
      
       <div
         className={cn(
