@@ -9,6 +9,9 @@ export interface StreamFormData {
     organizationId: string;
     folderId: number | null | string;
     subfolder: number | null | string;
+    detectionSensitivity: number | undefined,
+    overlapSensitivity: number | undefined,
+    sceneDensity: number | undefined,
 }
 
 export interface StreamsViewProps {

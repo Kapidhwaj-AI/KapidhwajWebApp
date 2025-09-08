@@ -30,11 +30,11 @@ export const DOBPicker =({
                     mode="single"
                     selected={date}
                     onSelect={setDate}
-                    // 🎯 Enable year + month dropdowns
                     captionLayout="dropdown"
                     fromYear={1920}
                     toYear={new Date().getFullYear()}
                     disabled={(date) => date > new Date()}
+                    className="w-sm shadow-sm rounded-xl"
                 />
             </PopoverContent>
         </Popover>

@@ -7,6 +7,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { ThunkAction, Action } from "@reduxjs/toolkit";
 import { singleCameraSettingReducer } from "./slices/singleCameraSettingSlice";
 import { singelCameraReducer } from "./slices/singleCameraSlice";
+import { hubReducer } from "./slices/hubSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   camera: cameraReducer,
   settings: settingsReducer,
   singleCameraSetting: singleCameraSettingReducer,
-  singleCamera: singelCameraReducer
+  singleCamera: singelCameraReducer,
+  hub: hubReducer
 });
 
 export const store = configureStore({

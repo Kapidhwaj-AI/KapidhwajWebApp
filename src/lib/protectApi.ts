@@ -14,7 +14,7 @@ export async function protectApi<T, D = undefined>(
     data?: D,
     type?: string,
     isNotCustomHeader?: boolean,
-    params?:unknown
+    params?: unknown
 ) {
     const remoteHub = JSON.parse(getLocalStorageItem("Remotehub") ?? "{}");
     const localHub = JSON.parse(getLocalStorageItem("Localhub") ?? "{}");
@@ -79,7 +79,9 @@ export async function protectApi<T, D = undefined>(
 
 export const fetchRefreshToken = async () => {
     try {
-        const res = await axios.post(`${apiBaseUrl}/refresh`);
+        const res = await axios.post(`${apiBaseUrl}/refresh`, {}, 
+            { withCredentials: true }
+        );
         console.log("Refresh API response:", res.status, res.data);
 
         const expiresAt = new Date();

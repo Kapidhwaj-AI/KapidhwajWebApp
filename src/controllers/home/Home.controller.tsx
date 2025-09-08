@@ -7,6 +7,9 @@ import React, { useEffect, useState } from 'react'
 import HubDialogue from '@/components/dialogue/HubDialogue'
 import { Organization } from '@/models/organization'
 import SiteFolderModal from '@/components/dialogue/SiteFolderModal'
+import { setLocalHUb, setRemoteHub } from '@/redux/slices/hubSlice'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '@/redux/store'
 
 
 const HomeController = () => {
@@ -29,7 +32,7 @@ const HomeController = () => {
     const [sites, setSites] = useState<Organization[]>([])
     const [isSiteAddModal, setIsSiteAddModal] = useState(false)
     const [siteName, setSiteName] = useState('')
-
+    const dispatch = useDispatch<AppDispatch>()
     const fetchHubs = async () => {
         setIsHubLoading(true)
         try {
@@ -41,6 +44,7 @@ const HomeController = () => {
             console.error("err:", error)
 
         } finally {
+            ``
             setIsHubLoading(false)
         }
 
@@ -89,15 +93,28 @@ const HomeController = () => {
     }, [])
     useEffect(() => {
         if (nearbyHubs.length > 0 && savedHubs.length > 0) {
-            const commonHubs = savedHubs.filter(saved =>
-                nearbyHubs.some(nearby => nearby.name === saved.id)
-            );
-            setCommonHubs(commonHubs)
+            console.log("SavedHubs:", savedHubs);
+            console.log("NearbyHubs:", nearbyHubs);
+
+            const commonHubs = savedHubs.filter(saved => {
+                const match = nearbyHubs.some(nearby => {
+                    const result = nearby.name.trim() === String(saved.id).trim();
+                    return result;
+                });
+                return match;
+            });
+
+
+            setCommonHubs(commonHubs);
+
             if (commonHubs.length === 1) {
-                setLocalStorageItem('Localhub', JSON.stringify(commonHubs[0]))
+                console.log("Final CommonHubs:", commonHubs);
+
+                dispatch(setLocalHUb(commonHubs[0]));
             }
         }
-    }, [savedHubs, nearbyHubs])
+    }, [savedHubs, nearbyHubs]);
+
     const handleAccessRemotely = (hub: Hub) => {
         // const findHub = nearbyHubs.find((item) => item.name === hub.id)
         // if (findHub) {
@@ -105,9 +122,7 @@ const HomeController = () => {
         //     setIsRemotely((prev) => !prev)
         // }
         // else {
-
-        setLocalStorageItem('Remotehub', JSON.stringify(hub));
-        removeLocalStorageItem('Localhub')
+        dispatch(setRemoteHub(hub))
         if (storedHub) {
             setLocalStorageItem('Remotetemphub', JSON.stringify(storedHub))
         } else {
@@ -116,9 +131,8 @@ const HomeController = () => {
         window.location.reload();
     }
     const handleAccessNearbyHubs = (hub: ManageHub) => {
-        setLocalStorageItem('Localhub', JSON.stringify(commonHubs.find((item) => item.id === hub.name)));
-        removeLocalStorageItem('Remotehub')
-        window.location.reload();
+        dispatch(setLocalHUb(commonHubs.find((item) => item.id === hub.name) ?? null))
+        // window.location.reload();
     }
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

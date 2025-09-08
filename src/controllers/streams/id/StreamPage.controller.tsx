@@ -46,7 +46,10 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         people_threshold_count: camera?.people_threshold_count ?? NaN,
         organizationId: camera?.organization_id ?? '',
         folderId: cameraLocation?.parantFolderId ?? NaN,
-        subfolder: cameraLocation?.folderId ?? NaN
+        subfolder: cameraLocation?.folderId ?? NaN,
+        detectionSensitivity: 0,
+        overlapSensitivity: 0,
+        sceneDensity: 0
     });
     const [isEditLoading, setIsEditLoading] = useState(false)
     const [stream, setStream] = useState(false)
@@ -100,7 +103,9 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                     newFormData.name = camRes.value.name ?? '';
                     newFormData.people_threshold_count = camRes.value.people_threshold_count ?? 0;
                     newFormData.organizationId = camRes.value.organization_id ?? '';
-
+                    newFormData.detectionSensitivity = camRes.value.obj_thresh;
+                    newFormData.overlapSensitivity = camRes.value.nms_thresh;
+                    newFormData.sceneDensity = camRes.value.topk_pre_nms;
                 }
 
                 if (alertsRes.status === "fulfilled") setAlerts(alertsRes.value);
@@ -230,7 +235,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         if (date && startTime && endTime) {
             const start = getUtcTimestamp(date, startTime)
             const end = getUtcTimestamp(date, endTime)
-            console.log(start, end,"times")
+            console.log(start, end, "times")
             const res = await fetchAlerts(alertOffset, serviceType, start, end)
             console.log("hello", res)
             setIsDateFiltered(true)
@@ -277,9 +282,12 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             people_threshold_count: formData.people_threshold_count,
             organizationId: formData.organizationId,
             folderId: fallbackFolderId,
+            detectionSensitivity: formData.detectionSensitivity,
+            overlapSensitivity: formData.overlapSensitivity,
+            sceneDensity: formData.sceneDensity,
         };
         try {
-            const res = await protectApi<unknown, Partial<StreamFormData>>(
+            const res = await protectApi<unknown, typeof payload>(
                 `/camera?action=update&cameraId=${camera?.camera_id}`,
                 'PUT',
                 payload
@@ -288,14 +296,18 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             if (res.status === 200) {
                 setIsEdit(false)
                 toast.success(`Camera stream updated successfully`)
-                setFormData({
-                    name: '',
-                    people_threshold_count: 0,
-                    organizationId: '',
-                    folderId: -1,
-                    subfolder: -1
-                })
-                fetchCamera(id)
+
+                const cam = await fetchCamera(id)
+                const newFormData: Partial<StreamFormData> = {};
+                setCamera(cam);
+                setStream(cam.webrtc_url !== null && cam?.rtsp_url !== null);
+                newFormData.name = cam.name ?? '';
+                newFormData.people_threshold_count = cam.people_threshold_count ?? 0;
+                newFormData.organizationId = cam.organization_id ?? '';
+                newFormData.detectionSensitivity = cam.obj_thresh;
+                newFormData.overlapSensitivity = cam.nms_thresh;
+                newFormData.sceneDensity = cam.topk_pre_nms;
+                setFormData((prev) => ({ ...prev, ...newFormData }));
             }
 
         } catch (error) {
@@ -307,7 +319,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     }
 
     const changeTab = async (tab: string) => {
-        if(tab === selectedTab){
+        if (tab === selectedTab) {
             return
         }
         setIsDateFiltered(false)

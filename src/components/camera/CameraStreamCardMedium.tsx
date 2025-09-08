@@ -11,11 +11,22 @@ import {
 } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsFullScreenMode } from "@/redux/slices/cameraSlice";
+import { getLocalStorageItem } from "@/lib/storage";
+import { useEffect, useState } from "react";
 
 
 export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {
   const isFullscreen = useSelector((state: RootState) => state.camera.isFullScreen)
-
+  const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
+  const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
+  const localHub = useSelector((state: RootState) => state.hub.localHub)
+  const remoteHub = useSelector((state: RootState) => state.hub.remoteHub)
+  const [isValid, setIsValid] = useState(false)
+  useEffect(() => {
+    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub.id || savedRemoteHub.id)) {
+      setIsValid(true)
+    }
+  }, [localHub, remoteHub])
   const dispatch = useDispatch<AppDispatch>()
   return (
     <div
@@ -37,9 +48,9 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
       >
         Your browser does not support the video tag.
       </iframe>}
-      <div className="absolute top-2 left-2 md:top-3 md:left-3">
+      {camera?.webrtc_url && <div className="absolute top-2 left-2 md:top-3 md:left-3">
         <LiveBadge />
-      </div>
+      </div>}
 
       <div
         className={cn(

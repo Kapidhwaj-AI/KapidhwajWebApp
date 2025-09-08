@@ -34,9 +34,7 @@ export const LoginFormController = () => {
     setIsError(false);
     setError("");
     try {
-      const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-      };
+
       // if (isValidHub) {
       //   headers['x-hub-id'] = hub.id;
       // }
@@ -53,12 +51,12 @@ export const LoginFormController = () => {
           [key]: username.trim(),
           password,
         },
-        headers
       });
 
       if (res.status === 200) {
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7);
+        console.log(res, "58585");
 
         setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.access_token, expiresAt: expiresAt.toISOString() }))
         setLocalStorageItem('user', JSON.stringify(res.data.data))

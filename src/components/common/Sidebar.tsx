@@ -8,6 +8,8 @@ import { ProfileMenu } from './ProfileMenu';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { getLocalStorageItem } from '@/lib/storage';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 type SidebarTabs = "/home" | "/streams" | "/alerts" | "/favourites" | "/notifications" | "/settings";
 
@@ -25,14 +27,16 @@ export default function Sidebar() {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isValidHub, setIsValidHub] = useState(false)
-  const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
-  const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
-
+  const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
+  const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
+  const localHub = useSelector((state: RootState) => state.hub.localHub)
+  const remoteHub = useSelector((state: RootState) => state.hub.remoteHub)
   const t = useTranslations();
   useEffect(() => {
-    setIsValidHub((remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub))
-  }, [localStorage, localHub, remoteHub])
-  console.log("isValid", isValidHub, localHub)
+    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub.id || savedRemoteHub.id)) {
+      setIsValidHub(true)
+    }
+  }, [localHub, remoteHub])
   const menuItems: MenuItemType[] = [
     { icon: <IconSmartHome />, label: t('home_title'), path: '/home' },
     { icon: <IconShareplay />, label: t('streams.title'), path: '/streams' },
