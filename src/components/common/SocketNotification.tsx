@@ -19,12 +19,12 @@ const SocketNotification = () => {
     const reduxRemote = useSelector((state: RootState) => state.hub.remoteHub)
     const [isValid, setIsValid] = useState(false)
     useEffect(() => {
-        if (((reduxLocal !== null || reduxRemote !== null) && (reduxLocal?.id || reduxRemote?.id)) || (remoteHub?.id || localHub.id)) {
+        if (((reduxLocal !== null || reduxRemote !== null) && (reduxLocal?.id || reduxRemote?.id)) || (remoteHub?.id || localHub?.id)) {
             setIsValid(true)
         }
     }, [reduxLocal, reduxRemote])
 
-    const baseUrl = isValid && (!remoteHub.id || !reduxRemote?.id) ? `ws://${localHub.id}.local:8084` : apiSocketUrl
+    const baseUrl = isValid && (!remoteHub?.id || !reduxRemote?.id) ? `ws://${localHub?.id}.local:8084` : apiSocketUrl
 
     useEffect(() => {
         if (token) {

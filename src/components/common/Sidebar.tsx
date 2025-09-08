@@ -32,7 +32,7 @@ export default function Sidebar() {
   const localHub = useSelector((state: RootState) => state.hub.localHub)
   const remoteHub = useSelector((state: RootState) => state.hub.remoteHub)
   useEffect(() => {
-    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub.id || savedRemoteHub.id)) {
+    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub?.id || savedRemoteHub?.id)) {
       setIsValidHub(true)
     }
   }, [localHub, remoteHub])
