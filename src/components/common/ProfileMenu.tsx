@@ -3,7 +3,9 @@ import { protectApi } from "@/lib/protectApi";
 import { getLocalStorageItem, removeLocalStorageItem } from "@/lib/storage";
 import { clearAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
+import { apiBaseUrl } from "@/services/config";
 import { IconMoon, IconSun, IconUser, IconLogout2 } from "@tabler/icons-react";
+import axios from "axios";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
@@ -22,9 +24,13 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
   const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
   const handleLogoutClick = async () => {
+    const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     try {
-
-      const res = await protectApi('/signout', "POST", undefined, undefined, true)
+      const res = await axios({
+        url: `${apiBaseUrl}/signout`, method: "POST", headers: {
+          'Authorization': `BBearer ${token}`
+        }
+      })
       if (res?.status === 200) {
         document.cookie = "locale=; path=/; max-age=0";
         toast.success(res.data.message ?? 'User Logout Successfully')
