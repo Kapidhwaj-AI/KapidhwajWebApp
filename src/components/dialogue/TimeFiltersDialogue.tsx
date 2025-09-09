@@ -1,4 +1,3 @@
-'use client';
 
 import { IconX, IconChevronDown } from '@tabler/icons-react';
 import { Calendar } from "@/components/ui/calendar";
@@ -11,7 +10,6 @@ import { useTranslations } from 'next-intl';
 
 export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime, setDate, setEndTime, setStartTime, handleApplyFilter }: { isOpen: boolean; onClose: () => void; date: Date | undefined, startTime: Date | undefined; endTime: Date | undefined; setDate: (val: Date | undefined) => void; setStartTime: (val: Date | undefined) => void; setEndTime: (val: Date | undefined) => void; handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void }) {
     const t = useTranslations()
-    if (!isOpen) return null;
     return (
         <Modal onClose={onClose} title={t('alerts.apply_filter')}>
             {/* Content Area */}
@@ -113,7 +111,6 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                 </div>
             </form>
 
-            {/* Action Buttons - Fixed to Bottom */}
         </Modal>
 
     );

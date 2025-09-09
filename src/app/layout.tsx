@@ -4,8 +4,9 @@ import { jakarta } from "@/lib/fonts";
 import { Providers } from "@/providers/Providers";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
-import { ToastContainer } from 'react-toastify';
+
 import SocketNotification from "@/components/common/SocketNotification";
+import { ToastProvider } from "@/components/common/ToastProvider";
 export const metadata: Metadata = {
   title: "Kapidhwaj AI",
   description: "",
@@ -29,9 +30,9 @@ export default async function RootLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
             <SocketNotification/>
+            <ToastProvider/>
             {children} 
           </Providers>
-          <ToastContainer/>
         </NextIntlClientProvider>
       </body>
     </html>

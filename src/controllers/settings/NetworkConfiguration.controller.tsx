@@ -1,9 +1,9 @@
 'use client'
 import { protectApi } from '@/lib/protectApi'
+import { showToast } from '@/lib/showToast'
 import { NetworkData } from '@/models/settings'
 import NetworkConfigurationView from '@/views/settings/NetworkConfiguration.view'
 import React, { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 
 const NetworkConfigurationController = () => {
     const [loading, setLoading] = useState(false)
@@ -21,13 +21,13 @@ const NetworkConfigurationController = () => {
     const handleSave = async (data: NetworkData) => {
         if (data.mode === 'static') {
             if (!data.ipv4?.address || !data.ipv4.gateway || !data.ipv4.subnetMask || !data.dns?.alternate || !data.dns.preferrd) {
-                toast.error('Please Fill all the feilds')
+                showToast('Please Fill all the feilds', "error")
                 return
             }
         }
         if (!data.autoDns) {
             if (!data.dns?.alternate || !data.dns.preferrd) {
-                toast.error('Please Fill all the feilds')
+                showToast('Please Fill all the feilds', "error")
                 return
             }
         }

@@ -60,5 +60,7 @@ export interface AlertViewProps {
   setSelectedTab: (value: string) => void;
   selectedTab: string;
   setAlertsLoading: (val: boolean) => void;
-  serviceType: string | null
+  serviceType: string | null;
+  search: string;
+  setSearch: (val: ChangeEvent<HTMLInputElement>) => void
 }

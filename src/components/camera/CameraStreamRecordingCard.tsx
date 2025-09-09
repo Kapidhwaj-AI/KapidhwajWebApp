@@ -1,9 +1,9 @@
 "use client";
-import {  IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { RecordedClip } from "@/models/clip";
 import { useRef, useState } from "react";
 import { getLocalStorageItem } from "@/lib/storage";
+import { Pause, Play } from "lucide-react";
 
 export default function CameraStreamRecordingCard({ recording }: { recording: RecordedClip }) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -51,14 +51,14 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
                     )}
                 >
                     {isPlaying ? (
-                        <IconPlayerPause
-                            stroke={2}
+                        <Pause
+                            stroke={'2'}
                             className="text-white/80 hover:text-white"
                             size={24}
                         />
                     ) : (
-                        <IconPlayerPlay
-                            stroke={2}
+                        <Play
+                            stroke={'2'}
                             className="text-white/80 hover:text-white"
                             size={24}
                         />

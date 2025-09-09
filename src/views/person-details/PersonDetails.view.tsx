@@ -23,7 +23,7 @@ const PersonDetailsView: React.FC<PersonDetailsViewProps> = ({ personDetails, of
             {isLoading ? <Spinner/>:<>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 ">
                 <div className='flex items-center gap-3'>
-                    <Image className="rounded-full object-cover w-20 h-20 aspect-auto" src={baseUrl + personDetails[0]?.persons[0]?.gcp_image_path} alt={personDetails[0]?.persons[0]?.name} width={200} height={200} />
+                        <Image priority={false} className="rounded-full object-cover w-20 h-20 aspect-auto" src={baseUrl + personDetails[0]?.persons[0]?.gcp_image_path} alt={personDetails[0]?.persons[0]?.name} width={200} height={200} />
                     <div className='flex flex-col items-start'>
                         <h1 className="sm:text-md md:text-lg lg:text-xl xl:text-2xl font-bold whitespace-nowrap">
                             {personDetails[0]?.persons[0]?.name}

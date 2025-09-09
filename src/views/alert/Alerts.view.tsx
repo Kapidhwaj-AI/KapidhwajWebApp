@@ -1,23 +1,31 @@
 import { TimeFiltersDialogue } from '@/components/dialogue/TimeFiltersDialogue';
-import { IconFilter, IconFilterX } from '@tabler/icons-react';
+
+const IconFilter = dynamic(() =>
+    import('@tabler/icons-react').then(m => m.IconFilter)
+);
+const IconFilterX = dynamic(() =>
+    import('@tabler/icons-react').then(m => m.IconFilterX)
+);
 import React from 'react'
 import AlertsFiltersButtons from './AlertsFiltersButtons';
 import Spinner from '@/components/ui/Spinner';
-import InfiniteScrolling from '@/components/ui/InfiniteScrolling';
+
 import { Alert, AlertViewProps } from '@/models/alert';
 import { AlertCard } from './AlertCard';
 import SearchBar from '@/components/common/Searchbar';
 import { useTranslations } from 'next-intl';
 import { filterButtonClassname } from '@/styles/tailwind-class';
+import dynamic from 'next/dynamic';
+import InfiniteScrolling from '@/components/ui/InfiniteScrolling';
 
-const AlertsView: React.FC<AlertViewProps> = ({ err, setAlerts, serviceType, filteredAlerts, setAlertOffset, alertOffset, setFilterDial, isDateFiltered, setIsDateFiltered, isLoading, fetchAlerts, filterDial, setDate, setEndTime, setIsLoading, setStartTime, handleApplyFilter, date, startTime, endTime, alertEndRef, alerts, alertsLoading, hasMore, selectedTab, setHasMore, setSelectedTab, setAlertsLoading }) => {
+const AlertsView: React.FC<AlertViewProps> = ({ err, search, setSearch, setAlerts, serviceType, filteredAlerts, setAlertOffset, alertOffset, setFilterDial, isDateFiltered, setIsDateFiltered, isLoading, fetchAlerts, filterDial, setDate, setEndTime, setIsLoading, setStartTime, handleApplyFilter, date, startTime, endTime, alertEndRef, alerts, alertsLoading, hasMore, selectedTab, setHasMore, setSelectedTab, setAlertsLoading }) => {
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col gap-4 min-h-0 md:p-5">
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold">{t('alerts.title')}</h1>
                 <div className="flex items-center gap-4">
-                    <SearchBar search="" setSearch={() => { }} placeholder={t("alerts.search_alerts")} />
+                    <SearchBar search={search} setSearch={setSearch} placeholder={t("alerts.search_alerts")} />
                     {!isDateFiltered && <button
                         className={filterButtonClassname}
                         onClick={() => { setFilterDial(true); setAlertOffset(0) }}
@@ -67,7 +75,7 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, setAlerts, serviceType, fil
                     </div>
                 }
             </div>
-            <TimeFiltersDialogue
+            {filterDial && <TimeFiltersDialogue
 
                 date={date}
                 startTime={startTime}
@@ -78,7 +86,7 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, setAlerts, serviceType, fil
                 isOpen={filterDial}
                 onClose={() => setFilterDial(false)}
                 handleApplyFilter={handleApplyFilter}
-            />
+            />}
         </div >
     )
 }

@@ -11,7 +11,7 @@ import { RootState } from '@/redux/store';
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp';
 import React, { use, useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { showToast } from '@/lib/showToast';
 
 const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) => {
 
@@ -63,7 +63,6 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         faceDetection
     } = useSelector((state: RootState) => state.singleCameraSetting);
     const { data: organizations } = useOrganizations();
-    console.log('serviceType', serviceType)
     const fetchCamera = async (id: string) => {
         const res = await protectApi<Camera, undefined>(`/camera?cameraId=${id}`)
         return res.data.data
@@ -142,7 +141,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         const url = !makeFav ? `/camera/fav/add?cameraId=${id}` : `/camera/fav/remove?cameraId=${id}`
         const res = await protectApi<unknown, { cameraId: string }>(url, 'POST', { cameraId: id })
         if (res.status === 200) {
-            toast.success(`Stream ${makeFav ? 'Deleted from ' : 'Added in'} Favourites`)
+            showToast(`Stream ${makeFav ? 'Deleted from ' : 'Added in'} Favourites`, "success")
             setMakeFav((prev) => !prev)
         }
     };
@@ -173,14 +172,14 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                 : `/camera/stream/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`;
             const res = await protectApi<unknown, { cameraId: string, serviceType: typeof key }>(endpoint, 'POST', { cameraId: camera?.camera_id.toString() ?? '', serviceType: key })
             if (res.status === 200) {
-                toast.success(`Camera stream ${key} ${toggleValue ? 'started ' : 'stoped'} successfully`)
+                showToast(`Camera stream ${key} ${toggleValue ? 'started ' : 'stoped'} successfully`, "success")
                 const cameraRes = await fetchCamera(id)
                 setCamera(cameraRes)
             }
             return res
         } catch (error) {
             console.error(error)
-            toast.error(error.response.data.message)
+            showToast(error.response.data.message, "error")
         } finally {
             setIsMlService(false)
         }
@@ -191,7 +190,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             const endpoint = toggleValue ? '/camera/motion/start' : '/camera/motion/stop'
             const res = await protectApi<unknown, { camId: string }>(endpoint, "POST", { camId: camera?.camera_id ?? '' })
             if (res.status === 200) {
-                toast.success(`Camera streams motion detection  ${toggleValue ? 'started ' : 'stoped'} successfully`)
+                showToast(`Camera streams motion detection  ${toggleValue ? 'started ' : 'stoped'} successfully`, "success")
                 const cameraRes = await fetchCamera(id)
                 setCamera(cameraRes)
             }
@@ -199,7 +198,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
         } catch (error) {
             console.error(error)
-            toast.error(error.response.data.message)
+            showToast(error.response.data.message, "error")
         }
         finally {
             setIsMlService(false)
@@ -216,7 +215,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
             const res = await protectApi(url, "POST", { cameraId: camera?.camera_id, serviceType: 'cloud_storage' })
             if (res.status === 200) {
-                toast.success(`Camera stream recording ${isRecord ? 'started ' : 'stoped'} successfully`)
+                showToast(`Camera stream recording ${isRecord ? 'started ' : 'stoped'} successfully`, "success")
                 const cameraRes = await fetchCamera(id)
                 setCamera(cameraRes)
 
@@ -225,7 +224,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
         } catch (error) {
             console.error(error)
-            toast.error(error.response.data.message)
+            showToast(error.response.data.message, "error")
         } finally {
             setIsMlService(false)
         }
@@ -258,7 +257,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             }
             const res = await protectApi<unknown, typeof payload>(url, "POST", payload)
             if (res.status === 200) {
-                toast.success(`Camera stream  ${toggleValue ? 'started ' : 'stoped'} successfully`)
+                showToast(`Camera stream  ${toggleValue ? 'started ' : 'stoped'} successfully`)
                 setStream(toggleValue)
             }
         } catch (error) {
@@ -295,8 +294,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
             if (res.status === 200) {
                 setIsEdit(false)
-                toast.success(`Camera stream updated successfully`)
-
+                showToast(`Camera stream updated successfully`, "success")
                 const cam = await fetchCamera(id)
                 const newFormData: Partial<StreamFormData> = {};
                 setCamera(cam);
@@ -312,7 +310,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
         } catch (error) {
             console.error(error)
-            toast.error(error.message ?? 'An error occured')
+            showToast(error.message ?? 'An error occured',"error")
         } finally {
             setIsEditLoading(false)
         }

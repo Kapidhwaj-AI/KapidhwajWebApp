@@ -10,7 +10,7 @@ import { useTranslations } from 'next-intl';
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { AxiosError } from 'axios';
-import { toast } from 'react-toastify';
+import { showToast } from '@/lib/showToast';
 
 const StreamsController = () => {
     const toogleColumnValue = useSelector((state: RootState) => state?.camera?.toogleColumns);
@@ -37,7 +37,7 @@ const StreamsController = () => {
     }, []);
     useEffect(() => {
         if (error instanceof AxiosError) {
-            toast.error(error.response?.data.error)
+            showToast(error.response?.data.error, "error")
         }
     }, [error])
     console.log(error, "errorr")

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Camera, CameraLocation } from "@/models/camera";
-import { IconBorderCornerSquare } from "@tabler/icons-react";
+import { Square } from "lucide-react";
 import Link from "next/link";
 
 export const CameraStreamCard = ({
@@ -42,10 +42,10 @@ export const CameraStreamCard = ({
               </span>
             </div>
             <Link href={`streams/${camera.camera_id}`} className="h-14 w-14 rounded-full bg-black flex items-center justify-center">
-              <IconBorderCornerSquare
+              <Square
                 className="rotate-90"
                 color="white"
-                stroke={4}
+                stroke={'4'}
                 size={15}
               />
             </Link>

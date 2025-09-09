@@ -5,9 +5,9 @@ import { Alert } from '@/models/alert'
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AxiosError } from 'axios'
-import { toast } from 'react-toastify'
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
+import { showToast } from '@/lib/showToast'
 
 const AlertsController = () => {
     const [alerts, setAlerts] = useState<Alert[]>([])
@@ -48,7 +48,7 @@ const AlertsController = () => {
             } catch (error) {
                 console.error(error)
                 if (error instanceof AxiosError && error.response?.status === 400) {
-                    toast.error(error.response?.data.error)
+                    showToast(error.response?.data.error, "error")
                     setErr(error.response?.data.error)
                 }
 
@@ -67,9 +67,9 @@ const AlertsController = () => {
         licensePlateDetected,
         fireSmokeDetected,
         faceDetection])
-   
+
     const changeTab = async (tab: string) => {
-        if(tab === selectedTab) {
+        if (tab === selectedTab) {
             return
         }
         setIsDateFiltered(false)
@@ -117,7 +117,7 @@ const AlertsController = () => {
     }
 
     return (
-        <AlertsView serviceType={serviceType} err={err} setStartTime={setStartTime} isDateFiltered={isDateFiltered} isLoading={isLoading} selectedTab={selectedTab} setAlertsLoading={setAlertsLoading} setSelectedTab={changeTab} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setHasMore={setHasMore} hasMore={hasMore} handleApplyFilter={handleApplyFilter} setIsDateFiltered={setIsDateFiltered} setIsLoading={setIsLoading} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} startTime={startTime} endTime={endTime} date={date} setAlertOffset={setAlertOffset} setAlerts={setAlerts} filteredAlerts={filteredAlerts} fetchAlerts={fetchAlerts} filterDial={filterDial} />
+        <AlertsView search={search} setSearch={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)} serviceType={serviceType} err={err} setStartTime={setStartTime} isDateFiltered={isDateFiltered} isLoading={isLoading} selectedTab={selectedTab} setAlertsLoading={setAlertsLoading} setSelectedTab={changeTab} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setHasMore={setHasMore} hasMore={hasMore} handleApplyFilter={handleApplyFilter} setIsDateFiltered={setIsDateFiltered} setIsLoading={setIsLoading} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} startTime={startTime} endTime={endTime} date={date} setAlertOffset={setAlertOffset} setAlerts={setAlerts} filteredAlerts={filteredAlerts} fetchAlerts={fetchAlerts} filterDial={filterDial} />
     )
 }
 

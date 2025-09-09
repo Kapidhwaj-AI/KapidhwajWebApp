@@ -6,9 +6,9 @@ import { io } from 'socket.io-client';
 import { apiSocketUrl } from '../../services/config'
 import { setNotificationCount } from '@/redux/slices/userSlice';
 import { setPeopleCount } from '@/redux/slices/singleCameraSlice';
-import { toast } from 'react-toastify';
 import { toggleFaceDetection, toggleFireSmokeDetection, toggleIntrusionDetection, toggleLicensePlateDetection, toggleMotionDetection, togglePeopleCountDetected, togglePeopleDetection } from '@/redux/slices/singleCameraSettingSlice';
 import { RootState } from '@/redux/store';
+import { showToast } from '@/lib/showToast';
 const SocketNotification = () => {
     console.log("api", apiSocketUrl)
     const dispatch = useDispatch();
@@ -69,7 +69,7 @@ const SocketNotification = () => {
 
             socket.on('notification', (notification: { type: string, message: string }) => {
                 const type = notification.type;
-                toast.info(notification.message);
+                showToast(notification.message, "info")
                 if (type === 'intrusion_detected') {
                     dispatch(toggleIntrusionDetection());
                 } else if (type === 'face_detected') {

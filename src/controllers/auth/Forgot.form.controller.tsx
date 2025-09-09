@@ -4,7 +4,7 @@ import { apiBaseUrl } from '@/services/config';
 import axios from 'axios';
 import React, {  useState } from 'react'
 import { OtpFormController } from './Otp.form.controller';
-import { toast } from 'react-toastify';
+import { showToast } from '@/lib/showToast';
 
 const ForgotFormController = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,7 @@ const ForgotFormController = () => {
                 url: `${apiBaseUrl}/sendOTP`,
             })
             if (res.status === 200) {
-                toast.success("OTP sent successfully")
+                showToast("OTP sent successfully", "success")
                 setIsOpen(true)
             }
             
@@ -43,7 +43,7 @@ const ForgotFormController = () => {
                 setError(
                     error.response?.data?.message || "An error occurred during login"
                 );
-                toast.error(error.response?.data?.message)
+                showToast(error.response?.data?.message, "error")
             } else {
                 setError("An unexpected error occurred");
             }

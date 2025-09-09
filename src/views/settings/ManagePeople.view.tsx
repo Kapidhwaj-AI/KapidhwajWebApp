@@ -122,6 +122,7 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ offset, setHasMore, set
                                                                 width={151}
                                                                 height={199}
                                                                 className="rounded-l-[24px] object-cover h-full w-full"
+                                                                priority={false}
                                                             />
                                                         </Link>
 

@@ -1,10 +1,10 @@
 import { Badge } from "@/components/ui/badge";
-import { IconVideo } from '@tabler/icons-react';
+import { Video } from "lucide-react";
 
 const LiveBadge = () => {
     return (
         <Badge className="flex items-center gap-1 backdrop-blur-xs bg-[#FF6868] opacity-80 text-white px-2 py-1 rounded-full text-xs font-bold">
-            <IconVideo stroke={2} size="sm" />
+            <Video stroke={'2'} size="sm" />
             LIVE
         </Badge>
     );

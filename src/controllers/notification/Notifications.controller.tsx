@@ -3,10 +3,10 @@ import NotificationView from '@/views/notification/Notification.view';
 import { protectApi } from '@/lib/protectApi';
 import { Notification } from '@/models/notification';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { showToast } from '@/lib/showToast';
 
 const NotificationsController = () => {
     const [offset, setOffset] = useState(0);
@@ -53,7 +53,7 @@ const NotificationsController = () => {
             } catch (error) {
 
                 if (error instanceof AxiosError && error.response?.status === 400) {
-                    toast.error(error.response?.data.error)
+                    showToast(error.response?.data.error, "error")
                 }
 
                 setErr(error)
@@ -70,7 +70,7 @@ const NotificationsController = () => {
             } catch (error) {
 
                 if (error instanceof AxiosError && error.response?.status === 400) {
-                    toast.error(error.response?.data.error)
+                    showToast(error.response?.data.error, "error")
                 }
 
                 setErr(error)

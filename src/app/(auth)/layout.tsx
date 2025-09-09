@@ -19,8 +19,11 @@ export default function AuthLayout({
               alt="Kapidhwaj AI"
               width={252}
               height={117}
-              className="w-[180px] sm:w-[200px] md:w-[220px] lg:w-[252px] h-auto"
-              priority
+              sizes="(max-width: 640px) 180px, 
+         (max-width: 768px) 200px, 
+         (max-width: 1024px) 220px, 
+         252px"
+              priority={false}
             />
           </div>
 

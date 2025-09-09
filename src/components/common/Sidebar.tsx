@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl';
 import { getLocalStorageItem } from '@/lib/storage';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { BellRing, FolderHeart, Settings2 } from 'lucide-react';
 
 type SidebarTabs = "/home" | "/streams" | "/alerts" | "/favourites" | "/notifications" | "/settings";
 
@@ -33,7 +34,7 @@ export default function Sidebar() {
   const remoteHub = useSelector((state: RootState) => state.hub.remoteHub)
   const t = useTranslations();
   useEffect(() => {
-    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub.id || savedRemoteHub.id)) {
+    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub?.id || savedRemoteHub?.id)) {
       setIsValidHub(true)
     }
   }, [localHub, remoteHub])
@@ -41,9 +42,9 @@ export default function Sidebar() {
     { icon: <IconSmartHome />, label: t('home_title'), path: '/home' },
     { icon: <IconShareplay />, label: t('streams.title'), path: '/streams' },
     { icon: <IconUrgent />, label: t('alerts.title'), path: '/alerts' },
-    { icon: <IconFolderStar />, label: t('favourites.title'), path: '/favourites' },
-    { icon: <IconBellRinging />, label: t('notifications.title'), path: '/notifications' },
-    { icon: <IconSettings2 />, label: t('settings.title'), path: '/settings' },
+    { icon: <FolderHeart />, label: t('favourites.title'), path: '/favourites' },
+    { icon: <BellRing/>, label: t('notifications.title'), path: '/notifications' },
+    { icon: <Settings2 />, label: t('settings.title'), path: '/settings' },
   ];
 
   useEffect(() => {
@@ -75,6 +76,7 @@ export default function Sidebar() {
               width={40}
               height={40}
               className="rounded-full object-cover"
+              priority={false}
             />
             <span className="font-semibold text-base">Kapidhwaj AI</span>
           </div>
@@ -103,7 +105,7 @@ export default function Sidebar() {
                       width={98}
                       height={98}
                       className="rounded-full object-cover w-full h-full"
-                      priority={true}
+                      priority={false}
                     />
                   </div>
 
@@ -151,6 +153,7 @@ export default function Sidebar() {
                   width={40}
                   height={40}
                   className="rounded-full object-cover"
+                  priority={false}
                 />
                 <span className="text-sm">{t('your_profile')}</span>
               </button>
@@ -192,7 +195,7 @@ export default function Sidebar() {
                   width={98}
                   height={98}
                   className="rounded-full object-cover w-full h-full"
-                  priority={true}
+                  priority={false}
                 />
               </div>
               {shouldExpand && (
@@ -245,6 +248,7 @@ export default function Sidebar() {
                 width={48}
                 height={48}
                 className="rounded-full object-cover"
+                priority={false}
               />
               {shouldExpand && (
                 <span className="text-sm text-gray-700 dark:text-gray-200">{t('your_profile')}</span>

@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { protectApi } from "@/lib/protectApi";
-import { toast } from "react-toastify";
+import { showToast } from "@/lib/showToast";
 
 export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, isForgot, password, showPassword, setShowPassword, setPassword, isProtected, }: { value: string, backKey: string, verify: string, resend: string; setIsOpen: (value: boolean) => void; isForgot?: boolean, password?: string, setPassword?: (value: string) => void; showPassword?: boolean; setShowPassword?: (val: boolean) => void; isProtected?: boolean; }) => {
   const router = useRouter();
@@ -112,7 +112,7 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
         setLocalStorageItem('user', JSON.stringify(res.data.data))
         removeLocalStorageItem('email')
         dispatch(setAuthToken(res.data.token));
-        toast.success("User created successfully")
+        showToast("User created successfully", "success")
         router.push('/home')
 
 
@@ -120,7 +120,7 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
       }
       if (res.status === 200) {
         if (isForgot || isProtected) {
-          toast.success("Password changed successfully")
+          showToast("Password changed successfully", "success")
           router.push('/login')
         }
       }
@@ -131,7 +131,7 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
         setError(
           error.response?.data?.message || "An error occurred during login"
         );
-        toast.error(error.response?.data?.message)
+        showToast(error.response?.data?.message, "error")
       } else {
         setError("An unexpected error occurred");
       }

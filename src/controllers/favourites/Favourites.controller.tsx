@@ -6,7 +6,7 @@ import { RootState } from '@/redux/store';
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { AxiosError } from 'axios';
-import { toast } from 'react-toastify';
+import { showToast } from '@/lib/showToast';
 
 const FavouritesController = () => {
     const toogleColumnValue = useSelector((state: RootState) => state.camera.toogleColumns);
@@ -34,7 +34,7 @@ const FavouritesController = () => {
         } catch (error) {
             setErr(error?.message)
             if (error instanceof AxiosError && error.response?.status === 400) {
-                toast.error(error.response?.data.error)
+                showToast(error.response?.data.error, "error")
             }
         } finally {
             setLoading(false)

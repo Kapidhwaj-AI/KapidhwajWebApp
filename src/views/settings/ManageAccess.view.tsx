@@ -43,6 +43,7 @@ const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit
                                         width={1000}
                                         height={1000}
                                         className="object-cover rounded-l-[24px] w-auto h-auto"
+                                        priority={false}
                                     />
                                     <div className="flex flex-col w-full items-start lg:gap-2 gap-1 lg:pb-15 md:pb-5 pb-8 md:pt-2 pt-1 px-2 ">
 

@@ -3,9 +3,10 @@ import { getLocalStorageItem } from '@/lib/storage';
 import { Hub, ManageHub } from '@/models/settings';
 import { RootState } from '@/redux/store';
 import { IconRefresh, IconRouter } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { useTranslations } from 'use-intl';
+
 interface NearbyHubsProps {
     isHubLoading: boolean;
     fetchHub: () => void;

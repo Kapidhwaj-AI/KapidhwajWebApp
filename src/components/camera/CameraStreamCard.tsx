@@ -4,13 +4,12 @@ import LiveBadge from "./LiveBadge";
 import { cn } from "@/lib/utils";
 import { Camera } from "@/models/camera";
 import { RootState } from "@/redux/store";
-import { IconBorderCornerSquare, IconTrash } from "@tabler/icons-react";
-
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { DeleteDialog } from "../dialogue/DeleteDialog";
 import { useTranslations } from "next-intl";
+import { Square, Trash } from "lucide-react";
 
 interface CameraStreamCardProps {
   camera: Camera | null;
@@ -74,7 +73,7 @@ export default function CameraStreamCard({
       )}
       {cameraDetailView !== "focused" && isFav && setIsDelete && (
         <div className="absolute top-3 right-3 z-5 text-white">
-          <button onClick={() => setIsDelete(true)} className="rounded-full p-1 bg-[#FF6868]"><IconTrash size={18} /></button>
+          <button onClick={() => setIsDelete(true)} className="rounded-full p-1 bg-[#FF6868]"><Trash size={18} /></button>
         </div>
       )}
       <Link
@@ -90,10 +89,10 @@ export default function CameraStreamCard({
               <span className="font-bold text-md">{camera?.name}</span>
             </div>
             <div className="rounded-full bg-black p-4 flex items-center justify-center">
-              <IconBorderCornerSquare
+              <Square
                 className="rotate-90"
                 color="white"
-                stroke={4}
+                stroke={'4'}
                 size={12}
               />
             </div>

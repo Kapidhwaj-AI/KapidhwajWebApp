@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-
 interface InfiniteScrollingProp<T> {
     setIsLoading: (val: boolean) => void;
     setHasMore: (val: boolean) => void;
@@ -14,7 +13,6 @@ interface InfiniteScrollingProp<T> {
     setOffset: React.Dispatch<React.SetStateAction<number>>
     data: T[];
 }
-
 function InfiniteScrolling<T>({
     setIsLoading,
     setHasMore,
@@ -29,7 +27,6 @@ function InfiniteScrolling<T>({
     isLoading,
     serviceType
 }: InfiniteScrollingProp<T>) {
-
     useEffect(() => {
         const loadItems = async () => {
             setIsLoading(true);
@@ -55,7 +52,6 @@ function InfiniteScrolling<T>({
     useEffect(() => {
         const target = divRef.current;
         if (!target) return;
-        console.log(hasMore, target, "target")
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting && hasMore && !isLoading) {
@@ -68,7 +64,6 @@ function InfiniteScrolling<T>({
         observer.observe(target);
         return () => observer.disconnect();
     }, [divRef, hasMore, isLoading]);
-    console.log(offset,"offset")
     return <>{children}</>;
 }
 

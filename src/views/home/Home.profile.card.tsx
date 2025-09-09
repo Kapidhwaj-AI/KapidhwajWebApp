@@ -21,6 +21,9 @@ export const HomeProfileCard = ({
           width={200} 
           height={200} 
           className="rounded-full object-cover"
+          priority={false}
+          loading="lazy"
+          sizes="200px"
         />
       </div>
       <div className="flex items-center bg-[#2B4C88] rounded-full py-2 px-4 h-18 md:w-60 w-auto">
