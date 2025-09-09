@@ -39,9 +39,7 @@ export const LoginFormController = () => {
     setIsError(false);
     setError("");
     try {
-      const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-      };
+    
       const key = emailRegex.test(username)
         ? "email"
         : phoneRegex.test(username)
@@ -55,7 +53,7 @@ export const LoginFormController = () => {
           [key]: username.trim(),
           password,
         },
-        headers
+        withCredentials: true
       });
 
       if (res.status === 200) {
