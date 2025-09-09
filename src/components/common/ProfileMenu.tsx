@@ -1,5 +1,4 @@
 "use client";
-import { protectApi } from "@/lib/protectApi";
 import { getLocalStorageItem, removeLocalStorageItem } from "@/lib/storage";
 import { clearAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
