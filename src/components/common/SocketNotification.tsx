@@ -17,9 +17,10 @@ const SocketNotification = () => {
     useEffect(() => {
         if (token) {
             const socket = io(getSocketApiBaseUrl(), {
-                auth: {
-                    token,
-                },
+                //auth: {
+                //    token,
+               // },
+		 withCredentials: true,
                 transports: ['websocket', 'polling'],
                 reconnection: true,
                 reconnectionAttempts: 5,

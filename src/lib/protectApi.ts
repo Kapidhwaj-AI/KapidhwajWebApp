@@ -21,7 +21,7 @@ export const getApiBaseUrl = () => {
     }
 
     // When accessed from another machine (IP or domain)
-    return `http://${hostname}`;
+    return `https://${hostname}`;
 };
 export const getSocketApiBaseUrl = () => {
     if (typeof window === "undefined") return "";
@@ -34,7 +34,7 @@ export const getSocketApiBaseUrl = () => {
     }
 
     // When accessed from another machine (IP or domain)
-    return `ws://${hostname}:8084`;
+    return `wss://${hostname}/api-backend`;
 };
 export const BASE_URL = getApiBaseUrl()
 const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
@@ -46,7 +46,7 @@ export async function protectApi<T, D = undefined>(url: string,
     const baseUrl = isValidHub && !isNotCustomHeader
         ? hub.isRemotely
             ? apiBaseUrl
-            : `http://${hub.id}.local:8084`
+            : `https://${hub.id}.local/api-backend`
         : apiBaseUrl;
     const headers: Record<string, string> = {
         Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ export async function protectApi<T, D = undefined>(url: string,
     try {
         const response = await axios<ApiResponse<T>>({
             method: method ?? 'GET',
-            url: BASE_URL + ':8084' + url,
+            url: BASE_URL + '/api-backend' + url,
             data: data,
             headers,
             params
@@ -98,7 +98,7 @@ export const fetchRefreshToken = async () => {
 
     try {
         const res = await axios.post(
-            `${BASE_URL}:8084/refresh`, {
+            `${BASE_URL}/api-backend/refresh`, {
             headers
                 : {
                 Authorization: `Bearer ${token}`,
