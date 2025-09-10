@@ -50,10 +50,6 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         detectionSensitivity: 0,
         overlapSensitivity: 0,
         sceneDensity: 0
-        subfolder: cameraLocation?.folderId ?? NaN,
-        detectionSensitivity: 0,
-        overlapSensitivity: 0,
-        sceneDensity: 0
     });
     const [isEditLoading, setIsEditLoading] = useState(false)
     const [stream, setStream] = useState(false)
@@ -107,9 +103,6 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                     newFormData.name = camRes.value.name ?? '';
                     newFormData.people_threshold_count = camRes.value.people_threshold_count ?? 0;
                     newFormData.organizationId = camRes.value.organization_id ?? '';
-                    newFormData.detectionSensitivity = camRes.value.obj_thresh;
-                    newFormData.overlapSensitivity = camRes.value.nms_thresh;
-                    newFormData.sceneDensity = camRes.value.topk_pre_nms;
                     newFormData.detectionSensitivity = camRes.value.obj_thresh;
                     newFormData.overlapSensitivity = camRes.value.nms_thresh;
                     newFormData.sceneDensity = camRes.value.topk_pre_nms;
@@ -291,13 +284,10 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             folderId: fallbackFolderId,
             detectionSensitivity: formData.detectionSensitivity,
             overlapSensitivity: formData.overlapSensitivity,
-            sceneDensity: formData.sceneDensity,
-            detectionSensitivity: formData.detectionSensitivity,
-            overlapSensitivity: formData.overlapSensitivity,
-            sceneDensity: formData.sceneDensity,
+            sceneDensity: formData.sceneDensity
         };
         try {
-            const res = await protectApi<unknown, typeof payload>(
+            
             const res = await protectApi<unknown, typeof payload>(
                 `/camera?action=update&cameraId=${camera?.camera_id}`,
                 'PUT',
