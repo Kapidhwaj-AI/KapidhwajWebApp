@@ -1,4 +1,4 @@
-import axios, { Method } from "axios";
+import axios, { isAxiosError, Method } from "axios";
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
 
@@ -48,8 +48,8 @@ export async function protectApi<T, D = undefined>(
             params
         });
         return response;
-    } catch (err: any) {
-        if (err?.response?.status === 401) {
+    } catch (err: unknown) {
+        if (isAxiosError(err) && err?.response?.status === 401) {
             console.log("Token expired, trying refresh...");
             const refreshed = await fetchRefreshToken();
 
@@ -96,8 +96,8 @@ export const fetchRefreshToken = async () => {
         );
 
         return true;
-    } catch (refreshErr: any) {
-        console.error("Refresh token failed:", refreshErr.message, refreshErr?.response?.data);
+    } catch (refreshErr: unknown) {
+        console.error("Refresh token failed:", refreshErr);
         
         return false;
     }

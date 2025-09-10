@@ -35,9 +35,7 @@ function InfiniteScrolling<T>({
             setIsLoading(true);
             try {
                 const newData = await fetchData(offset, serviceType);
-                console.log(data,newData,"New data")
                 if (newData.length <= 0) {
-                    console.log(newData.length,"in empty")
                     setHasMore(false);
                 } else {
                     setData([...data, ...newData]);

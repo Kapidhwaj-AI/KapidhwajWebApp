@@ -6,16 +6,26 @@ import { getLocalStorageItem } from "@/lib/storage";
 import { GOOGLE_KPH_BUCKET_URL } from "@/services/config";
 
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export const HomeProfileCardController = ({ devices }: { devices: number }) => {
   const [userImage, setUserImage] = useState("");
   const [name, setName] = useState("");
-  const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
-  const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
-  const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-  console.log("isValid", isValidHub, localHub, remoteHub)
-  const baseUrl = isValidHub ? remoteHub ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/`: GOOGLE_KPH_BUCKET_URL
+  const [isValidHub, setIsValidHub] = useState(false)
+  const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
+  const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
+  const localHub = useSelector((state: RootState) => state.hub.localHub)
+  const remoteHub = useSelector((state: RootState) => state.hub.remoteHub)
   useEffect(() => {
+    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub.id || savedRemoteHub.id)) {
+      setIsValidHub(true)
+    }
+  }, [localHub, remoteHub, savedLocalHub.id, savedRemoteHub.id])
+  useEffect(() => {
+    const staticPort = remoteHub?.static_port || savedRemoteHub.static_port
+    const id = remoteHub?.id || savedRemoteHub.id
+    const baseUrl = isValidHub ? remoteHub ? `http://media.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
     const fetchUserDetails = async () => {
       try {
         const res = await protectApi<{ profile_image: string, name: string }>('/user', "GET", undefined, undefined, true)
@@ -32,7 +42,7 @@ export const HomeProfileCardController = ({ devices }: { devices: number }) => {
     };
 
     fetchUserDetails();
-  }, []);
+  }, [isValidHub]);
 
   return (
     <HomeProfileCard imagePath={userImage} name={name} devices={devices} />

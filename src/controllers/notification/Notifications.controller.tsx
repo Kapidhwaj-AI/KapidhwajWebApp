@@ -49,7 +49,7 @@ const NotificationsController = () => {
         const loadNotification = async () => {
             setLoading(true)
             try {
-                setAllNotifications(await fetchNotification(offset))
+                setAllNotifications(await fetchNotification(0))
             } catch (error) {
 
                 if (error instanceof AxiosError && error.response?.status === 400) {
@@ -61,12 +61,12 @@ const NotificationsController = () => {
                 setLoading(false)
             }
         }
-        if (offset === 0) { loadNotification() }
+        loadNotification()
     }, [])
     useEffect(() => {
         const loadOnalerts = async () => {
             try {
-                setAllNotifications(await fetchNotification(offset))
+                setAllNotifications(await fetchNotification(0))
             } catch (error) {
 
                 if (error instanceof AxiosError && error.response?.status === 400) {
@@ -89,7 +89,7 @@ const NotificationsController = () => {
             notification.title.toLowerCase().includes(searchQuery.toLowerCase()))
     }, [allNotifications, searchQuery])
 
-    return <NotificationView setIsMoreLoading={setIsMoreLoading} isMoreLoading={isMoreLoading} handleReadAll={handleReadAll} offset={offset} filteredNotifications={filteredNotifications} error={err} divRef={divRef} isDateFiltered={isDateFiltered} setIsDateFiltered={setIsDateFiltered} setIsLoading={setLoading} setAllNotifications={setAllNotifications} setOffset={setOffset} searchQuery={searchQuery} setSearchQuery={setSearchQuery} allNotifications={allNotifications} fetchNotification={fetchNotification} isLoading={loading} setHasMore={setHasMore} hasMore={hasMore} />
+    return <NotificationView setIsMoreLoading={setIsMoreLoading} isMoreLoading={isMoreLoading} handleReadAll={handleReadAll} offset={offset} filteredNotifications={filteredNotifications} error={err} divRef={divRef} isDateFiltered={isDateFiltered} setIsDateFiltered={setIsDateFiltered} setAllNotifications={setAllNotifications} setOffset={setOffset} searchQuery={searchQuery} setSearchQuery={setSearchQuery} allNotifications={allNotifications} fetchNotification={fetchNotification} isLoading={loading} setHasMore={setHasMore} hasMore={hasMore} />
 }
 
 export default NotificationsController

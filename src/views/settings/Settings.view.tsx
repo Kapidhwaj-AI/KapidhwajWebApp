@@ -1,9 +1,6 @@
-import { ChangePasswordDialogue } from '@/components/dialogue/ChangePasswordDialogue';
 import { HelpAndSupportDialogue } from '@/components/dialogue/HelpAndSupportDialogue';
 import { MainSettingsDialogue } from '@/components/dialogue/MainSettingsDialogue';
-import { ProfileDialogue } from '@/components/dialogue/ProfileDialogue';
 import { SelectLanguageDialogue } from '@/components/dialogue/SelectLanguageDialogue';
-import { OtpFormController } from '@/controllers/auth/Otp.form.controller';
 import ChangePasswordController from '@/controllers/settings/ChangePassword.controller';
 import ProfileController from '@/controllers/settings/Profile.controller';
 import { getLocalStorageItem } from '@/lib/storage';
@@ -18,7 +15,6 @@ import { useTranslations } from 'use-intl';
 const SettingsView: React.FC<SettingsViewProps> = ({ settingsItems, setShowHelpDial, setShowMainSettingDial, setShowSelectLanguageDial, showHelpDial, showMainSettingDial, showSelectLanguageDial }) => {
     const t = useTranslations()
     const dispatch = useDispatch<AppDispatch>();
-    const storedHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
     return (
         <div className="md:p-6">
             <h1 className="text-3xl font-bold mb-6">{t('settings.title')}</h1>

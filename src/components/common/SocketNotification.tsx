@@ -10,7 +10,6 @@ import { toast } from 'react-toastify';
 import { toggleFaceDetection, toggleFireSmokeDetection, toggleIntrusionDetection, toggleLicensePlateDetection, toggleMotionDetection, togglePeopleCountDetected, togglePeopleDetection } from '@/redux/slices/singleCameraSettingSlice';
 import { RootState } from '@/redux/store';
 const SocketNotification = () => {
-    console.log("api", apiSocketUrl)
     const dispatch = useDispatch();
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
@@ -22,13 +21,11 @@ const SocketNotification = () => {
         if (((reduxLocal !== null || reduxRemote !== null) && (reduxLocal?.id || reduxRemote?.id)) || (remoteHub.id || localHub.id)) {
             setIsValid(true)
         }
-    }, [reduxLocal, reduxRemote])
+    }, [reduxLocal, reduxRemote, remoteHub.id, localHub.id ])
    
-    const baseUrl = isValid && (!remoteHub.id || !reduxRemote?.id) ? `ws://${localHub.id}.local:8084` : apiSocketUrl
-    console.log(baseUrl,"socketBaseUrl")
     useEffect(() => {
+        const baseUrl = isValid && !(remoteHub.id || reduxRemote?.id) ? `ws://${localHub.id || reduxLocal?.id}.local:8084` : apiSocketUrl
         if (token) {
-            console.log(isValid,"socketValid", (!remoteHub.id || !reduxRemote?.id))
             const socket = io(baseUrl, {
                 auth: {
                     token,

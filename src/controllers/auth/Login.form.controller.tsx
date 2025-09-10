@@ -1,7 +1,7 @@
 "use client";
 
 import { LoginForm } from "@/views/auth/Login.form";
-import { getLocalStorageItem, setLocalStorageItem } from "@/lib/storage";
+import {  setLocalStorageItem } from "@/lib/storage";
 import { setAuthToken } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
@@ -34,10 +34,6 @@ export const LoginFormController = () => {
     setIsError(false);
     setError("");
     try {
-
-      // if (isValidHub) {
-      //   headers['x-hub-id'] = hub.id;
-      // }
       const key = emailRegex.test(username)
         ? "email"
         : phoneRegex.test(username)

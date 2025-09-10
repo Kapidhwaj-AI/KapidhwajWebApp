@@ -90,7 +90,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         setLoading(true);
         Promise.allSettled([
             fetchCamera(id),
-            fetchAlerts(alertOffset, serviceType),
+            fetchAlerts(0, serviceType),
             fetchRecordings(recordingOffset),
             fetchIsFav(id),
             fetchCameraLocation()
@@ -150,7 +150,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         const alertFetch = async () => {
             setIsAllAlertLoading(true)
             try {
-                const res = await fetchAlerts(alertOffset, serviceType)
+                const res = await fetchAlerts(0, serviceType)
                 setAlerts(res)
             } catch (error) {
                 console.error(error, "Err")
@@ -262,7 +262,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                 setStream(toggleValue)
             }
         } catch (error) {
-
+            console.error("err:", error)
         } finally {
             setIsMlService(false)
         }
@@ -287,7 +287,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             sceneDensity: formData.sceneDensity
         };
         try {
-            
+
             const res = await protectApi<unknown, typeof payload>(
                 `/camera?action=update&cameraId=${camera?.camera_id}`,
                 'PUT',
@@ -297,7 +297,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             if (res.status === 200) {
                 setIsEdit(false)
                 toast.success(`Camera stream updated successfully`)
-                
+
                 const cam = await fetchCamera(id)
                 const newFormData: Partial<StreamFormData> = {};
                 setCamera(cam);

@@ -79,13 +79,8 @@ const ManagePeopleConroller = () => {
         fetchSites()
     }, [])
     const handleOnSiteSelect = async (offset: number) => {
-
         const res = await protectApi<Person[]>(`/person?organizationId=${selectedId}&offset=${offset}`)
-
         return res.data.data
-
-
-
     }
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];

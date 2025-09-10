@@ -22,11 +22,11 @@ interface AddNewCameraDialogueProps {
     selectedSite: string;
     sites: Organization[];
     hubId: string;
-
+    handleSwitchToggle: (val:boolean) => Promise<void>
     fetchSavedHubs: () => void
 }
 
-export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, isLoading, fetchNearCams, nearCams, selectedSite, setSelectedSite, sites }: AddNewCameraDialogueProps) {
+export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, handleSwitchToggle,  hubId, onClose, isLoading, fetchNearCams, nearCams, selectedSite, setSelectedSite, sites }: AddNewCameraDialogueProps) {
     const [ipAddress, setIpAddress] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -65,7 +65,8 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, i
             }, undefined, false)
             if (res.status === 201) {
                 onClose()
-                await fetchSavedHubs()
+                fetchSavedHubs()
+                await handleSwitchToggle(true)
             }
         } catch {
 

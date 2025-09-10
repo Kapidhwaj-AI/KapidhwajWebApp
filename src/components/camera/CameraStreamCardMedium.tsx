@@ -1,5 +1,4 @@
 "use client";
-
 import { Camera, CameraLocation } from "@/models/camera";
 import LiveBadge from "./LiveBadge";
 import { cn } from "@/lib/utils";
@@ -11,22 +10,10 @@ import {
 } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsFullScreenMode } from "@/redux/slices/cameraSlice";
-import { getLocalStorageItem } from "@/lib/storage";
-import { useEffect, useState } from "react";
 
 
 export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {
-  const isFullscreen = useSelector((state: RootState) => state.camera.isFullScreen)
-  const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
-  const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
-  const localHub = useSelector((state: RootState) => state.hub.localHub)
-  const remoteHub = useSelector((state: RootState) => state.hub.remoteHub)
-  const [isValid, setIsValid] = useState(false)
-  useEffect(() => {
-    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub.id || savedRemoteHub.id)) {
-      setIsValid(true)
-    }
-  }, [localHub, remoteHub])
+  const isFullscreen = useSelector((state: RootState) => state.camera.isFullScreen)  
   const dispatch = useDispatch<AppDispatch>()
   return (
     <div

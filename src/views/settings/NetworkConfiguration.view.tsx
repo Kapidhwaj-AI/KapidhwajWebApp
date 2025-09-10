@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Switch } from "@/components/ui/CustomeSwitch"; // adjust import to your Switch
-import { InputField } from "@/components/ui/Input.field"; // your custom input
+import { Switch } from "@/components/ui/CustomeSwitch"; 
 import { useTranslations } from "next-intl";
 import { NetworkData, NetworkViewProps } from "@/models/settings";
 import Spinner from "@/components/ui/Spinner";

@@ -11,10 +11,10 @@ export interface Alert {
   alertType: string;
   createdAt?: Date;
   updatedAt?: Date;
-  meta_data:{
+  meta_data: {
     DETECTED_PLATE?: string;
     DETECTED_FIRE_SMOKE?: string;
-    PEOPLE_COUNT?: number|string
+    PEOPLE_COUNT?: number | string
   }
 }
 
@@ -60,5 +60,7 @@ export interface AlertViewProps {
   setSelectedTab: (value: string) => void;
   selectedTab: string;
   setAlertsLoading: (val: boolean) => void;
-  serviceType: string | null
+  serviceType: string | null;
+  search: string;
+  setSearch: (val: string) => void
 }

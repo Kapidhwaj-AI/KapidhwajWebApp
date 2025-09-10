@@ -4,8 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { Alert } from '@/models/alert';
 import { protectApi } from '@/lib/protectApi';
 import PersonDetailsView from '@/views/person-details/PersonDetails.view';
-import { PersonDetails } from '@/models/person-details';
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp';
+import { isAxiosError } from 'axios';
 const PersonsDetailsController = () => {
     const searchParams = useSearchParams();
     const id = searchParams.get("id");
@@ -23,7 +23,6 @@ const PersonsDetailsController = () => {
     const divRef = useRef<HTMLDivElement>(null)
     const [endTime, setEndTime] = useState<Date | undefined>();
     const fetchAlertsByPersonId = async (offset: number, startTime?: number, endTime?: number) => {
-
         const params: { personId: string | null, offset: number; startUtcTimestamp?: number; endUtcTimestamp?: number } = { personId: id, offset }
         if (startTime !== undefined) {
             params.startUtcTimestamp = startTime
@@ -31,7 +30,6 @@ const PersonsDetailsController = () => {
         if (endTime !== undefined) {
             params.endUtcTimestamp = endTime
         }
-
         const res = await protectApi<Alert[]>('/alert/person', "GET", undefined, undefined, false, params)
         console.log('Alertsbypersonid', res.data.data)
         return res.data.data
@@ -44,6 +42,9 @@ const PersonsDetailsController = () => {
                 setPersonDetails(await fetchAlertsByPersonId(offset))
             } catch (error) {
                 console.error(error)
+                if(isAxiosError(error)){
+                    setErr(error.response?.data.error)
+                }
             } finally {
                 setIsLoading(false)
             }

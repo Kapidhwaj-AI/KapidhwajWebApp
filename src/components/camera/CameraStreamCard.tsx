@@ -27,7 +27,6 @@ export default function CameraStreamCard({
     (state: RootState) => state?.camera?.cameraDetailView
   );
   const [streamError, setStreamError] = useState<string | null>(null);
-  const hasStream = camera?.webrtc_url;
 
   useEffect(() => {
     const fetchWebrtc = async () => {
@@ -43,7 +42,7 @@ export default function CameraStreamCard({
       }
     }
     fetchWebrtc()
-  }, [hasStream]);
+  }, [camera?.webrtc_url]);
 
   const t = useTranslations()
   return (
@@ -53,12 +52,12 @@ export default function CameraStreamCard({
         "overflow-hidden flex items-center justify-center relative"
       )}
       style={{
-        backgroundImage: hasStream ? "none" : "url('/assets/images/image.png')",
+        backgroundImage: camera?.webrtc_url ? "none" : "url('/assets/images/image.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      {hasStream && (
+      {camera?.webrtc_url && (
         <iframe
           src={camera.webrtc_url}
           allowFullScreen
@@ -67,7 +66,7 @@ export default function CameraStreamCard({
           Your browser does not support the video tag.
         </iframe>
       )}
-      {streamError === null && hasStream && (
+      {streamError === null && camera?.webrtc_url && (
         <div className="absolute top-3 left-3 z-5">
           <LiveBadge />
         </div>

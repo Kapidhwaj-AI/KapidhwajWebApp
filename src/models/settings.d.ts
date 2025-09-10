@@ -50,7 +50,7 @@ export interface Hub {
     organization_id: string;
     physical_address: string;
     cameras: Camera[];
-    port: string | number
+    static_port: string | number;
 }
 
 export interface Profile {

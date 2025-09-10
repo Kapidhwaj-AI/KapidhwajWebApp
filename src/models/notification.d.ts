@@ -19,7 +19,6 @@ export interface NotificationViewProps {
     searchQuery: string;
     setSearchQuery: (val: string) => void;
     isLoading: boolean;
-    setIsLoading: (val: boolean) => void;
     allNotifications: Notification[];
     setAllNotifications: (val: Notification[]) => void;
     error: Error | undefined;

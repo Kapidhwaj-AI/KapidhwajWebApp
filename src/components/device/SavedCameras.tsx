@@ -138,19 +138,8 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
 
             if (res.status === 200) {
                 setIsEditCameraOpen(false)
-                await fetchSavedHubs()
-                setFormData({
-                    name: '',
-                    people_threshold_count: 0,
-                    organizationId: '',
-                    folderId: -1,
-                    subfolder: -1
-                })
-            }
-            if (res.status === 201) {
-                setIsEditCameraOpen(false)
                 handleSwitchToggle(true)
-                await fetchSavedHubs()
+                fetchSavedHubs()
                 setFormData({
                     name: '',
                     people_threshold_count: 0,
@@ -159,6 +148,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                     subfolder: -1
                 })
             }
+            
         } catch (e) { console.error(e) }
         finally {
             setLoading(false)
@@ -218,6 +208,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                 </div>}
             </div>
             <AddNewCameraDialogue
+                handleSwitchToggle={handleSwitchToggle}
                 nearCams={nearbyCams}
                 isOpen={isAddCameraOpen}
                 onClose={() => setIsAddCameraOpen(false)}

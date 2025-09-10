@@ -113,12 +113,12 @@ const ManageAccessController = () => {
             fetchUserSelectedStreams()
             setUsername(selectedShareableUser?.name ?? '')
             setSelectedUser({ name: selectedShareableUser?.name ?? '', userId: selectedShareableUser?.id ?? '' })
-            setSelectedAccess(selectedShareableUser?.role_id ?? -1)
+            setSelectedAccess(selectedShareableUser?.role_id ?? NaN)
             setOriginalAccessRole(selectedShareableUser?.role_id)
         }
     }, [isEdit])
     useEffect(() => {
-        if (debouncedQuery.trim().length < 3) return;
+        if (debouncedQuery.trim().length < 2) return;
         fetchSearchedUser()
     }, [debouncedQuery])
     const handleRemoveUser = async () => {

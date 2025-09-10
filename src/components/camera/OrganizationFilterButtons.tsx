@@ -18,13 +18,13 @@ const OrganizationFilterButtons = ({ organizations, folders, isLoading, onOrgani
     const [selected, setSelected] = useState<string | number | null>(null);
 
     useEffect(() => {
-        if (organizations && organizations.length > 0 && !selected && onOrganizationSelect) {
+        if (organizations && organizations.length > 0 && !selected ) {
             const firstOrg = organizations[0];
             setSelected(firstOrg.id);
-            onOrganizationSelect(firstOrg);
+            onOrganizationSelect?.(firstOrg);
         }
 
-    }, [organizations]);
+    }, [organizations, selected]);
 
     if (isLoading) {
         return <div>Loading organizations...</div>;

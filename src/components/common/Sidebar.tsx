@@ -36,7 +36,7 @@ export default function Sidebar() {
     if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub.id || savedRemoteHub.id)) {
       setIsValidHub(true)
     }
-  }, [localHub, remoteHub])
+  }, [localHub, remoteHub, savedLocalHub.id, savedRemoteHub.id])
   const menuItems: MenuItemType[] = [
     { icon: <IconSmartHome />, label: t('home_title'), path: '/home' },
     { icon: <IconShareplay />, label: t('streams.title'), path: '/streams' },

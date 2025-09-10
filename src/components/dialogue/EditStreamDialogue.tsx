@@ -1,6 +1,6 @@
 import React from 'react'
 import Modal from '../ui/Modal'
-import { IconCheck, IconVideo, IconX } from '@tabler/icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { StreamFormData } from '@/models/stream';
 import { useTranslations } from 'next-intl';
 import { InputField } from '../ui/Input.field';

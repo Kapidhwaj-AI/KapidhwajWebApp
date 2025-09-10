@@ -44,7 +44,6 @@ const HomeController = () => {
             console.error("err:", error)
 
         } finally {
-            ``
             setIsHubLoading(false)
         }
 
@@ -107,7 +106,7 @@ const HomeController = () => {
                 dispatch(setLocalHUb(commonHubs[0]));
             }
         }
-    }, [savedHubs, nearbyHubs]);
+    }, [savedHubs, nearbyHubs, dispatch]);
 
     const handleAccessRemotely = (hub: Hub) => {
         // const findHub = nearbyHubs.find((item) => item.name === hub.id)

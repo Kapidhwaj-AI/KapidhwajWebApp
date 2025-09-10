@@ -31,7 +31,6 @@ const ManageDevicesController = () => {
         setIsOpen(true)
     };
     const fetchSites = async () => {
-
         try {
             const res = await protectApi<{ organization: Organization }[]>('/organizations', undefined, undefined, undefined, true)
             if (res.status === 200) {

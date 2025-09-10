@@ -6,7 +6,7 @@ import InfiniteScrolling from '@/components/ui/InfiniteScrolling'
 import Spinner from '@/components/ui/Spinner'
 import { useTranslations } from 'next-intl'
 
-const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setIsMoreLoading, isMoreLoading, setSearchQuery, isLoading, setIsLoading, allNotifications, filteredNotifications, error, setAllNotifications, divRef, fetchNotification, hasMore, setHasMore, offset, setOffset, handleReadAll }) => {
+const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setIsMoreLoading, isMoreLoading, setSearchQuery, isLoading,  allNotifications, filteredNotifications, error, setAllNotifications, divRef, fetchNotification, hasMore, setHasMore, offset, setOffset, handleReadAll }) => {
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col gap-4 min-h-0 md:p-5">

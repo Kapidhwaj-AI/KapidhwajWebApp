@@ -13,7 +13,7 @@ interface NearbyHubsProps {
     handleAccessRemotely: (hub: ManageHub) => void
     commonHubs: Hub[]
 }
-const NearbyHubsHome: React.FC<NearbyHubsProps> = ({ isHubLoading, fetchHub, nearbyHubs, handleAccessRemotely, commonHubs }) => {
+const NearbyHubsHome: React.FC<NearbyHubsProps> = ({ isHubLoading, fetchHub, nearbyHubs, handleAccessRemotely }) => {
     const t = useTranslations()
     const storedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
     const storedHub = useSelector((state: RootState) => state.hub.localHub)
