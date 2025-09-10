@@ -11,30 +11,47 @@ import {
 } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsFullScreenMode } from "@/redux/slices/cameraSlice";
+import { getLocalStorageItem } from "@/lib/storage";
+import { useEffect, useState } from "react";
 
 
 export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {
-  const isFullscreen = useSelector((state:RootState)=> state.camera.isFullScreen)
+  const isFullscreen = useSelector((state: RootState) => state.camera.isFullScreen)
+  const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
+  const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
+  const localHub = useSelector((state: RootState) => state.hub.localHub)
+  const remoteHub = useSelector((state: RootState) => state.hub.remoteHub)
+  const [isValid, setIsValid] = useState(false)
+  useEffect(() => {
+    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub.id || savedRemoteHub.id)) {
+      setIsValid(true)
+    }
+  }, [localHub, remoteHub])
   const dispatch = useDispatch<AppDispatch>()
   return (
     <div
-      className={cn( isFullscreen?"absolute top-0 left-0 right-0 w-full h-full overflow-hidden":
+      style={{
+        backgroundImage: camera?.webrtc_url ? "none" : "url('/assets/images/image.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+      className={cn(isFullscreen ? "absolute top-0 left-0 right-0 w-full h-full overflow-hidden" :
         "h-full bg-white dark:bg-gray-800 rounded-xl md:rounded-3xl lg:rounded-4xl",
         "overflow-hidden flex items-center justify-center relative ring-background"
       )}
     >
-      <iframe
+      {camera?.webrtc_url && <iframe
         src={camera?.webrtc_url}
         allowFullScreen
-        
-        style={{width:'105%', height:'105%'}}
+
+        style={{ width: '105%', height: '105%' }}
       >
         Your browser does not support the video tag.
-      </iframe>
-     {camera?.webrtc_url && <div className="absolute top-2 left-2 md:top-3 md:left-3">
+      </iframe>}
+      {camera?.webrtc_url && <div className="absolute top-2 left-2 md:top-3 md:left-3">
         <LiveBadge />
       </div>}
-     
+
       <div
         className={cn(
           "w-full px-2 md:px-4 pb-2 md:pb-4 absolute bottom-0"
@@ -54,8 +71,8 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
 
             {/* Right icon circle */}
             <div className="h-8 w-8 md:h-14 md:w-14 text-white rounded-full bg-black flex items-center justify-center">
-              <button onClick={() => {dispatch(setIsFullScreenMode(!isFullscreen))}}>
-                {isFullscreen ? <IconMinimize stroke={2} size={16} /> :<IconMaximize stroke={2} size={16} />}
+              <button onClick={() => { dispatch(setIsFullScreenMode(!isFullscreen)) }}>
+                {isFullscreen ? <IconMinimize stroke={2} size={16} /> : <IconMaximize stroke={2} size={16} />}
               </button>
             </div>
           </div>

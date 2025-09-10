@@ -44,6 +44,7 @@ const HomeController = () => {
             console.error("err:", error)
 
         } finally {
+            ``
             setIsHubLoading(false)
         }
 
@@ -100,13 +101,14 @@ const HomeController = () => {
                 return match;
             });
 
-
             setCommonHubs(commonHubs);
+
             if (commonHubs.length === 1) {
                 dispatch(setLocalHUb(commonHubs[0]));
             }
         }
-    }, [savedHubs, nearbyHubs])
+    }, [savedHubs, nearbyHubs]);
+
     const handleAccessRemotely = (hub: Hub) => {
         // const findHub = nearbyHubs.find((item) => item.name === hub.id)
         // if (findHub) {
@@ -114,7 +116,6 @@ const HomeController = () => {
         //     setIsRemotely((prev) => !prev)
         // }
         // else {
-
         dispatch(setRemoteHub(hub))
         if (storedHub) {
             setLocalStorageItem('Remotetemphub', JSON.stringify(storedHub))

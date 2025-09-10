@@ -3,6 +3,7 @@ import CameraStreamCard from '@/components/camera/CameraStreamCard'
 import ColumnDropdown from '@/components/camera/ColumnDropdown'
 import OrganizationFilterButtons from '@/components/camera/OrganizationFilterButtons'
 import SearchBar from '@/components/common/Searchbar'
+import { fetchRefreshToken } from '@/lib/protectApi'
 import { cn } from '@/lib/utils'
 import { StreamsViewProps } from '@/models/stream'
 import { useTranslations } from 'next-intl'
@@ -22,6 +23,7 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
                       setSearch={(e) => setSearchQuery(e.target.value)}
                       placeholder={t("streams.search_placeholder")}
                   />
+                  <button onClick={fetchRefreshToken}>Refresh Token</button>
               </div>
           </div>
           <div className="">
@@ -59,7 +61,7 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
           </div>
           <h4 className="text-xl dark:text-white"> {t('streams.showing_streams', { count: cameraCount })}</h4>
           {selectedData ? (
-              <div className={cn("grid grid-cols-1 gap-6 max-h-[51vh] h-full overflow-y-auto scrollbar-hide p-2",
+              <div className={cn("grid grid-cols-1 gap-6  overflow-y-auto scrollbar-hide p-2",
                   {
                       "md:grid-cols-1": toogleColumnValue === 1,
                       "md:grid-cols-2": toogleColumnValue === 2,

@@ -90,4 +90,5 @@ export interface StreamsPageViewProps {
     handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void;
     isAiServiceLoading: boolean;
     serviceType: string | null
+    setIsAllAlertsLoading:(val:boolean) => void
 }

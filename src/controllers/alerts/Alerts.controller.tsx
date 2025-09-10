@@ -23,10 +23,10 @@ const AlertsController = () => {
     const [err, setErr] = useState('')
     const [endTime, setEndTime] = useState<Date | undefined>();
     const [isDateFiltered, setIsDateFiltered] = useState(false)
-    const [serviceType, setServiceType] = useState<string | null>(null)
+    const [serviceType, setServiceType] = useState<string | null>('')
     const alertEndRef = useRef<HTMLDivElement>(null)
     const fetchAlerts = async (offset: number, serviceType: string | null, startTime?: number, endTime?: number,) => {
-        const endpoint = serviceType !== null ? startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}`
+        const endpoint = startTime ? serviceType !== null && serviceType !== 'all' ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}` : `/alert/recent?offset=${offset}`
         const res = await protectApi<Alert[], undefined>(endpoint)
         return res.data.data
     }
@@ -69,8 +69,12 @@ const AlertsController = () => {
         faceDetection])
    
     const changeTab = async (tab: string) => {
-        if (tab === 'ALL') {
-            setServiceType(null);
+        if(tab === selectedTab) {
+            return
+        }
+        setIsDateFiltered(false)
+        if (tab === 'ALL' || tab === 'all') {
+            setServiceType('all');
         } else if (tab === 'INTRUSION_DETECTION') {
             setServiceType('intrusion_detection');
 

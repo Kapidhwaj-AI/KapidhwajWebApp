@@ -4,7 +4,7 @@ import { IconX, IconChevronDown } from '@tabler/icons-react';
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import { TimePicker } from "@/components/ui/time-picker";
 import Modal from '../ui/Modal';
 import { useTranslations } from 'next-intl';
@@ -52,14 +52,24 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                                         variant="outline"
                                         className="w-full h-[35px] flex items-center justify-between sm:h-[40px] md:h-[45px] p-2 px-4 bg-transparent rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] dark:text-white"
                                     >
-                                        {startTime ? format(startTime, "h:mm a") : t('alerts.start_time')}
+
+                                        {startTime && isValid(startTime)
+                                            ? format(startTime, "h:mm a")
+                                            : t('alerts.start_time')}
                                         <IconChevronDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0 bg-[var(--surface-200)] rounded-xl">
                                     <TimePicker
                                         value={startTime}
-                                        onChange={setStartTime}
+                                        onChange={(val) => {
+                                            // val might be null, undefined, or invalid Date while editing
+                                            if (val && isValid(val)) {
+                                                setStartTime(val);
+                                            } else {
+                                                setStartTime(undefined)
+                                            }
+                                        }}
                                         className="rounded-xl"
                                     />
                                 </PopoverContent>

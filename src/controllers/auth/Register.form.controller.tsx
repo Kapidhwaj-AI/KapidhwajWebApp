@@ -39,6 +39,7 @@ export const RegisterFormController = () => {
         method: "POST",
         url: `${apiBaseUrl}/signup`,
         data: { name: `${firstName} ${lastName}`, username, phone, email, password },
+        withCredentials: true
       });
 
       if (res.status === 200) {

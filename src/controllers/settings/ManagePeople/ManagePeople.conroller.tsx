@@ -8,6 +8,7 @@ import { Person } from '@/models/person';
 import { PersonFormaData } from '@/models/settings';
 import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
 import React, { useEffect, useRef, useState } from 'react'
+import { format } from 'date-fns';
 
 const ManagePeopleConroller = () => {
     const [isAddPersonModalOpen, setAddPersonModalOpen] = useState(false);
@@ -41,7 +42,7 @@ const ManagePeopleConroller = () => {
     const [isPersonDelete, setIsPersonDelete] = useState(false);
     const [offset, setOffset] = useState(0)
     const divRef = useRef<HTMLDivElement>(null)
-    const[hasMore, setHasMore] = useState(true)
+    const [hasMore, setHasMore] = useState(true)
     const [personLoading, setPersonLoading] = useState(false)
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
@@ -77,7 +78,7 @@ const ManagePeopleConroller = () => {
     useEffect(() => {
         fetchSites()
     }, [])
-    const handleOnSiteSelect = async (offset:number) => {
+    const handleOnSiteSelect = async (offset: number) => {
 
         const res = await protectApi<Person[]>(`/person?organizationId=${selectedId}&offset=${offset}`)
 
@@ -103,7 +104,9 @@ const ManagePeopleConroller = () => {
         e.preventDefault();
         setIsSaving(true)
         try {
-            const url = isPersonEdit ? `/person?action=manage&personId=${personId}&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${formData.dob}&gender=${formData.gender}` : `/gcp/image?action=manage&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${formData.dob}&gender=${formData.gender}`
+            const dob = format(formData.dob ?? '', "yyyy-MM-dd")
+            console.log(dob, "dataDate")
+            const url = isPersonEdit ? `/person?action=manage&personId=${personId}&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${dob}&gender=${formData.gender}` : `/gcp/image?action=manage&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${dob}&gender=${formData.gender}`
             const imageData = new FormData();
             if (formData.file) {
                 imageData.append('image', formData?.file)
@@ -113,7 +116,7 @@ const ManagePeopleConroller = () => {
                 setAddPersonModalOpen(false)
                 setFormData({ name: '', category: '', dob: undefined, file: undefined, gender: '' })
                 setSelectedImage('')
-                setPeople(await handleOnSiteSelect(offset))
+                setPeople(await handleOnSiteSelect(0))
                 setIsPersonEdit(false)
                 setPersonId(NaN)
             }
@@ -159,6 +162,7 @@ const ManagePeopleConroller = () => {
         setCatId(cat.id)
     };
     const handleEditePerson = (person: Person) => {
+        console.log('persons', person)
         setIsPersonEdit(true)
         setAddPersonModalOpen(true)
         setPersonId(person.id)
@@ -180,9 +184,9 @@ const ManagePeopleConroller = () => {
     const handleDelete = async () => {
         if (isPersonDelete && personId) {
             try {
-                const res = await protectApi(`/person?personId=${personId}&organizationId=${selectedId}`, 'DELETE')
+                const res = await protectApi(`/gcp/image?action=manage&personId=${personId}&organizationId=${selectedId}`, 'DELETE', { personId })
                 if (res.status === 200) {
-                    setPeople(await handleOnSiteSelect(offset))
+                    setPeople(await handleOnSiteSelect(0))
                 }
             } catch (e) {
                 console.error("Err: ", e)

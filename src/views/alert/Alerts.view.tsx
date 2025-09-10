@@ -18,13 +18,13 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, setAlerts, serviceType, fil
                 <h1 className="text-2xl font-bold">{t('alerts.title')}</h1>
                 <div className="flex items-center gap-4">
                     <SearchBar search="" setSearch={() => { }} placeholder={t("alerts.search_alerts")} />
-                    <button
+                    {!isDateFiltered && <button
                         className={filterButtonClassname}
                         onClick={() => { setFilterDial(true); setAlertOffset(0) }}
                     >
                         <IconFilter stroke={1} size={24} />
                         <span className="hidden sm:inline">{t('alerts.filter')}</span>
-                    </button>
+                    </button>}
                     {isDateFiltered && <button onClick={async () => {
                         setDate(undefined);
                         setStartTime(undefined);

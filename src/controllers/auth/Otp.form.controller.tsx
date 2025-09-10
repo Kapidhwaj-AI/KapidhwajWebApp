@@ -108,7 +108,7 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
       if (res.status === 201) {
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7);
-        setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.token, expiresAt: expiresAt.toISOString() }))
+        // setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.token, expiresAt: expiresAt.toISOString() }))
         setLocalStorageItem('user', JSON.stringify(res.data.data))
         removeLocalStorageItem('email')
         dispatch(setAuthToken(res.data.token));

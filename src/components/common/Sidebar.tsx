@@ -31,13 +31,12 @@ export default function Sidebar() {
   const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
   const localHub = useSelector((state: RootState) => state.hub.localHub)
   const remoteHub = useSelector((state: RootState) => state.hub.remoteHub)
+  const t = useTranslations();
   useEffect(() => {
-    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub?.id || savedRemoteHub?.id)) {
+    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub.id || savedRemoteHub.id)) {
       setIsValidHub(true)
     }
   }, [localHub, remoteHub])
-  const t = useTranslations();
-
   const menuItems: MenuItemType[] = [
     { icon: <IconSmartHome />, label: t('home_title'), path: '/home' },
     { icon: <IconShareplay />, label: t('streams.title'), path: '/streams' },

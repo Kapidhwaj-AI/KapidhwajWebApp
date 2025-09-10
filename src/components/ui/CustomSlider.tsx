@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Slider } from "./Slider";
+import { Slider } from "./slider";
 import { Input } from "@/components/ui/input";
 
 const CustomSlider = ({
@@ -27,7 +27,7 @@ const CustomSlider = ({
                     value={[value]}
                     min={min}
                     max={max}
-                    step={step ?? 0.01}
+                    step={step ?? 0.1}
                     onValueChange={(val) => setValue(val[0])}
                     className="[&_.bg-primary]:bg-[#2B4C88]"
                 />
@@ -42,10 +42,10 @@ const CustomSlider = ({
                     if (newVal > max) newVal = max;
                     setValue(newVal);
                 }}
-                className="w-20 text-center border-[#2B4C88] focus-visible:ring-[#2B4C88]  [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-20 text-center border-[#2B4C88]  [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
         </div>
-    );
+    ); 
 };
 
 export default CustomSlider

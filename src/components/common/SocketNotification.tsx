@@ -12,22 +12,23 @@ import { RootState } from '@/redux/store';
 const SocketNotification = () => {
     console.log("api", apiSocketUrl)
     const dispatch = useDispatch();
+    const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
-    const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const reduxLocal = useSelector((state: RootState) => state.hub.localHub)
     const reduxRemote = useSelector((state: RootState) => state.hub.remoteHub)
     const [isValid, setIsValid] = useState(false)
     useEffect(() => {
-        if (((reduxLocal !== null || reduxRemote !== null) && (reduxLocal?.id || reduxRemote?.id)) || (remoteHub?.id || localHub?.id)) {
+        if (((reduxLocal !== null || reduxRemote !== null) && (reduxLocal?.id || reduxRemote?.id)) || (remoteHub.id || localHub.id)) {
             setIsValid(true)
         }
     }, [reduxLocal, reduxRemote])
-
-    const baseUrl = isValid && (!remoteHub?.id || !reduxRemote?.id) ? `ws://${localHub?.id}.local:8084` : apiSocketUrl
-
+   
+    const baseUrl = isValid && (!remoteHub.id || !reduxRemote?.id) ? `ws://${localHub.id}.local:8084` : apiSocketUrl
+    console.log(baseUrl,"socketBaseUrl")
     useEffect(() => {
         if (token) {
+            console.log(isValid,"socketValid", (!remoteHub.id || !reduxRemote?.id))
             const socket = io(baseUrl, {
                 auth: {
                     token,

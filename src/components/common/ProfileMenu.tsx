@@ -21,7 +21,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>()
   const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
-  const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+  const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
   const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
   const handleLogoutClick = async () => {
     try {
