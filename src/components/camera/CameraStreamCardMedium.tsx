@@ -1,14 +1,22 @@
 "use client";
 
 import { Camera, CameraLocation } from "@/models/camera";
-import LiveBadge from "./LiveBadge";
+const LiveBadge = dynamic(() => import("./LiveBadge"),
+  { ssr: false });
 import { cn } from "@/lib/utils";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsFullScreenMode } from "@/redux/slices/cameraSlice";
 import { getLocalStorageItem } from "@/lib/storage";
 import { useEffect, useState } from "react";
-import { ChevronRight, Maximize, Minimize } from "lucide-react";
+const ChevronRight = dynamic(() => import("lucide-react").then((mod) => mod.ChevronRight),
+  { ssr: false });
+const Maximize = dynamic(() => import("lucide-react").then((mod) => mod.Maximize),
+  { ssr: false });
+
+const Minimize = dynamic(() => import("lucide-react").then((mod) => mod.Minimize),
+  { ssr: false });
+import dynamic from "next/dynamic";
 
 
 export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {
@@ -27,7 +35,7 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
   return (
     <div
       style={{
-        backgroundImage: camera?.webrtc_url ? "none" : "url('/assets/images/image.png')",
+        backgroundImage: camera?.webrtc_url ? "none" : "url('/assets/images/image.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -60,7 +68,7 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
             <div className="flex flex-col text-white ml-1 md:ml-2">
               {camLocation?.parantFolder !== "NA" && <span className="font-bold text-sm md:text-md">{camLocation?.parantFolder}</span>}
               <span className="text-xs md:text-sm flex gap-1 items-center  text-gray-300">
-                {camLocation?.organization} <ChevronRight size={16} className=" text-gray-400" />  {camera?.name}
+                {camLocation?.organization} <ChevronRight fill="currentColor" size={16} className=" text-gray-400" />  {camera?.name}
 
               </span>
             </div>
@@ -68,7 +76,7 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
             {/* Right icon circle */}
             <div className="h-8 w-8 md:h-14 md:w-14 text-white rounded-full bg-black flex items-center justify-center">
               <button onClick={() => { dispatch(setIsFullScreenMode(!isFullscreen)) }}>
-                {isFullscreen ? <Minimize stroke={'2'} size={16} /> : <Maximize stroke={'2'} size={16} />}
+                {isFullscreen ? <Minimize fill="currentColor" stroke={'2'} size={16} /> : <Maximize fill="currentColor" stroke={'2'} size={16} />}
               </button>
             </div>
           </div>

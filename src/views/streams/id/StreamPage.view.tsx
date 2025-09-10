@@ -3,18 +3,39 @@ import CameraStreamRecordingCard from '@/components/camera/CameraStreamRecording
 import InfiniteScrolling from '@/components/ui/InfiniteScrolling';
 import Spinner from '@/components/ui/Spinner';
 import { RecordedClip } from '@/models/clip';
-import { IconChevronRight, IconFilter, IconFilterX, IconHeart, IconPencil, IconSettings, IconVideo } from '@tabler/icons-react';
+const IconChevronRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconChevronRight),
+    { ssr: false });
+const IconFilter = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFilter),
+    { ssr: false });
+const IconFilterX = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFilterX),
+    { ssr: false });
+
+const IconHeart = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconHeart),
+    { ssr: false });
+const IconPencil = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconPencil),
+    { ssr: false });
+
+const IconSettings = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconSettings),
+    { ssr: false });
+const IconVideo = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconVideo),
+    { ssr: false });
+
+const AlertsFiltersButtonAtStream = dynamic(() => import("../../alert/AlertsFiltersButtonAtStream"),
+    { ssr: false });
+const TimeFiltersDialogue = dynamic(() => import("@/components/dialogue/TimeFiltersDialogue").then((mod) => mod.TimeFiltersDialogue),
+    { ssr: false });
+const StreamSettingsDialogue = dynamic(() => import("@/components/dialogue/StreamSettingsDialogue").then((mod) => mod.StreamSettingsDialogue),
+    { ssr: false });
+const EditStreamDialogue = dynamic(() => import("@/components/dialogue/EditStreamDialogue"),
+    { ssr: false });
 import { useTranslations } from 'next-intl';
 import React from 'react'
-import AlertsFiltersButtonAtStream from '../../alert/AlertsFiltersButtonAtStream';
 import { Alert } from '@/models/alert';
 import { AlertCard } from '../../alert/AlertCard';
-import { TimeFiltersDialogue } from '@/components/dialogue/TimeFiltersDialogue';
-import EditStreamDialogue from '@/components/dialogue/EditStreamDialogue';
-import { StreamSettingsDialogue } from '@/components/dialogue/StreamSettingsDialogue';
 import { filterButtonClassname } from '@/styles/tailwind-class';
 import { StreamsPageViewProps } from '@/models/stream';
 import { cn } from '@/lib/utils';
+import dynamic from 'next/dynamic';
 
 
 const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
@@ -96,7 +117,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, set
                                         "flex flex-col p-3 md:p-6 rounded-2xl md:rounded-4xl bg-[var(--surface-100)] overflow-y-auto scrollbar-hide",
                                         "h-[33vh] lg:flex-[1/2]"
                                     )}
-                                >                                    <h3 className="text-sm md:text-md flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                                >   <h3 className="text-sm md:text-md flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
                                         <IconVideo stroke={2} size={18} />
                                         <span>{t("alerts.recordings")}</span>
                                     </h3>

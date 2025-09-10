@@ -2,8 +2,13 @@
 
 import { Notification } from '@/models/notification';
 import { getNotificationStyle } from '@/utils/notification';
-import {  IconBellFilled, IconSparkles } from '@tabler/icons-react';
+const IconBellFilled = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBellFilled),
+    { ssr: false });
+
+const IconSparkles = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconSparkles),
+    { ssr: false });
 import clsx from 'clsx';
+import dynamic from 'next/dynamic';
 
 export default function NotificationCard({ notification }: { notification: Notification }) {
     const { id, title, message, type, seen } = notification;

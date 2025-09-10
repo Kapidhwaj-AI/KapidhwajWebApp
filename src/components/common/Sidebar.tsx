@@ -1,7 +1,22 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { IconBellRinging, IconFolderStar, IconSettings2, IconShareplay, IconSmartHome, IconUrgent, IconMenu2, IconX } from '@tabler/icons-react';
+const IconBellRinging = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBellRinging),
+  { ssr: false });
+const IconSettings2 = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconSettings2),
+  { ssr: false });
+const IconShareplay = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconShareplay),
+  { ssr: false });
+const IconSmartHome = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconSmartHome),
+  { ssr: false });
+const IconUrgent = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconUrgent),
+  { ssr: false });
+const IconMenu2 = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconMenu2),
+  { ssr: false });
+const IconX = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconX),
+  { ssr: false });
+const IconFolderHeart = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFolderHeart),
+  { ssr: false });
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ProfileMenu } from './ProfileMenu';
@@ -10,7 +25,7 @@ import { useTranslations } from 'next-intl';
 import { getLocalStorageItem } from '@/lib/storage';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { BellRing, FolderHeart, Settings2 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 
 type SidebarTabs = "/home" | "/streams" | "/alerts" | "/favourites" | "/notifications" | "/settings";
 
@@ -42,9 +57,9 @@ export default function Sidebar() {
     { icon: <IconSmartHome />, label: t('home_title'), path: '/home' },
     { icon: <IconShareplay />, label: t('streams.title'), path: '/streams' },
     { icon: <IconUrgent />, label: t('alerts.title'), path: '/alerts' },
-    { icon: <FolderHeart />, label: t('favourites.title'), path: '/favourites' },
-    { icon: <BellRing/>, label: t('notifications.title'), path: '/notifications' },
-    { icon: <Settings2 />, label: t('settings.title'), path: '/settings' },
+    { icon: <IconFolderHeart />, label: t('favourites.title'), path: '/favourites' },
+    { icon: <IconBellRinging/>, label: t('notifications.title'), path: '/notifications' },
+    { icon: <IconSettings2 />, label: t('settings.title'), path: '/settings' },
   ];
 
   useEffect(() => {
@@ -71,7 +86,7 @@ export default function Sidebar() {
         <div className="flex items-center justify-between bg-[var(--surface-200)] px-4 py-2 rounded-2xl mx-4">
           <div className="flex items-center gap-2">
             <Image
-              src="/assets/images/logo-square.png"
+              src="/assets/images/logo-square.webp"
               alt="Logo"
               width={40}
               height={40}
@@ -88,8 +103,6 @@ export default function Sidebar() {
           </button>
         </div>
       )}
-
-      {/* MOBILE SIDEBAR DRAWER */}
       {isMobile && isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 flex">
           <div className="bg-[var(--surface-200)] w-64 h-full p-4 flex flex-col justify-between">
@@ -100,7 +113,7 @@ export default function Sidebar() {
                   <div className="w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
                     <Image
                       onClick={() => setIsExpanded(!isExpanded)}
-                      src="/assets/images/logo-square.png"
+                      src="/assets/images/logo-square.webp"
                       alt="Logo"
                       width={98}
                       height={98}
@@ -148,7 +161,7 @@ export default function Sidebar() {
                 className="flex items-center gap-3 w-full rounded-lg px-4 py-2 hover:ring-2 hover:ring-blue-500"
               >
                 <Image
-                  src="/assets/images/person-logo.png"
+                  src="/assets/images/person-logo.webp"
                   alt="Profile"
                   width={40}
                   height={40}
@@ -190,7 +203,7 @@ export default function Sidebar() {
               <div className="w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
                 <Image
                   onClick={() => setIsExpanded(!isExpanded)}
-                  src="/assets/images/logo-square.png"
+                  src="/assets/images/logo-square.webp"
                   alt="Logo"
                   width={98}
                   height={98}
@@ -243,7 +256,7 @@ export default function Sidebar() {
               )}
             >
               <Image
-                src="/assets/images/person-logo.png"
+                src="/assets/images/person-logo.webp"
                 alt="Profile"
                 width={48}
                 height={48}

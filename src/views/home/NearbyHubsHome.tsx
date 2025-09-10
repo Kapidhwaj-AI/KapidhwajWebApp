@@ -1,9 +1,12 @@
 import Spinner from '@/components/ui/Spinner';
-import { getLocalStorageItem } from '@/lib/storage';
 import { Hub, ManageHub } from '@/models/settings';
 import { RootState } from '@/redux/store';
-import { IconRefresh, IconRouter } from '@tabler/icons-react';
+const IconRefresh = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconRefresh),
+    { ssr: false });
+const IconRouter = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconRouter),
+    { ssr: false });
 import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import React from 'react'
 import { useSelector } from 'react-redux';
 

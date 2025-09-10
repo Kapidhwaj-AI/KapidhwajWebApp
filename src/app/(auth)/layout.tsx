@@ -8,14 +8,14 @@ export default function AuthLayout({
   return (
     <main
       className="min-h-screen w-full flex items-center justify-center bg-cover bg-center bg-no-repeat p-3 sm:p-4"
-      style={{ backgroundImage: 'url("/assets/images/auth-bg.png")' }}
+      style={{ backgroundImage: 'url("/assets/images/auth-bg.webp")' }}
     >
       <div className="w-full max-w-[480px] min-w-[280px] transform scale-[0.85] sm:scale-90 md:scale-95 lg:scale-100">
         <div className="w-full bg-white dark:bg-[var(--surface-150)] rounded-[2rem] sm:rounded-[2.5rem] md:rounded-[3rem] overflow-hidden">
           {/* Logo Section */}
           <div className="flex justify-center pt-4 sm:pt-6 md:pt-8 pb-1 sm:pb-2">
             <Image
-              src="/assets/images/logo-rectangle.png"
+              src="/assets/images/logo-rectangle.webp"
               alt="Kapidhwaj AI"
               width={252}
               height={117}
@@ -23,7 +23,6 @@ export default function AuthLayout({
          (max-width: 768px) 200px, 
          (max-width: 1024px) 220px, 
          252px"
-              priority={false}
             />
           </div>
 

@@ -74,7 +74,7 @@ export function AddNewPersonDialogue({ isOpen, onClose, formData, setFormData, h
                             ) : (
                                 <div className="flex gap-4 items-center justify-center">
                                     <div className="flex w-16 h-16 rounded-full bg-gray-200 items-center justify-center mb-1">
-                                            <Image src={'/assets/images/person-logo.png'} width={100} height={100} alt='camera' className='object-cover' priority={false} />
+                                            <Image src={'/assets/images/person-logo.webp'} width={100} height={100} alt='camera' className='object-cover' priority={false} />
                                     </div>
                                     <div className='flex flex-col gap-1'>
                                         <div className="text-xs">{t('managePeople.add_person.photo')}</div>

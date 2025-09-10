@@ -1,7 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Folders, Organization } from "@/models/organization";
+import dynamic from "next/dynamic";
+const Button = dynamic(() => import("@/components/ui/button").then((mod) => mod.Button),
+    { ssr: false });
+
 
 interface OrganizationFilterButtonsProps {
     organizations?: Organization[];

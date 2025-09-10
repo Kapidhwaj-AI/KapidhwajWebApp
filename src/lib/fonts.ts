@@ -24,4 +24,5 @@ export const jakarta = localFont({
         },
     ],
     variable: "--font-jakarta",
+    display: "swap"
 });

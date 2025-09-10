@@ -1,6 +1,4 @@
 import { Alert } from "@/models/alert";
-import { Clock, Calendar, Film, Dumbbell, LayoutDashboard, ChevronRight, Users, ScanFace, BadgeCheck, FireExtinguisher } from "lucide-react";
-
 import Image from "next/image";
 import dynamic from 'next/dynamic';
 
@@ -9,6 +7,29 @@ import { useState } from "react";
 const AlertPreviewDialogue = dynamic(() => import('@/components/dialogue/AlertPreviewDialogue'));
 import { GOOGLE_KPH_BUCKET_URL } from "@/services/config";
 import Link from "next/link";
+const IconBounceRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBounceRight),
+    { ssr: false });
+
+const IconCalendar = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconCalendar),
+    { ssr: false });
+const IconClock = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconClock),
+    { ssr: false });
+
+const IconFireExtinguisher = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFireExtinguisher),
+    { ssr: false });
+const IconFriends = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFriends),
+    { ssr: false });
+
+const IconLayoutDashboard = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconLayoutDashboard),
+    { ssr: false });
+const IconLicense = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconLicense),
+    { ssr: false });
+
+const IconMovie = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconMovie),
+    { ssr: false });
+const IconTreadmill = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTreadmill),
+    { ssr: false });
+
 
 export function AlertCard({ alert }: { alert: Alert }) {
     const [isPreview, setIsPreview] = useState(false);
@@ -17,7 +38,7 @@ export function AlertCard({ alert }: { alert: Alert }) {
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
     const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-    const baseUrl = isValidHub ? remoteHub.id ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
+    const baseUrl = isValidHub ? remoteHub.id ? `http://turn.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
     const formattedDate = alertTimestamp.toLocaleDateString("en-GB");
     const formattedTime = alertTimestamp.toLocaleTimeString("en-GB", {
         hour: '2-digit',
@@ -27,16 +48,15 @@ export function AlertCard({ alert }: { alert: Alert }) {
         <div className="w-full bg-[var(--surface-200)] rounded-4xl shadow-lg overflow-hidden">
             <div className="flex justify-between md:flex-row flex-col md:gap-0 gap-1 items-start md:items-center p-2 md:px-4 md:pt-4">
                 <div className="flex items-center gap-1 md:gap-3">
-                    {alert.alertType === 'FACE_DETECTION' && alert?.persons && <Link href={{ pathname: "/person-details", query: { id: alert.person_ids[0] } }}><Image alt={alert?.persons[0].gcp_image_path ?? ''} loading="lazy" priority={false} className="rounded-full object-cover w-10 h-10 aspect-auto" src={baseUrl + `/${alert?.persons[0].gcp_image_path}`} /></Link>}
+                    {alert.alertType === 'FACE_DETECTION' && alert?.persons && <Link href={{ pathname: "/person-details", query: { id: alert.person_ids[0] } }}><Image alt={alert?.persons[0].gcp_image_path ?? ''} loading="lazy" priority={false} width={1000} height={1000} className="rounded-full object-cover w-12 h-12 aspect-auto" src={baseUrl + `${alert?.persons[0].gcp_image_path}`} /></Link>}
                     {alert.alertType !== 'FACE_DETECTION' && <div className="p-2 md:p-4 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                         {[
-                            { value: 'all', icon: <LayoutDashboard  stroke={'2'} /> },
-                            { value: 'INTRUSION_DETECTION', icon: <Dumbbell stroke={'2'} /> },
-                            { value: 'MOTION_DETECTION', icon: <ChevronRight stroke={'2'} /> },
-                            { value: 'PEOPLE_COUNT', icon: <Users stroke={'2'} /> },
-                            { value: 'FACE_DETECTION', icon: <ScanFace stroke={'2'} /> },
-                            { value: 'LICENSE_PLATE_DETECTION', icon: <BadgeCheck stroke={'2'} /> },
-                            { value: 'FIRE_SMOKE_DETECTION', icon: <FireExtinguisher stroke={'2'} /> },
+                            { value: 'all', icon: <IconLayoutDashboard  stroke={'2'} /> },
+                            { value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={'2'} /> },
+                            { value: 'MOTION_DETECTION', icon: <IconBounceRight stroke={'2'} /> },
+                            { value: 'PEOPLE_COUNT', icon: <IconFriends stroke={'2'} /> },
+                            { value: 'LICENSE_PLATE_DETECTION', icon: <IconLicense stroke={'2'} /> },
+                            { value: 'FIRE_SMOKE_DETECTION', icon: <IconFireExtinguisher stroke={'2'} /> },
                         ].find((item) => item.value === alert?.alertType)?.icon}
 
                     </div>}
@@ -54,11 +74,11 @@ export function AlertCard({ alert }: { alert: Alert }) {
 
                 <div className="flex flex-col gap-1 text-right text-xs self-end md:self-center ">
                     <div className="flex items-center gap-1">
-                        <Calendar size={14} />
+                        <IconCalendar size={14} />
                         <span className="text-gray-500 dark:text-gray-400">{formattedDate}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                        <Clock size={14} />
+                        <IconClock size={14} />
                         <span className="text-gray-500 dark:text-gray-400">{formattedTime}</span>
                     </div>
                 </div>
@@ -68,7 +88,7 @@ export function AlertCard({ alert }: { alert: Alert }) {
                 {alert?.frame_url && isValidHub ? <Image priority={false} loading="lazy" src={baseUrl + alert?.frame_url} alt={alert?.alertType} width={1000} height={1000} className="object-cover w-auto h-auto rounded-2xl" /> : <Image priority={false} src={baseUrl + alert?.frame_url} alt={alert?.alertType} width={1000} height={1000} className="object-cover w-auto h-auto rounded-2xl" />}
 
                 <button onClick={() => setIsPreview(true)} className="absolute h-14 w-14 rounded-full bg-neutral-400/20 dark:bg-black/20 backdrop-blur-[32px] flex items-center justify-center">
-                    <Film stroke={'2'} className="text-gray-600 dark:text-gray-300" size={24} />
+                    <IconMovie stroke={'2'} className="text-gray-600 dark:text-gray-300" size={24} />
                 </button>
             </div>
             {isPreview && <AlertPreviewDialogue onClose={() => setIsPreview(false)} imageUrl={baseUrl + alert.frame_url} alertType={alert.alertType} />}

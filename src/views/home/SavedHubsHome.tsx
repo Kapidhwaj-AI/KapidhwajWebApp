@@ -1,8 +1,11 @@
 import Spinner from '@/components/ui/Spinner';
 import { getLocalStorageItem } from '@/lib/storage';
 import { Hub } from '@/models/settings';
-import { IconRefresh, IconRouter } from '@tabler/icons-react';
-import { useTranslations } from 'next-intl';
+const IconRefresh = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconRefresh),
+    { ssr: false });
+const IconRouter = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconRouter),
+    { ssr: false });import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import React from 'react'
 
 interface SavedHubsProps {

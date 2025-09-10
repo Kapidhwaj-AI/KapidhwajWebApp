@@ -1,15 +1,22 @@
 import React from 'react';
-import {
-    Select,
-    SelectTrigger,
-    SelectValue,
-    SelectContent,
-    SelectItem,
-    SelectLabel,
-    SelectGroup,
-} from './select';
 import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
+const Select = dynamic(() => import("./select").then((mod) => mod.Select),
+    { ssr: false });
+const SelectTrigger = dynamic(() => import("./select").then((mod) => mod.SelectTrigger),
+    { ssr: false });
+const SelectValue = dynamic(() => import("./select").then((mod) => mod.SelectValue),
+    { ssr: false });
 
+const SelectContent = dynamic(() => import("./select").then((mod) => mod.SelectContent),
+    { ssr: false });
+const SelectItem = dynamic(() => import("./select").then((mod) => mod.SelectItem),
+    { ssr: false });
+
+const SelectLabel = dynamic(() => import("./select").then((mod) => mod.SelectLabel),
+    { ssr: false });
+const SelectGroup = dynamic(() => import("./select").then((mod) => mod.SelectGroup),
+    { ssr: false });
 interface SelectFieldProps {
     value: string | number;
     setValue: (val: string) => void;

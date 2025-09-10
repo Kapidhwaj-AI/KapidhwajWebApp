@@ -52,6 +52,7 @@ function InfiniteScrolling<T>({
     useEffect(() => {
         const target = divRef.current;
         if (!target) return;
+        console.log("Hello", target)
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting && hasMore && !isLoading) {

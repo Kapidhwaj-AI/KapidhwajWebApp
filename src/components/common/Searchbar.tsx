@@ -1,5 +1,8 @@
-import { Input } from "@/components/ui/input";
+
+const Input = dynamic(() => import("@/components/ui/input").then((mod) => mod.Input),
+    { ssr: false });
 import { Search } from "lucide-react";
+import dynamic from "next/dynamic";
 
 const SearchBar = ({ search, setSearch, placeholder }: { search: string; setSearch: (e: React.ChangeEvent<HTMLInputElement>) => void; placeholder: string; }) => {
     return (

@@ -14,7 +14,6 @@ import { useSelector } from 'react-redux';
 import { showToast } from '@/lib/showToast';
 
 const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) => {
-
     const { id } = use(params);
     const [filterDial, setFilterDial] = useState(false);
     const [settingDial, setSettingDial] = useState(false);
@@ -38,7 +37,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const [startTime, setStartTime] = useState<Date | undefined>();
     const [endTime, setEndTime] = useState<Date | undefined>();
     const [isDateFiltered, setIsDateFiltered] = useState(false)
-    const [serviceType, setServiceType] = useState<string | null>('')
+    const [serviceType, setServiceType] = useState<string | null>('all')
     const [isMlService, setIsMlService] = useState(false)
     const [isAllAlertLoading, setIsAllAlertLoading] = useState(false)
     const [formData, setFormData] = useState<StreamFormData>({
@@ -72,7 +71,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         return res.data.data
     }
     const fetchAlerts = async (offset: number, serviceType: string | null, startTime?: number, endTime?: number) => {
-        const endpoint = startTime ? serviceType !== null && serviceType !== 'all' ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}` : `/alert/recent?offset=${offset}`
+        const endpoint = serviceType !== null && serviceType !== 'all' ? startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}&cameraId=${id}` : `/alert/recent?offset=${offset}&serviceType=${serviceType}&cameraId=${id}` : `/alert/recent?offset=${offset}&cameraId=${id}`
         const res = await protectApi<Alert[]>(endpoint)
         return res.data.data
     }
@@ -89,12 +88,11 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         setLoading(true);
         Promise.allSettled([
             fetchCamera(id),
-            fetchAlerts(alertOffset, serviceType),
             fetchRecordings(recordingOffset),
             fetchIsFav(id),
             fetchCameraLocation()
         ])
-            .then(([camRes, alertsRes, recRes, isFav, location]) => {
+            .then(([camRes,  recRes, isFav, location]) => {
                 const newFormData: Partial<StreamFormData> = {};
                 if (camRes.status === "fulfilled") {
                     setCamera(camRes.value);
@@ -106,8 +104,6 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                     newFormData.overlapSensitivity = camRes.value.nms_thresh;
                     newFormData.sceneDensity = camRes.value.topk_pre_nms;
                 }
-
-                if (alertsRes.status === "fulfilled") setAlerts(alertsRes.value);
 
                 if (recRes.status === "fulfilled") setRecordings(recRes.value);
 
@@ -148,6 +144,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     useEffect(() => {
         const alertFetch = async () => {
             setIsAllAlertLoading(true)
+            console.log(alertOffset,"alertOffset")
             try {
                 const res = await fetchAlerts(alertOffset, serviceType)
                 setAlerts(res)

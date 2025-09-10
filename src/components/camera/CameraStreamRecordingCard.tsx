@@ -65,31 +65,6 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
                     )}
                 </button>
             )}
-    
-
-            {/* Bottom Controls Bar */}
-            {/* <div className={cn(
-                "absolute bottom-0 left-0 right-0",
-                "bg-gradient-to-t from-black/80 to-transparent",
-                "p-2 md:p-3 lg:p-4 flex items-center justify-between",
-                "transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-            )}>
-                 <div className="flex items-center gap-2">
-                    <LiveBadge />
-                    <span className="text-white text-xs md:text-sm font-medium">
-                        Front Camera
-                    </span>
-                </div> 
-
-                <div className="flex items-center gap-2 md:gap-3">
-                    <button className="p-1 md:p-1.5 rounded-full bg-black/30 hover:bg-black/50 transition-colors">
-                        <IconEye className="text-white" size={16} />
-                    </button>
-                    <button className="p-1 md:p-1.5 rounded-full bg-black/30 hover:bg-black/50 transition-colors">
-                        <IconMovie className="text-white" size={16} />
-                    </button>
-                </div>
-            </div> */}
         </div>
     );
 }

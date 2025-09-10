@@ -1,10 +1,24 @@
 import { useState } from "react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ChevronDown, ChevronUp } from "lucide-react";
+const DropdownMenu = dynamic(() => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenu),
+    { ssr: false });
+const DropdownMenuContent = dynamic(() => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuContent),
+    { ssr: false });
+const DropdownMenuItem = dynamic(() => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuItem),
+    { ssr: false });
+const DropdownMenuTrigger = dynamic(() => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuTrigger),
+    { ssr: false });
+
+const IconChevronDown = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconChevronDown),
+    { ssr: false });
+
+const IconChevronUp = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconChevronUp),
+    { ssr: false });
+
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { setToggleColumns } from "@/redux/slices/cameraSlice";
 import { useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
 
 
 
@@ -33,8 +47,8 @@ const ColumnDropdown = () => {
                 >
                     <span>{selected}</span>
                     <div className="flex flex-col">
-                        <ChevronUp size={14} className="text-[var(--foreground-muted)]" />
-                        <ChevronDown size={14} className="text-[var(--foreground-muted)] -mt-1" />
+                        <IconChevronUp size={14} className="text-[var(--foreground-muted)]" />
+                        <IconChevronDown size={14} className="text-[var(--foreground-muted)] -mt-1" />
                     </div>
                 </button>
             </DropdownMenuTrigger>

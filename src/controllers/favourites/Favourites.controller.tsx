@@ -7,6 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { AxiosError } from 'axios';
 import { showToast } from '@/lib/showToast';
+import dynamic from 'next/dynamic';
 
 const FavouritesController = () => {
     const toogleColumnValue = useSelector((state: RootState) => state.camera.toogleColumns);

@@ -1,5 +1,5 @@
-import { TimeFiltersDialogue } from '@/components/dialogue/TimeFiltersDialogue';
-
+const TimeFiltersDialogue = dynamic(() => import("@/components/dialogue/TimeFiltersDialogue").then((mod) => mod.TimeFiltersDialogue),
+    { ssr: false });
 const IconFilter = dynamic(() =>
     import('@tabler/icons-react').then(m => m.IconFilter)
 );
@@ -7,12 +7,14 @@ const IconFilterX = dynamic(() =>
     import('@tabler/icons-react').then(m => m.IconFilterX)
 );
 import React from 'react'
-import AlertsFiltersButtons from './AlertsFiltersButtons';
+const AlertsFiltersButtons = dynamic(() => import("./AlertsFiltersButtons"),
+    { ssr: false });
 import Spinner from '@/components/ui/Spinner';
 
 import { Alert, AlertViewProps } from '@/models/alert';
 import { AlertCard } from './AlertCard';
-import SearchBar from '@/components/common/Searchbar';
+const SearchBar = dynamic(() => import("@/components/common/Searchbar"),
+    { ssr: false });
 import { useTranslations } from 'next-intl';
 import { filterButtonClassname } from '@/styles/tailwind-class';
 import dynamic from 'next/dynamic';

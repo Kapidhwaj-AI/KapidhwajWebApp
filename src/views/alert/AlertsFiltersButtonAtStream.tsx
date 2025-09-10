@@ -1,9 +1,25 @@
 import { cn } from '@/lib/utils';
-import { Dumbbell, LayoutDashboard, ChevronRight, Users, ScanFace, BadgeCheck, FireExtinguisher, } from "lucide-react";
 import React from 'react'
 import { useTranslations } from "next-intl";
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import dynamic from 'next/dynamic';
+const IconBounceRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBounceRight),
+    { ssr: false });
+const IconFireExtinguisher = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFireExtinguisher),
+    { ssr: false });
+const IconFriends = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFriends),
+    { ssr: false });
+
+const IconLayoutDashboard = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconLayoutDashboard),
+    { ssr: false });
+const IconLicense = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconLicense),
+    { ssr: false });
+
+const IconUserScan = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconUserScan),
+    { ssr: false });
+const IconTreadmill = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTreadmill),
+    { ssr: false });
 function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selectedTab: string, setSelectedTab: (val: string) => void }) {
     const t = useTranslations()
     const isPeople = useSelector(
@@ -13,15 +29,15 @@ function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selected
         (state: RootState) => state.singleCamera.peopleCount,
     );
     const tabFilters = [
-        { id: 0, label: `${t("alerts.all")}`, value: 'all', icon: <LayoutDashboard stroke={'2'} /> },
-        { id: 1, label: `${t("alerts.intrusion_detection")}`, value: 'INTRUSION_DETECTION', icon: <Dumbbell stroke={'2'} /> },
-        { id: 2, label: `${t("alerts.motion_detection")}`, value: 'MOTION_DETECTION', icon: <ChevronRight stroke={'2'} /> },
-        { id: 3, label: `${t("alerts.people_count")}`, value: 'PEOPLE_COUNT', icon: <Users stroke={'2'} /> },
-        { id: 4, label: `${t("alerts.face_detection")}`, value: 'FACE_DETECTION', icon: <ScanFace stroke={'2'} /> },
-        { id: 5, label: `${t("alerts.license_plate_detection")}`, value: 'LICENSE_PLATE_DETECTION', icon: <BadgeCheck stroke={'2'} /> },
-        { id: 6, label: `${t("alerts.fire_smoke_detection")}`, value: 'FIRE_SMOKE_DETECTION', icon: <FireExtinguisher stroke={'2'} /> },
+        { id: 0, label: `${t("alerts.all")}`, value: 'all', icon: <IconLayoutDashboard stroke={'2'} /> },
+        { id: 1, label: `${t("alerts.intrusion_detection")}`, value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={'2'} /> },
+        { id: 2, label: `${t("alerts.motion_detection")}`, value: 'MOTION_DETECTION', icon: <IconBounceRight stroke={'2'} /> },
+        { id: 3, label: `${t("alerts.people_count")}`, value: 'PEOPLE_COUNT', icon: <IconFriends stroke={'2'} /> },
+        { id: 4, label: `${t("alerts.face_detection")}`, value: 'FACE_DETECTION', icon: <IconUserScan stroke={'2'} /> },
+        { id: 5, label: `${t("alerts.license_plate_detection")}`, value: 'LICENSE_PLATE_DETECTION', icon: <IconLicense stroke={'2'} /> },
+        { id: 6, label: `${t("alerts.fire_smoke_detection")}`, value: 'FIRE_SMOKE_DETECTION', icon: <IconFireExtinguisher stroke={'2'} /> },
     ];
-console.log(selectedTab, "hello")
+    console.log(selectedTab, "hello")
     return (
         <div className="flex gap-2 md:gap-4 min-h-min overflow-x-auto w-full scrollbar-hide p-2 pb-4 px-4 justify-start md:justify-normal">
             {tabFilters.map((tf, index) => (

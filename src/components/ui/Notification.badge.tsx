@@ -1,4 +1,7 @@
-import { IconBellRinging } from "@tabler/icons-react";
+
+const IconBellRinging = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBellRinging),
+  { ssr: false });
+import dynamic from "next/dynamic";
 import Link from "next/link";
 
 export const NotificationBadge = ({ value }: { value: number }) => {

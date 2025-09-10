@@ -1,6 +1,7 @@
 "use client";
 
-import LiveBadge from "./LiveBadge";
+const LiveBadge = dynamic(() => import("./LiveBadge"),
+  { ssr: false });
 import { cn } from "@/lib/utils";
 import { Camera } from "@/models/camera";
 import { RootState } from "@/redux/store";
@@ -9,7 +10,11 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { DeleteDialog } from "../dialogue/DeleteDialog";
 import { useTranslations } from "next-intl";
-import { Square, Trash } from "lucide-react";
+import dynamic from "next/dynamic";
+const IconBorderCornerSquare = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBorderCornerSquare),
+    { ssr: false });
+const IconTrash = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTrash),
+    { ssr: false });
 
 interface CameraStreamCardProps {
   camera: Camera | null;
@@ -52,7 +57,7 @@ export default function CameraStreamCard({
         "overflow-hidden flex items-center justify-center relative"
       )}
       style={{
-        backgroundImage: hasStream ? "none" : "url('/assets/images/image.png')",
+        backgroundImage: hasStream ? "none" : "url('/assets/images/image.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -73,7 +78,7 @@ export default function CameraStreamCard({
       )}
       {cameraDetailView !== "focused" && isFav && setIsDelete && (
         <div className="absolute top-3 right-3 z-5 text-white">
-          <button onClick={() => setIsDelete(true)} className="rounded-full p-1 bg-[#FF6868]"><Trash size={18} /></button>
+          <button onClick={() => setIsDelete(true)} className="rounded-full p-1 bg-[#FF6868]"><IconTrash size={18} /></button>
         </div>
       )}
       <Link
@@ -89,7 +94,7 @@ export default function CameraStreamCard({
               <span className="font-bold text-md">{camera?.name}</span>
             </div>
             <div className="rounded-full bg-black p-4 flex items-center justify-center">
-              <Square
+              <IconBorderCornerSquare
                 className="rotate-90"
                 color="white"
                 stroke={'4'}

@@ -4,14 +4,12 @@ import { jakarta } from "@/lib/fonts";
 import { Providers } from "@/providers/Providers";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
-
-import SocketNotification from "@/components/common/SocketNotification";
 import { ToastProvider } from "@/components/common/ToastProvider";
 export const metadata: Metadata = {
   title: "Kapidhwaj AI",
-  description: "",
+  description: "Kapidhwaj AI is a smart surveillance system with AI-powered cameras for face recognition, vehicle number plate detection, fire & smoke alerts, people counting, intrusion detection, and secure video recordings.",
   icons:{
-    icon:'/assets/images/logo-square.png'
+    icon:'/assets/images/logo-square.webp'
   }
 };
 
@@ -24,12 +22,16 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        <link rel="preload" as="image" href="/assets/images/auth-bg.webp" />
+        <link rel="preload" as="image" href="/assets/images/logo-square.webp" />
+        <link rel="preload" as="image" href="/assets/images/logo-rectangle.webp" />
+      </head>
       <body
         className={`${jakarta.variable} antialiased bg-[var(--surface-150)]`}
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
-            <SocketNotification/>
             <ToastProvider/>
             {children} 
           </Providers>

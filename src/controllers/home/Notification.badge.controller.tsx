@@ -5,6 +5,7 @@ import { protectApi } from "@/lib/protectApi";
 import { showToast } from "@/lib/showToast";
 import { Notification } from "@/models/notification";
 import { AxiosError } from "axios";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
 export const NotificationBadgeController = () => {

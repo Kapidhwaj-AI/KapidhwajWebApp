@@ -26,7 +26,7 @@ const AlertsController = () => {
     const [serviceType, setServiceType] = useState<string | null>('')
     const alertEndRef = useRef<HTMLDivElement>(null)
     const fetchAlerts = async (offset: number, serviceType: string | null, startTime?: number, endTime?: number,) => {
-        const endpoint = startTime ? serviceType !== null && serviceType !== 'all' ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}` : `/alert/recent?offset=${offset}`
+        const endpoint = serviceType !== null && serviceType !== 'all' ? startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}`
         const res = await protectApi<Alert[], undefined>(endpoint)
         return res.data.data
     }
@@ -43,8 +43,10 @@ const AlertsController = () => {
     useEffect(() => {
         const loaddata = async () => {
             setIsLoading(true)
+            console.log("hello",)
             try {
                 setAlerts(await fetchAlerts(alertOffset, serviceType))
+                console.log("hello",)
             } catch (error) {
                 console.error(error)
                 if (error instanceof AxiosError && error.response?.status === 400) {
@@ -117,7 +119,8 @@ const AlertsController = () => {
     }
 
     return (
-        <AlertsView search={search} setSearch={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)} serviceType={serviceType} err={err} setStartTime={setStartTime} isDateFiltered={isDateFiltered} isLoading={isLoading} selectedTab={selectedTab} setAlertsLoading={setAlertsLoading} setSelectedTab={changeTab} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setHasMore={setHasMore} hasMore={hasMore} handleApplyFilter={handleApplyFilter} setIsDateFiltered={setIsDateFiltered} setIsLoading={setIsLoading} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} startTime={startTime} endTime={endTime} date={date} setAlertOffset={setAlertOffset} setAlerts={setAlerts} filteredAlerts={filteredAlerts} fetchAlerts={fetchAlerts} filterDial={filterDial} />
+   
+         <AlertsView search={search} setSearch={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)} serviceType={serviceType} err={err} setStartTime={setStartTime} isDateFiltered={isDateFiltered} isLoading={isLoading} selectedTab={selectedTab} setAlertsLoading={setAlertsLoading} setSelectedTab={changeTab} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setHasMore={setHasMore} hasMore={hasMore} handleApplyFilter={handleApplyFilter} setIsDateFiltered={setIsDateFiltered} setIsLoading={setIsLoading} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} startTime={startTime} endTime={endTime} date={date} setAlertOffset={setAlertOffset} setAlerts={setAlerts} filteredAlerts={filteredAlerts} fetchAlerts={fetchAlerts} filterDial={filterDial} />
     )
 }
 

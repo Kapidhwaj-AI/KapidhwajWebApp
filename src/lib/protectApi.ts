@@ -49,6 +49,7 @@ export async function protectApi<T, D = undefined>(
         });
         return response;
     } catch (err: unknown) {
+
         if (isAxiosError(err) && err?.response?.status === 401) {
             console.log("Token expired, trying refresh...");
             const refreshed = await fetchRefreshToken();
@@ -72,6 +73,11 @@ export async function protectApi<T, D = undefined>(
                 window.location.assign('/login');
             }
         }
+        else if (isAxiosError(err) && err?.response?.status === 400 && err.response?.data.error === `Hub with ID "${remoteHub.id || localHub.id}" is not connected.`) {
+            removeLocalStorageItem('Localhub')
+            removeLocalStorageItem('Remotehub')
+            removeLocalStorageItem('Remotetemphub')
+        }
         console.error(err, "err from protectApi");
         throw err;
     }
@@ -79,7 +85,7 @@ export async function protectApi<T, D = undefined>(
 
 export const fetchRefreshToken = async () => {
     try {
-        const res = await axios.post(`${apiBaseUrl}/refresh`, {}, 
+        const res = await axios.post(`${apiBaseUrl}/refresh`, {},
             { withCredentials: true }
         );
         console.log("Refresh API response:", res.status, res.data);
@@ -98,7 +104,7 @@ export const fetchRefreshToken = async () => {
         return true;
     } catch (refreshErr: unknown) {
         console.error("Refresh token failed:", refreshErr);
-        
+
         return false;
     }
 };
