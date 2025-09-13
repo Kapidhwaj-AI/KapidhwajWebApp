@@ -24,6 +24,7 @@ export const jakarta = localFont({
         },
     ],
     variable: "--font-jakarta",
+    display: "swap"
 });
 
 export const notoHindi = localFont({
@@ -50,6 +51,7 @@ export const notoHindi = localFont({
         },
     ],
     variable: "--font-notoHindi",
+    display: "swap"
 });
 
 export const notoGuj = localFont({
@@ -76,4 +78,5 @@ export const notoGuj = localFont({
         },
     ],
     variable: "--font-notoGuj",
+    display: "swap"
 });

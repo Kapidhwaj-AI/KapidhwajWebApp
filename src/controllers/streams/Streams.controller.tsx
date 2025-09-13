@@ -5,22 +5,19 @@ import StreamsView from '@/views/streams/Streams.view';
 import { useOrganizations } from '@/hooks/useOrganizations';
 import { Camera } from '@/models/camera';
 import { Folders, Organization } from '@/models/organization';
-import { RootState } from '@/redux/store';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux';
 import { AxiosError } from 'axios';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
+import { showToast } from '@/lib/showToast';
+import { RootState, useStore } from '@/store';
 
 const StreamsController = () => {
-    const toogleColumnValue = useSelector((state: RootState) => state?.camera?.toogleColumns);
+    const toogleColumnValue = useStore((state: RootState) => state.camera.toogleColumns);
     const [selectedOrganization, setSelectedOrganization] = useState<Organization | null>(null);
     const [selectedFolder, setSelectedFolder] = useState<Folders | null>(null)
     const [selectedChildFolder, setSelectedChildFolder] = useState<Folders | null>(null)
     const [selectedData, setSelecteddata] = useState<Camera[] | null>(null)
     const [searchQuery, setSearchQuery] = useState("");
-    const router = useRouter()
     const { data: organizations, isLoading, error, refetch } = useOrganizations();
     useEffect(() => {
         if (selectedChildFolder) {
@@ -34,14 +31,13 @@ const StreamsController = () => {
         }
     }, [selectedOrganization, selectedFolder, selectedChildFolder]);
     useEffect(() => {
-        refetch()
-    }, [router])
+        refetch();
+    }, []);
     useEffect(() => {
         if (error instanceof AxiosError) {
-            toast.error(error.response?.data.error)
+            showToast(error.response?.data.error, "error")
         }
     }, [error])
-    console.log(error, "errorr")
     const visibleCameras = useMemo(() => {
         return searchQuery.trim()
             ? selectedData?.filter((camera) =>

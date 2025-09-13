@@ -6,12 +6,22 @@ const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['storage.googleapis.com'],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'media.kapidhwaj.ai',
         port: '9889',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'turn.kapidhwaj.ai',
+        port: '10001',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'turn.kapidhwaj.ai',
         pathname: '/**',
       },
       {

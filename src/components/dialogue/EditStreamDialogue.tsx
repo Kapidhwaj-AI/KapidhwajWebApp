@@ -1,13 +1,21 @@
 import React from 'react'
 import Modal from '../ui/Modal'
-import { IconCheck, IconVideo, IconX } from '@tabler/icons-react';
-import { Switch } from '../ui/CustomeSwitch';
+const IconCheck = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconCheck),
+    { ssr: false });
+
+const IconX = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconX),
+    { ssr: false });
 import { StreamFormData } from '@/models/stream';
 import { useTranslations } from 'next-intl';
-import { InputField } from '../ui/Input.field';
-import SelectField from '../ui/Select.field';
+
+const InputField = dynamic(() => import("../ui/Input.field").then((mod) => mod.InputField),
+    { ssr: false });
+const SelectField = dynamic(() => import("../ui/Select.field"),
+    { ssr: false });
 import Spinner from '../ui/Spinner';
-import CustomSlider from '../ui/CustomSlider';
+const CustomSlider = dynamic(() => import("../ui/CustomSlider"),
+    { ssr: false });
+import dynamic from 'next/dynamic';
 
 interface KeyValue {
     key: string;
@@ -18,7 +26,6 @@ interface EditStreamDialogueProps {
     onClose: () => void;
     formData: StreamFormData;
     setFormData: (data: StreamFormData) => void;
-
     organizations: KeyValue[] | undefined;
     folders: KeyValue[] | undefined;
     subfolders: KeyValue[] | undefined;
@@ -40,9 +47,11 @@ const EditStreamDialogue = ({ onClose, isEditLoading, isLoading,  formData, setF
                     <SelectField label={t('settings.select_site')} placeholder={t('settings.select_a_site')} data={organizations?.map((item) => ({ id: item.key, name: item.value }))} value={formData.organizationId} setValue={(e) => setFormData({ ...formData, organizationId: e })} />
                     <SelectField label={t('settings.folder_optional')} placeholder={t('settings.select_folder')} data={folders?.map((item) => ({ id: item.key, name: item.value }))} value={formData.folderId ?? ''} setValue={(e) => setFormData({ ...formData, folderId: Number(e) })} />
                     <SelectField label={t('settings.subfolder_optional')} placeholder={t('settings.select_subfolder')} data={subfolders?.map((item) => ({ id: item.key, name: item.value }))} value={formData.subfolder ?? ''} setValue={(e) => setFormData({ ...formData, subfolder: Number(e) })} />
-                    <CustomSlider  min={0} max={1} label={t('settings.detection_sensitivity')} value={formData.detectionSensitivity ?? 0} setValue={(val) => setFormData({ ...formData, detectionSensitivity: val })} />
+                    
+                    <CustomSlider min={0} max={1} label={t('settings.detection_sensitivity')} value={formData.detectionSensitivity ?? 0 } setValue={(val) => setFormData({...formData, detectionSensitivity: val})}  />
                     <CustomSlider min={0} max={1} label={t('settings.overlap_sensitivity')} value={formData.overlapSensitivity ?? 0} setValue={(val) => setFormData({ ...formData, overlapSensitivity: val })} />
                     <CustomSlider step={1} min={0} max={3200} label={t('settings.scene_density')} value={formData.sceneDensity ?? 0} setValue={(val) => setFormData({ ...formData, sceneDensity: val })} />
+
                     <div className="flex justify-end gap-3 mt-5 pt-4 border-t border-gray-200">
                         <button type='button'
                             className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"

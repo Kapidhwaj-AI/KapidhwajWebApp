@@ -1,7 +1,7 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { BASE_URL } from '@/lib/protectApi';
 import { Camera } from '@/models/camera';
-import React from 'react'
+import React, { useEffect } from 'react'
 
 interface StreamsCardProps {
     selectedStreams: Set<string>;
@@ -10,6 +10,26 @@ interface StreamsCardProps {
 }
 
 const StreamsCard: React.FC<StreamsCardProps> = ({ selectedStreams, toggleStreamSelection, stream }) => {
+    useEffect(() => {
+        const handlePageHide = () => {
+          const iframe = document.querySelector<HTMLIFrameElement>('iframe');
+          if (iframe) iframe.src = 'about:blank';
+        };
+        window.addEventListener('pagehide', handlePageHide);
+        return () => window.removeEventListener('pagehide', handlePageHide);
+      }, []);
+      useEffect(() => {
+        const handlePageShow = (e: PageTransitionEvent) => {
+          if (e.persisted) {
+            if (stream?.webrtc_url) {
+              const iframe = document.querySelector<HTMLIFrameElement>('iframe');
+              if (iframe) iframe.src = stream.webrtc_url;
+            }
+          }
+        };
+        window.addEventListener('pageshow', handlePageShow);
+        return () => window.removeEventListener('pageshow', handlePageShow);
+      }, [stream?.webrtc_url]);
     return (
         <div
             className={`group relative bg-white p-5 dark:bg-gray-800 rounded-xl overflow-hidden ${selectedStreams.has(stream.camera_id) ? 'ring-2 ring-[#2B4C88]' : ''}`}

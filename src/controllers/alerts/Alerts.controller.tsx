@@ -5,9 +5,8 @@ import { Alert } from '@/models/alert'
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AxiosError } from 'axios'
-import { toast } from 'react-toastify'
-import { RootState } from '@/redux/store'
-import { useSelector } from 'react-redux'
+import { showToast } from '@/lib/showToast'
+import { RootState, useStore } from '@/store'
 
 const AlertsController = () => {
     const [alerts, setAlerts] = useState<Alert[]>([])
@@ -16,17 +15,17 @@ const AlertsController = () => {
     const [alertsLoading, setAlertsLoading] = useState(false)
     const [alertOffset, setAlertOffset] = useState(0)
     const [filterDial, setFilterDial] = useState(false);
-    const [selectedTab, setSelectedTab] = useState('all')
+    const [selectedTab, setSelectedTab] = useState('all');
     const [search, setSearch] = useState('')
     const [date, setDate] = useState<Date | undefined>();
     const [startTime, setStartTime] = useState<Date | undefined>();
     const [err, setErr] = useState('')
     const [endTime, setEndTime] = useState<Date | undefined>();
     const [isDateFiltered, setIsDateFiltered] = useState(false)
-    const [serviceType, setServiceType] = useState<string | null>(null)
+    const [serviceType, setServiceType] = useState<string | null>('')
     const alertEndRef = useRef<HTMLDivElement>(null)
     const fetchAlerts = async (offset: number, serviceType: string | null, startTime?: number, endTime?: number,) => {
-        const endpoint = serviceType !== null ? startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}`
+        const endpoint = serviceType !== null && serviceType !== 'all' ? startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}`
         const res = await protectApi<Alert[], undefined>(endpoint)
         return res?.data.data
     }
@@ -38,17 +37,17 @@ const AlertsController = () => {
         licensePlateDetected,
         fireSmokeDetected,
         faceDetection
-    } = useSelector
-            ((state: RootState) => state.singleCameraSetting);
+    } = useStore
+            ((state: RootState) => state.singleCameraSettings);
     useEffect(() => {
         const loaddata = async () => {
             setIsLoading(true)
             try {
-                setAlerts(await fetchAlerts(alertOffset, serviceType, undefined, undefined) ?? [])
+                setAlerts(await fetchAlerts(alertOffset, serviceType))
             } catch (error) {
                 console.error(error)
                 if (error instanceof AxiosError && error.response?.status === 400) {
-                    toast.error(error.response?.data.error)
+                    showToast(error.response?.data.error, "error")
                     setErr(error.response?.data.error)
                 }
 
@@ -60,19 +59,21 @@ const AlertsController = () => {
         if (alertOffset === 0) {
             loaddata()
         }
-    }, [serviceType, intrusionDetected,
+    }, [intrusionDetected, serviceType,
         peopleDetected,
         peopleCountDetected,
         motionDetected,
         licensePlateDetected,
         fireSmokeDetected,
         faceDetection])
+
     const changeTab = async (tab: string) => {
-        if(tab === selectedTab){
+        if (tab === selectedTab) {
             return
         }
-        if (tab === 'ALL') {
-            setServiceType(null);
+        setIsDateFiltered(false)
+        if (tab === 'ALL' || tab === 'all') {
+            setServiceType('all');
         } else if (tab === 'INTRUSION_DETECTION') {
             setServiceType('intrusion_detection');
 
@@ -96,44 +97,11 @@ const AlertsController = () => {
         setAlertOffset(0)
         setHasMore(true)
     };
-    // useEffect(() => {
-    //     const loadAlerts = async () => {
-    //         setAlertsLoading(true)
-    //         try {
-    //             const newAlerts = await fetchAlerts(alertOffset, serviceType, undefined, undefined)
-    //             if (newAlerts.length === 0) {
-    //                 setHasMore(false);
-    //             } else {
-    //                 setAlerts(prev => [...prev, ...newAlerts]);
-    //             }
-    //         } catch (error) {
-    //             console.error(error)
-    //         }
-    //         finally {
-    //             setAlertsLoading(false)
-    //         }
-    //     }
-    //     if (alertOffset > 0) loadAlerts()
-    // }, [alertOffset]);
-    // useEffect(() => {
-    //     const observer = new IntersectionObserver(
-    //         ([entry]) => {
-    //             if (entry.isIntersecting && hasMore) {
-    //                 setAlertOffset((prev) => prev + 10);
-    //             }
-    //         },
-    //         { threshold: 0.5 }
-    //     );
 
-    //     if (alertEndRef.current) observer.observe(alertEndRef.current);
-
-    //     return () => observer.disconnect();
-    // }, [alertEndRef.current]);
     const filteredAlerts = useMemo(() => {
         if (search === "") return alerts;
-
-        return alerts.filter((alert) => alert.alertType.includes(search));
-    }, [alerts, selectedTab]);
+        return alerts.filter((alert) => alert.alertType.includes(search ?? ''));
+    }, [alerts, search]);
     const handleApplyFilter = async (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => {
         if (date && startTime && endTime) {
             const start = getUtcTimestamp(date, startTime)
@@ -147,7 +115,7 @@ const AlertsController = () => {
     }
 
     return (
-        <AlertsView serviceType={serviceType} err={err} changeTab={changeTab} setStartTime={setStartTime} isDateFiltered={isDateFiltered} isLoading={isLoading} selectedTab={selectedTab} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setHasMore={setHasMore} hasMore={hasMore} handleApplyFilter={handleApplyFilter} setIsDateFiltered={setIsDateFiltered} setIsLoading={setIsLoading} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} startTime={startTime} endTime={endTime} date={date} setAlertOffset={setAlertOffset} setAlerts={setAlerts} filteredAlerts={filteredAlerts} fetchAlerts={fetchAlerts} filterDial={filterDial} />
+         <AlertsView search={search} setSearch={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)} serviceType={serviceType} err={err} setStartTime={setStartTime} isDateFiltered={isDateFiltered} isLoading={isLoading} selectedTab={selectedTab} setAlertsLoading={setAlertsLoading} setSelectedTab={changeTab} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setHasMore={setHasMore} hasMore={hasMore} handleApplyFilter={handleApplyFilter} setIsDateFiltered={setIsDateFiltered} setIsLoading={setIsLoading} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} startTime={startTime} endTime={endTime} date={date} setAlertOffset={setAlertOffset} setAlerts={setAlerts} filteredAlerts={filteredAlerts} fetchAlerts={fetchAlerts} filterDial={filterDial} />
     )
 }
 

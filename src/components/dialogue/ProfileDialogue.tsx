@@ -1,4 +1,3 @@
-'use client';
 import { IconCameraPlus, IconCheck, IconX } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
 import Image from 'next/image';
@@ -21,6 +20,7 @@ export function ProfileDialogue({ isOpen, isLoading, onClose, name, setName, id,
                         width={1000}
                         height={1000}
                         className="w-full h-full  object-cover rounded-full border-2 border-gray-300 shadow"
+                        priority={false}
                     />
                     <input
                         type="file"

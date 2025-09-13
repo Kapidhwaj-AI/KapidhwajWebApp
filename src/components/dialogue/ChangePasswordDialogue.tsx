@@ -1,4 +1,3 @@
-'use client';
 import Modal from '../ui/Modal';
 import { InputField } from '../ui/Input.field';
 import { useTranslations } from 'next-intl';

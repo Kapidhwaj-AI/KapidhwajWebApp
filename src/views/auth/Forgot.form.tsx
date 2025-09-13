@@ -26,18 +26,13 @@ const ForgotForm = ({
         Forgot Password
       </h1>
 
-      <form onSubmit={onSubmit} className="space-y-3 flex flex-col sm:space-y-4">
-        {/* Email/Phone Field */}
+      <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
         <InputField
           label="Email / Phone"
           placeholder="Enter your phone / email  here..."
           value={value}
           setValue={setValue}
         />
-
-
-
-        {/* Error Message */}
         {isError && (
           <div className="text-red-500 text-xs sm:text-sm text-center">
             {error}

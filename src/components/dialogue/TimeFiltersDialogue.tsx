@@ -1,17 +1,31 @@
-'use client';
 
-import { IconX, IconChevronDown } from '@tabler/icons-react';
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
-import { TimePicker } from "@/components/ui/time-picker";
+import { format, isValid } from "date-fns";
+const IconX = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconX),
+    { ssr: false });
+
+const IconChevronDown = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconChevronDown),
+    { ssr: false });
+const Calendar = dynamic(() => import("@/components/ui/calendar").then((mod) => mod.Calendar),
+    { ssr: false });
+const TimePicker = dynamic(() => import("@/components/ui/time-picker").then((mod) => mod.TimePicker),
+    { ssr: false });
+
+const Popover = dynamic(() => import("@/components/ui/popover").then((mod) => mod.Popover),
+    { ssr: false });
+const PopoverContent = dynamic(() => import("@/components/ui/popover").then((mod) => mod.PopoverContent),
+    { ssr: false });
+
+const PopoverTrigger = dynamic(() => import("@/components/ui/popover").then((mod) => mod.PopoverTrigger),
+    { ssr: false });
+
+const Button = dynamic(() => import("@/components/ui/button").then((mod) => mod.Button),
+    { ssr: false });
 import Modal from '../ui/Modal';
 import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 
 export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime, setDate, setEndTime, setStartTime, handleApplyFilter }: { isOpen: boolean; onClose: () => void; date: Date | undefined, startTime: Date | undefined; endTime: Date | undefined; setDate: (val: Date | undefined) => void; setStartTime: (val: Date | undefined) => void; setEndTime: (val: Date | undefined) => void; handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void }) {
     const t = useTranslations()
-    if (!isOpen) return null;
     return (
         <Modal onClose={onClose} title={t('alerts.apply_filter')}>
             {/* Content Area */}
@@ -41,7 +55,6 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                     </Popover>
                 </div>
 
-                {/* Time Filter - Time Picker */}
                 <div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -52,14 +65,23 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                                         variant="outline"
                                         className="w-full h-[35px] flex items-center justify-between sm:h-[40px] md:h-[45px] p-2 px-4 bg-transparent rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] dark:text-white"
                                     >
-                                        {startTime ? format(startTime, "h:mm a") : t('alerts.start_time')}
+                                        {startTime && isValid(startTime)
+                                            ? format(startTime, "h:mm a")
+                                            : t('alerts.start_time')}
                                         <IconChevronDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0 bg-[var(--surface-200)] rounded-xl">
                                     <TimePicker
                                         value={startTime}
-                                        onChange={setStartTime}
+                                        onChange={(val) => {
+                                            // val might be null, undefined, or invalid Date while editing
+                                            if (val && isValid(val)) {
+                                                setStartTime(val);
+                                            } else {
+                                                setStartTime(undefined)
+                                            }
+                                        }}
                                         className="rounded-xl"
                                     />
                                 </PopoverContent>
@@ -102,9 +124,6 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                     </button>
                 </div>
             </form>
-
-            {/* Action Buttons - Fixed to Bottom */}
         </Modal>
-
     );
 }

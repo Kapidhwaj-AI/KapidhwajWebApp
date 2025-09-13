@@ -1,5 +1,3 @@
-'use client';
-
 import { ChevronLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';

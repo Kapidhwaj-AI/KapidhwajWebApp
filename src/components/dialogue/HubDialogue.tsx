@@ -2,10 +2,20 @@ import React, { FormEvent } from 'react'
 import Modal from '../ui/Modal';
 import { useTranslations } from 'next-intl';
 import { Organization } from '@/models/organization';
-import { InputField } from '../ui/Input.field';
-import SelectField from '../ui/Select.field';
+const InputField = dynamic(() => import('../ui/Input.field').then((mod) => mod.InputField), {
+    ssr: false,
+});
+const SelectField = dynamic(() => import('../ui/Select.field'), {
+    ssr: false,
+});
 import Spinner from '../ui/Spinner';
-import { IconCheck, IconX } from '@tabler/icons-react';
+const IconCheck = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconCheck), {
+    ssr: false,
+});
+const IconX = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconX), {
+    ssr: false,
+});
+import dynamic from 'next/dynamic';
 
 interface HubDialogueProps {
     onClose: () => void
@@ -25,14 +35,14 @@ interface HubDialogueProps {
 }
 
 const HubDialogue: React.FC<HubDialogueProps> = ({ onClose, onSubmit, name, setName, id, setId, password, setPassword, sites, selectedSite, isLoading, setSelectedSite, setShowPassword, showPassword }) => {
-    const t = useTranslations()
+    const t = useTranslations('settings')
     return (
-        <Modal onClose={onClose} title={t('settings.add_hub')}>
+        <Modal onClose={onClose} title={t('add_hub')}>
             <form className='flex flex-col gap-2' onSubmit={onSubmit}>
-                <InputField required value={name} setValue={setName} label={t('settings.name')} placeholder={t('settings.enter_name_here')} />
-                <InputField required value={id} setValue={setId} label={t('settings.hub_id')} placeholder={t('settings.enter_hub_id')}/>
-                <InputField required value={password} setValue={setPassword} isPasswordField setShowPassword={setShowPassword} showPassword={showPassword} label={t('settings.password')} placeholder={t('settings.enter_password_here')} />
-                <SelectField required placeholder={t('settings.select_a_site')} label={t('settings.select_site')} value={selectedSite} setValue={setSelectedSite} data={sites}/>
+                <InputField required value={name} setValue={setName} label={t('name')} placeholder={t('enter_name_here')} />
+                <InputField required value={id} setValue={setId} label={t('hub_id')} placeholder={t('enter_hub_id')}/>
+                <InputField required value={password} setValue={setPassword} isPasswordField setShowPassword={setShowPassword} showPassword={showPassword} label={t('password')} placeholder={t('enter_password_here')} />
+                <SelectField required placeholder={t('select_a_site')} label={t('select_site')} value={selectedSite} setValue={setSelectedSite} data={sites}/>
                 <div className='flex justify-end gap-3 py-2'>
                     <button type='button'
                         className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"

@@ -1,16 +1,21 @@
-'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
-import { IconX, IconCheck, IconRefresh, IconRouter, IconCopyPlus } from '@tabler/icons-react';
-// import { cameras } from '../device/SavedCameras';
 import Modal from '../ui/Modal';
 import { DevicesMap } from '@/models/settings';
 import Spinner from '../ui/Spinner';
 import { InputField } from '../ui/Input.field';
 import { useTranslations } from 'next-intl';
-import SelectField from '../ui/Select.field';
 import { Folders, Organization } from '@/models/organization';
 import { protectApi } from '@/lib/protectApi';
+import { Camera } from '@/models/camera';
+import dynamic from 'next/dynamic';
+
+const SelectField = dynamic(() => import('../ui/Select.field'))
+const IconRouter = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconRouter))
+const IconRefresh = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconRefresh))
+const IconX = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconX))
+const IconCheck = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconCheck))
+const IconCopyPlus = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconCopyPlus))
 
 interface AddNewCameraDialogueProps {
     isOpen: boolean;
@@ -22,11 +27,13 @@ interface AddNewCameraDialogueProps {
     selectedSite: string;
     sites: Organization[];
     hubId: string;
-
-    fetchSavedHubs: () => void
+    handleSwitchToggle: (val: boolean) => Promise<void>
+    fetchSavedHubs: () => Promise<void>
+    camera: Camera | undefined;
+    setCamera: (val: Camera) => void
 }
 
-export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, isLoading, fetchNearCams, nearCams, selectedSite, setSelectedSite, sites }: AddNewCameraDialogueProps) {
+export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, setCamera, handleSwitchToggle, hubId, onClose, isLoading, fetchNearCams, nearCams, selectedSite, setSelectedSite, sites }: AddNewCameraDialogueProps) {
     const [ipAddress, setIpAddress] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -54,18 +61,22 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, i
 
             return;
         }
+        const folderToSend = subfolderId || roomName || null;
+        const payload = {
+            name,
+            physicalAddress: mac,
+            folderId: Number(folderToSend),
+            hubId, username, password, ipaddress: ipAddress,
+        }
         setIsSaving(true)
+        console.log("hiiii")
         try {
-            const folderToSend = subfolderId || roomName || null;
-            const res = await protectApi(`/camera?action=add&organizationId=${selectedSite}`, 'POST', {
-                name,
-                physicalAddress: mac,
-                folderId: Number(folderToSend),
-                hubId, username, password, ipaddress: ipAddress,
-            }, undefined, false)
+            const res = await protectApi<Camera, typeof payload>(`/camera?action=add&organizationId=${selectedSite}`, 'POST', payload, undefined, false)
             if (res.status === 201) {
                 onClose()
+                console.log('shwet', "shwet", res.data.data)
                 await fetchSavedHubs()
+                setCamera(res.data.data)
             }
         } catch {
 
@@ -112,37 +123,25 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, i
     return (
         <Modal onClose={onClose} title={t('settings.add_new_camera')}>
             <form onSubmit={handleSave} className="h-full w-full flex flex-col gap-4">
-                {/* Form Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    {/* IP Address Field */}
-
                     <InputField value={name}
                         required
                         setValue={setName}
                         label={t('settings.name')}
                         placeholder={t('settings.enter_name_here')}
                     />
-
-
-                    {/* Name Field */}
-
                     <InputField value={ipAddress}
                         required
                         setValue={setIpAddress}
                         label={t('settings.ip_address')}
                         placeholder={t('settings.enter_ip_address')}
                     />
-
                     <InputField value={mac}
                         required
                         setValue={setMac}
                         label={t('settings.mac_address')}
                         placeholder={t('settings.enter_mac_address')}
                     />
-
-
-                    {/* Username Field */}
-
                     <InputField value={username}
                         required
                         setValue={setUsername}
@@ -157,18 +156,10 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, i
                         placeholder={t('settings.enter_password')}
                     />
                     <SelectField required placeholder={t('settings.select_a_site')} label={t('settings.select_site')} value={selectedSite} setValue={setSelectedSite} data={sites} />
-
-
-                    {/* Folder Name Field */}
                     <SelectField placeholder={t('settings.select_folder')} label={t('settings.folder_optional')} value={roomName} setValue={setRoomName} data={rooms} />
                     <SelectField placeholder={t('settings.select_subfolder')} label={t('settings.subfolder_optional')} value={subfolderId} setValue={setSubfolderId} data={subfolders} />
 
                 </div>
-
-                {/* Divider */}
-
-
-                {/* Nearby Cameras Section */}
                 <div>
                     <div className="flex gap-2 items-center mb-2">
                         <h2 className="text-sm font-bold">{t('manage_hubs.manage_cameras.nearby_cameras')}</h2>
@@ -215,8 +206,6 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, hubId, onClose, i
                         </div>
                     </div>
                 </div>
-
-                {/* Action Buttons */}
                 <div className="flex justify-end gap-3 mt-10">
                     <button type='button'
                         className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"

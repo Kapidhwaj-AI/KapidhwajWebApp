@@ -1,4 +1,4 @@
-import PersonsDetailsController from '@/controllers/person-details/PersonDetails.controllers'
+import PersonsDetailsController from '@/controllers/persons-details/PersonsDetails.controller'
 import React from 'react'
 
 const PersonDetailsPage = () => {

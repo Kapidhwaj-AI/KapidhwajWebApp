@@ -1,12 +1,15 @@
-'use client';
-
 import { useState } from 'react';
-import { IconX, IconCheck, IconPlus } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
 import { useTranslations } from 'next-intl';
 import { InputField } from '../ui/Input.field';
 import SelectField from '../ui/Select.field';
-
+import dynamic from 'next/dynamic';
+const IconX = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconX),
+    { ssr: false });
+const IconCheck = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconCheck),
+    { ssr: false });
+const IconPlus = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconPlus),
+    { ssr: false });
 interface AddNewAccessDialogueProps {
     isOpen: boolean;
     onClose: () => void;

@@ -1,8 +1,11 @@
 import Spinner from '@/components/ui/Spinner';
 import { getLocalStorageItem } from '@/lib/storage';
 import { Hub } from '@/models/settings';
-import { IconRefresh, IconRouter } from '@tabler/icons-react';
-import { useTranslations } from 'next-intl';
+const IconRefresh = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconRefresh),
+    { ssr: false });
+const IconRouter = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconRouter),
+    { ssr: false });import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import React from 'react'
 
 interface SavedHubsProps {
@@ -10,13 +13,12 @@ interface SavedHubsProps {
     isSavedHubLoading: boolean;
     fetchSavedHubs: () => void;
     handleAccessRemotely: (hub: Hub) => void;
-    isRemotely: boolean;
     setIsAddModal: (val: boolean) => void
 }
 
-const SavedHubsHome: React.FC<SavedHubsProps> = ({ savedHubs, setIsAddModal, isSavedHubLoading, fetchSavedHubs, handleAccessRemotely, isRemotely }) => {
+const SavedHubsHome: React.FC<SavedHubsProps> = ({ savedHubs, setIsAddModal, isSavedHubLoading, fetchSavedHubs, handleAccessRemotely, }) => {
     const t = useTranslations()
-    const storedHub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
+    const storedHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     return (
         <div className={`flex flex-col bg-[var(--surface-100)] px-8 pb-4 rounded-2xl md:rounded-4xl `}>
             <div className="flex justify-between items-center pt-4 pb-2 flex-shrink-0">

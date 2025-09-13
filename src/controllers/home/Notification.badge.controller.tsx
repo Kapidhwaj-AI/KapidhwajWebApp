@@ -1,11 +1,12 @@
-"use client";
-
-import { NotificationBadge } from "@/components/ui/Notification.badge";
+const NotificationBadge = dynamic(() => import('@/components/ui/Notification.badge').then((mod) => mod.NotificationBadge), {
+  ssr: false,
+});
 import { protectApi } from "@/lib/protectApi";
+import { showToast } from "@/lib/showToast";
 import { Notification } from "@/models/notification";
 import { AxiosError } from "axios";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 export const NotificationBadgeController = () => {
   const [notificationsCount, setNotificationsCount] = useState(0);
@@ -21,8 +22,7 @@ export const NotificationBadgeController = () => {
       } catch (error) {
         console.error("Error while fetching notifications", error)
         if (error instanceof AxiosError) {
-          toast.error(error.response?.data.error)
-
+          showToast(error.response?.data.error, "error")
         }
       } finally {
       }

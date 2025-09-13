@@ -11,19 +11,15 @@ export interface ManageHub {
     txt: string
 }
 export interface ManageDeviceViewProp {
-    setSiteModalOpen: (val: boolean) => void;
-    setAddFolderModalOpen: (val: boolean) => void;
     setSelectedHub: (val: Hub | null) => void;
     selectedHub: Hub | null;
-    siteModalOpen: boolean;
-    isAddFolderModalOpen: boolean;
     isHubLoading: boolean;
     setIsHubLoading: (val: boolean) => void;
-    fetchHub: () => void;
+    fetchHub: () => Promis<void>;
     nearbyHubs: ManageHub[]
     savedHubs: Hub[]
     isSavedHubLoading: boolean;
-    fetchSavedHubs: () => void;
+    fetchSavedHubs: () => Promis<void>;
     toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: number) => Promise<AxiosResponse | undefined>
     handleCopyIp: (ip: string) => void;
     isDelete: boolean;
@@ -36,6 +32,8 @@ export interface ManageDeviceViewProp {
     setSelectedSite: (val: string) => void;
     selectedSite: string;
     sites: Organization[]
+    camera: Camera | undefined;
+    setCamera:(val: Camera) => void
 }
 
 
@@ -50,7 +48,7 @@ export interface Hub {
     organization_id: string;
     physical_address: string;
     cameras: Camera[];
-    port: string | number
+    static_port: string | number
 }
 
 export interface Profile {
@@ -162,10 +160,8 @@ export interface PersonFormaData {
 
 
 export interface SettingsViewProps {
-    setShowMainSettingDial: (val: boolean) => void;
     setShowSelectLanguageDial: (val: boolean) => void;
     setShowHelpDial: (val: boolean) => void;
-    showMainSettingDial: boolean;
     showSelectLanguageDial: boolean;
     showHelpDial: boolean;
     settingsItems: {

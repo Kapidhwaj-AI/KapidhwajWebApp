@@ -6,7 +6,6 @@ import { Category } from '@/models/category';
 import { Organization } from '@/models/organization';
 import { Person } from '@/models/person';
 import { PersonFormaData } from '@/models/settings';
-import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
 import React, { useEffect, useRef, useState } from 'react'
 import { format } from 'date-fns';
 
@@ -96,7 +95,7 @@ const ManagePeopleConroller = () => {
         setIsSaving(true)
         try {
             const dob = format(formData.dob ?? '', "yyyy-MM-dd")
-            const url = isPersonEdit ? `/person?action=manage&personId=${personId}&personName=${dob}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${formData.dob}&gender=${formData.gender}` : `/gcp/image?action=manage&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${dob}&gender=${formData.gender}`
+            const url = isPersonEdit ? `/person?action=manage&personId=${personId}&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${dob}&gender=${formData.gender}` : `/gcp/image?action=manage&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${dob}&gender=${formData.gender}`
             const imageData = new FormData();
             if (formData.file) {
                 imageData.append('image', formData?.file)

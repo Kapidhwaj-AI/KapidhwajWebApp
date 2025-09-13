@@ -1,21 +1,27 @@
-"use client";
+const Switch = dynamic(() => import("../ui/CustomeSwitch").then((mod) => mod.Switch),
+  { ssr: false });
+const IconBounceRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBounceRight),
+  { ssr: false });
+const IconVideo = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconVideo),
+  { ssr: false });
+const IconFireExtinguisher = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFireExtinguisher),
+  { ssr: false });
+const IconFriends = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFriends),
+  { ssr: false });
+const IconLicense = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconLicense),
+  { ssr: false });
 
-import { Switch } from "../ui/CustomeSwitch";
-import {
-  IconVideo,
-  IconTreadmill,
-  IconBounceRight,
-  IconFriends,
-  IconLicense,
-  IconUserScan,
-  IconFireExtinguisher,
-} from "@tabler/icons-react";
+const IconUserScan = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconUserScan),
+  { ssr: false });
+const IconTreadmill = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTreadmill),
+  { ssr: false });
 import { useState } from "react";
 import Modal from "../ui/Modal";
 import { AxiosResponse } from "axios";
 import { ApiResponse } from "@/lib/protectApi";
 import { useTranslations } from "next-intl";
 import Spinner from "../ui/Spinner";
+import dynamic from "next/dynamic";
 
 export function StreamSettingsDialogue({
   isOpen,
@@ -47,7 +53,7 @@ export function StreamSettingsDialogue({
   handleAiStremToggle: (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
-  handleToggleStream:(isStream: boolean) =>  void;
+  handleToggleStream: (isStream: boolean) => void;
   isStream: boolean
 }) {
   const [settings, setSettings] = useState({

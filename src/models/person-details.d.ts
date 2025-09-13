@@ -29,7 +29,7 @@ export interface PersonDetailsViewProps {
     setStartTime: (val: Date | undefined) => void;
     setEndTime: (val: Date | undefined) => void;
     setIsLoading: (val: boolean) => void;
-    fetchAlertsByPersonId: (val: number) => Promise<Alert[] | undefined>;
+    fetchAlertsByPersonId: (val: number) => Promise<Alert[]>;
     date: Date | undefined;
     startTime: Date | undefined;
     endTime: Date | undefined;

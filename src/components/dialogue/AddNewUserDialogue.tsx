@@ -1,18 +1,28 @@
-'use client';
-
 import { useMemo } from 'react';
-import { IconX, IconCheck, IconSearch } from '@tabler/icons-react';
 import { AccessLevel } from '@/models/settings';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import clsx from 'clsx';
 import { Organization } from '@/models/organization';
-import { Checkbox } from '../ui/checkbox';
 import StreamsCard from '@/views/settings/StreamsCard';
 import Spinner from '../ui/Spinner';
 import { useTranslations } from 'next-intl';
 import SelectField from '../ui/Select.field';
 import { InputField } from '../ui/Input.field';
-
+import dynamic from 'next/dynamic';
+const IconX = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconX),
+    { ssr: false });
+const IconCheck = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconCheck),
+    { ssr: false });
+const IconSearch = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconSearch),
+    { ssr: false });
+const Popover = dynamic(() => import("@/components/ui/popover").then((mod) => mod.Popover),
+    { ssr: false });
+const PopoverContent = dynamic(() => import("@/components/ui/popover").then((mod) => mod.PopoverContent),
+    { ssr: false });
+const PopoverTrigger = dynamic(() => import("@/components/ui/popover").then((mod) => mod.PopoverTrigger),
+    { ssr: false });
+const Checkbox = dynamic(() => import("@/components/ui/checkbox").then((mod) => mod.Checkbox),
+    { ssr: false });
+    
 interface AddNewUserDialogueProps {
     isOpen: boolean;
     onClose: () => void;

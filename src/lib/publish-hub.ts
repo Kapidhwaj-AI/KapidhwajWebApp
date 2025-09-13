@@ -1,10 +1,10 @@
 import dnssd from 'dnssd';
 
-let isPublished = false;
+// let isPublished = false;
 
 export function startAIPublisher() {
     // if (isPublished) return;
-    isPublished = true;
+    // isPublished = true;
 
     console.log("📡 Publishing Simulated AI Hub...");
 
@@ -13,7 +13,7 @@ export function startAIPublisher() {
         txt: {
             model: 'v1.0',
             location: 'Lab'
-        }
+        },
     });
 
     ad.on('error', (err) => {

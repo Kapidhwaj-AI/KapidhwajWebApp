@@ -1,10 +1,20 @@
 import Spinner from '@/components/ui/Spinner'
 import { ManageAccessViewProp } from '@/models/settings'
 import { GOOGLE_KPH_BUCKET_URL } from '@/services/config'
-import {  IconCrown, IconLock, IconPencil, IconTrash, IconUserPlus } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import React from 'react'
+const IconCrown = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconCrown),
+    { ssr: false });
+const IconLock = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconLock),
+    { ssr: false });
+const IconPencil = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconPencil),
+    { ssr: false });
+const IconTrash = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTrash),
+    { ssr: false });
+const IconUserPlus = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconUserPlus),
+    { ssr: false });
 
 const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit,  setAddUserModalOpen, sharedUser, setIsDelete,  setSelectedShareableUser, accessLevels }) => {
     const t = useTranslations()
@@ -22,13 +32,6 @@ const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit
                         <IconUserPlus stroke={1.5} size={20} />
                         <span className="hidden sm:inline">{t('add_new_user')}</span>
                     </button>
-                    {/* <button
-                        onClick={() => setAddAccessModalOpen(true)}
-                        className={filterButtonClassname}
-                    >
-                        <IconKey stroke={1.5} size={20} />
-                        <span className="hidden sm:inline">Manage Access</span>
-                    </button> */}
                 </div>
             </div>
             <div className='grid grid-cols-1 lg:grid-cols-4 gap-4'>
@@ -38,11 +41,12 @@ const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit
                             {sharedUser.map((user) => (
                                 <div key={user.id} className="bg-[var(--surface-200)] flex rounded-[24px]  w-full min-h-[8rem] h-[9rem] max-h-[10.2rem]  relative group hover:bg-[var(--surface-300)] transition-colors border border-[var(--surface-300)]">
                                     <Image
-                                        src={user.profile_image ? GOOGLE_KPH_BUCKET_URL + user.profile_image : '/dummy-user.jpg'}
+                                        src={user.profile_image ? GOOGLE_KPH_BUCKET_URL + user.profile_image : '/dummy-user.webp'}
                                         alt={user.name}
                                         width={1000}
                                         height={1000}
                                         className="object-cover rounded-l-[24px] w-auto h-auto"
+                                        priority={false}
                                     />
                                     <div className="flex flex-col w-full items-start lg:gap-2 gap-1 lg:pb-15 md:pb-5 pb-8 md:pt-2 pt-1 px-2 ">
 
@@ -88,20 +92,7 @@ const ManageAccessView: React.FC<ManageAccessViewProp> = ({ isLoading, setIsEdit
                                     <h3 className="text-sm font-medium">{access.name}</h3>
 
                                 </div>
-                                {/* <div className="flex gap-2">
-                                    <button
-                                        onClick={() => handleEditCategory(category)}
-                                        className="p-1.5 hover:bg-gray-100 dark:hover:bg-[var(--surface-400)] rounded-lg transition-colors"
-                                    >
-                                        <IconPencil size={24} className="text-gray-600 dark:text-gray-400" />
-                                    </button>
-                                    <button
-                                        onClick={() => { setIsCateDelete(true); setCatId(category.id) }}
-                                        className="p-1.5 hover:bg-gray-100 dark:hover:bg-[var(--surface-400)] rounded-lg transition-colors"
-                                    >
-                                        <IconTrash size={24} className="text-[#FF6868]" />
-                                    </button>
-                                </div> */}
+                                
                             </div>
 
                         ))

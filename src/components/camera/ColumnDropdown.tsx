@@ -1,16 +1,28 @@
 import { useState } from "react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
-import { setToggleColumns } from "@/redux/slices/cameraSlice";
+const DropdownMenu = dynamic(() => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenu),
+    { ssr: false });
+const DropdownMenuContent = dynamic(() => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuContent),
+    { ssr: false });
+const DropdownMenuItem = dynamic(() => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuItem),
+    { ssr: false });
+const DropdownMenuTrigger = dynamic(() => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuTrigger),
+    { ssr: false });
+
+const IconChevronDown = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconChevronDown),
+    { ssr: false });
+
+const IconChevronUp = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconChevronUp),
+    { ssr: false });
+
+
 import { useTranslations } from "next-intl";
-
-
+import dynamic from "next/dynamic";
+import { RootActions, RootState, useStore } from "@/store";
 
 const ColumnDropdown = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const toggleColumnValue = useSelector((state: RootState) => state.camera.toogleColumns);
+    const setToggleColumns = useStore((state: RootActions) => state.setToggleColumns);
+    const toggleColumnValue = useStore((state: RootState) => state.camera.toogleColumns);
+
     const t = useTranslations()
     const columns = [
         { label: `2 ${t('columns')}`, value: 2 },
@@ -22,7 +34,7 @@ const ColumnDropdown = () => {
 
     const handleChange = (colValue: number) => {
         setSelected(columns.find(col => col.value === colValue)?.label || `3 ${t('columns')}`);
-        dispatch(setToggleColumns(colValue)); // Dispatch action to Redux
+        setToggleColumns(colValue)
     };
 
     return (
@@ -33,8 +45,8 @@ const ColumnDropdown = () => {
                 >
                     <span>{selected}</span>
                     <div className="flex flex-col">
-                        <ChevronUp size={14} className="text-[var(--foreground-muted)]" />
-                        <ChevronDown size={14} className="text-[var(--foreground-muted)] -mt-1" />
+                        <IconChevronUp size={14} className="text-[var(--foreground-muted)]" />
+                        <IconChevronDown size={14} className="text-[var(--foreground-muted)] -mt-1" />
                     </div>
                 </button>
             </DropdownMenuTrigger>

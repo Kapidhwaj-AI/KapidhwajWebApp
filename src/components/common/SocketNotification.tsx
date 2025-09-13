@@ -1,21 +1,24 @@
 'use client'
 import { getLocalStorageItem } from '@/lib/storage';
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
-import { apiSocketUrl } from '../../services/config'
-import { setNotificationCount } from '@/redux/slices/userSlice';
-import { setPeopleCount } from '@/redux/slices/singleCameraSlice';
-import { toast } from 'react-toastify';
-import { toggleFaceDetection, toggleFireSmokeDetection, toggleIntrusionDetection, toggleLicensePlateDetection, toggleMotionDetection, togglePeopleCountDetected, togglePeopleDetection } from '@/redux/slices/singleCameraSettingSlice';
+import { showToast } from '@/lib/showToast';
+import { RootActions, useStore } from '@/store';
 import { getSocketApiBaseUrl } from '@/lib/protectApi';
 const SocketNotification = () => {
-    console.log("api", apiSocketUrl)
-    const dispatch = useDispatch();
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
-
+    const togglePeopleDetection = useStore((state: RootActions) => state.togglePeopleDetection);
+    const toggleFaceDetection = useStore((state: RootActions) => state.toggleFaceDetection);
+    const toggleFireSmokeDetection = useStore((state: RootActions) => state.toggleFireSmokeDetection);
+    const toggleIntrusionDetection = useStore((state: RootActions) => state.toggleIntrusionDetection);
+    const toggleLicensePlateDetection = useStore((state: RootActions) => state.toggleLicensePlateDetection);
+    const toggleMotionDetection = useStore((state: RootActions) => state.toggleMotionDetection);
+    const togglePeopleCountDetected = useStore((state: RootActions) => state.togglePeopleCountDetected);
+    const setNotificationCount = useStore((state: RootActions) => state.setNotificationCount);
+    const setPeopleCount = useStore((state: RootActions) => state.setPeopleCount);
     useEffect(() => {
         if (token) {
+            
             const socket = io(getSocketApiBaseUrl(), {
                 auth: {
                     token,
@@ -44,38 +47,37 @@ const SocketNotification = () => {
             });
 
             socket.on('unseen_count', (data: { unSeenCount: number }) => {
-                dispatch(setNotificationCount(data.unSeenCount));
+                setNotificationCount(data.unSeenCount);
             });
 
             socket.on('people_count', (data: {
                 camera_id: string;
                 people_count: string;
             }) => {
-                console.log(data, "people live count")
-                dispatch(setPeopleCount(data));
+                setPeopleCount(data);
             });
 
             socket.on('notification', (notification: { type: string, message: string }) => {
                 const type = notification.type;
-                toast.info(notification.message);
+                showToast(notification.message, "info")
                 if (type === 'intrusion_detected') {
-                    dispatch(toggleIntrusionDetection());
+                    toggleIntrusionDetection();
                 } else if (type === 'face_detected') {
-                    dispatch(toggleFaceDetection());
+                    toggleFaceDetection();
                 } else if (type === 'face_detected') {
-                    dispatch(togglePeopleDetection());
+                    togglePeopleDetection();
                 } else if (type === 'people_count') {
-                    dispatch(togglePeopleCountDetected());
+                    togglePeopleCountDetected();
                 } else if (type === 'license_plate_detected') {
-                    dispatch(toggleLicensePlateDetection());
+                    toggleLicensePlateDetection();
                 } else if (type === 'motion_detected') {
-                    dispatch(toggleMotionDetection());
+                    toggleMotionDetection();
                 } else if (type === 'fire_smoke_detected') {
-                    dispatch(toggleFireSmokeDetection());
+                    toggleFireSmokeDetection();
                 }
             });
 
-            socket.on('disconnect', reason => {
+            socket.on('disconnect', (reason) => {
                 console.log('Disconnected from server. Reason:', reason);
             });
 

@@ -1,4 +1,3 @@
-// Switch Component
 export function Switch({
   enabled,
   onChange,

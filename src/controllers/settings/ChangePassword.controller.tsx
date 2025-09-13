@@ -1,12 +1,10 @@
 import { ChangePasswordDialogue } from '@/components/dialogue/ChangePasswordDialogue'
 import { protectApi } from '@/lib/protectApi'
 import { getLocalStorageItem } from '@/lib/storage'
-import { setIsChangePasswordOpen } from '@/redux/slices/settingsSlice'
-import { AppDispatch, RootState } from '@/redux/store'
 import { AxiosResponse } from 'axios'
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { OtpFormController } from '../auth/Otp.form.controller'
+import { RootActions, RootState, useStore } from '@/store'
 
 const ChangePasswordController = () => {
     const [newPassword, setNewPassword] = useState('')
@@ -16,9 +14,10 @@ const ChangePasswordController = () => {
     const [isOtpSend, setIsOtpSend] = useState(false)
     const [showConfirm, setShowConfirm] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
-    const dispatch = useDispatch<AppDispatch>();
     const user = JSON.parse(getLocalStorageItem('user') ?? '{}')
-    const showChangePasswordDial = useSelector((state: RootState) => state.settings.isChangePasswordOpen)
+    const showChangePasswordDial = useStore((state: RootState) => state.settings.isChangePasswordOpen)
+    const setIsChangePasswordOpen = useStore((state: RootActions) => state.setIsChangePasswordOpen);
+    
     const handleOtpSend = async () => {
         setPasswordErr('')
         if (newPassword.trim() !== confirmPassword.trim()) {
@@ -45,7 +44,7 @@ const ChangePasswordController = () => {
  
     return (
         <>
-            <ChangePasswordDialogue showConfirm={showConfirm} setShowConfirm={setShowConfirm} showPassword={showPassword} setShowPassword={setShowPassword} newPassword={newPassword} confirmPassword={confirmPassword} setNewPassword={setNewPassword} setConfirmPassword={setConfirmPassword} isLoading={loading} err={passwordErr} handleOtpSend={handleOtpSend} isOpen={showChangePasswordDial} onClose={() => dispatch(setIsChangePasswordOpen(false))} />
+            <ChangePasswordDialogue showConfirm={showConfirm} setShowConfirm={setShowConfirm} showPassword={showPassword} setShowPassword={setShowPassword} newPassword={newPassword} confirmPassword={confirmPassword} setNewPassword={setNewPassword} setConfirmPassword={setConfirmPassword} isLoading={loading} err={passwordErr} handleOtpSend={handleOtpSend} isOpen={showChangePasswordDial} onClose={() => setIsChangePasswordOpen(false)} />
             {isOtpSend && <OtpFormController password={newPassword} value={user.email} isProtected={true} setIsOpen={setIsOtpSend} backKey='email' verify='/changePassword' resend='/sendOTP' />}
         </>
 

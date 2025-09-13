@@ -32,6 +32,7 @@ export interface StreamsViewProps {
 }
 
 export interface StreamsPageViewProps {
+    isAllAlertLoading: boolean
     loading: boolean;
     serviceType: string | null;
     isFullscreen: boolean;
@@ -40,14 +41,14 @@ export interface StreamsPageViewProps {
     setIsEdit: (val: boolean) => void;
     setSettingDial: (val: boolean) => void;
     setFilterDial: (val: boolean) => void;
-    setAlertOffset: (val: number) => void;
+    setAlertOffset: React.Dispatch<React.SetStateAction<number>>;
     setRecordings: (val: RecordedClip[]) => void;
     makeFav: boolean;
     toggleStreamFav: () => void;
-    fetchRecordings: (offSet: number) => Promise<RecordedClip[] | undefined>;
+    fetchRecordings: (offSet: number) => Promise<RecordedClip[]>;
     setHasRecordingMore: (val: boolean) => void;
     setRecordingLoading: (val: boolean) => void;
-    setRecordingOffset: (val: number) => void;
+    setRecordingOffset: React.Dispatch<React.SetStateAction<number>>;
     recordingOffset: number;
     recordingLoading: boolean;
     recordings: RecordedClip[];
@@ -59,7 +60,7 @@ export interface StreamsPageViewProps {
     alertOffset: number;
     alertEndRef: React.RefObject<HTMLDivElement | null>;
     alerts: Alert[];
-    fetchAlerts: (offSet: number, serviceType?: string | null) => Promise<Alert[] | undefined>;
+    fetchAlerts: (offSet: number, serviceType?: string | null) => Promise<Alert[] >;
     alertsLoading: boolean;
     setAlertsLoading: (val: boolean) => void;
     setHasMore: (val: boolean) => void;
@@ -89,5 +90,9 @@ export interface StreamsPageViewProps {
     handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void;
     isAiServiceLoading: boolean;
-    isAllAlertLoading: boolean
+    serviceType: string | null
+    setIsAllAlertsLoading:(val:boolean) => void;
+    topAlertRef: React.RefObject<HTMLDivElement | null>;
+    topRecordingRef: React.RefObject<HTMLDivElement | null>
+    
 }

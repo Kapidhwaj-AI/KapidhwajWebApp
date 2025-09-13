@@ -2,15 +2,13 @@
 import Modal from "@/components/ui/Modal";
 import { OtpForm } from "@/components/common/Otp.form";
 import { removeLocalStorageItem, setLocalStorageItem } from "@/lib/storage";
-import { setAuthToken } from "@/redux/slices/authSlice";
-import { AppDispatch } from "@/redux/store";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { protectApi } from "@/lib/protectApi";
-import { toast } from "react-toastify";
+import { showToast } from "@/lib/showToast";
+import { RootActions, useStore } from "@/store";
 
 export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, isForgot, password, showPassword, setShowPassword, setPassword, isProtected, }: { value: string, backKey: string, verify: string, resend: string; setIsOpen: (value: boolean) => void; isForgot?: boolean, password?: string, setPassword?: (value: string) => void; showPassword?: boolean; setShowPassword?: (val: boolean) => void; isProtected?: boolean; }) => {
   const router = useRouter();
@@ -18,11 +16,12 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
-  const dispatch = useDispatch<AppDispatch>();
   const [canResendOtp, setCanResendOtp] = useState(false);
   const [resendOtpTimer, setResendOtpTimer] = useState("01:30");
   const [timeLeft, setTimeLeft] = useState(90); // 90 seconds in total
   const [isVerifyLoading, setIsVerifyLoading] = useState(false)
+  const setAuthToken = useStore((state: RootActions) => state.setAuthToken);
+
   const handleOtpChange = (value: string, index: number,) => {
     if (/^\d$/.test(value)) {
       const newOtp = [...otp];
@@ -92,7 +91,7 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
       const enteredOTP = otp.join("");
       const payload = { [backKey]: value, otp: enteredOTP }
       if ((isForgot || isProtected) && password) {
-        payload.newPassword = password 
+        payload.newPassword = password
       }
       let res;
       if (isProtected) {
@@ -108,16 +107,15 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
       if (res.status === 201) {
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7);
-        setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.access_token, expiresAt: expiresAt.toISOString() }))
-        setLocalStorageItem('user', JSON.stringify(res.data.data))
+        setLocalStorageItem([[LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.access_token, expiresAt: expiresAt.toISOString() })], ['user', JSON.stringify(res.data.data)]])
         removeLocalStorageItem('email')
-        dispatch(setAuthToken(res.data.token));
-        toast.success("User created successfully")
+        setAuthToken(res.data.access_token)
+        showToast("User created successfully", "success")
         router.push('/home')
       }
       if (res.status === 200) {
         if (isForgot || isProtected) {
-          toast.success("Password changed successfully")
+          showToast("Password changed successfully", "success")
           router.push('/login')
         }
       }
@@ -128,7 +126,7 @@ export const OtpFormController = ({ value, backKey, verify, resend, setIsOpen, i
         setError(
           error.response?.data?.message || "An error occurred during login"
         );
-        toast.error(error.response?.data?.message)
+        showToast(error.response?.data?.message, "error")
       } else {
         setError("An unexpected error occurred");
       }

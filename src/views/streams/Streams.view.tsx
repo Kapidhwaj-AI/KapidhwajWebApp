@@ -1,11 +1,17 @@
-import { CameraDetailsViewToggleButton } from '@/components/camera/CameraDetailsViewToggleButton'
+const CameraDetailsViewToggleButton = dynamic(() => import("@/components/camera/CameraDetailsViewToggleButton").then((mod) => mod.CameraDetailsViewToggleButton),
+    { ssr: false });
+const ColumnDropdown = dynamic(() => import("@/components/camera/ColumnDropdown"),
+    { ssr: false });
+const OrganizationFilterButtons = dynamic(() => import("@/components/camera/OrganizationFilterButtons"),
+    { ssr: false });
+const SearchBar = dynamic(() => import("@/components/common/Searchbar"),
+    { ssr: false });
+
 import CameraStreamCard from '@/components/camera/CameraStreamCard'
-import ColumnDropdown from '@/components/camera/ColumnDropdown'
-import OrganizationFilterButtons from '@/components/camera/OrganizationFilterButtons'
-import SearchBar from '@/components/common/Searchbar'
 import { cn } from '@/lib/utils'
 import { StreamsViewProps } from '@/models/stream'
 import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic';
 import React from 'react'
 
 const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFolder, setSearchQuery, setSelectedChildFolder, selectedData, selectedFolder, visibleCameras, cameraCount, selectedOrganization, isLoading, organizations, handleFolderSelect, handleOrganizationSelect, toogleColumnValue,}) => {
@@ -59,7 +65,7 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
           </div>
           <h4 className="text-xl dark:text-white"> {t('streams.showing_streams', { count: cameraCount })}</h4>
           {selectedData ? (
-              <div className={cn("grid grid-cols-1 gap-6 max-h-[51vh] h-full overflow-y-auto scrollbar-hide p-2",
+              <div className={cn("grid grid-cols-1 gap-6  overflow-y-auto scrollbar-hide p-2",
                   {
                       "md:grid-cols-1": toogleColumnValue === 1,
                       "md:grid-cols-2": toogleColumnValue === 2,

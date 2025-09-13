@@ -1,11 +1,12 @@
 'use client'
-import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
-import SiteFolderModal from '@/components/dialogue/SiteFolderModal'
+const SiteFolderModal = dynamic(() => import('@/components/dialogue/SiteFolderModal'))
+const DeleteDialog = dynamic(() => import('@/components/dialogue/DeleteDialog').then((mod) => mod.DeleteDialog))
 import ManageSitesFolderView from '@/views/settings/ManageSitesFolder.view'
 import { protectApi } from '@/lib/protectApi'
 import { Folders, Organization } from '@/models/organization'
 import { useTranslations } from 'next-intl'
 import React, { useCallback, useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 
 const ManageSitesFoldersController = () => {
     const [sites, setSites] = useState<Organization[]>([])

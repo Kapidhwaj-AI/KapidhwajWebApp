@@ -21,7 +21,7 @@ async function HomeProfileCard() {
           width={200} // Set your desired width
           height={200} // Set your desired height
           className="rounded-full object-cover" // Optional styling
-          priority={true} // Optional: if it's above the fold
+          priority={false}
         />
       </div>
 

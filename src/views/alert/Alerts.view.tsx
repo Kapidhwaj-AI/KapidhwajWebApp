@@ -1,30 +1,40 @@
-import { TimeFiltersDialogue } from '@/components/dialogue/TimeFiltersDialogue';
-import { IconFilter, IconFilterX } from '@tabler/icons-react';
+const TimeFiltersDialogue = dynamic(() => import("@/components/dialogue/TimeFiltersDialogue").then((mod) => mod.TimeFiltersDialogue),
+    { ssr: false });
+const IconFilter = dynamic(() =>
+    import('@tabler/icons-react').then(m => m.IconFilter)
+);
+const IconFilterX = dynamic(() =>
+    import('@tabler/icons-react').then(m => m.IconFilterX)
+);
 import React from 'react'
-import AlertsFiltersButtons from './AlertsFiltersButtons';
+const AlertsFiltersButtons = dynamic(() => import("./AlertsFiltersButtons"),
+    { ssr: false });
 import Spinner from '@/components/ui/Spinner';
-import InfiniteScrolling from '@/components/ui/InfiniteScrolling';
+
 import { Alert, AlertViewProps } from '@/models/alert';
 import { AlertCard } from './AlertCard';
-import SearchBar from '@/components/common/Searchbar';
+const SearchBar = dynamic(() => import("@/components/common/Searchbar"),
+    { ssr: false });
 import { useTranslations } from 'next-intl';
 import { filterButtonClassname } from '@/styles/tailwind-class';
+import dynamic from 'next/dynamic';
+import InfiniteScrolling from '@/components/ui/InfiniteScrolling';
 
-const AlertsView: React.FC<AlertViewProps> = ({ err, setAlerts, serviceType, filteredAlerts, changeTab, setAlertOffset, alertOffset, setFilterDial, isDateFiltered, setIsDateFiltered, isLoading, fetchAlerts, filterDial, setDate, setEndTime, setIsLoading, setStartTime, handleApplyFilter, date, startTime, endTime, alertEndRef, alerts, alertsLoading, hasMore, selectedTab, setHasMore, setAlertsLoading }) => {
+const AlertsView: React.FC<AlertViewProps> = ({ err, search, setSearch, setAlerts, serviceType, filteredAlerts,setSelectedTab, setAlertOffset, alertOffset, setFilterDial, isDateFiltered, setIsDateFiltered, isLoading, fetchAlerts, filterDial, setDate, setEndTime, setIsLoading, setStartTime, handleApplyFilter, date, startTime, endTime, alertEndRef, alerts, alertsLoading, hasMore, selectedTab, setHasMore,  setAlertsLoading }) => {
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col gap-4 min-h-0 md:p-5">
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold">{t('alerts.title')}</h1>
                 <div className="flex items-center gap-4">
-                    <SearchBar search="" setSearch={() => { }} placeholder={t("alerts.search_alerts")} />
-                    <button
+                    <SearchBar search={search} setSearch={setSearch} placeholder={t("alerts.search_alerts")} />
+                    {!isDateFiltered && <button
                         className={filterButtonClassname}
                         onClick={() => { setFilterDial(true); setAlertOffset(0) }}
                     >
                         <IconFilter stroke={1} size={24} />
                         <span className="hidden sm:inline">{t('alerts.filter')}</span>
-                    </button>
+                    </button>}
                     {isDateFiltered && <button onClick={async () => {
                         setDate(undefined);
                         setStartTime(undefined);
@@ -44,45 +54,30 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, setAlerts, serviceType, fil
                     </button>}
                 </div>
             </div>
-            <AlertsFiltersButtons changeTab={changeTab} selectedTab={selectedTab} />
+            <AlertsFiltersButtons setSelectedTab={setSelectedTab} selectedTab={selectedTab} />
             <div className="flex-1 flex flex-col gap-2 mb-2 overflow-y-auto scrollbar-hide">
                 {isLoading ? <Spinner /> :
                     <div className='flex-1 md:max-h-[59vh] max-h-[35vh] overflow-auto scrollbar-hide'>
-                        <div className={filteredAlerts.length > 0 ? `grid md:grid-cols-3 grid-cols-1 gap-3 md:gap-6 w-full ` : 'w-full h-full'}>
-                            <InfiniteScrolling<Alert>
-                                setData={setAlerts}
-                                setOffset={setAlertOffset}
-                                offset={alertOffset}
-                                divRef={alertEndRef}
-                                data={alerts}
-                                serviceType={serviceType}
-                                fetchData={fetchAlerts}
-                                isLoading={alertsLoading}
-                                setIsLoading={setAlertsLoading}
-                                setHasMore={setHasMore}
-                                hasMore={hasMore}
-                            >
-                                {filteredAlerts.length > 0 ? (
-                                    filteredAlerts.map((item, index) => (
-                                        <AlertCard alert={item} key={index} />
-                                    ))
-                                ) : (
-                                    <p className="text-center h-full w-full flex items-center justify-center">
-                                        {t("alerts.no_found")}
-                                    </p>
-                                )}
-                                <div ref={alertEndRef} className="h-3" />
-                            </InfiniteScrolling>
+                        <div className={filteredAlerts.length > 0 ? "grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid grid-cols-1 h-full w-full"}>
+                            <InfiniteScrolling<Alert> setData={setAlerts} serviceType={serviceType} setOffset={setAlertOffset} offset={alertOffset} divRef={alertEndRef} data={alerts} fetchData={fetchAlerts} isLoading={alertsLoading} setIsLoading={setAlertsLoading} setHasMore={setHasMore} hasMore={hasMore}>
+                                {filteredAlerts.length > 0 ? <>
 
+                                    {filteredAlerts.map((item, index) => (
+                                        <AlertCard alert={item} key={index} />
+                                    ))}
+
+                                </> :
+                                    <p className="text-center h-full flex items-center justify-center w-full text-red-500">{err}</p>
+                                }
+                                {filteredAlerts.length > 0 && <div ref={alertEndRef} className="h-2" />}
+                            </InfiniteScrolling>
                         </div>
                         {alertsLoading && <div className="text-center"><Spinner /></div>}
-                        {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (
-                            <p className="text-center">{t("no_more_data")}</p>
-                        )}
+                        {!alertsLoading && !hasMore && filteredAlerts.length > 0 && <p className="text-center">{t('no_more_data')}</p>}
                     </div>
                 }
             </div>
-            <TimeFiltersDialogue
+            {filterDial && <TimeFiltersDialogue
 
                 date={date}
                 startTime={startTime}
@@ -93,7 +88,7 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, setAlerts, serviceType, fil
                 isOpen={filterDial}
                 onClose={() => setFilterDial(false)}
                 handleApplyFilter={handleApplyFilter}
-            />
+            />}
         </div >
     )
 }

@@ -11,10 +11,10 @@ export interface Alert {
   alertType: string;
   createdAt?: Date;
   updatedAt?: Date;
-  meta_data: {
+  meta_data:{
     DETECTED_PLATE?: string;
     DETECTED_FIRE_SMOKE?: string;
-    PEOPLE_COUNT?: number | string
+    PEOPLE_COUNT?: number|string
   }
 }
 
@@ -43,7 +43,7 @@ export interface AlertViewProps {
   setIsDateFiltered: (val: boolean) => void;
   isLoading: boolean;
   setIsLoading: (val: boolean) => void;
-  fetchAlerts: (val: number, serviceType: string | null) => Promise<Alert[] | undefined>;
+  fetchAlerts: (val: number, serviceType: string | null) => Promise<Alert[] >;
   setDate: (val: Date | undefined) => void;
   setStartTime: (val: Date | undefined) => void;
   setEndTime: (val: Date | undefined) => void;
@@ -58,7 +58,9 @@ export interface AlertViewProps {
   alertEndRef: React.RefObject<HTMLDivElement | nul>;
   alerts: Alert[];
   selectedTab: string;
-  setAlertsLoading: (val: boolean) => void
-  changeTab: (val:string) => void
-  serviceType: string | null
+  setAlertsLoading: (val: boolean) => void;
+  serviceType: string | null;
+  search: string;
+  setSearch: (val: ChangeEvent<HTMLInputElement>) => void
+  setSelectedTab:(val: string) => void
 }

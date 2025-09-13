@@ -1,11 +1,8 @@
-"use client";
-import {  IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { RecordedClip } from "@/models/clip";
 import { useRef, useState } from "react";
+import { Pause, Play } from "lucide-react";
 import { BASE_URL } from "@/lib/protectApi";
-// import { getLocalStorageItem } from "@/lib/storage";
-
 export default function CameraStreamRecordingCard({ recording }: { recording: RecordedClip }) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -24,11 +21,9 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
     };
     return (
         <div
-            className={cn(
-                'w-full aspect-video bg-white dark:bg-gray-800 rounded shadow-md lg:shadow-lg',
-                'overflow-hidden flex items-center justify-center relative group',
-                'transition-all duration-300 hover:shadow-xl hover:scale-[1.01]'
-            )}
+            className={
+                'w-full aspect-video bg-white dark:bg-gray-800 rounded shadow-md lg:shadow-lg overflow-hidden flex items-center justify-center relative group transition-all duration-300 hover:shadow-xl hover:scale-[1.01] snap-start'
+            }
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -50,45 +45,23 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
                     )}
                 >
                     {isPlaying ? (
-                        <IconPlayerPause
-                            stroke={2}
+                        <Pause
+                            stroke={'2'}
                             className="text-white/80 hover:text-white"
                             size={24}
+                            fill="currentColor"
                         />
                     ) : (
-                        <IconPlayerPlay
-                            stroke={2}
+                        <Play
+                            stroke={'2'}
                             className="text-white/80 hover:text-white"
                             size={24}
+                                fill="currentColor"
+
                         />
                     )}
                 </button>
             )}
-    
-
-            {/* Bottom Controls Bar */}
-            {/* <div className={cn(
-                "absolute bottom-0 left-0 right-0",
-                "bg-gradient-to-t from-black/80 to-transparent",
-                "p-2 md:p-3 lg:p-4 flex items-center justify-between",
-                "transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-            )}>
-                 <div className="flex items-center gap-2">
-                    <LiveBadge />
-                    <span className="text-white text-xs md:text-sm font-medium">
-                        Front Camera
-                    </span>
-                </div> 
-
-                <div className="flex items-center gap-2 md:gap-3">
-                    <button className="p-1 md:p-1.5 rounded-full bg-black/30 hover:bg-black/50 transition-colors">
-                        <IconEye className="text-white" size={16} />
-                    </button>
-                    <button className="p-1 md:p-1.5 rounded-full bg-black/30 hover:bg-black/50 transition-colors">
-                        <IconMovie className="text-white" size={16} />
-                    </button>
-                </div>
-            </div> */}
         </div>
     );
 }

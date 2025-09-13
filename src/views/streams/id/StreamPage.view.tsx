@@ -3,22 +3,42 @@ import CameraStreamRecordingCard from '@/components/camera/CameraStreamRecording
 import InfiniteScrolling from '@/components/ui/InfiniteScrolling';
 import Spinner from '@/components/ui/Spinner';
 import { RecordedClip } from '@/models/clip';
-import { IconChevronRight, IconFilter, IconHeart, IconPencil, IconSettings, IconVideo } from '@tabler/icons-react';
+const IconChevronRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconChevronRight),
+    { ssr: false });
+const IconFilter = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFilter),
+    { ssr: false });
+const IconFilterX = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFilterX),
+    { ssr: false });
+
+const IconHeart = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconHeart),
+    { ssr: false });
+const IconPencil = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconPencil),
+    { ssr: false });
+
+const IconSettings = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconSettings),
+    { ssr: false });
+const IconVideo = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconVideo),
+    { ssr: false });
+
+const AlertsFiltersButtonAtStream = dynamic(() => import("../../alert/AlertsFiltersButtonAtStream"),
+    { ssr: false });
+const TimeFiltersDialogue = dynamic(() => import("@/components/dialogue/TimeFiltersDialogue").then((mod) => mod.TimeFiltersDialogue),
+    { ssr: false });
+const StreamSettingsDialogue = dynamic(() => import("@/components/dialogue/StreamSettingsDialogue").then((mod) => mod.StreamSettingsDialogue),
+    { ssr: false });
+const EditStreamDialogue = dynamic(() => import("@/components/dialogue/EditStreamDialogue"),
+    { ssr: false });
 import { useTranslations } from 'next-intl';
 import React from 'react'
-import AlertsFiltersButtonAtStream from '../../alert/AlertsFiltersButtonAtStream';
 import { Alert } from '@/models/alert';
 import { AlertCard } from '../../alert/AlertCard';
-import { TimeFiltersDialogue } from '@/components/dialogue/TimeFiltersDialogue';
-import EditStreamDialogue from '@/components/dialogue/EditStreamDialogue';
-import { StreamSettingsDialogue } from '@/components/dialogue/StreamSettingsDialogue';
 import { filterButtonClassname } from '@/styles/tailwind-class';
 import { StreamsPageViewProps } from '@/models/stream';
 import { cn } from '@/lib/utils';
+import dynamic from 'next/dynamic';
 
 
-
-const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, changeTab, setSettingDial, setStartTime, settingDial,
+const StreamPageView: React.FC<StreamsPageViewProps> = ({changeTab, isAllAlertLoading, topAlertRef, topRecordingRef, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings,  setSettingDial, setStartTime, settingDial,
     startTime, stream, fetchAlerts, date, fetchRecordings, filterDial, filteredAlerts, formData, recordingLoading, recordingOffset, recordingref, recordings, alertEndRef, alertOffset, alerts, alertsLoading, handleAiToggle, handleMotionToggle, handleRecordingToggle, handleSave, handleToggleStream, hasMore, hasRecordingMore, endTime, organizations, handleApplyFilter
 
 }) => {
@@ -50,13 +70,30 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, isA
                         <IconSettings stroke={1} size={24} />
                         <span className="hidden sm:inline">{t('streams.options.settings')}</span>
                     </button>
-                    <button
+                    {!isDateFiltered && <button
                         className={filterButtonClassname}
                         onClick={() => { setFilterDial(true); setAlertOffset(0) }}
                     >
                         <IconFilter stroke={1} size={24} />
                         <span className="hidden sm:inline">{t('alerts.filter')}</span>
-                    </button>
+                    </button>}
+                    {isDateFiltered && <button onClick={async () => {
+                        setDate(undefined);
+                        setStartTime(undefined);
+                        setEndTime(undefined);
+                        setIsDateFiltered(false);
+                        setAlertOffset(0);
+                        setIsAllAlertsLoading(true);
+                        try {
+                            const freshAlerts = await fetchAlerts(0, serviceType);
+                            setAlerts(freshAlerts ?? []);
+                        } finally {
+                            setIsAllAlertsLoading(false);
+                        }
+                    }} className="bg-[#2B4C88] text-white font-medium py-1 md:py-2 px-2 md:px-4 rounded-full shadow-sm transition-all duration-200 flex items-center gap-1">
+                        <IconFilterX stroke={1} size={24} />
+                        <span className="hidden sm:inline">{t('common.clear_filter')}</span>
+                    </button>}
                 </div>
             </div>}
             {loading ? <Spinner /> :
@@ -81,7 +118,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, isA
                                         "flex flex-col p-3 md:p-6 rounded-2xl md:rounded-4xl bg-[var(--surface-100)] overflow-y-auto scrollbar-hide",
                                         "h-[33vh] lg:flex-[1/2]"
                                     )}
-                                >                                    <h3 className="text-sm md:text-md flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                                >   <h3 className="text-sm md:text-md flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
                                         <IconVideo stroke={2} size={18} />
                                         <span>{t("alerts.recordings")}</span>
                                     </h3>
@@ -97,7 +134,10 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, isA
                                         data={recordings}
                                         divRef={recordingref}
                                         hasMore={hasRecordingMore}
+                                        topRef={topRecordingRef}
                                     >
+                                        {recordingOffset > 0 && !recordingLoading && <div ref={topRecordingRef} className="h-1" />}
+                                        {recordingLoading && topRecordingRef.current && <div className="text-center"><Spinner /></div>}
                                         {recordings.length === 0 ? (
                                             <p className="flex items-center justify-center w-full h-full">
                                                 {t("streams.no_recordings")}
@@ -119,14 +159,9 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, isA
                         </div>
                     </div>
 
-                    {!isFullscreen && <div className="lg:col-span-2 flex flex-col p-2 md:p-5 rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
-
-                        <AlertsFiltersButtonAtStream
-                            selectedTab={selectedTab}
-                            changeTab={changeTab}
-                        />
-
-                        {isAllAlertLoading ? <Spinner /> : <div className='flex-1 md:max-h-[59vh] max-h-[35vh] overflow-auto scrollbar-hide'>
+                    {!isFullscreen && <div className="lg:col-span-2 flex flex-col p-2 md:p-5 md:max-h-[82vh] max-h-[35vh] overflow-auto scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
+                        <AlertsFiltersButtonAtStream selectedTab={selectedTab} setSelectedTab={changeTab} />
+                        {isAllAlertLoading ? <Spinner /> : <div className='flex-1 '>
                             <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
                                 <InfiniteScrolling<Alert>
                                     setData={setAlerts}
@@ -134,11 +169,11 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, isA
                                     offset={alertOffset}
                                     divRef={alertEndRef}
                                     data={alerts}
-                                    serviceType={serviceType}
                                     fetchData={fetchAlerts}
                                     isLoading={alertsLoading}
                                     setIsLoading={setAlertsLoading}
                                     setHasMore={setHasMore}
+                                    serviceType={serviceType}
                                     hasMore={hasMore}
                                 >
                                     {filteredAlerts.length > 0 ? (
@@ -150,9 +185,8 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, isA
                                             {t("alerts.no_found")}
                                         </p>
                                     )}
-                                    {!isDateFiltered && filteredAlerts.length > 0 && <div ref={alertEndRef} className="h-3" />}
+                                    {filteredAlerts.length > 0 && <div ref={alertEndRef} className="h-1" />}
                                 </InfiniteScrolling>
-
                                 {alertsLoading && <div className="text-center"><Spinner /></div>}
                                 {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (
                                     <p className="text-center">{t("no_more_data")}</p>

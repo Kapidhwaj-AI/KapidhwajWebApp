@@ -12,8 +12,7 @@ export function TokenCheck() {
     const checkToken = async () => {
       const isValid = await checkLocalToken();
       if (isValid) {
-        removeLocalStorageItem('kapi-token')
-        removeLocalStorageItem('hub')
+        removeLocalStorageItem(['user', 'Remotehub', 'Localhub', 'kapi-token'])
         router.push('/login');
       }
     };

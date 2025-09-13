@@ -1,10 +1,17 @@
 import React from 'react'
 import Modal from '../ui/Modal';
 import { useTranslations } from 'next-intl';
-import { InputField } from '../ui/Input.field';
 import Spinner from '../ui/Spinner';
-import { IconCheck, IconX } from '@tabler/icons-react';
-
+import dynamic from 'next/dynamic';
+const InputField = dynamic(() => import('../ui/Input.field').then((mod) => mod.InputField), {
+  ssr: false,
+});
+const IconCheck = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconCheck), {
+  ssr: false,
+});
+const IconX = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconX), {
+  ssr: false,
+});
 interface SiteFolderModalProps {
   isSite?: boolean;
   isFolder?: boolean;
@@ -17,11 +24,11 @@ interface SiteFolderModalProps {
 }
 
 const SiteFolderModal: React.FC<SiteFolderModalProps> = ({ setName, isLoading, handleSubmit, name, onClose, isFolder, isSite, isEdit }) => {
-  const t = useTranslations()
+  const t = useTranslations('settings')
   return (
-    <Modal onClose={onClose} title={isEdit ? (isSite ? t('settings.update_site') : isFolder ? t('settings.update_folder') : t('settings.update_subfolder'))  :(isSite ? t('settings.add_site') : isFolder ? t('settings.add_folder') : t('settings.add_subfolder'))} >
+    <Modal onClose={onClose} title={isEdit ? (isSite ? t('update_site') : isFolder ? t('update_folder') : t('update_subfolder'))  :(isSite ? t('add_site') : isFolder ? t('add_folder') : t('add_subfolder'))} >
       <form onSubmit={(e) => { e.preventDefault(); handleSubmit() }} className='flex flex-col gap-5'>
-        <InputField value={name} setValue={setName} placeholder={t('settings.enter_name_here')} label={t('settings.name')} />
+        <InputField value={name} setValue={setName} placeholder={t('enter_name_here')} label={t('name')} />
         <div className='flex justify-end gap-3'>
 
           <button type='button'

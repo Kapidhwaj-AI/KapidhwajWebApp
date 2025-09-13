@@ -1,9 +1,7 @@
-import axios, { Method } from "axios"
-import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage"
-import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config"
-
-
-
+import axios, { isAxiosError, Method } from "axios";
+import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage";
+import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
+import { showToast } from "./showToast";
 export interface ApiResponse<T> {
     data: T;
     status: number;
@@ -80,6 +78,7 @@ export async function protectApi<T, D = undefined>(url: string,
                 });
             }
             else {
+                showToast(err?.response?.data?.error, "error")
                 removeLocalStorageItem(LOCALSTORAGE_KEY);
                 removeLocalStorageItem('user')
                 removeLocalStorageItem('Localhub')
