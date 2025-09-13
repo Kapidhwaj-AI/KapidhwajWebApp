@@ -153,23 +153,15 @@ const ManageDevicesController = () => {
             selectedSite={selectedSite} 
             sites={sites} 
             setSelectedSite={setSelectedSite} 
-            setIsOpen={setIsOpen} 
-            handleDeleteHub={handleDeleHub} 
-            isHubDelete={isHubDelete} 
-            setIsHubDelete={setIsHubDelete} 
             handleDelete={handleDeleteSavedCamera} 
             isDelete={isDelete} 
             setIsDelete={setIsDelete} 
-            handleCopyIp={handleNearbyAdd} 
             toggleStream={handleToggleStream} 
             fetchSavedHubs={fetchSavedHubs} 
-            savedHubs={savedHaubs} 
             isSavedHubLoading={isSavedHubsLoading} 
-            nearbyHubs={nearbyHubs} fetchHub={fetchHubs} 
             selectedHub={selectedHub}
-            isHubLoading={isHubLoading}
             setIsHubLoading={setIsHubLoading}
-            setSelectedHub={setSelectedHub}/>
+           />
 
             {isOpen && <HubDialogue 
             isLoading={isSaving}

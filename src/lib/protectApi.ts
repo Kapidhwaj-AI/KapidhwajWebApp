@@ -1,4 +1,4 @@
-import axios, { isAxiosError, Method } from "axios";
+import axios, {  Method } from "axios";
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
 import { showToast } from "./showToast";
@@ -39,20 +39,12 @@ const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
 export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
     data?: D, type?: string, isNotCustomHeader?: boolean, params?: unknown) {
-    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
-    const baseUrl = isValidHub && !isNotCustomHeader
-        ? hub.isRemotely
-            ? apiBaseUrl
-            : `http://${hub.id}.local:8084`
-        : apiBaseUrl;
+    
     const headers: Record<string, string> = {
         Authorization: `Bearer ${token}`,
         'Content-Type': type ?? 'application/json',
     };
-    if (hub.isRemotely && !isNotCustomHeader) {
-        headers['x-hub-id'] = hub.id;
-    }
+   
     try {
         const response = await axios<ApiResponse<T>>({
             method: method ?? 'GET',

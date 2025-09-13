@@ -4,7 +4,6 @@ import { useSearchParams } from "next/navigation";
 import { Alert } from '@/models/alert';
 import { protectApi } from '@/lib/protectApi';
 import PersonDetailsView from '@/views/person-details/PersonDetails.view';
-import { PersonDetails } from '@/models/person-details';
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp';
 const PersonsDetailsController = () => {
     const searchParams = useSearchParams();
@@ -42,6 +41,7 @@ const PersonsDetailsController = () => {
                 setPersonDetails(await fetchAlertsByPersonId(offset))
             } catch (error) {
                 console.error(error)
+                setErr(error.response.data.error)
             } finally {
                 setIsLoading(false)
             }

@@ -11,24 +11,14 @@ export interface ManageHub {
     txt: string
 }
 export interface ManageDeviceViewProp {
-    setSelectedHub: (val: Hub | null) => void;
     selectedHub: Hub | null;
-    isHubLoading: boolean;
+    isSavedHubLoading: boolean
     setIsHubLoading: (val: boolean) => void;
-    fetchHub: () => Promis<void>;
-    nearbyHubs: ManageHub[]
-    savedHubs: Hub[]
-    isSavedHubLoading: boolean;
     fetchSavedHubs: () => Promis<void>;
     toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: number) => Promise<AxiosResponse | undefined>
-    handleCopyIp: (ip: string) => void;
     isDelete: boolean;
     setIsDelete: (val: boolean) => void;
     handleDelete: (cameraId: string, organizationId: string) => void
-    isHubDelete: boolean;
-    setIsHubDelete: (val: boolean) => void;
-    handleDeleteHub: (hubId: string) => void;
-    setIsOpen: (val: boolean) => void;
     setSelectedSite: (val: string) => void;
     selectedSite: string;
     sites: Organization[]

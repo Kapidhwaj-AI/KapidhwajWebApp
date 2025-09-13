@@ -17,10 +17,6 @@ export const LoginFormController = () => {
   const router = useRouter();
   const setAuthToken = useStore((state:RootActions) => state.setAuthToken);
 
-  const handleRegisterRedirect = () => {
-    router.push("/register");
-  };
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const phoneRegex = /^[0-9]{7,15}$/;
@@ -77,7 +73,6 @@ export const LoginFormController = () => {
       isLoading={isLoading}
       isError={isError}
       error={error}
-      redirectRegister={handleRegisterRedirect}
       username={username}
       setUsername={setUsername}
       password={password}

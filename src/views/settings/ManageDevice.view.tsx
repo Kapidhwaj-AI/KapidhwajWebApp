@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import React from 'react'
 const SavedCameras = dynamic(() => import('@/components/device/SavedCameras').then((mod) => mod.SavedCameras), { loading: () => <Spinner /> })
 
-const ManageDeviceView: React.FC<ManageDeviceViewProp> = ({ setIsOpen, sites, selectedSite, setSelectedSite, isSavedHubLoading, setSelectedHub, selectedHub, fetchSavedHubs, isHubLoading, fetchHub, nearbyHubs, savedHubs, toggleStream, handleCopyIp, isDelete, setIsDelete, handleDelete, isHubDelete, setIsHubDelete, handleDeleteHub }) => {
+const ManageDeviceView: React.FC<ManageDeviceViewProp> = ({  sites, selectedSite, setSelectedSite, isSavedHubLoading,  selectedHub, fetchSavedHubs, toggleStream,  isDelete, setIsDelete, handleDelete, }) => {
   const t = useTranslations()
   return (
     <div className="h-full flex flex-col min-h-0">

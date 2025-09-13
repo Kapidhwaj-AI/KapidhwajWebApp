@@ -6,7 +6,7 @@ export const LoginForm = ({
   isLoading,
   isError,
   error = "",
-  redirectRegister,
+
   username,
   setUsername,
   password,
@@ -19,7 +19,7 @@ export const LoginForm = ({
   isLoading: boolean;
   isError: boolean;
   error?: string;
-  redirectRegister: () => void;
+
   username: string;
   setUsername: (username: string) => void;
   password: string;

@@ -1,8 +1,6 @@
 import { Alert } from "@/models/alert";
 import Image from "next/image";
 import dynamic from 'next/dynamic';
-
-import { getLocalStorageItem } from "@/lib/storage";
 import { useState } from "react";
 const AlertPreviewDialogue = dynamic(() => import('@/components/dialogue/AlertPreviewDialogue'));
 import Link from "next/link";
@@ -44,7 +42,7 @@ export function AlertCard({ alert }: { alert: Alert }) {
         <div className="w-full bg-[var(--surface-200)] rounded-4xl shadow-lg overflow-hidden">
             <div className="flex justify-between md:flex-row flex-col md:gap-0 gap-1 items-start md:items-center p-2 md:px-4 md:pt-4">
                 <div className="flex items-center gap-1 md:gap-3">
-                    {alert.alertType === 'FACE_DETECTION' && alert?.persons && <Link href={{ pathname: "/person-details", query: { id: alert.person_ids[0] } }}><img className="rounded-full object-cover w-10 h-10 aspect-auto" src={BASE_URL + `:3000/${alert?.persons[0].gcp_image_path}`} /></Link>}
+                    {alert.alertType === 'FACE_DETECTION' && alert?.persons && <Link href={{ pathname: "/person-details", query: { id: alert.person_ids[0] } }}><Image alt={alert.persons[0].name} className="rounded-full object-cover w-10 h-10 aspect-auto" src={BASE_URL + `:3000/${alert?.persons[0].gcp_image_path}`} /></Link>}
                     {alert.alertType !== 'FACE_DETECTION' && <div className="p-2 md:p-4 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">               {[
                         { value: 'all', icon: <IconLayoutDashboard stroke={2} /> },
                         { value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={2} /> },
@@ -79,7 +77,7 @@ export function AlertCard({ alert }: { alert: Alert }) {
             </div>
             <div className="relative aspect-video m-4 rounded-xl flex items-center justify-center"
             >
-                {alert?.frame_url  && <Image priority={false} loading="lazy" src={BASE_URL+':3000' + alert?.frame_url} alt={alert?.alertType} width={1000} height={1000} className="object-cover w-auto h-auto rounded-2xl" /> }
+                {alert?.frame_url && <Image priority={false} loading="lazy" src={BASE_URL + ':3000' + alert?.frame_url} alt={alert?.alertType} width={1000} height={1000} className="object-cover w-auto h-auto rounded-2xl" />}
 
                 <button onClick={() => setIsPreview(true)} className="absolute h-14 w-14 rounded-full bg-neutral-400/20 dark:bg-black/20 backdrop-blur-[32px] flex items-center justify-center">
                     <IconMovie stroke={'2'} className="text-gray-600 dark:text-gray-300" size={24} />
