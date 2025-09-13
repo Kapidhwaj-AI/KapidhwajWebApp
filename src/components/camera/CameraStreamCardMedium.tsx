@@ -13,10 +13,11 @@ const Minimize = dynamic(() => import("lucide-react").then((mod) => mod.Minimize
 import dynamic from "next/dynamic";
 import { RootActions, RootState, useStore } from "@/store";
 import { BASE_URL } from "@/lib/protectApi";
+import Image from "next/image";
 
 
 export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {
-  
+
   const isFullscreen = useStore((state: RootState) => state.camera.isFullScreen);
 
   useEffect(() => {
@@ -54,14 +55,15 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
         "overflow-hidden flex items-center justify-center relative ring-background"
       )}
     >
-      {camera?.webrtc_url && <iframe
-        src={`${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
-        allowFullScreen
-
-        style={{ width: '105%', height: '105%' }}
-      >
-        Your browser does not support the video tag.
-      </iframe>}
+      {camera?.webrtc_url ? (
+        <iframe
+          src={`${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
+          allowFullScreen
+          style={{ width: "100%", maxWidth: "800px", height: '100%' }}
+        >
+          Your browser does not support the video tag.
+        </iframe>
+      ) : <Image alt='Stream Place holder' src={'/assets/images/image.webp'} width={1000} height={1000} className="w-auto h-auto" />}
       {camera?.webrtc_url && <div className="absolute top-2 left-2 md:top-3 md:left-3">
         <LiveBadge />
       </div>}

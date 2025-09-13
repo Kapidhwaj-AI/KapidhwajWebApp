@@ -1,34 +1,20 @@
 'use client'
-const HubDialogue = dynamic(() => import('@/components/dialogue/HubDialogue'))
 import { protectApi } from '@/lib/protectApi';
 import { Organization } from '@/models/organization';
-import { Hub, ManageHub } from '@/models/settings';
-import React, { FormEvent, useEffect, useState } from 'react'
+import { Hub, } from '@/models/settings';
+import React, {  useEffect, useState } from 'react'
 import { Camera } from '@/models/camera';
-import dynamic from 'next/dynamic';
 import ManageDeviceView from '@/views/settings/ManageDevice.view';
 
 const ManageDevicesController = () => {
     const [selectedHub, setSelectedHub] = useState<Hub | null>(null);
-    const [nearbyHubs, setNearbyHubs] = useState<ManageHub[]>([])
     const [savedHaubs, setSavedHubs] = useState<Hub[]>([])
     const [isHubLoading, setIsHubLoading] = useState(false)
     const [isSavedHubsLoading, setIsSavedHubsLoading] = useState(false)
     const [isDelete, setIsDelete] = useState(false)
-    const [isHubDelete, setIsHubDelete] = useState(false)
-    const [isOpen, setIsOpen] = useState(false)
-    const [name, setName] = useState('')
-    const [id, setId] = useState('')
-    const [password, setPassword] = useState('')
     const [camera, setCamera] = useState<Camera>()
     const [selectedSite, setSelectedSite] = useState('')
     const [sites, setSites] = useState<Organization[]>([])
-    const [showPassword, setShowPassword] = useState(false)
-    const [isSaving, setIsSaving] = useState(false);
-    const handleNearbyAdd = (ip: string) => {
-        setId(ip)
-        setIsOpen(true)
-    };
     const fetchSites = async (): Promise<void> => {
         try {
             const res = await protectApi<{ organization: Organization }[]>(
@@ -46,20 +32,6 @@ const ManageDevicesController = () => {
             console.error('err (sites):', error);
         }
     };
-
-    const fetchHubs = async (): Promise<void> => {
-        setIsHubLoading(true);
-        try {
-            const res = await fetch('/api/hubs');
-            const data = await res.json();
-            setNearbyHubs(data.hubs);
-        } catch (error) {
-            console.error('err (hubs):', error);
-        } finally {
-            setIsHubLoading(false);
-        }
-    };
-
     const fetchSavedHubs = async (): Promise<void> => {
         setIsSavedHubsLoading(true);
         try {
@@ -84,15 +56,14 @@ const ManageDevicesController = () => {
     };
     useEffect(() => {
         const fetchAll = async () => {
-            const results = await Promise.allSettled([
-                fetchHubs(),
+            const results = await Promise.allSettled([,
                 fetchSavedHubs(),
                 fetchSites(),
             ]);
 
             results.forEach((result, index) => {
                 if (result.status === 'rejected') {
-                    const name = ['fetchHubs', 'fetchSavedHubs', 'fetchSites'][index];
+                    const name = ['fetchSavedHubs', 'fetchSites'][index];
                     console.error(`${name} failed:`, result.reason);
                 }
             });
@@ -120,33 +91,7 @@ const ManageDevicesController = () => {
             setIsDelete(false)
         }
     }
-    const handleDeleHub = async (hubId: string) => {
-        const res = await protectApi(`/devices/hub?action=remove&hubId=${hubId}`, 'DELETE', undefined, undefined, true)
-        if (res.status === 200) {
-            setIsHubDelete(false)
-        }
-    }
-    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsSaving(true)
-        try {
-            const res = await protectApi<unknown, { name: string, hubId: string, password: string, organizationId: string }>('/devices/hub?action=add', 'POST', { name, hubId: id, password, organizationId: selectedSite }, undefined, true)
-            if (res?.status === 200) {
-                setIsOpen(false)
-                setName('')
-                setSelectedSite('')
-                setPassword('')
-                setId('')
-            }
-
-        } catch (error) {
-            console.error("Err", error)
-        } finally {
-            setIsSaving(false)
-        }
-    }
     return (
-        <>
             <ManageDeviceView
             camera={camera} 
             setCamera={setCamera} 
@@ -162,23 +107,6 @@ const ManageDevicesController = () => {
             selectedHub={selectedHub}
             setIsHubLoading={setIsHubLoading}
            />
-
-            {isOpen && <HubDialogue 
-            isLoading={isSaving}
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
-            onSubmit={onSubmit}
-            id={id}
-            selectedSite={selectedSite}
-            setSelectedSite={setSelectedSite}
-            setId={setId}
-            setName={setName}
-            setPassword={setPassword}
-            name={name}
-            password={password}
-            sites={sites}
-            onClose={() => setIsOpen(false)} />}
-        </>
     )
 
 }
