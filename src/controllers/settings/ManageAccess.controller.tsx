@@ -1,7 +1,4 @@
 'use client'
-import { AddNewAccessDialogue } from '@/components/dialogue/AddNewAccessDialogue'
-import { AddNewUserDialogue } from '@/components/dialogue/AddNewUserDialogue'
-import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
 import ManageAccessView from '@/views/settings/ManageAccess.view'
 import { useDebounce } from '@/hooks/useDebounce'
 import { protectApi } from '@/lib/protectApi'
@@ -10,6 +7,10 @@ import { AccessLevel, User } from '@/models/settings'
 import { AxiosResponse } from 'axios'
 import { useTranslations } from 'next-intl'
 import React, { useEffect, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
+const AddNewAccessDialogue = dynamic(() => import('@/components/dialogue/AddNewAccessDialogue').then((mod) => mod.AddNewAccessDialogue))
+const AddNewUserDialogue = dynamic(() => import('@/components/dialogue/AddNewUserDialogue').then((mod) => mod.AddNewUserDialogue))
+const DeleteDialog = dynamic(() => import('@/components/dialogue/DeleteDialog').then((mod) => mod.DeleteDialog))
 
 const ManageAccessController = () => {
     const [sharedUser, setSharedUser] = useState<User[]>([])
@@ -104,9 +105,22 @@ const ManageAccessController = () => {
         }
     }
     useEffect(() => {
-        fetchUser();
-        fetchAccessLevels();
-        fetchSharedOrg();
+        const fetchAll = async () => {
+            const results = await Promise.allSettled([
+                fetchUser(),
+                fetchAccessLevels(),
+                fetchSharedOrg()
+            ]);
+
+            results.forEach((result, index) => {
+                if (result.status === 'rejected') {
+                    const name = ['fetchUser', 'fetchAccessLevel', 'fetchSharedSites'][index];
+                    console.error(`${name} failed:`, result.reason);
+                }
+            });
+        };
+
+        fetchAll();
     }, [])
     useEffect(() => {
         if (isEdit) {
@@ -256,8 +270,6 @@ const ManageAccessController = () => {
 
         } catch (error) {
             console.error("Camera sharing failed:", error);
-
-
         } finally {
             setIsSaving(false);
         }
@@ -267,7 +279,7 @@ const ManageAccessController = () => {
     return (
         <>
             <ManageAccessView accessLevels={accessLevels} isAccessLoading={isAccessLoading} setIsEdit={setIsEdit} setIsDelete={setIsDelete} selectedShareableUser={selectedShareableUser} setSelectedShareableUser={setSelectedShareableUser} isLoading={isLoading} sharedUser={sharedUser} setAddAccessModalOpen={setAddAccessModalOpen} setAddUserModalOpen={setAddUserModalOpen} />
-            <AddNewUserDialogue
+            {isAddUserModalOpen && <AddNewUserDialogue
                 isEdit={isEdit}
                 isLoading={isSaving}
                 handleSave={handleSave}
@@ -292,12 +304,12 @@ const ManageAccessController = () => {
                 setSearchQuery={setSearchQuery}
                 selectedStreams={selectedStreams}
                 setSelectedStreams={setSelectedStreams}
-            />
+            />}
 
-            <AddNewAccessDialogue
+            {isAddAccessModalOpen && <AddNewAccessDialogue
                 isOpen={isAddAccessModalOpen}
                 onClose={() => setAddAccessModalOpen(false)}
-            />
+            />}
             {isDelete && <DeleteDialog title={t('managePeople.delete_access_user')} data={{ userId: selectedShareableUser?.id, roleId: selectedShareableUser?.role_id }} onClose={() => setIsDelete(false)} handleDelete={handleRemoveUser} />}
         </>
     )

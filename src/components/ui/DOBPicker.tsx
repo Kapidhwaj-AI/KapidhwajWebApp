@@ -1,9 +1,12 @@
 import * as React from "react";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
+import dynamic from "next/dynamic";
+const Calendar = dynamic(() => import('@/components/ui/calendar').then((mod) => mod.Calendar))
+const Popover = dynamic(() => import('@/components/ui/popover').then((mod) => mod.Popover))
+const PopoverTrigger = dynamic(() => import('@/components/ui/popover').then((mod) => mod.PopoverTrigger))
+const PopoverContent = dynamic(() => import('@/components/ui/popover').then((mod) => mod.PopoverContent))
+const Button = dynamic(() => import('@/components/ui/button').then((mod) => mod.Button))
 
 export const DOBPicker =({
     date,

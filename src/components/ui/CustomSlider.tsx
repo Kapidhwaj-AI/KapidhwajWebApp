@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import dynamic from "next/dynamic";
 const Slider = dynamic(() => import("./slider").then((mod) => mod.Slider),

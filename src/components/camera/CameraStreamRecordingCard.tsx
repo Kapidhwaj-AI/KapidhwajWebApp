@@ -1,16 +1,27 @@
-"use client";
 import { cn } from "@/lib/utils";
 import { RecordedClip } from "@/models/clip";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getLocalStorageItem } from "@/lib/storage";
 import { Pause, Play } from "lucide-react";
+import { RootState, useStore } from "@/store";
 
 export default function CameraStreamRecordingCard({ recording }: { recording: RecordedClip }) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const  baseUrl = hub ? `http://media.kapidhwaj.ai:${hub.static_port}/` : 'http://media.kapidhwaj.ai:3000/'
+    const [isValidHub, setIsValidHub] = useState(false)
+    const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
+    const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
+    const localHub = useStore((state: RootState) => state.hub.localHub)
+    const remoteHub = useStore((state: RootState) => state.hub.remoteHub)
+    useEffect(() => {
+        if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub?.id || savedRemoteHub?.id)) {
+            setIsValidHub(true)
+        }
+    }, [localHub, remoteHub])
+    const staticPort = remoteHub?.static_port || savedRemoteHub?.static_port
+    const id = localHub?.id || savedLocalHub.id
+    const baseUrl = isValidHub ? remoteHub?.id ? `http://media.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/` : 'http://media.kapidhwaj.ai:3000/'
     const handleTogglePlay = () => {
         const video = videoRef.current;
         if (!video) return;
@@ -28,7 +39,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
             className={cn(
                 'w-full aspect-video bg-white dark:bg-gray-800 rounded shadow-md lg:shadow-lg',
                 'overflow-hidden flex items-center justify-center relative group',
-                'transition-all duration-300 hover:shadow-xl hover:scale-[1.01]'
+                'transition-all duration-300 hover:shadow-xl hover:scale-[1.01] snap-start'
             )}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -55,12 +66,15 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
                             stroke={'2'}
                             className="text-white/80 hover:text-white"
                             size={24}
+                            fill="currentColor"
                         />
                     ) : (
                         <Play
                             stroke={'2'}
                             className="text-white/80 hover:text-white"
                             size={24}
+                                fill="currentColor"
+
                         />
                     )}
                 </button>

@@ -1,8 +1,5 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { Switch } from "@/components/ui/CustomeSwitch"; // adjust import to your Switch
-import { InputField } from "@/components/ui/Input.field"; // your custom input
+import { Switch } from "@/components/ui/CustomeSwitch"; 
 import { useTranslations } from "next-intl";
 import { NetworkData, NetworkViewProps } from "@/models/settings";
 import Spinner from "@/components/ui/Spinner";
@@ -16,10 +13,6 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
     useEffect(() => {
         setNewData(networkData);
     }, [networkData]);
-
-    useEffect(() => {
-        console.log("newData updated:", newData);
-    }, [newData]);
 
     return (
         <form onSubmit={(e) => { e.preventDefault(); handleSave(newData) }} className="space-y-5 md:w-[40rem] w-full self-center p-6 bg-[var(--surface-200)] dark:bg-gray-800 flex flex-col py-3 px-4 rounded-2xl border">

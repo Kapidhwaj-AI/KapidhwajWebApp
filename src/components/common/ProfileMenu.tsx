@@ -1,15 +1,12 @@
-"use client";
 import { protectApi } from "@/lib/protectApi";
 import { showToast } from "@/lib/showToast";
 import { getLocalStorageItem, removeLocalStorageItem } from "@/lib/storage";
-import { clearAuthToken } from "@/redux/slices/authSlice";
-import { AppDispatch, RootState } from "@/redux/store";
+import { RootActions, RootState, useStore } from "@/store";
 import { LogOut, Moon, Sun, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 
 interface ProfileMenuProps {
@@ -20,12 +17,13 @@ interface ProfileMenuProps {
 export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>()
   const [isValidHub, setIsValidHub] = useState(false)
   const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
   const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
-  const localHub = useSelector((state: RootState) => state.hub.localHub)
-  const remoteHub = useSelector((state: RootState) => state.hub.remoteHub)
+  const localHub = useStore((state: RootState) => state.hub.localHub);
+  const remoteHub = useStore((state: RootState) => state.hub.remoteHub);
+  const clearAuthToken = useStore((state: RootActions) => state.clearAuthToken);
+
   useEffect(() => {
     if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub?.id || savedRemoteHub?.id)) {
       setIsValidHub(true)
@@ -38,11 +36,8 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
       if (res.status === 200) {
         document.cookie = "locale=; path=/; max-age=0";
         showToast(res.data.message ?? 'User Logout Successfully', "success")
-        removeLocalStorageItem('user')
-        removeLocalStorageItem('Remotehub')
-        removeLocalStorageItem('Localhub')
-        removeLocalStorageItem('kapi-token')
-        dispatch(clearAuthToken())
+        removeLocalStorageItem(['user', 'Remotehub', 'Localhub', 'kapi-token'])
+        clearAuthToken()
         router.replace("/login");
       }
     } catch (error) {
@@ -50,9 +45,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
       if (error.status === 401) {
         document.cookie = "locale=; path=/; max-age=0";
         showToast(error.response.data.message ?? 'THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)', "error")
-        removeLocalStorageItem('user')
-        removeLocalStorageItem('kapi-token')
-        removeLocalStorageItem('hub')
+        removeLocalStorageItem(['user', 'Remotehub', 'Localhub', 'kapi-token'])
         router.replace("/login");
       }
     }

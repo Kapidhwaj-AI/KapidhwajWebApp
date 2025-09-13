@@ -1,4 +1,3 @@
-'use client'
 import { useQuery } from '@tanstack/react-query';
 import { Organization } from '@/models/organization';
 import { protectApi } from '@/lib/protectApi';

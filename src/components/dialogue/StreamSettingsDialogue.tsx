@@ -1,5 +1,3 @@
-"use client";
-
 const Switch = dynamic(() => import("../ui/CustomeSwitch").then((mod) => mod.Switch),
   { ssr: false });
 const IconBounceRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBounceRight),

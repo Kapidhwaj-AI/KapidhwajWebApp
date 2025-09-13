@@ -49,7 +49,6 @@ export const OtpForm = ({
         onSubmit={onSubmit}
         className="space-y-1.5 xs:space-y-2 sm:space-y-2.5"
       >
-        {/* OTP Field */}
         <label className="block text-xs sm:text-sm text-black dark:text-white">OTP
           <span className="text-red-500 ml-1">*</span>
         </label>
@@ -79,14 +78,11 @@ export const OtpForm = ({
           showPassword={showPassword}
           />
         }
-        {/* Error Message */}
         {isError && (
           <div className="text-red-500 text-[11px] xs:text-xs sm:text-sm text-center">
             {error}
           </div>
         )}
-
-        {/* Register Button */}
         <button
         disabled={isVerifyLoading}
           type="submit"
@@ -94,7 +90,6 @@ export const OtpForm = ({
         >
           {isVerifyLoading ? <Spinner/> :<span>{isForgot ? 'Verify & Change Password' : 'Verify'}</span> }
         </button>
-
         <button
           disabled={!canResendOtp && isLoading && isVerifyLoading}
           type="button"

@@ -1,10 +1,12 @@
 import Spinner from '@/components/ui/Spinner'
 import { ManageSitesFoldersProp } from '@/models/settings'
-import { IconFolder, IconFolders, IconSitemap } from '@tabler/icons-react'
 import React from 'react'
 import { ListCard } from './ListCard'
 import { useTranslations } from 'next-intl'
-
+import dynamic from 'next/dynamic'
+const IconFolder = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconFolder))
+const IconFolders = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconFolders))
+const IconSitemap = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconSitemap))
 
 const ManageSitesFolderView: React.FC<ManageSitesFoldersProp> = ({ sites, setIsEdit, setName, setIsOpen, folders, subFolders, orgId, folderId, isSiteLoading, setIsFolder, setIsOrg, setIsDelete, handleNavigate, setId }) => {
     const t = useTranslations()
@@ -22,9 +24,6 @@ const ManageSitesFolderView: React.FC<ManageSitesFoldersProp> = ({ sites, setIsE
                         )))
                     }
                 </div>
-
-                {/* <button onClick={() => { setIsOpen(true); setIsOrg(true); setIsFolder(false) }} className='bg-[#2B4C88] rounded-2xl px-5 py-1 self-end text-white'>{t('settings.add')}</button> */}
-
             </div>
             <div className='bg-[var(--surface-100)] scrollbar-hide rounded-2xl md:rounded-4xl flex flex-col  md:p-6 p-3 overflow-y-auto h-full max-h-[35vh] md:max-h-[84vh]'>
                 <div className="flex items-center gap-2">

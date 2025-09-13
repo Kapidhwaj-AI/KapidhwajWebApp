@@ -10,7 +10,7 @@ export const HomeProfileCard = ({
   name: string;
   devices: number;
 }) => {
-  const t = useTranslations()
+  const t = useTranslations('home')
   return (
     <div className="flex items-center md:gap-3 gap-1">
       
@@ -21,8 +21,7 @@ export const HomeProfileCard = ({
           width={200} 
           height={200} 
           className="rounded-full object-cover"
-          priority={false}
-          loading="lazy"
+          priority
           sizes="200px"
         />
       </div>
@@ -32,10 +31,10 @@ export const HomeProfileCard = ({
             className="md:text-md text-sm font-bold text-white leading-[100%]"
             style={{ fontWeight: 700 }}
           >
-            {t('home.greetings')} {name ?? 'Your Name'}
+            {t('greetings')} {name ?? 'Your Name'}
           </h1>
           <p className="text-xs text-white mt-0.5">
-            {devices.toString()} {t('home.devices_active')}
+            {devices.toString()} {t('devices_active')}
           </p>
         </div>
       </div>

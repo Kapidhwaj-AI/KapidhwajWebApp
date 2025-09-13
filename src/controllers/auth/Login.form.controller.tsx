@@ -1,15 +1,13 @@
 "use client";
 
 import { LoginForm } from "@/views/auth/Login.form";
-import { getLocalStorageItem, setLocalStorageItem } from "@/lib/storage";
-import { setAuthToken } from "@/redux/slices/authSlice";
-import { AppDispatch } from "@/redux/store";
+import { setLocalStorageItem } from "@/lib/storage";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { RootActions, useStore } from "@/store";
+import { showToast } from "@/lib/showToast";
 
 export const LoginFormController = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +15,7 @@ export const LoginFormController = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
+  const setAuthToken = useStore((state:RootActions) => state.setAuthToken);
 
   const handleRegisterRedirect = () => {
     router.push("/register");
@@ -25,12 +23,8 @@ export const LoginFormController = () => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const phoneRegex = /^[0-9]{7,15}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-  const isValidHub = hub && typeof hub === 'object' && 'id' in hub && 'isRemotely' in hub;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,7 +32,6 @@ export const LoginFormController = () => {
     setIsError(false);
     setError("");
     try {
-    
       const key = emailRegex.test(username)
         ? "email"
         : phoneRegex.test(username)
@@ -52,17 +45,13 @@ export const LoginFormController = () => {
           [key]: username.trim(),
           password,
         },
-        // withCredentials: true
       });
 
       if (res.status === 200) {
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7);
-
-        setLocalStorageItem(LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.access_token, expiresAt: expiresAt.toISOString() }))
-        setLocalStorageItem('user', JSON.stringify(res.data.data))
-        dispatch(setAuthToken(res.data.access_token));
-
+        setLocalStorageItem([[LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.access_token, expiresAt: expiresAt.toISOString() })], ['user', JSON.stringify(res.data.data)]])
+        setAuthToken(res.data.access_token)
         window.location.href = "/home";
       }
     } catch (error) {
@@ -72,7 +61,7 @@ export const LoginFormController = () => {
         setError(
           error.response?.data?.message || "An error occurred during login"
         );
-        toast.error(error.message)
+        showToast(error.message,"error")
         console.error("Err:",error)
       } else {
         setError("An unexpected error occurred");

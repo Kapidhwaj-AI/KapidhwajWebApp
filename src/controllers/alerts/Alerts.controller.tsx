@@ -5,9 +5,8 @@ import { Alert } from '@/models/alert'
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AxiosError } from 'axios'
-import { RootState } from '@/redux/store'
-import { useSelector } from 'react-redux'
 import { showToast } from '@/lib/showToast'
+import { RootState, useStore } from '@/store'
 
 const AlertsController = () => {
     const [alerts, setAlerts] = useState<Alert[]>([])
@@ -38,15 +37,13 @@ const AlertsController = () => {
         licensePlateDetected,
         fireSmokeDetected,
         faceDetection
-    } = useSelector
-            ((state: RootState) => state.singleCameraSetting);
+    } = useStore
+            ((state: RootState) => state.singleCameraSettings);
     useEffect(() => {
         const loaddata = async () => {
             setIsLoading(true)
-            console.log("hello",)
             try {
                 setAlerts(await fetchAlerts(alertOffset, serviceType))
-                console.log("hello",)
             } catch (error) {
                 console.error(error)
                 if (error instanceof AxiosError && error.response?.status === 400) {
@@ -103,7 +100,6 @@ const AlertsController = () => {
 
     const filteredAlerts = useMemo(() => {
         if (search === "") return alerts;
-
         return alerts.filter((alert) => alert.alertType.includes(search ?? ''));
     }, [alerts, search]);
     const handleApplyFilter = async (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => {
@@ -119,7 +115,6 @@ const AlertsController = () => {
     }
 
     return (
-   
          <AlertsView search={search} setSearch={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)} serviceType={serviceType} err={err} setStartTime={setStartTime} isDateFiltered={isDateFiltered} isLoading={isLoading} selectedTab={selectedTab} setAlertsLoading={setAlertsLoading} setSelectedTab={changeTab} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setHasMore={setHasMore} hasMore={hasMore} handleApplyFilter={handleApplyFilter} setIsDateFiltered={setIsDateFiltered} setIsLoading={setIsLoading} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} startTime={startTime} endTime={endTime} date={date} setAlertOffset={setAlertOffset} setAlerts={setAlerts} filteredAlerts={filteredAlerts} fetchAlerts={fetchAlerts} filterDial={filterDial} />
     )
 }

@@ -1,8 +1,9 @@
-'use client';
+const IconMail = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconMail))
+const IconPhone = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconPhone))
 
-import { IconMail, IconPhone } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
 import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 
 export function HelpAndSupportDialogue({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     const t = useTranslations()

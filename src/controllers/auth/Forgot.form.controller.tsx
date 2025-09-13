@@ -3,8 +3,9 @@ import ForgotForm from '@/views/auth/Forgot.form';
 import { apiBaseUrl } from '@/services/config';
 import axios from 'axios';
 import React, {  useState } from 'react'
-import { OtpFormController } from './Otp.form.controller';
+const OtpFormController = dynamic(() => import('./Otp.form.controller').then((mod) => mod.OtpFormController))
 import { showToast } from '@/lib/showToast';
+import dynamic from 'next/dynamic';
 
 const ForgotFormController = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -53,8 +54,6 @@ const ForgotFormController = () => {
         }
        
     }
-
-
     return (
         <>
             <ForgotForm onSubmit={handleSendOtp} value={value} setValue={setValue} isError={isError} isLoading={isLoading} error={error}  />

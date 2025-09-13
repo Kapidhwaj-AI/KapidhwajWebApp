@@ -2,15 +2,13 @@
 import FavouritesView from '@/views/favourites/Favourites.view';
 import { protectApi } from '@/lib/protectApi';
 import { Favourite } from '@/models/favourite';
-import { RootState } from '@/redux/store';
 import React, { useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux';
 import { AxiosError } from 'axios';
 import { showToast } from '@/lib/showToast';
-import dynamic from 'next/dynamic';
+import { RootState, useStore } from '@/store';
 
 const FavouritesController = () => {
-    const toogleColumnValue = useSelector((state: RootState) => state.camera.toogleColumns);
+    const toogleColumnValue = useStore((state: RootState) => state.camera.toogleColumns);
     const [isDelete, setIsDelete] = useState(false)
     const [search, setSearch] = useState('')
     const [favourites, setFavourites] = useState<Favourite[]>([])

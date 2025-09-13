@@ -1,7 +1,7 @@
 import axios, { isAxiosError, Method } from "axios";
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
-
+import { showToast } from "./showToast";
 export interface ApiResponse<T> {
     data: T;
     status: number;
@@ -16,6 +16,7 @@ export async function protectApi<T, D = undefined>(
     isNotCustomHeader?: boolean,
     params?: unknown
 ) {
+
     const remoteHub = JSON.parse(getLocalStorageItem("Remotehub") ?? "{}");
     const localHub = JSON.parse(getLocalStorageItem("Localhub") ?? "{}");
 
@@ -65,18 +66,14 @@ export async function protectApi<T, D = undefined>(
                     headers,
                 });
             } else {
-                removeLocalStorageItem(LOCALSTORAGE_KEY);
-                removeLocalStorageItem('user')
-                removeLocalStorageItem('Localhub')
-                removeLocalStorageItem('Remotehub')
-                removeLocalStorageItem('Remotetemphub')
+                removeLocalStorageItem(['user', 'Remotehub', 'Localhub', 'Remotetemphub', LOCALSTORAGE_KEY])
+                showToast('Access Token is Expired Or Refresh token is Expired ', "error")
                 window.location.assign('/login');
             }
         }
         else if (isAxiosError(err) && err?.response?.status === 400 && err.response?.data.error === `Hub with ID "${remoteHub.id || localHub.id}" is not connected.`) {
-            removeLocalStorageItem('Localhub')
-            removeLocalStorageItem('Remotehub')
-            removeLocalStorageItem('Remotetemphub')
+            removeLocalStorageItem(['Remotehub', 'Localhub', 'Remotetemphub'])
+            window.location.assign('/home')
         }
         console.error(err, "err from protectApi");
         throw err;

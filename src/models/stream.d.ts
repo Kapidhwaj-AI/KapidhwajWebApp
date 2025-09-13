@@ -40,14 +40,14 @@ export interface StreamsPageViewProps {
     setIsEdit: (val: boolean) => void;
     setSettingDial: (val: boolean) => void;
     setFilterDial: (val: boolean) => void;
-    setAlertOffset: (val: number) => void;
+    setAlertOffset: React.Dispatch<React.SetStateAction<number>>;
     setRecordings: (val: RecordedClip[]) => void;
     makeFav: boolean;
     toggleStreamFav: () => void;
     fetchRecordings: (offSet: number) => Promise<RecordedClip[]>;
     setHasRecordingMore: (val: boolean) => void;
     setRecordingLoading: (val: boolean) => void;
-    setRecordingOffset: (val: number) => void;
+    setRecordingOffset: React.Dispatch<React.SetStateAction<number>>;
     recordingOffset: number;
     recordingLoading: boolean;
     recordings: RecordedClip[];
@@ -90,5 +90,7 @@ export interface StreamsPageViewProps {
     handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void;
     isAiServiceLoading: boolean;
     serviceType: string | null
-    setIsAllAlertsLoading:(val:boolean) => void
+    setIsAllAlertsLoading:(val:boolean) => void;
+    topAlertRef: React.RefObject<HTMLDivElement | null>;
+    topRecordingRef: React.RefObject<HTMLDivElement | null>
 }

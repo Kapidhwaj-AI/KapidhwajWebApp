@@ -1,4 +1,3 @@
-'use client';
 
 import { Notification } from '@/models/notification';
 import { getNotificationStyle } from '@/utils/notification';

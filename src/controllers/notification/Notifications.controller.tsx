@@ -4,9 +4,8 @@ import { protectApi } from '@/lib/protectApi';
 import { Notification } from '@/models/notification';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AxiosError } from 'axios';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
 import { showToast } from '@/lib/showToast';
+import { RootState, useStore } from '@/store';
 
 const NotificationsController = () => {
     const [offset, setOffset] = useState(0);
@@ -31,8 +30,8 @@ const NotificationsController = () => {
         licensePlateDetected,
         fireSmokeDetected,
         faceDetection
-    } = useSelector
-            ((state: RootState) => state.singleCameraSetting);
+    } = useStore
+            ((state: RootState) => state.singleCameraSettings);
     const handleReadAll = async () => {
         try {
 

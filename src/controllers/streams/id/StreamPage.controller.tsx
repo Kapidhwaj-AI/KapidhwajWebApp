@@ -7,11 +7,11 @@ import { Camera, CameraLocation } from '@/models/camera';
 import { RecordedClip } from '@/models/clip';
 
 import { StreamFormData } from '@/models/stream';
-import { RootState } from '@/redux/store';
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp';
 import React, { use, useEffect, useMemo, useRef, useState } from 'react'
-import { useSelector } from 'react-redux';
+
 import { showToast } from '@/lib/showToast';
+import { RootActions, RootState, useStore } from '@/store';
 
 const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) => {
     const { id } = use(params);
@@ -28,10 +28,12 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const [hasMore, setHasMore] = useState(true)
     const [alertsLoading, setAlertsLoading] = useState(false)
     const alertEndRef = useRef<HTMLDivElement>(null)
+    const topAlertRef = useRef<HTMLDivElement>(null)
     const [cameraLocation, setCameraLocation] = useState<CameraLocation>()
     const [hasRecordingMore, setHasRecordingMore] = useState(true)
     const [recordingLoading, setRecordingLoading] = useState(false)
     const recordingref = useRef<HTMLDivElement>(null)
+    const topRecordingRef = useRef<HTMLDivElement>(null)
     const [selectedTab, setSelectedTab] = useState('all')
     const [date, setDate] = useState<Date | undefined>();
     const [startTime, setStartTime] = useState<Date | undefined>();
@@ -50,6 +52,9 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         overlapSensitivity: 0,
         sceneDensity: 0
     });
+    const setIsPeople = useStore((state: RootActions) => state.setIsPeople);
+    const setCurrentCameraId = useStore((state: RootActions) => state.setCurrentCameraId);
+
     const [isEditLoading, setIsEditLoading] = useState(false)
     const [stream, setStream] = useState(false)
     const {
@@ -60,10 +65,15 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         licensePlateDetected,
         fireSmokeDetected,
         faceDetection
-    } = useSelector((state: RootState) => state.singleCameraSetting);
+    } = useStore((state: RootState) => state.singleCameraSettings);
+
+
+
     const { data: organizations } = useOrganizations();
     const fetchCamera = async (id: string) => {
         const res = await protectApi<Camera, undefined>(`/camera?cameraId=${id}`)
+        setIsPeople(res?.data.data.is_people_count_active !==0)
+
         return res.data.data
     }
     const fetchCameraLocation = async () => {
@@ -88,15 +98,16 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         setLoading(true);
         Promise.allSettled([
             fetchCamera(id),
-            fetchRecordings(recordingOffset),
+            fetchRecordings(0),
             fetchIsFav(id),
             fetchCameraLocation()
         ])
-            .then(([camRes,  recRes, isFav, location]) => {
+            .then(([camRes, recRes, isFav, location]) => {
                 const newFormData: Partial<StreamFormData> = {};
                 if (camRes.status === "fulfilled") {
                     setCamera(camRes.value);
                     setStream(camRes.value.webrtc_url !== null && camRes.value?.rtsp_url !== null);
+                    setCurrentCameraId({id: camRes.value.camera_id})
                     newFormData.name = camRes.value.name ?? '';
                     newFormData.people_threshold_count = camRes.value.people_threshold_count ?? 0;
                     newFormData.organizationId = camRes.value.organization_id ?? '';
@@ -105,7 +116,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                     newFormData.sceneDensity = camRes.value.topk_pre_nms;
                 }
 
-                if (recRes.status === "fulfilled") setRecordings(recRes.value);
+                if (recRes.status === "fulfilled") { setRecordings(recRes.value)};
 
                 if (isFav.status === "fulfilled") setMakeFav(isFav.value.is_fav);
                 if (location.status === 'fulfilled') {
@@ -144,7 +155,6 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     useEffect(() => {
         const alertFetch = async () => {
             setIsAllAlertLoading(true)
-            console.log(alertOffset,"alertOffset")
             try {
                 const res = await fetchAlerts(alertOffset, serviceType)
                 setAlerts(res)
@@ -231,9 +241,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         if (date && startTime && endTime) {
             const start = getUtcTimestamp(date, startTime)
             const end = getUtcTimestamp(date, endTime)
-            console.log(start, end, "times")
             const res = await fetchAlerts(alertOffset, serviceType, start, end)
-            console.log("hello", res)
             setIsDateFiltered(true)
             setAlerts(res)
             setFilterDial(false)
@@ -307,7 +315,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
         } catch (error) {
             console.error(error)
-            showToast(error.message ?? 'An error occured',"error")
+            showToast(error.message ?? 'An error occured', "error")
         } finally {
             setIsEditLoading(false)
         }
@@ -342,10 +350,10 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         setSelectedTab(tab);
         setAlertOffset(0)
         setHasMore(true)
-    };
-    const isFullscreen = useSelector((state: RootState) => state.camera.isFullScreen)
+    }
+    const isFullscreen = useStore((state: RootState) => state.camera.isFullScreen)
     return (
-        <StreamPageView setIsAllAlertsLoading={setIsAllAlertLoading} isAllAlertLoading={isAllAlertLoading} isAiServiceLoading={isMlService} loading={loading} selectedTab={selectedTab} setAlertOffset={setAlertOffset} setAlerts={setAlerts} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setFormData={setFormData} setHasMore={setHasMore} setHasRecordingMore={setHasRecordingMore} setIsDateFiltered={setIsDateFiltered} setIsEdit={setIsEdit} setRecordingLoading={setRecordingLoading} setRecordingOffset={setRecordingOffset} setRecordings={setRecordings} setSelectedTab={changeTab} setSettingDial={setSettingDial} setStartTime={setStartTime} settingDial={settingDial} startTime={startTime} stream={stream} isDateFiltered={isDateFiltered} isEdit={isEdit} isEditLoading={isEditLoading} isFullscreen={isFullscreen} camera={camera} cameraLocation={cameraLocation} makeFav={makeFav} toggleStreamFav={toggleStreamFav} handleAiToggle={handleAiToggle} handleApplyFilter={handleApplyFilter} handleMotionToggle={handleMotionToggle} handleRecordingToggle={handleRecordinToggle} serviceType={serviceType} handleSave={handleSave} handleToggleStream={handleToggleStream} hasMore={hasMore} hasRecordingMore={hasRecordingMore} fetchAlerts={fetchAlerts} fetchRecordings={fetchRecordings} filterDial={filterDial} filteredAlerts={filteredAlerts} formData={formData} recordingLoading={recordingLoading} recordingOffset={recordingOffset} recordingref={recordingref} recordings={recordings} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} date={date} endTime={endTime} organizations={organizations} />
+        <StreamPageView topAlertRef={topAlertRef} topRecordingRef={topRecordingRef} setIsAllAlertsLoading={setIsAllAlertLoading} isAllAlertLoading={isAllAlertLoading} isAiServiceLoading={isMlService} loading={loading} selectedTab={selectedTab} setAlertOffset={setAlertOffset} setAlerts={setAlerts} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setFormData={setFormData} setHasMore={setHasMore} setHasRecordingMore={setHasRecordingMore} setIsDateFiltered={setIsDateFiltered} setIsEdit={setIsEdit} setRecordingLoading={setRecordingLoading} setRecordingOffset={setRecordingOffset} setRecordings={setRecordings} setSelectedTab={changeTab} setSettingDial={setSettingDial} setStartTime={setStartTime} settingDial={settingDial} startTime={startTime} stream={stream} isDateFiltered={isDateFiltered} isEdit={isEdit} isEditLoading={isEditLoading} isFullscreen={isFullscreen} camera={camera} cameraLocation={cameraLocation} makeFav={makeFav} toggleStreamFav={toggleStreamFav} handleAiToggle={handleAiToggle} handleApplyFilter={handleApplyFilter} handleMotionToggle={handleMotionToggle} handleRecordingToggle={handleRecordinToggle} serviceType={serviceType} handleSave={handleSave} handleToggleStream={handleToggleStream} hasMore={hasMore} hasRecordingMore={hasRecordingMore} fetchAlerts={fetchAlerts} fetchRecordings={fetchRecordings} filterDial={filterDial} filteredAlerts={filteredAlerts} formData={formData} recordingLoading={recordingLoading} recordingOffset={recordingOffset} recordingref={recordingref} recordings={recordings} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} date={date} endTime={endTime} organizations={organizations} />
     )
 }
 

@@ -23,7 +23,7 @@ interface SavedCamerasProps {
     setSelectedSite: (val: string) => void;
     selectedSite: string;
     sites: Organization[];
-    fetchSavedHubs: () => void;
+    fetchSavedHubs: () => Promise<void>;
     camLoading: boolean
 }
 
@@ -114,6 +114,11 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
             setEditLoading(false)
         }
     }
+    useEffect(() => {
+        if (camera?.camera_id && !isEditCameraOpen) {
+            handleSwitchToggle(true)
+        }
+    }, [camera, camera?.camera_id])
     const handleSave = async () => {
         setLoading(true)
         const fallbackFolderId =
@@ -138,18 +143,6 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
 
             if (res.status === 200) {
                 setIsEditCameraOpen(false)
-                await fetchSavedHubs()
-                setFormData({
-                    name: '',
-                    people_threshold_count: 0,
-                    organizationId: '',
-                    folderId: -1,
-                    subfolder: -1
-                })
-            }
-            if (res.status === 201) {
-                setIsEditCameraOpen(false)
-                handleSwitchToggle(true)
                 await fetchSavedHubs()
                 setFormData({
                     name: '',
@@ -228,6 +221,9 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                 selectedSite={selectedSite}
                 hubId={hub.id}
                 fetchSavedHubs={fetchSavedHubs}
+                handleSwitchToggle={handleSwitchToggle}
+                camera={camera}
+                setCamera={setCamera}
             />
             {isEditCameraOpen &&
                 <EditStreamDialogue

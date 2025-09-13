@@ -1,17 +1,14 @@
 'use client'
 import HomeView from '@/views/home/Home.view'
 import { protectApi } from '@/lib/protectApi'
-import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from '@/lib/storage'
+import { getLocalStorageItem, setLocalStorageItem } from '@/lib/storage'
 import { Hub, ManageHub } from '@/models/settings'
 import React, { useEffect, useState } from 'react'
-import HubDialogue from '@/components/dialogue/HubDialogue'
+const HubDialogue = dynamic(() => import('@/components/dialogue/HubDialogue'), { ssr: false })
 import { Organization } from '@/models/organization'
-import SiteFolderModal from '@/components/dialogue/SiteFolderModal'
-import { setLocalHUb, setRemoteHub } from '@/redux/slices/hubSlice'
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from '@/redux/store'
-
-
+const SiteFolderModal = dynamic(() => import('@/components/dialogue/SiteFolderModal'), { ssr: false })
+import dynamic from 'next/dynamic'
+import { RootActions, RootState, useStore } from '@/store'
 const HomeController = () => {
     const [nearbyHubs, setNearbyHubs] = useState<ManageHub[]>([])
     const [savedHubs, setSavedHubs] = useState<Hub[]>([])
@@ -21,7 +18,10 @@ const HomeController = () => {
 
     const [devices, setDevices] = useState(0)
     const [isAddModal, setIsAddModal] = useState(false)
-    const storedHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
+    const localHub = useStore((state: RootState) => state.hub.localHub)
+    const remoteHub = useStore((state: RootState) => state.hub.remoteHub)
+    const storedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
+    const storedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const tempHub = JSON.parse(getLocalStorageItem('Remotetemphub') ?? '{}')
     const [isSaving, setIsSaving] = useState(false);
     const [showPassword, setShowPassword] = useState(false)
@@ -32,7 +32,9 @@ const HomeController = () => {
     const [sites, setSites] = useState<Organization[]>([])
     const [isSiteAddModal, setIsSiteAddModal] = useState(false)
     const [siteName, setSiteName] = useState('')
-    const dispatch = useDispatch<AppDispatch>()
+    const setRemoteHub = useStore((state: RootActions) => state.setRemoteHub);
+    const setLocalHUb = useStore((state: RootActions) => state.setLocalHUb);
+
     const fetchHubs = async () => {
         setIsHubLoading(true)
         try {
@@ -42,9 +44,7 @@ const HomeController = () => {
 
         } catch (error) {
             console.error("err:", error)
-
         } finally {
-            ``
             setIsHubLoading(false)
         }
 
@@ -58,17 +58,8 @@ const HomeController = () => {
             setSavedHubs(data)
         } catch (error) {
             console.error("err:", error)
-            if (error.status === 401 && error.response.data.message === "THE BEARER TOKEN IS INVALIDATED (LOGGED OUT)") {
-                document.cookie = "locale=; path=/; max-age=0";
-                removeLocalStorageItem('kapi-token')
-                removeLocalStorageItem('hub')
-                removeLocalStorageItem('temphub')
-                window.location.href = '/login';
-            }
-
         } finally {
             setIsSavedHubsLoading(false)
-
         }
     }
     const fetchSites = async () => {
@@ -81,9 +72,6 @@ const HomeController = () => {
                 setSites(sites)
             }
         } catch (error) {
-            if (error.status === 400 && error.response.data.message === `Hub with ID ${storedHub.id} is not connected`) {
-                setLocalStorageItem("hub", JSON.stringify(tempHub))
-            }
             console.error("err:", error)
         }
     }
@@ -93,9 +81,6 @@ const HomeController = () => {
     }, [])
     useEffect(() => {
         if (nearbyHubs.length > 0 && savedHubs.length > 0) {
-            console.log("SavedHubs:", savedHubs);
-            console.log("NearbyHubs:", nearbyHubs);
-
             const commonHubs = savedHubs.filter(saved => {
                 const match = nearbyHubs.some(nearby => {
                     const result = nearby.name.trim() === String(saved.id).trim();
@@ -103,36 +88,23 @@ const HomeController = () => {
                 });
                 return match;
             });
-
-
             setCommonHubs(commonHubs);
-
             if (commonHubs.length === 1) {
-                console.log("Final CommonHubs:", commonHubs);
-
-                dispatch(setLocalHUb(commonHubs[0]));
+                setLocalHUb(commonHubs[0])
             }
         }
     }, [savedHubs, nearbyHubs]);
 
     const handleAccessRemotely = (hub: Hub) => {
-        // const findHub = nearbyHubs.find((item) => item.name === hub.id)
-        // if (findHub) {
-        //     setLocalStorageItem('hub', JSON.stringify({ ...hub, isRemotely: !isRemotely }));
-        //     setIsRemotely((prev) => !prev)
-        // }
-        // else {
-        dispatch(setRemoteHub(hub))
-        if (storedHub) {
-            setLocalStorageItem('Remotetemphub', JSON.stringify(storedHub))
+        setRemoteHub(hub)
+        if (storedRemoteHub) {
+            setLocalStorageItem('Remotetemphub', JSON.stringify(storedRemoteHub))
         } else {
             setLocalStorageItem('Remotetemphub', JSON.stringify(hub))
         }
-        window.location.reload();
     }
     const handleAccessNearbyHubs = (hub: ManageHub) => {
-        dispatch(setLocalHUb(commonHubs.find((item) => item.id === hub.name) ?? null))
-        // window.location.reload();
+        setLocalHUb(commonHubs.find((item) => item.id === hub.name) ?? null)
     }
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

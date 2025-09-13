@@ -1,7 +1,4 @@
-'use client';
-
 import { FormEvent, SetStateAction } from 'react';
-import { IconX, IconCheck } from '@tabler/icons-react';
 import Image from 'next/image';
 import Modal from '../ui/Modal';
 import { PersonFormaData } from '@/models/settings';
@@ -10,7 +7,9 @@ import { useTranslations } from 'next-intl';
 import SelectField from '../ui/Select.field';
 import { DOBPicker } from '../ui/DOBPicker';
 import Spinner from '../ui/Spinner';
-
+import dynamic from 'next/dynamic';
+const IconX = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconX))
+const IconCheck = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconCheck))
 
 interface AddNewPersonDialogueProps {
     isOpen: boolean;
@@ -47,7 +46,6 @@ export function AddNewPersonDialogue({ isOpen, onClose, formData, setFormData, h
                     {/* Gender Field */}
                     <SelectField data={[{ id: 'male', name: t('managePeople.add_person.male') }, { id: 'female', name: t('managePeople.add_person.female') }, { id: 'other', name: t('managePeople.add_person.other') }]} label={t('managePeople.add_person.gender')} placeholder={t('managePeople.add_person.select_gender')} value={formData.gender} setValue={(e) => setFormData((prev) => ({ ...prev, gender: e }))} />
                 </div>
-                {/* Category Field */}
                 <SelectField value={formData.category} label={t('managePeople.add_person.category')} placeholder={t('managePeople.add_person.select_category')} data={categories} setValue={(e) => setFormData((prev) => ({ ...prev, category: e }))} />
 
 

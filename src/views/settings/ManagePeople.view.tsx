@@ -1,17 +1,25 @@
-import { AddNewCategoryDialogue } from '@/components/dialogue/AddNewCategoryDialogue'
-import { AddNewPersonDialogue } from '@/components/dialogue/AddNewPersonDialogue'
-import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
-import { Button } from '@/components/ui/button'
+const AddNewCategoryDialogue = dynamic(() => import('@/components/dialogue/AddNewCategoryDialogue').then((mod) => mod.AddNewCategoryDialogue))
+const AddNewPersonDialogue = dynamic(() => import('@/components/dialogue/AddNewPersonDialogue').then((mod) => mod.AddNewPersonDialogue))
+const DeleteDialog = dynamic(() => import('@/components/dialogue/DeleteDialog').then((mod) => mod.DeleteDialog))
+const Button = dynamic(() => import('@/components/ui/button').then((mod) => mod.Button))
 import InfiniteScrolling from '@/components/ui/InfiniteScrolling'
 import Spinner from '@/components/ui/Spinner'
 import { getLocalStorageItem } from '@/lib/storage'
 import { ManagePeopleProps, Person } from '@/models/person'
 import { GOOGLE_KPH_BUCKET_URL } from '@/services/config'
-import { IconCake, IconCategory2, IconChevronRight, IconGenderMale, IconPencil, IconTrash, IconUserPlus } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+
+const IconCake = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconCake))
+const IconCategory2 = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconCategory2))
+const IconChevronRight = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconChevronRight))
+const IconGenderMale = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconGenderMale))
+const IconPencil = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconPencil))
+const IconTrash = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconTrash))
+const IconUserPlus = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconUserPlus))
 
 const ManagePeopleView: React.FC<ManagePeopleProps> = ({ offset, setHasMore, setPersonLoading, personLoading, hasMore, setOffset, divRef, setPerson, handleSelectSite, isAddCategoryModalOpen, handleCatSubmit, isAddPersonModalOpen, isCatDelete, isCatEdit, isPersonDelete, isPersonEdit, handleDelete, handleImageUpload, handleOnSubmit, selectedImage, setCategoryData, setFormData, setIsCatEdit, setIsPersonEdit, formData, catId, categoryData, personId, isSaving, selectedId, setCatId, setAddCategoryModalOpen, setAddPersonModalOpen, setIsCateDelete, setIsPersonDelete, setPersonId, setSelectedId, sharedWithMe, people, categories, isLoading, mySites, handleEditCategory, handleEditePerson, getAge,
 }) => {
@@ -19,8 +27,7 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ offset, setHasMore, set
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
     const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-    const baseUrl = isValidHub ? remoteHub.id ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
-    console.log("people",people)
+    const baseUrl = isValidHub ? remoteHub.id ? `http://turn.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
     return (
         <div className="h-full flex flex-col gap-3 min-h-0 px-2 md:px-4">
             {/* Header Section */}
@@ -117,7 +124,7 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ offset, setHasMore, set
                                                     <div className="flex h-full">
                                                         <Link href={{ pathname: "/person-details", query: { id:person.id }} } className="w-[106px] 2xl:w-[120px] 4xl:w-[151px] h-full flex-shrink-0">
                                                             <Image
-                                                                src={person.gcp_image_path ? (baseUrl + person.gcp_image_path) : '/dummy-user.jpg'}
+                                                                src={person.gcp_image_path ? (baseUrl + person.gcp_image_path) : '/dummy-user.webp'}
                                                                 alt={person.name}
                                                                 width={151}
                                                                 height={199}
@@ -215,8 +222,6 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ offset, setHasMore, set
                 isOpen={isAddPersonModalOpen}
                 onClose={() => { setAddPersonModalOpen(false); setIsPersonEdit(false); setFormData({ file: undefined, name: '', dob: undefined, category: '', gender: '' }) }}
             />}
-
-            {/* Add New Category Dialog */}
             {selectedId && isAddCategoryModalOpen && <AddNewCategoryDialogue
                 colors={[
                     '#b80000',
@@ -235,18 +240,6 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ offset, setHasMore, set
                 onClose={() => { setAddCategoryModalOpen(false); setIsCatEdit(false); setCategoryData({ name: '', colorCode: '' }) }}
             />}
             {(isCatDelete || isPersonDelete) && <DeleteDialog title={isCatDelete ? t('managePeople.manage_categories.delete_modal.message') : t('managePeople.delete_modal.message')} onClose={() => { setIsCateDelete(false); setIsPersonDelete(false) }} data={isCatDelete ? catId : personId} handleDelete={handleDelete} />}
-            <style jsx global>{`
-                /* Hide scrollbar for Chrome, Safari and Opera */
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-
-                /* Hide scrollbar for IE, Edge and Firefox */
-                .scrollbar-hide {
-                    -ms-overflow-style: none;  /* IE and Edge */
-                    scrollbar-width: none;  /* Firefox */
-                }
-            `}</style>
         </div>
     )
 }

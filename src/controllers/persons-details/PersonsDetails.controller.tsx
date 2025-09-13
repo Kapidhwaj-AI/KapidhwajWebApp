@@ -9,7 +9,6 @@ import { getUtcTimestamp } from '@/utils/getUTCTimestamp';
 const PersonsDetailsController = () => {
     const searchParams = useSearchParams();
     const id = searchParams.get("id");
-    console.log("PersonId", id)
     const [personDatails, setPersonDetails] = useState<Alert[]>([])
     const [offset, setOffset] = useState(0)
     const [filterDial, setFilterDial] = useState(false)
@@ -33,7 +32,6 @@ const PersonsDetailsController = () => {
         }
 
         const res = await protectApi<Alert[]>('/alert/person', "GET", undefined, undefined, false, params)
-        console.log('Alertsbypersonid', res.data.data)
         return res.data.data
 
     }

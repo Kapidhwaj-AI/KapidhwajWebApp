@@ -24,7 +24,6 @@ const Breadcrumbs = () => {
     }
     const style = 'sm:text-md md:text-lg lg:text-xl xl:text-2xl font-medium whitespace-nowrap'
     const t = useTranslations()
-    console.log(paths,"paths")
     return (
         <div className='flex gap-2 items-center flex-wrap'>
             <BackButton />

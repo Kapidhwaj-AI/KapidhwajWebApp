@@ -5,15 +5,14 @@ import StreamsView from '@/views/streams/Streams.view';
 import { useOrganizations } from '@/hooks/useOrganizations';
 import { Camera } from '@/models/camera';
 import { Folders, Organization } from '@/models/organization';
-import { RootState } from '@/redux/store';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux';
 import { AxiosError } from 'axios';
 import { showToast } from '@/lib/showToast';
+import { RootState, useStore } from '@/store';
 
 const StreamsController = () => {
-    const toogleColumnValue = useSelector((state: RootState) => state?.camera?.toogleColumns);
+    const toogleColumnValue = useStore((state: RootState) => state.camera.toogleColumns);
     const [selectedOrganization, setSelectedOrganization] = useState<Organization | null>(null);
     const [selectedFolder, setSelectedFolder] = useState<Folders | null>(null)
     const [selectedChildFolder, setSelectedChildFolder] = useState<Folders | null>(null)
@@ -40,7 +39,6 @@ const StreamsController = () => {
             showToast(error.response?.data.error, "error")
         }
     }, [error])
-    console.log(error, "errorr")
     const visibleCameras = useMemo(() => {
         return searchQuery.trim()
             ? selectedData?.filter((camera) =>

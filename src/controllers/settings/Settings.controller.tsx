@@ -1,22 +1,24 @@
 'use client'
 import SettingsView from '@/views/settings/Settings.view';
-import { IconDevices, IconFriends, IconLanguage, IconLifebuoy, IconLockAccess, IconLockSquareRounded, IconMapPin, IconNetwork, IconPlus, IconUser } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import React, { useState } from 'react'
+const IconDevices = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconDevices))
+const IconFriends = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconFriends))
+const IconLanguage = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconLanguage))
+const IconLifebuoy = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconLifebuoy))
+const IconLockAccess = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconLockAccess))
+const IconLockSquareRounded = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconLockSquareRounded))
+const IconMapPin = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconMapPin))
+const IconPlus = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconPlus))
+const IconUser = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconUser))
 
 const SettingsController = () => {
-    const [showMainSettingDial, setShowMainSettingDial] = useState(false);
     const [showSelectLanguageDial, setShowSelectLanguageDial] = useState(false);
     const [showHelpDial, setShowHelpDial] = useState(false);
     const t = useTranslations()
 
     const settingsItems = [
-        // {
-        //   id: 0,
-        //   title: "Main Settings",
-        //   icon: <IconAdjustmentsAlt size={40} />,
-        //   path: "/settings"
-        // },
         {
             id: 1,
             title: t("manage_devices"),
@@ -81,10 +83,8 @@ const SettingsController = () => {
     return (
         <SettingsView
             setShowHelpDial={setShowHelpDial}
-            setShowMainSettingDial={setShowMainSettingDial}
             setShowSelectLanguageDial={setShowSelectLanguageDial}
             settingsItems={settingsItems} showHelpDial={showHelpDial}
-            showMainSettingDial={showMainSettingDial}
             showSelectLanguageDial={showSelectLanguageDial}
         />
     )

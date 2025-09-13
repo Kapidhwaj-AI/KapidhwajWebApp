@@ -23,9 +23,8 @@ import { ProfileMenu } from './ProfileMenu';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { getLocalStorageItem } from '@/lib/storage';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
 import dynamic from 'next/dynamic';
+import { RootState, useStore } from '@/store';
 
 type SidebarTabs = "/home" | "/streams" | "/alerts" | "/favourites" | "/notifications" | "/settings";
 
@@ -45,8 +44,8 @@ export default function Sidebar() {
   const [isValidHub, setIsValidHub] = useState(false)
   const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
   const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
-  const localHub = useSelector((state: RootState) => state.hub.localHub)
-  const remoteHub = useSelector((state: RootState) => state.hub.remoteHub)
+  const localHub = useStore((state: RootState) => state.hub.localHub)
+  const remoteHub = useStore((state: RootState) => state.hub.remoteHub)
   const t = useTranslations();
   useEffect(() => {
     if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub?.id || savedRemoteHub?.id)) {
@@ -58,7 +57,7 @@ export default function Sidebar() {
     { icon: <IconShareplay />, label: t('streams.title'), path: '/streams' },
     { icon: <IconUrgent />, label: t('alerts.title'), path: '/alerts' },
     { icon: <IconFolderHeart />, label: t('favourites.title'), path: '/favourites' },
-    { icon: <IconBellRinging/>, label: t('notifications.title'), path: '/notifications' },
+    { icon: <IconBellRinging />, label: t('notifications.title'), path: '/notifications' },
     { icon: <IconSettings2 />, label: t('settings.title'), path: '/settings' },
   ];
 

@@ -1,4 +1,3 @@
-"use client";
 import { useState, useEffect } from "react";
 import { Folders, Organization } from "@/models/organization";
 import dynamic from "next/dynamic";

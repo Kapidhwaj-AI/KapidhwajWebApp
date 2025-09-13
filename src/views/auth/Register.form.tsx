@@ -53,7 +53,6 @@ export const RegisterForm = ({
         onSubmit={onSubmit}
         className="space-y-1.5 xs:space-y-2 sm:space-y-2.5"
       >
-        {/* Name Field */}
         <div className="flex justify-between gap-4">
           <InputField
             label="First Name"
@@ -71,8 +70,6 @@ export const RegisterForm = ({
             required
           />
         </div>
-
-        {/* Username Field */}
         <InputField
           label="Username"
           placeholder="Enter your username..."
@@ -80,8 +77,6 @@ export const RegisterForm = ({
           setValue={setUsername}
           required
         />
-
-        {/* Phone Field */}
         <InputField
           label="Phone"
           placeholder="Enter your phone number..."
@@ -89,8 +84,6 @@ export const RegisterForm = ({
           setValue={setPhone}
           required
         />
-
-        {/* Email Field */}
         <InputField
           label="Email"
           placeholder="Enter your email..."
@@ -99,7 +92,6 @@ export const RegisterForm = ({
           required
         />
 
-        {/* Password Field */}
         <InputField
           label="Password"
           placeholder="Enter your password..."
@@ -111,15 +103,11 @@ export const RegisterForm = ({
           showPassword={showPassword}
           required
         />
-
-        {/* Error Message */}
         {isError && (
           <div className="text-red-500 text-[11px] xs:text-xs sm:text-sm text-center">
             {error}
           </div>
         )}
-
-        {/* Register Button */}
         <button
           type="submit"
           className="w-full h-[35px] sm:h-[40px] md:h-[45px] bg-[#2B4C88] hover:bg-blue-700 text-white text-sm sm:text-base rounded-full transition-colors"
@@ -127,7 +115,6 @@ export const RegisterForm = ({
           {isLoading ? <Spinner /> : 'Register'}
         </button>
 
-        {/* OR Divider */}
         <div className="flex items-center gap-3 py-2 sm:py-3">
           <div className="w-full bg-[var(--surface-300)]  h-[1px] dark:bg-white "></div>
           <span className="flex items-center justify-center text-xs sm:text-sm text-gray-500 dark:text-white ">
@@ -136,7 +123,6 @@ export const RegisterForm = ({
           <div className="w-full bg-[var(--surface-300)]  h-[1px] dark:bg-white"></div>
         </div>
 
-        {/* Sign In Button */}
         <button
           type="button"
           onClick={redirectLogin}

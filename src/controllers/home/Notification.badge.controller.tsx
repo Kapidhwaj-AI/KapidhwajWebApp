@@ -1,6 +1,6 @@
-"use client";
-
-import { NotificationBadge } from "@/components/ui/Notification.badge";
+const NotificationBadge = dynamic(() => import('@/components/ui/Notification.badge').then((mod) => mod.NotificationBadge), {
+  ssr: false,
+});
 import { protectApi } from "@/lib/protectApi";
 import { showToast } from "@/lib/showToast";
 import { Notification } from "@/models/notification";

@@ -1,9 +1,8 @@
 import { cn } from '@/lib/utils';
 import React from 'react'
 import { useTranslations } from "next-intl";
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
 import dynamic from 'next/dynamic';
+import { RootState, useStore } from '@/store';
 const IconBounceRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBounceRight),
     { ssr: false });
 const IconFireExtinguisher = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFireExtinguisher),
@@ -22,10 +21,10 @@ const IconTreadmill = dynamic(() => import("@tabler/icons-react").then((mod) => 
     { ssr: false });
 function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selectedTab: string, setSelectedTab: (val: string) => void }) {
     const t = useTranslations()
-    const isPeople = useSelector(
+    const isPeople = useStore(
         (state: RootState) => state.singleCamera.isPeople,
     );
-    const peopleCount = useSelector(
+    const peopleCount = useStore(
         (state: RootState) => state.singleCamera.peopleCount,
     );
     const tabFilters = [
@@ -39,27 +38,27 @@ function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selected
     ];
     console.log(selectedTab, "hello")
     return (
-        <div className="flex gap-2 md:gap-4 min-h-min overflow-x-auto w-full scrollbar-hide p-2 pb-4 px-4 justify-start md:justify-normal">
+        <div className="flex gap-2 md:gap-4  overflow-x-auto w-full scrollbar-hide p-2 pb-4 px-4 justify-start md:justify-normal">
             {tabFilters.map((tf, index) => (
                 <button
                     key={index}
                     onClick={() => setSelectedTab(tf.value)}
                     className={cn(
-                        'flex flex-col items-center justify-center',
+                        'flex  items-center justify-center gap-2',
                         'px-3 rounded-lg md:rounded-xl hover:bg-white hover:text-black',
                         selectedTab === tf.value
                             ? 'bg-[#2B4C88] text-white'
                             : 'bg-[var(--surface-350)] text-[#888888]'
                     )}
                 >
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center flex-col justify-center">
                         {React.cloneElement(tf.icon, { size: 16 })}
+                        <span className="text-xs mt-1">{tf.label}</span>
                     </div>
-                    <span className="text-xs mt-1">{tf.label}</span>
-                    {tf.value === 'PEOPLE_COUNT' && isPeople && (<div className={`rounded-full p-2 ${selectedTab === tf.value
+                    {tf.value === 'PEOPLE_COUNT' && isPeople && (<div className={`rounded-full flex px-1 justify-center items-center ${selectedTab === tf.value
                         ? ' bg-[#888888]'
                         : ' bg-white'}`}>
-                        <span> {peopleCount?.people_count}</span>
+                        <span className="text-xs text-center self-center "> {peopleCount?.people_count}</span>
                     </div>)}
                 </button>
             ))}

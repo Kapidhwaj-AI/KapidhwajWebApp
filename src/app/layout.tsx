@@ -5,6 +5,8 @@ import { Providers } from "@/providers/Providers";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import { ToastProvider } from "@/components/common/ToastProvider";
+
+
 export const metadata: Metadata = {
   title: "Kapidhwaj AI",
   description: "Kapidhwaj AI is a smart surveillance system with AI-powered cameras for face recognition, vehicle number plate detection, fire & smoke alerts, people counting, intrusion detection, and secure video recordings.",
@@ -24,7 +26,6 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <head>
         <link rel="preload" as="image" href="/assets/images/auth-bg.webp" />
-        <link rel="preload" as="image" href="/assets/images/logo-square.webp" />
         <link rel="preload" as="image" href="/assets/images/logo-rectangle.webp" />
       </head>
       <body
@@ -32,7 +33,7 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
-            <ToastProvider/>
+            <ToastProvider/> 
             {children} 
           </Providers>
         </NextIntlClientProvider>

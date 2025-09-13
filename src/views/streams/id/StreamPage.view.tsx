@@ -38,7 +38,7 @@ import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 
 
-const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
+const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, topAlertRef, topRecordingRef, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
     startTime, stream, fetchAlerts, date, fetchRecordings, filterDial, filteredAlerts, formData, recordingLoading, recordingOffset, recordingref, recordings, alertEndRef, alertOffset, alerts, alertsLoading, handleAiToggle, handleMotionToggle, handleRecordingToggle, handleSave, handleToggleStream, hasMore, hasRecordingMore, endTime, organizations, handleApplyFilter
 
 }) => {
@@ -133,7 +133,10 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, set
                                         data={recordings}
                                         divRef={recordingref}
                                         hasMore={hasRecordingMore}
+                                        topRef={topRecordingRef}
                                     >
+                                        {recordingOffset > 0 && !recordingLoading && <div ref={topRecordingRef} className="h-1" />}
+                                        {recordingLoading && topRecordingRef.current && <div className="text-center"><Spinner /></div>}
                                         {recordings.length === 0 ? (
                                             <p className="flex items-center justify-center w-full h-full">
                                                 {t("streams.no_recordings")}
@@ -171,6 +174,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, set
                                     setHasMore={setHasMore}
                                     serviceType={serviceType}
                                     hasMore={hasMore}
+                                   
                                 >
                                     {filteredAlerts.length > 0 ? (
                                         filteredAlerts.map((item, index) => (

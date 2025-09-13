@@ -1,20 +1,14 @@
-"use client";
-
-const LiveBadge = dynamic(() => import("./LiveBadge"),
-  { ssr: false });
+const LiveBadge = dynamic(() => import("./LiveBadge"),);
 import { cn } from "@/lib/utils";
 import { Camera } from "@/models/camera";
-import { RootState } from "@/redux/store";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { DeleteDialog } from "../dialogue/DeleteDialog";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
-const IconBorderCornerSquare = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBorderCornerSquare),
-    { ssr: false });
-const IconTrash = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTrash),
-    { ssr: false });
+import { useEffect } from "react";
+import { RootState, useStore } from "@/store";
+const DeleteDialog = dynamic(() => import("../dialogue/DeleteDialog").then((mod) => mod.DeleteDialog));
+const IconBorderCornerSquare = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBorderCornerSquare));
+const IconTrash = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTrash),);
 
 interface CameraStreamCardProps {
   camera: Camera | null;
@@ -27,29 +21,32 @@ interface CameraStreamCardProps {
 export default function CameraStreamCard({
   camera, isFav, isDelete, setIsDelete, handleDelete
 }: CameraStreamCardProps) {
-  const cameraDetailView = useSelector(
+  const cameraDetailView = useStore(
     (state: RootState) => state?.camera?.cameraDetailView
   );
-  const [streamError, setStreamError] = useState<string | null>(null);
-  const hasStream = camera?.webrtc_url;
-
   useEffect(() => {
-    const fetchWebrtc = async () => {
-      try {
-        const res = await fetch(camera?.webrtc_url ?? '')
-        if (res.ok) {
-          setStreamError(null)
+    const handlePageHide = () => {
+      
+      const iframe = document.querySelector<HTMLIFrameElement>('iframe');
+      if (iframe) iframe.src = 'about:blank';
+    };
+    window.addEventListener('pagehide', handlePageHide);
+    return () => window.removeEventListener('pagehide', handlePageHide);
+  }, []);
+  useEffect(() => {
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) {
+        if (camera?.webrtc_url) {
+          const iframe = document.querySelector<HTMLIFrameElement>('iframe');
+          if (iframe) iframe.src = camera.webrtc_url;
         }
       }
-      catch (err) {
-        console.error(err)
-        setStreamError(err.message ?? 'Some errro')
-      }
-    }
-    fetchWebrtc()
-  }, [hasStream]);
+    };
+    window.addEventListener('pageshow', handlePageShow);
+    return () => window.removeEventListener('pageshow', handlePageShow);
+  }, [camera?.webrtc_url]);
 
-  const t = useTranslations()
+  const t = useTranslations('settings')
   return (
     <div
       className={cn(
@@ -57,12 +54,12 @@ export default function CameraStreamCard({
         "overflow-hidden flex items-center justify-center relative"
       )}
       style={{
-        backgroundImage: hasStream ? "none" : "url('/assets/images/image.webp')",
+        backgroundImage: camera?.webrtc_url ? "none" : "url('/assets/images/image.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      {hasStream && (
+      {camera?.webrtc_url && (
         <iframe
           src={camera.webrtc_url}
           allowFullScreen
@@ -71,7 +68,7 @@ export default function CameraStreamCard({
           Your browser does not support the video tag.
         </iframe>
       )}
-      {streamError === null && hasStream && (
+      { camera?.webrtc_url && (
         <div className="absolute top-3 left-3 z-5">
           <LiveBadge />
         </div>
@@ -104,8 +101,7 @@ export default function CameraStreamCard({
           </div>
         </div>
       </Link>
-
-      {isDelete && handleDelete && setIsDelete && <DeleteDialog title={t('settings.delete_camera_confirm')} data={camera?.camera_id ?? -1} handleDelete={handleDelete} onClose={() => setIsDelete(false)} />}
+      {isDelete && handleDelete && setIsDelete && <DeleteDialog title={t('delete_camera_confirm')} data={camera?.camera_id ?? -1} handleDelete={handleDelete} onClose={() => setIsDelete(false)} />}
     </div>
   );
 }

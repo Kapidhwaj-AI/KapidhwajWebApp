@@ -1,4 +1,3 @@
-'use client';
 import { IconCameraPlus, IconCheck, IconX } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
 import Image from 'next/image';

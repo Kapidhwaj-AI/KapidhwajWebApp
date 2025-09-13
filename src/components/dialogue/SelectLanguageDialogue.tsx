@@ -1,4 +1,3 @@
-'use client';
 import { useEffect, useState } from 'react';
 import Modal from '../ui/Modal';
 import { IconCheck, IconX, IconLanguage } from '@tabler/icons-react';

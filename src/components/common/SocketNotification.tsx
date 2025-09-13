@@ -1,34 +1,38 @@
 'use client'
 import { getLocalStorageItem } from '@/lib/storage';
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import { apiSocketUrl } from '../../services/config'
-import { setNotificationCount } from '@/redux/slices/userSlice';
-import { setPeopleCount } from '@/redux/slices/singleCameraSlice';
-import { toggleFaceDetection, toggleFireSmokeDetection, toggleIntrusionDetection, toggleLicensePlateDetection, toggleMotionDetection, togglePeopleCountDetected, togglePeopleDetection } from '@/redux/slices/singleCameraSettingSlice';
-import { RootState } from '@/redux/store';
 import { showToast } from '@/lib/showToast';
+import { RootActions, RootState, useStore } from '@/store';
 const SocketNotification = () => {
-    console.log("api", apiSocketUrl)
-    const dispatch = useDispatch();
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
-    const reduxLocal = useSelector((state: RootState) => state.hub.localHub)
-    const reduxRemote = useSelector((state: RootState) => state.hub.remoteHub)
+    const reduxLocal = useStore((state: RootState) => state.hub.localHub)
+    const reduxRemote = useStore((state: RootState) => state.hub.remoteHub)
+    const togglePeopleDetection = useStore((state: RootActions) => state.togglePeopleDetection);
+    const toggleFaceDetection = useStore((state: RootActions) => state.toggleFaceDetection);
+    const toggleFireSmokeDetection = useStore((state: RootActions) => state.toggleFireSmokeDetection);
+    const toggleIntrusionDetection = useStore((state: RootActions) => state.toggleIntrusionDetection);
+    const toggleLicensePlateDetection = useStore((state: RootActions) => state.toggleLicensePlateDetection);
+    const toggleMotionDetection = useStore((state: RootActions) => state.toggleMotionDetection);
+    const togglePeopleCountDetected = useStore((state: RootActions) => state.togglePeopleCountDetected);
+    const setNotificationCount = useStore((state: RootActions) => state.setNotificationCount);
+    const setPeopleCount = useStore((state: RootActions) => state.setPeopleCount);
+
     const [isValid, setIsValid] = useState(false)
     useEffect(() => {
         if (((reduxLocal !== null || reduxRemote !== null) && (reduxLocal?.id || reduxRemote?.id)) || (remoteHub.id || localHub.id)) {
             setIsValid(true)
         }
     }, [reduxLocal, reduxRemote])
-   
+
     const baseUrl = isValid && (!remoteHub.id || !reduxRemote?.id) ? `ws://${localHub.id}.local:8084` : apiSocketUrl
-    console.log(baseUrl,"socketBaseUrl")
+    console.log(baseUrl, "socketBaseUrl")
     useEffect(() => {
         if (token) {
-            console.log(isValid,"socketValid", (!remoteHub.id || !reduxRemote?.id))
+            console.log(isValid, "socketValid", (!remoteHub.id || !reduxRemote?.id))
             const socket = io(baseUrl, {
                 auth: {
                     token,
@@ -57,33 +61,33 @@ const SocketNotification = () => {
             });
 
             socket.on('unseen_count', (data: { unSeenCount: number }) => {
-                dispatch(setNotificationCount(data.unSeenCount));
+                setNotificationCount(data.unSeenCount);
             });
 
             socket.on('people_count', (data: {
                 camera_id: string;
                 people_count: string;
             }) => {
-                dispatch(setPeopleCount(data));
+                setPeopleCount(data);
             });
 
             socket.on('notification', (notification: { type: string, message: string }) => {
                 const type = notification.type;
                 showToast(notification.message, "info")
                 if (type === 'intrusion_detected') {
-                    dispatch(toggleIntrusionDetection());
+                    toggleIntrusionDetection();
                 } else if (type === 'face_detected') {
-                    dispatch(toggleFaceDetection());
+                    toggleFaceDetection();
                 } else if (type === 'face_detected') {
-                    dispatch(togglePeopleDetection());
+                    togglePeopleDetection();
                 } else if (type === 'people_count') {
-                    dispatch(togglePeopleCountDetected());
+                    togglePeopleCountDetected();
                 } else if (type === 'license_plate_detected') {
-                    dispatch(toggleLicensePlateDetection());
+                    toggleLicensePlateDetection();
                 } else if (type === 'motion_detected') {
-                    dispatch(toggleMotionDetection());
+                    toggleMotionDetection();
                 } else if (type === 'fire_smoke_detected') {
-                    dispatch(toggleFireSmokeDetection());
+                    toggleFireSmokeDetection();
                 }
             });
 

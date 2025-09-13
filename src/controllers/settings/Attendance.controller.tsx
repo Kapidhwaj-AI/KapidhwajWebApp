@@ -39,7 +39,6 @@ const AttendanceController = () => {
         fetchSites();
         fetchCat();
     }, [])
-    console.log("org", categories)
     return (
         <>
             <AttendanceView setIsStartModal={setIsStartModal} sites={sites} loading={loading} categories={categories} />
