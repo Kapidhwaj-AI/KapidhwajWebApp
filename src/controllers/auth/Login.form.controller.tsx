@@ -41,6 +41,7 @@ export const LoginFormController = () => {
           [key]: username.trim(),
           password,
         },
+        withCredentials: true
       });
 
       if (res.status === 200) {
