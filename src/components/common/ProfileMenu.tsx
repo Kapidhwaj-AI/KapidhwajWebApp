@@ -22,7 +22,7 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
     try {
       const res = await axios({
         url: `${BASE_URL}:8084/signout`, method: "POST", headers: {
-          'Authorization': `BBearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
       })
       if (res?.status === 200) {

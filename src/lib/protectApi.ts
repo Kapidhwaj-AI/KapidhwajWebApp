@@ -89,14 +89,7 @@ export const fetchRefreshToken = async () => {
 
     try {
         const res = await axios.post(
-            `${BASE_URL}:8084/refresh`, {
-            headers
-                : {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            }
-
-        },
+            `${BASE_URL}:8084/refresh`,
         { withCredentials: true }
         );
         console.log("Refresh API response:", res.status, res.data);
