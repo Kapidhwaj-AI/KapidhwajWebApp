@@ -92,7 +92,7 @@ const ManageSitesFoldersController = () => {
                 if (isOrgId) {
                     payload.organizationId = id as string;
                 } else if (!isOrgId && id) {
-                    payload.parent_id = folderId; 
+                    payload.parent_id = isFolder ? null : folderId; 
                    
                 }
             } else {

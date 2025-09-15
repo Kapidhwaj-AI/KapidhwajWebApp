@@ -33,32 +33,6 @@ function InfiniteScrolling<T>({
     offsetRef.current = offset;
     let botLastY = 0;
     let lastY = 0;
-    console.log("offSet", offset)
-    useEffect(() => {
-        const loadItems = async () => {
-            setIsLoading(true);
-            try {
-                const newData = await fetchData(offset, serviceType);
-                if (newData.length <= 0) {
-                    setHasMore(false);
-                } else {
-                    if (topRef !== undefined) {
-
-                        setData(newData);
-                    } else {
-                        setData([...data, ...newData])
-                    }
-                }
-            } catch (error) {
-                console.error('Failed to fetch:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        loadItems();
-    }, [offset, serviceType]);
-
     useEffect(() => {
         const target = divRef.current;
         if (!target) return;
@@ -70,7 +44,6 @@ function InfiniteScrolling<T>({
                     if (entry.isIntersecting && currentY < botLastY
                         && hasMore && !isLoading) {
                         setOffset((prev) => prev + 10);
-                        console.log(currentY, lastY, "bottomintersecting")
                     }
                     botLastY = currentY;
                 } else {
@@ -89,15 +62,13 @@ function InfiniteScrolling<T>({
     }, [divRef, hasMore, isLoading]);
     useEffect(() => {
         const target = topRef?.current;
-        console.log(target, "target")
         if (!target || offset <= 0) return;
         const observer = new IntersectionObserver(
             ([entry]) => {
                 const currentY = entry.boundingClientRect.y;
-                console.log(currentY, lastY, "topintersecting")
                 if (entry.isIntersecting && currentY > lastY &&
                     !isLoading
-                    ) {
+                ) {
                     setOffset((prev) => Math.max(prev - 10, 0));
                 }
                 lastY = currentY;
@@ -108,6 +79,33 @@ function InfiniteScrolling<T>({
         observer.observe(target);
         return () => observer.disconnect();
     }, [topRef, isLoading]);
+    useEffect(() => {
+        const loadItems = async () => {
+            setIsLoading(true);
+            try {
+                const newData = await fetchData(offset, serviceType);
+                if (newData.length <= 0) {
+                    setHasMore(false);
+                } else {
+                    if (topRef !== undefined) {
+                        setData(newData);
+                    } else {
+                        if (offset
+                            > 0
+                        ) {
+                            setData([...data, ...newData])
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (!isLoading && data.length > 0) loadItems();
+    }, [offset, serviceType]);
     return <>{children}</>;
 }
 
