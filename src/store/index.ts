@@ -59,6 +59,7 @@ interface SingleCameraState {
     isMoveable: boolean;
     storage_type: string
     isPeople: boolean;
+    ports:{static_port:number; live_port: number}
 }
 
 interface UserState {
@@ -128,6 +129,7 @@ export interface RootActions {
     setActiveTabRedux: (tab: FeatureKeys) => void;
     setPeopleCount: (data: { camera_id: string; people_count: string }) => void;
     setIsPeople: (isPeople: boolean) => void;
+    setPorts:(data:{static_port: number; live_port: number}) => void;
     setCurrentCameraName: (data: { name: string }) => void;
     setIsMoveable: (isMoveable: boolean) => void;
     setCurrentStorageType: (storageType: string) => void;
@@ -183,7 +185,8 @@ export const  useStore = create<RootState & RootActions>((set, get) => ({
         currentCameraName: '',
         isMoveable: true,
         storage_type: '',
-        isPeople: false
+        isPeople: false,
+        ports:{static_port:NaN, live_port: NaN}
     },
 
     setAuthToken: (token) => set(state => ({ auth: { ...state.auth, token, } })),
@@ -239,6 +242,9 @@ export const  useStore = create<RootState & RootActions>((set, get) => ({
         set({ singleCamera: { ...currentState, peopleCount } });
     },
     setIsPeople: (isPeople) => set(state => ({ singleCamera: { ...state.singleCamera, isPeople } })),
+    setPorts:(data) =>{
+        set((state) => ({singleCamera: {...state.singleCamera, ports:data}}))
+    },
     setCurrentCameraName: ({ name }) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraName: name } })),
     setIsMoveable: (isMoveable) => set(state => ({ singleCamera: { ...state.singleCamera, isMoveable } })),
     setCurrentStorageType: (storageType) => set(state => ({ singleCamera: { ...state.singleCamera, storage_type: storageType } })),

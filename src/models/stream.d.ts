@@ -20,7 +20,7 @@ export interface StreamsViewProps {
     isLoading: boolean;
     organizations: Organization[];
     handleOrganizationSelect: (organization: Organization) => void;
-    selectedOrganization: Organization | null;
+    selectedOrganization: Organization | undefined;
     handleFolderSelect: (data: Folders) => void;
     selectedFolder: Folders | null;
     setSelectedChildFolder: (data: Folders) => void;
@@ -91,6 +91,5 @@ export interface StreamsPageViewProps {
     isAiServiceLoading: boolean;
     serviceType: string | null
     setIsAllAlertsLoading:(val:boolean) => void;
-    topAlertRef: React.RefObject<HTMLDivElement | null>;
     topRecordingRef: React.RefObject<HTMLDivElement | null>
 }

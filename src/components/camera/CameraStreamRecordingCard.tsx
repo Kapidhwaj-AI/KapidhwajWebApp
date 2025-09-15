@@ -12,16 +12,16 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
     const [isValidHub, setIsValidHub] = useState(false)
     const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
     const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
-    const localHub = useStore((state: RootState) => state.hub.localHub)
-    const remoteHub = useStore((state: RootState) => state.hub.remoteHub)
+    const ports = useStore((state:RootState) => state.singleCamera.ports)
+
     useEffect(() => {
-        if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub?.id || savedRemoteHub?.id)) {
+        if ( savedLocalHub?.id || savedRemoteHub?.id) {
             setIsValidHub(true)
         }
-    }, [localHub, remoteHub])
-    const staticPort = remoteHub?.static_port || savedRemoteHub?.static_port
-    const id = localHub?.id || savedLocalHub.id
-    const baseUrl = isValidHub ? remoteHub?.id ? `http://media.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/` : 'http://media.kapidhwaj.ai:3000/'
+    }, [savedLocalHub, savedRemoteHub])
+    const staticPort = !Number.isNaN(ports.static_port) ? ports.static_port : savedRemoteHub?.static_port
+    const id =  savedLocalHub.id
+    const baseUrl = isValidHub ? savedRemoteHub?.id ? `http://media.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/` : 'http://media.kapidhwaj.ai:3000/'
     const handleTogglePlay = () => {
         const video = videoRef.current;
         if (!video) return;
