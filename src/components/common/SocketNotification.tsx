@@ -16,6 +16,7 @@ const SocketNotification = () => {
     const togglePeopleCountDetected = useStore((state: RootActions) => state.togglePeopleCountDetected);
     const setNotificationCount = useStore((state: RootActions) => state.setNotificationCount);
     const setPeopleCount = useStore((state: RootActions) => state.setPeopleCount);
+    const setPorts = useStore((state: RootActions) => state.setPorts);
     useEffect(() => {
         if (token) {
             
@@ -56,6 +57,13 @@ const SocketNotification = () => {
             }) => {
                 setPeopleCount(data);
             });
+
+            socket.on('update_ports', (data: {
+                static_port: number;
+                live_port: number;
+            }) => {
+                setPorts(data)
+            })
 
             socket.on('notification', (notification: { type: string, message: string }) => {
                 const type = notification.type;

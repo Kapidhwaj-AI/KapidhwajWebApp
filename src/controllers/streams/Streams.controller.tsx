@@ -13,12 +13,12 @@ import { RootState, useStore } from '@/store';
 
 const StreamsController = () => {
     const toogleColumnValue = useStore((state: RootState) => state.camera.toogleColumns);
-    const [selectedOrganization, setSelectedOrganization] = useState<Organization | null>(null);
     const [selectedFolder, setSelectedFolder] = useState<Folders | null>(null)
     const [selectedChildFolder, setSelectedChildFolder] = useState<Folders | null>(null)
     const [selectedData, setSelecteddata] = useState<Camera[] | null>(null)
     const [searchQuery, setSearchQuery] = useState("");
     const { data: organizations, isLoading, error, refetch } = useOrganizations();
+    const [selectedOrganization, setSelectedOrganization] = useState<Organization | undefined>();
     useEffect(() => {
         if (selectedChildFolder) {
             setSelecteddata(selectedChildFolder.cameras);
@@ -29,10 +29,14 @@ const StreamsController = () => {
         } else {
             setSelecteddata(null);
         }
-    }, [selectedOrganization, selectedFolder, selectedChildFolder]);
+    }, [selectedOrganization, selectedFolder, selectedChildFolder, organizations]);
     useEffect(() => {
         refetch();
     }, []);
+    useEffect(() => {
+        setSelectedOrganization(organizations?.[0])
+    }, [organizations])
+    console.log("org", organizations)
     useEffect(() => {
         if (error instanceof AxiosError) {
             showToast(error.response?.data.error, "error")
@@ -46,7 +50,7 @@ const StreamsController = () => {
                     .includes(searchQuery.toLowerCase())
             )
             : selectedData;
-    }, [selectedData, searchQuery]);
+    }, [selectedData, searchQuery, organizations]);
     const handleOrganizationSelect = (org: Organization) => {
         setSelectedOrganization(org);
         setSelectedFolder(null);
