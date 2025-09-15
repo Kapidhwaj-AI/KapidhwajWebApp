@@ -48,6 +48,9 @@ const ManageDevicesController = () => {
                 const updated = data.find((h) => h.id === selectedHub.id);
                 if (updated) setSelectedHub(updated);
             }
+            else{
+                setSelectedHub(data[0])
+            }
         } catch (error) {
             console.error('err (saved hubs):', error);
         } finally {

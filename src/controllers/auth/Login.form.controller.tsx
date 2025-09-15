@@ -48,7 +48,7 @@ export const LoginFormController = () => {
         expiresAt.setDate(expiresAt.getDate() + 7);
         setLocalStorageItem([[LOCALSTORAGE_KEY, JSON.stringify({ token: res.data.access_token, expiresAt: expiresAt.toISOString() })], ['user', JSON.stringify(res.data.data)]])
         setAuthToken(res.data.access_token)
-        window.location.href = "/home";
+        window.location.href = "/streams";
       }
     } catch (error) {
       setIsError(true);
