@@ -92,6 +92,7 @@ const ManageDevicesController = () => {
         const res = await protectApi<unknown, { cameraId: string, organizationId: string }>('/camera/delete?action=remove', 'DELETE', { cameraId, organizationId })
         if (res?.status === 200) {
             setIsDelete(false)
+            await fetchSavedHubs()
         }
     }
     return (
