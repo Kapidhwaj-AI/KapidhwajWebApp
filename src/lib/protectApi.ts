@@ -1,4 +1,4 @@
-import axios, {  Method } from "axios";
+import axios, { Method } from "axios";
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
 import { showToast } from "./showToast";
@@ -39,12 +39,12 @@ const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
 export async function protectApi<T, D = undefined>(url: string,
     method?: Method,
     data?: D, type?: string, isNotCustomHeader?: boolean, params?: unknown) {
-    
+
     const headers: Record<string, string> = {
         Authorization: `Bearer ${token}`,
         'Content-Type': type ?? 'application/json',
     };
-   
+
     try {
         const response = await axios<ApiResponse<T>>({
             method: method ?? 'GET',
@@ -88,10 +88,7 @@ export async function protectApi<T, D = undefined>(url: string,
 export const fetchRefreshToken = async () => {
 
     try {
-        const res = await axios.post(
-            `${BASE_URL}:8084/refresh`,
-        { withCredentials: true }
-        );
+        const res = await axios({ url: `${BASE_URL}:8084/refresh`, method: 'POST', withCredentials: true });
         console.log("Refresh API response:", res.status, res.data);
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7);
