@@ -7,7 +7,6 @@ import { BASE_URL } from "@/lib/protectApi";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { RootState, useStore } from "@/store";
-import Image from "next/image";
 const DeleteDialog = dynamic(() => import("../dialogue/DeleteDialog").then((mod) => mod.DeleteDialog));
 const IconBorderCornerSquare = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBorderCornerSquare));
 const IconTrash = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTrash),);
@@ -61,7 +60,7 @@ export default function CameraStreamCard({
         backgroundPosition: "center",
       }}
     >
-      {camera?.webrtc_url ? (
+      camera?.webrtc_url ? (
         <iframe
           src={`${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
           allowFullScreen
@@ -69,7 +68,7 @@ export default function CameraStreamCard({
         >
           Your browser does not support the video tag.
         </iframe>
-      ) : <Image alt='Stream Place holder' src={'/assets/images/image.webp'} width={1000} height={1000} className="w-auto h-auto" />}
+      ) 
       {camera?.webrtc_url && (
         <div className="absolute top-3 left-3 z-5">
           <LiveBadge />

@@ -119,7 +119,7 @@ const ManagePeopleView: React.FC<ManagePeopleProps> = ({ offset, setHasMore, set
                                                     <div className="flex h-full">
                                                         <Link href={{ pathname: "/person-details", query: { id: person.id } }} className="w-[106px] 2xl:w-[120px] 4xl:w-[151px] h-full flex-shrink-0">
                                                             <Image
-                                                                src={person.gcp_image_path ? (BASE_URL + ':3000' + person.gcp_image_path) : '/dummy-user.webp'}
+                                                                src={person.gcp_image_path ? (BASE_URL + ':3000/' + person.gcp_image_path) : '/dummy-user.webp'}
                                                                 alt={person.name}
                                                                 width={151}
                                                                 height={199}

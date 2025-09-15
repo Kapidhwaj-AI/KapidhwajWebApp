@@ -14,20 +14,20 @@ import dynamic from 'next/dynamic';
 import React from 'react'
 
 const FavouritesView: React.FC<FavouriteViewProps> = ({search, setSearch, setIsDelete, isDelete, loading, err, filteredFavourites, toogleColumnValue, handleDelete}) => {
-    const t = useTranslations()
+    const t = useTranslations('favourites')
   return (
       <div className="h-full flex flex-col gap-4 min-h-0 md:p-5">
           <div className="flex flex-wrap justify-between items-center">
-              <h1 className="text-2xl font-bold">{t('favourites.title')}</h1>
+              <h1 className="text-2xl font-bold">{t('title')}</h1>
               <div className="flex flex-wrap justify-between items-center gap-4">
                   <CameraDetailsViewToggleButton />
                   <ColumnDropdown />
-                  <SearchBar search={search} setSearch={(e) => setSearch(e.target.value)} placeholder={t('favourites.search_placeholder')} />
+                  <SearchBar search={search} setSearch={(e) => setSearch(e.target.value)} placeholder={t('search_placeholder')} />
               </div>
           </div>
           {loading ? <Spinner /> : err ? <p className="text-red-500 flex items-center justify-center h-full w-full">{err.toString()}</p> :
               <div className="flex-1 overflow-y-auto scrollbar-hide mt-5">
-                  {filteredFavourites.length === 0 ? <p className="text-center w-full h-full flex items-center justify-center dark:text-white">{t('favourites.no_favourites')}</p> :
+                  {filteredFavourites.length === 0 ? <p className="text-center w-full h-full flex items-center justify-center dark:text-white">{t('no_favourites')}</p> :
                       <div className={cn("grid grid-cols-1 gap-6 min-h-min",
                           {
                               "md:grid-cols-1": toogleColumnValue === 1,
