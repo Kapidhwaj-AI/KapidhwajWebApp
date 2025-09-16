@@ -139,6 +139,7 @@ const ManageAccessController = () => {
         try {
             const res = await protectApi<AxiosResponse, { userId: string, roleId: number }>('/organizations/removeUser?action=remove', "POST", { userId: selectedShareableUser?.id ?? '', roleId: selectedShareableUser?.role_id ?? NaN })
             if (res.status === 200) {
+                setIsDelete(false)
                 fetchUser()
             }
         } catch (err) {

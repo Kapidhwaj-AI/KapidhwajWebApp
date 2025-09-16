@@ -34,9 +34,17 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const recordingref = useRef<HTMLDivElement>(null)
     const topRecordingRef = useRef<HTMLDivElement>(null)
     const [selectedTab, setSelectedTab] = useState('all')
-    const [date, setDate] = useState<Date | undefined>();
-    const [startTime, setStartTime] = useState<Date | undefined>();
-    const [endTime, setEndTime] = useState<Date | undefined>();
+    const [date, setDate] = useState<Date | undefined>(new Date());
+    const [startTime, setStartTime] = useState<Date | undefined>(() => {
+        const start = new Date();
+        start.setHours(0, 0, 0, 0);
+        return start;
+    });
+    const [endTime, setEndTime] = useState<Date | undefined>(() => {
+        const end = new Date();
+        end.setHours(23, 59, 0, 0);
+        return end
+    });
     const [isDateFiltered, setIsDateFiltered] = useState(false)
     const [serviceType, setServiceType] = useState<string | null>('all')
     const [isMlService, setIsMlService] = useState(false)
@@ -53,7 +61,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     });
     const setIsPeople = useStore((state: RootActions) => state.setIsPeople);
     const setCurrentCameraId = useStore((state: RootActions) => state.setCurrentCameraId);
-
+    const setIsFilterLoading = useStore((state: RootActions) => state.setIsFilterLoading);
     const [isEditLoading, setIsEditLoading] = useState(false)
     const [stream, setStream] = useState(false)
     const {
@@ -80,7 +88,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         return res.data.data
     }
     const fetchAlerts = async (offset: number, serviceType: string | null, startTime?: number, endTime?: number) => {
-        const endpoint = serviceType !== null && serviceType !== 'all' ? startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}&cameraId=${id}` : `/alert/recent?offset=${offset}&serviceType=${serviceType}&cameraId=${id}` : `/alert/recent?offset=${offset}&cameraId=${id}`
+        const endpoint = serviceType !== null && serviceType !== 'all' && startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}&cameraId=${id}` : serviceType !== null && serviceType !== 'all' ? `/alert/recent?offset=${offset}&serviceType=${serviceType}&cameraId=${id}` : startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&cameraId=${id}` : `/alert/recent?offset=${offset}&cameraId=${id}`
         const res = await protectApi<Alert[]>(endpoint)
         return res.data.data
     }
@@ -92,7 +100,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         const res = await protectApi<{ is_fav: boolean }>(`/camera/fav-status?cameraId=${id}`)
         return res.data.data
     }
-
+    console.log(formData, "Form data")
     useEffect(() => {
         setLoading(true);
         Promise.allSettled([
@@ -155,7 +163,9 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         const alertFetch = async () => {
             setIsAllAlertLoading(true)
             try {
-                const res = await fetchAlerts(alertOffset, serviceType)
+                const start = alertOffset > 0 && date && startTime ? getUtcTimestamp(date, startTime) : undefined
+                const end = alertOffset > 0 && date && endTime ? getUtcTimestamp(date, endTime) : undefined
+                const res = await fetchAlerts(alertOffset, serviceType, start, end)
                 setAlerts(res)
             } catch (error) {
                 console.error(error, "Err")
@@ -237,13 +247,16 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
     }
     const handleApplyFilter = async (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => {
+        console.log("date", date, startTime, endTime)
         if (date && startTime && endTime) {
+            setIsFilterLoading(true)
             const start = getUtcTimestamp(date, startTime)
             const end = getUtcTimestamp(date, endTime)
             const res = await fetchAlerts(alertOffset, serviceType, start, end)
             setIsDateFiltered(true)
             setAlerts(res)
             setFilterDial(false)
+            setIsFilterLoading(true)
         }
         return
     }
@@ -275,12 +288,12 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const handleSave = async () => {
         setIsEditLoading(true)
         const fallbackFolderId =
-            formData.folderId && Number(formData.folderId) > 0
-                ? formData.folderId
-                : formData.subfolder && Number(formData.subfolder) > 0
-                    ? formData.subfolder
+            formData.subfolder && Number(formData.subfolder) > 0
+                ? formData.subfolder
+                : formData.folderId && Number(formData.folderId) > 0
+                    ? formData.folderId
                     : null;
-
+                    
         const payload: Partial<StreamFormData> = {
             name: formData.name,
             people_threshold_count: formData.people_threshold_count,

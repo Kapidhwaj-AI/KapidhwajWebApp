@@ -8,6 +8,7 @@ const AlertPreviewDialogue = dynamic(() => import('@/components/dialogue/AlertPr
 import { GOOGLE_KPH_BUCKET_URL } from "@/services/config";
 import Link from "next/link";
 import { RootState, useStore } from "@/store";
+import { CameraLocation } from "@/models/camera";
 const IconBounceRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBounceRight),
     { ssr: false });
 
@@ -30,10 +31,12 @@ const IconMovie = dynamic(() => import("@tabler/icons-react").then((mod) => mod.
     { ssr: false });
 const IconTreadmill = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTreadmill),
     { ssr: false });
+const IconChevronRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconChevronRight),
+    { ssr: false });
 
-
-export function AlertCard({ alert }: { alert: Alert }) {
+export function AlertCard({ alert, cameraLocation }: { alert: Alert; cameraLocation?:CameraLocation }) {
     const [isPreview, setIsPreview] = useState(false);
+    console.log(alert, "Alert")
     const timestamp = alert?.timestamp || 0
     const alertTimestamp = new Date(timestamp * 1000);
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
@@ -64,14 +67,16 @@ export function AlertCard({ alert }: { alert: Alert }) {
 
                     </div>}
                     <div className="flex flex-col gap-1">
-                        {alert.alertType === 'FACE_DETECTION' ? <><h3 className="text-xs">{alert?.persons?.[0].name}</h3>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">{alert?.persons?.[0].category?.name ?? ' '} </p></> : alert.alertType === 'PEOPLE_COUNT' ? <><h3 className="text-xs">{alert?.meta_data?.PEOPLE_COUNT} Peoples Found</h3>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">{alert?.camera?.name} </p></> : alert.alertType === 'FIRE_SMOKE_DETECTION' ? <><h3 className="text-xs">{alert?.meta_data?.DETECTED_FIRE_SMOKE?.toUpperCase()}</h3>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">{alert?.camera?.name} </p></> : alert.alertType === 'LICENSE_PLATE_DETECTION' ? <><h3 className="text-xs">{alert?.meta_data?.DETECTED_PLATE}</h3>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">{alert?.camera?.name} </p></> : <>
-                            <h3 className="text-xs">{alert?.alertType}</h3>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">{alert?.camera?.name} </p>
-                        </>}
+                        {alert.alertType === 'FACE_DETECTION' ? <h3 className="text-xs">{alert?.persons?.[0].name} {`(${alert?.persons?.[0].category?.name ?? ' '})`}</h3>
+                            : alert.alertType === 'PEOPLE_COUNT' ? <h3 className="text-xs">Crowd Aletr: {alert?.meta_data?.PEOPLE_COUNT}</h3>
+                                : alert.alertType === 'FIRE_SMOKE_DETECTION' ? <h3 className="text-xs">{alert?.meta_data?.DETECTED_FIRE_SMOKE?.toUpperCase()}</h3>
+                                    : alert.alertType === 'LICENSE_PLATE_DETECTION' ? <h3 className="text-xs">{alert?.meta_data?.DETECTED_PLATE}</h3>
+                                        :
+                                <h3 className="text-xs">{alert?.alertType}</h3>
+                        }
+                        {cameraLocation && <p className=" flex text-xs items-center justify-between font-light whitespace-nowrap">
+                            {cameraLocation?.organization} <IconChevronRight size={12} className=" text-gray-400 text-xs" /> {cameraLocation?.parantFolder === "NA" ? '' : <div className=' flex gap-2 items-center'>{cameraLocation?.parantFolder} <IconChevronRight size={12} className=" text-gray-400 text-xs" /></div>}   {alert.camera?.name}
+                        </p>}
                     </div>
                 </div>
 

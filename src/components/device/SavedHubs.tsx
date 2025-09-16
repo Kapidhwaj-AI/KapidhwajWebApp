@@ -37,7 +37,7 @@ export const SavedHubs: React.FC<SavedHubsProps> = ({ className = "", setIsOpen,
     };
     const t = useTranslations()
     return (
-        <div className={`flex flex-col bg-[var(--surface-100)] px-8 pb-2 h-[36vh] max-h-[36vh] md:h-auto md:max-h-auto overflow-y-auto rounded-2xl md:rounded-4xl ${className}`}>
+        <div className={`flex flex-col bg-[var(--surface-100)] px-8 pb-2 h-[36vh] max-h-[36vh] scrollbar-hide overflow-y-auto rounded-2xl md:rounded-4xl ${className}`}>
             <div className="flex justify-between items-center pt-4 pb-2 flex-shrink-0">
                 <div className="flex items-center gap-2">
                     <IconRouter size={24} className="text-[var(--text-color)]" />

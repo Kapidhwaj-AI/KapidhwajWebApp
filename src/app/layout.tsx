@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "../styles/globals.css";
 import { jakarta } from "@/lib/fonts";
 import { Providers } from "@/providers/Providers";
@@ -12,9 +12,20 @@ export const metadata: Metadata = {
   description: "Kapidhwaj AI is a smart surveillance system with AI-powered cameras for face recognition, vehicle number plate detection, fire & smoke alerts, people counting, intrusion detection, and secure video recordings.",
   icons:{
     icon:'/assets/images/logo-square.webp'
-  }
+  },
+  openGraph: {
+    title: "Kapidhwaj AI",
+    description: "AI-powered cameras with fire, smoke, and intrusion alerts.",
+    images: ["/assets/images/logo-rectangle.webp"],
+    url: "https://kapidhwaj-ai.com",
+    type: "website",
+  },
+  keywords: ["AI cameras", "surveillance", "Kapidhwaj"],
 };
-
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1.0,
+};
 export default async function RootLayout({
   children,
 }: {

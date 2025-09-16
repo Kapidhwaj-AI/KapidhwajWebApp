@@ -36,9 +36,17 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, search, setSearch, setAlert
                         <span className="hidden sm:inline">{t('alerts.filter')}</span>
                     </button>}
                     {isDateFiltered && <button onClick={async () => {
-                        setDate(undefined);
-                        setStartTime(undefined);
-                        setEndTime(undefined);
+                        setDate(new Date())
+                        setStartTime(() => {
+                            const start = new Date();
+                            start.setHours(0, 0, 0, 0);
+                            return start;
+                        })
+                        setEndTime(() => {
+                            const end = new Date();
+                            end.setHours(23, 59, 0, 0);
+                            return end
+                        })
                         setIsDateFiltered(false);
                         setAlertOffset(0);
                         setIsLoading(true);

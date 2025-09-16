@@ -142,6 +142,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
 
     const allVisibleSelected = getVisibleStreamIds().every(id => selectedStreams.has(id));
     const t = useTranslations()
+    console.log(searchedUsers.length>0,"searchedUser")
     if (!isOpen) return null;
 
     return (
@@ -160,7 +161,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
                         </div>
                         <div className="flex-1">
                             <div className="mb-4">
-                                <Popover open={open && !isEdit} onOpenChange={setOpen} >
+                                <Popover open={open && !isEdit && searchedUsers.length > 0} onOpenChange={setOpen} >
                                     <PopoverTrigger className='w-full'>
                                         <InputField
                                             placeholder={t('settings.enter_username')}

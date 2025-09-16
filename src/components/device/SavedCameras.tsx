@@ -40,10 +40,13 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     const { data: organizations, } = useOrganizations();
     const [formData, setFormData] = useState<StreamFormData>({
         name: '',
-        people_threshold_count: -1,
+        people_threshold_count: NaN,
         organizationId: '',
         folderId: null,
-        subfolder: null
+        subfolder: null,
+        detectionSensitivity: 0,
+        overlapSensitivity: 0,
+        sceneDensity: 0
     });
     const handleSwitchToggle = async (newToggle: boolean) => {
         if (camera) {
@@ -86,7 +89,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
         setCamera(camera)
         setCameraToggle(camera.is_ai_stream_active !== 0)
         await fetchCameraLocation(camera.camera_id)
-        setFormData((prev) => ({ ...prev, name: camera.name, people_threshold_count: camera.people_threshold_count, organizationId: camera.organization_id ?? '' }))
+        setFormData((prev) => ({ ...prev, name: camera.name, people_threshold_count: camera.people_threshold_count, organizationId: camera.organization_id ?? '', detectionSensitivity:camera.obj_thresh, overlapSensitivity:camera.nms_thresh, sceneDensity:camera.topk_pre_nms}))
     };
     const handleDeleteCamera = (id: string, orgId: string) => {
 
@@ -133,6 +136,9 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
             people_threshold_count: formData.people_threshold_count,
             organizationId: formData.organizationId,
             folderId: fallbackFolderId,
+            detectionSensitivity: formData.detectionSensitivity,
+            overlapSensitivity: formData.overlapSensitivity,
+            sceneDensity: formData.sceneDensity,
         };
         try {
             const res = await protectApi<unknown, Partial<StreamFormData>>(
@@ -144,13 +150,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
             if (res.status === 200) {
                 setIsEditCameraOpen(false)
                 await fetchSavedHubs()
-                setFormData({
-                    name: '',
-                    people_threshold_count: 0,
-                    organizationId: '',
-                    folderId: -1,
-                    subfolder: -1
-                })
+                
             }
         } catch (e) { console.error(e) }
         finally {
@@ -160,7 +160,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     const t = useTranslations()
     return (
         <>
-            <div className={`flex flex-col h-full px-8 ${className}`}>
+            <div className={`flex flex-col  scrollbar-hide overflow-y-auto h-full max-h-full px-8 ${className}`}>
                 <div className="flex justify-between items-center pt-6 pb-5 flex-shrink-0">
                     <div>
                         <h2 className="text-sm font-bold">{hub.name}</h2>

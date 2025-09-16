@@ -45,8 +45,8 @@ export interface AlertViewProps {
   setIsLoading: (val: boolean) => void;
   fetchAlerts: (val: number, serviceType: string | null) => Promise<Alert[]>;
   setDate: (val: Date | undefined) => void;
-  setStartTime: (val: Date | undefined) => void;
-  setEndTime: (val: Date | undefined) => void;
+  setStartTime: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  setEndTime: React.Dispatch<React.SetStateAction<Date | undefined>>;
   filterDial: boolean;
   handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void;
   date: Date | undefined;
