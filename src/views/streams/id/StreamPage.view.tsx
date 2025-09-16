@@ -78,9 +78,17 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, cha
                         <span className="hidden sm:inline">{t('alerts.filter')}</span>
                     </button>}
                     {isDateFiltered && <button onClick={async () => {
-                        setDate(undefined);
-                        setStartTime(undefined);
-                        setEndTime(undefined);
+                        setDate(new Date())
+                        setStartTime(() => {
+                            const start = new Date();
+                            start.setHours(0, 0, 0, 0);
+                            return start;
+                        })
+                        setEndTime(() => {
+                            const end = new Date();
+                            end.setHours(23, 59, 0, 0);
+                            return end
+                        })
                         setIsDateFiltered(false);
                         setAlertOffset(0);
                         setIsAllAlertsLoading(true);
@@ -158,7 +166,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, cha
 
                     </div>
 
-                    {!isFullscreen && <div className="lg:col-span-2 flex flex-col p-2 md:p-5 md:max-h-[82vh] max-h-[35vh] overflow-y-auto h-[35vh] lg:h-full scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
+                    {!isFullscreen && <div className="lg:col-span-2 gap-4 flex flex-col p-2  md:p-5 md:max-h-[82vh] max-h-[35vh] overflow-y-auto h-[35vh] lg:h-full scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
                         <AlertsFiltersButtonAtStream selectedTab={selectedTab} setSelectedTab={changeTab} />
                         {isAllAlertLoading ? <Spinner /> : <div className='flex-1 '>
                             <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
@@ -177,14 +185,14 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, cha
                                 >
                                     {filteredAlerts.length > 0 ? (
                                         filteredAlerts.map((item, index) => (
-                                            <AlertCard alert={item} key={index} />
+                                            <AlertCard cameraLocation={cameraLocation} alert={item} key={index} />
                                         ))
                                     ) : (
                                         <p className="text-center h-full w-full flex items-center justify-center">
                                             {t("alerts.no_found")}
                                         </p>
                                     )}
-                                    {filteredAlerts.length > 0 && <div ref={alertEndRef} className="h-1" />}
+                                    {filteredAlerts.length > 0 && !isDateFiltered && <div ref={alertEndRef} className="h-1" />}
                                 </InfiniteScrolling>
                                 {alertsLoading && <div className="text-center"><Spinner /></div>}
                                 {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (

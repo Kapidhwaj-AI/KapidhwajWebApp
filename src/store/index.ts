@@ -59,7 +59,8 @@ interface SingleCameraState {
     isMoveable: boolean;
     storage_type: string
     isPeople: boolean;
-    ports:{static_port:number; live_port: number}
+    ports:{static_port:number; live_port: number};
+    filterLoading: boolean
 }
 
 interface UserState {
@@ -133,6 +134,7 @@ export interface RootActions {
     setCurrentCameraName: (data: { name: string }) => void;
     setIsMoveable: (isMoveable: boolean) => void;
     setCurrentStorageType: (storageType: string) => void;
+    setIsFilterLoading:(val: boolean) => void
 }
 
 
@@ -186,7 +188,8 @@ export const  useStore = create<RootState & RootActions>((set, get) => ({
         isMoveable: true,
         storage_type: '',
         isPeople: false,
-        ports:{static_port:NaN, live_port: NaN}
+        ports:{static_port:NaN, live_port: NaN},
+        filterLoading: false
     },
 
     setAuthToken: (token) => set(state => ({ auth: { ...state.auth, token, } })),
@@ -242,6 +245,7 @@ export const  useStore = create<RootState & RootActions>((set, get) => ({
         set({ singleCamera: { ...currentState, peopleCount } });
     },
     setIsPeople: (isPeople) => set(state => ({ singleCamera: { ...state.singleCamera, isPeople } })),
+    setIsFilterLoading: (filterrDial) => set(state => ({singleCamera:{...state.singleCamera,filterLoading:filterrDial}})),
     setPorts:(data) =>{
         set((state) => ({singleCamera: {...state.singleCamera, ports:data}}))
     },

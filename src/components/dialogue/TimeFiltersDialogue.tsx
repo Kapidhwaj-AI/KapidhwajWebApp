@@ -23,12 +23,14 @@ const Button = dynamic(() => import("@/components/ui/button").then((mod) => mod.
 import Modal from '../ui/Modal';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
+import { useStore } from "@/store";
+import Spinner from "../ui/Spinner";
 
 export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime, setDate, setEndTime, setStartTime, handleApplyFilter }: { isOpen: boolean; onClose: () => void; date: Date | undefined, startTime: Date | undefined; endTime: Date | undefined; setDate: (val: Date | undefined) => void; setStartTime: (val: Date | undefined) => void; setEndTime: (val: Date | undefined) => void; handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void }) {
     const t = useTranslations()
+    const filterLoading = useStore(state => state.singleCamera.filterLoading)
     return (
         <Modal onClose={onClose} title={t('alerts.apply_filter')}>
-            {/* Content Area */}
             <form onSubmit={(e) => { e.preventDefault(); handleApplyFilter(date, startTime, endTime) }} className="flex-1 space-y-4 mb-6">
 
                 <div>
@@ -37,7 +39,7 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                         <PopoverTrigger asChild>
                             <Button
                                 variant="outline"
-                                className="w-full h-[35px] flex items-center justify-between sm:h-[40px] md:h-[45px] p-2 px-4 bg-transparent rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] dark:text-white"
+                                className="w-full h-[35px] flex items-center justify-between sm:h-[40px] md:h-[45px] p-2 px-4 bg-transparent rounded-full focus:outline-none border-2 border-[#2B4C88] dark:text-white"
                             >
                                 {date ? format(date, "PPP") : t("alerts.select_date")}
                                 <IconChevronDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
@@ -63,10 +65,10 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                                 <PopoverTrigger asChild>
                                     <Button
                                         variant="outline"
-                                        className="w-full h-[35px] flex items-center justify-between sm:h-[40px] md:h-[45px] p-2 px-4 bg-transparent rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] dark:text-white"
+                                        className="w-full h-[35px] flex items-center justify-between sm:h-[40px] md:h-[45px] p-2 px-4 bg-transparent rounded-full focus:outline-none border-2 border-[#2B4C88] dark:text-white"
                                     >
                                         {startTime && isValid(startTime)
-                                            ? format(startTime, "h:mm a")
+                                            ? startTime.toLocaleTimeString()
                                             : t('alerts.start_time')}
                                         <IconChevronDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
                                     </Button>
@@ -75,7 +77,6 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                                     <TimePicker
                                         value={startTime}
                                         onChange={(val) => {
-                                            // val might be null, undefined, or invalid Date while editing
                                             if (val && isValid(val)) {
                                                 setStartTime(val);
                                             } else {
@@ -93,9 +94,9 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                                 <PopoverTrigger asChild>
                                     <Button
                                         variant="outline"
-                                        className="w-full h-[35px] flex items-center justify-between sm:h-[40px] md:h-[45px] p-2 px-4 bg-transparent rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] dark:text-white"
+                                        className="w-full h-[35px] flex items-center justify-between sm:h-[40px] md:h-[45px] p-2 px-4 bg-transparent rounded-full focus:outline-none border-2 border-[#2B4C88] dark:text-white"
                                     >
-                                        {endTime ? format(endTime, "h:mm a") : t('alerts.end_time')}
+                                        {endTime ? endTime.toLocaleTimeString() : t('alerts.end_time')}
                                         <IconChevronDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
@@ -120,7 +121,7 @@ export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime,
                     <button type='submit'
                         className="px-6 py-3 bg-[#2B4C88] hover:bg-blue-600 text-white rounded-full text-base"
                     >
-                        {t('alerts.apply_filter')}
+                        {filterLoading ? <Spinner /> : t('alerts.apply_filter')}
                     </button>
                 </div>
             </form>

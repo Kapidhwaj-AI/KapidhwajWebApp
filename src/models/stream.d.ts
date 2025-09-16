@@ -71,9 +71,9 @@ export interface StreamsPageViewProps {
     date: Date | undefined;
     startTime: Date | undefined;
     endTime: Date | undefined;
-    setStartTime: (val: Date | undefined) => void;
+    setStartTime: React.Dispatch<React.SetStateAction<Date | undefined>>;
     setDate: (val: Date | undefined) => void;
-    setEndTime: (val: Date | undefined) => void;
+    setEndTime: React.Dispatch<React.SetStateAction<Date | undefined>>;
     filterDial: boolean;
     isEdit: boolean;
     setIsEdit: (val: boolean) => void;
