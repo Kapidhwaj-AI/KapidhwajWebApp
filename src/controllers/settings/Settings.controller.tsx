@@ -3,13 +3,13 @@ import SettingsView from '@/views/settings/Settings.view';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react'
-const IconDevices = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconDevices))
+const IconCameraDown = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconCameraDown))
 const IconFriends = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconFriends))
 const IconLanguage = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconLanguage))
 const IconLifebuoy = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconLifebuoy))
 const IconLockAccess = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconLockAccess))
 const IconLockSquareRounded = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconLockSquareRounded))
-const IconMapPin = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconMapPin))
+const IconFolderPin = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconFolderPin))
 const IconPlus = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconPlus))
 const IconUser = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconUser))
 
@@ -21,14 +21,14 @@ const SettingsController = () => {
     const settingsItems = [
         {
             id: 1,
-            title: t("manage_devices"),
-            icon: <IconDevices size={40} />,
+            title: t("manage_cameras"),
+            icon: <IconCameraDown size={40} />,
             path: "/settings/manage-devices"
         },
         {
             id: 2,
             title: t("manage_site_folders"),
-            icon: <IconMapPin size={40} />,
+            icon: <IconFolderPin size={40} />,
             path: "/settings/manage-sites"
         },
         {
