@@ -4,7 +4,7 @@ import { useDebounce } from '@/hooks/useDebounce'
 import { protectApi } from '@/lib/protectApi'
 import { Organization } from '@/models/organization'
 import { AccessLevel, User } from '@/models/settings'
-import { AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { useTranslations } from 'next-intl'
 import React, { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
@@ -85,9 +85,9 @@ const ManageAccessController = () => {
     const fetchSearchedUser = async () => {
         if (debouncedQuery.trim().length < 3) return;
         try {
-            const res = await protectApi<{ userId: string }>(`/user/exists?username=${debouncedQuery}`, undefined, undefined, undefined, true)
-            if (res?.status === 200) {
-                setSearchedUsers([{ name: debouncedQuery, userId: res.data.data.userId }])
+            const res = await axios.get(`/user/exists?username=${debouncedQuery}`)
+            if (res.status === 200) {
+                setSearchedUsers([{ name: debouncedQuery, userId: res.data.userId }])
                 setOpen(true)
             }
         } catch (error) {
