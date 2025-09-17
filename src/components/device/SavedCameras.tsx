@@ -1,6 +1,6 @@
 import { IconDeviceCctvFilled, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { AddNewCameraDialogue } from '@/components/dialogue/AddNewCameraDialogue';
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
 import { DevicesMap, Hub } from "@/models/settings";
 import { Camera, CameraLocation } from "@/models/camera";
@@ -37,7 +37,6 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     const [camera, setCamera] = useState<Camera>()
     const [loading, setLoading] = useState(false)
     const [editLoading, setEditLoading] = useState(false)
-    const [search, setSearch] = useState('')
     const { data: organizations, } = useOrganizations();
     const [formData, setFormData] = useState<StreamFormData>({
         name: '',

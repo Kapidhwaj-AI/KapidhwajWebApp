@@ -1,16 +1,21 @@
 import SearchBar from '@/components/common/Searchbar'
-import { TimeFiltersDialogue } from '@/components/dialogue/TimeFiltersDialogue'
 import InfiniteScrolling from '@/components/ui/InfiniteScrolling'
 import Spinner from '@/components/ui/Spinner'
 import { getLocalStorageItem } from '@/lib/storage'
 import { PersonDetails, PersonDetailsViewProps } from '@/models/person-details'
 import { GOOGLE_KPH_BUCKET_URL } from '@/services/config'
 import { filterButtonClassname } from '@/styles/tailwind-class'
-import { IconFilter, IconFilterX } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import React from 'react'
 import { AlertCard } from '../alert/AlertCard'
+import dynamic from 'next/dynamic'
+
+const IconFilter = dynamic(() => import('@tabler/icons-react').then((mode) => mode.IconFilter))
+const IconFilterX = dynamic(() => import('@tabler/icons-react').then((mode) => mode.IconFilterX))
+const TimeFiltersDialogue = dynamic(() => import('@/components/dialogue/TimeFiltersDialogue').then((mode) => mode.TimeFiltersDialogue))
+
+
 
 const PersonDetailsView: React.FC<PersonDetailsViewProps> = ({ personDetails, offset, divRef, isLoading, setOffset, date, err, startTime, alertsLoading, hasMore,setAlertsLoading, setHasMore, endTime, handleApplyFilter, filterDial, setFilterDial, setIsDateFiltered, isDateFiltered, fetchAlertsByPersonId, setDate, setEndTime, setIsLoading, setPersonDetails, setStartTime }) => {
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')

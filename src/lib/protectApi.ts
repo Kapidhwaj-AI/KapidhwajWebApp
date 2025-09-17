@@ -16,7 +16,6 @@ export async function protectApi<T, D = undefined>(
     isNotCustomHeader?: boolean,
     params?: unknown
 ) {
-
     const remoteHub = JSON.parse(getLocalStorageItem("Remotehub") ?? "{}");
     const localHub = JSON.parse(getLocalStorageItem("Localhub") ?? "{}");
 

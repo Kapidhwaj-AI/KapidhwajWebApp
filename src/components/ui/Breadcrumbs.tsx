@@ -1,7 +1,7 @@
 'use client'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import { BackButton } from '../common/BackButton'
 import { useTranslations } from 'next-intl'
@@ -9,6 +9,8 @@ import { useTranslations } from 'next-intl'
 const Breadcrumbs = () => {
     const pathName = usePathname()
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const name = searchParams.get('name')
     const paths = pathName.split('/').filter((item) => item != '' && item !== 'home')
     const buildHref = (index: number) => '/' + paths.slice(0, index + 1).join('/');
     const simplifiedString = (str: string) => {
@@ -38,7 +40,7 @@ const Breadcrumbs = () => {
                                     index === 0 ?
                                         t(`${simplifiedString(item).toLocaleLowerCase()}.title`) :
                                         t(`${simplifiedString(paths[index - 1]).toLocaleLowerCase()}.${simplifiedString(item).toLocaleLowerCase()}`) :
-                                    t(`${simplifiedString(paths[index - 1]).toLocaleLowerCase()}.single_${paths[index - 1]}_page`)}
+                                    name}
                         </button>
                     </div>
                 )
