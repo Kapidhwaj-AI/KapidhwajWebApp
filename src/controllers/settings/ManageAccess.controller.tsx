@@ -85,7 +85,6 @@ const ManageAccessController = () => {
     }
     const fetchSearchedUser = async () => {
         if (debouncedQuery.trim().length < 3) return;
-
         const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
         try {
             const res = await fetch(`https://apilive.kapidhwaj.ai/api-backend/user/exists?username=${debouncedQuery}`, {
@@ -96,10 +95,11 @@ const ManageAccessController = () => {
                 },
             });
             if (!res.ok) {
-                throw new Error(`Error: ${res.status}`); 
+                throw new Error(`Error: ${res.status}`);
             }
             const data = await res.json();
-            setSearchedUsers([{ name: debouncedQuery, userId: data.userId }]);
+            console.log("search", data)
+            setSearchedUsers([{ name: debouncedQuery, userId: data.data.userId }]);
             setOpen(true)
         } catch (error) {
             console.error("err:", error)
@@ -163,6 +163,7 @@ const ManageAccessController = () => {
         setOpen(false);
     };
     const handleSave = async () => {
+        console.log(selectedStreams.size, selectedUser, "useruser")
         if (selectedStreams.size === 0) return;
         if (!selectedUser?.userId) return;
         setIsSaving(true);
