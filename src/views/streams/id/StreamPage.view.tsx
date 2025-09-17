@@ -168,7 +168,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading,  to
 
                     {!isFullscreen && <div className="lg:col-span-2 flex flex-col p-2 md:p-5 md:max-h-[82vh] max-h-[35vh] overflow-auto scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
                         <AlertsFiltersButtonAtStream selectedTab={selectedTab} setSelectedTab={changeTab} />
-                        {isAllAlertLoading ? <Spinner /> : <div className='flex-1 '>
+                        {isAllAlertLoading ? <Spinner /> : 
                             <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
                                 <InfiniteScrolling<Alert>
                                     setData={setAlerts}
@@ -199,7 +199,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading,  to
                                     <p className="text-center">{t("no_more_data")}</p>
                                 )}
                             </div>
-                        </div>}
+                        }
                     </div>}
                 </div>
             }
