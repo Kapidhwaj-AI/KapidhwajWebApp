@@ -311,7 +311,7 @@ const ManageAccessController = () => {
                 setUsername={setUsername}
                 accessLevels={accessLevels}
                 isOpen={isAddUserModalOpen}
-                onClose={() => { setAddUserModalOpen(false); setIsEdit(false); setUsername(''); setSelectedAccess(NaN) }}
+                onClose={() => { setAddUserModalOpen(false); setIsEdit(false); setUsername(''); setSelectedAccess(NaN); setSelectedUser(null); setSearchedUsers([]) }}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
                 selectedStreams={selectedStreams}
