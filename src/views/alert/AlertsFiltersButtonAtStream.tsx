@@ -37,7 +37,7 @@ function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selected
         { id: 6, label: `${t("alerts.fire_smoke_detection")}`, value: 'FIRE_SMOKE_DETECTION', icon: <IconFireExtinguisher stroke={'2'} /> },
     ];
     return (
-        <div className="flex gap-2 md:gap-4 min-h-min h-full overflow-x-auto w-full scrollbar-hide px-4 justify-start md:justify-normal">
+        <div className="flex gap-2 md:gap-4 min-h-min overflow-x-auto w-full scrollbar-hide px-4 justify-start md:justify-normal">
             {tabFilters.map((tf, index) => (
                 <button
                     key={index}
