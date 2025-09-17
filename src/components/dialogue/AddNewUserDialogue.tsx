@@ -162,7 +162,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
                         <div className="flex-1">
                             <div className="mb-4">
                                 <Popover open={open && !isEdit && searchedUsers.length > 0} onOpenChange={setOpen} >
-                                    <PopoverTrigger className='w-full'>
+                                    <PopoverTrigger className='w-full' asChild>
                                         <InputField
                                             placeholder={t('settings.enter_username')}
                                             value={username}
@@ -175,8 +175,8 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
                                         />
                                     </PopoverTrigger>
 
-                                    <PopoverContent className="p-0 w-full" ref={popoverRef} sideOffset={5}>
-                                        <ul className="max-h-64 overflow-y-auto py-1 w-full">
+                                    {open && <PopoverContent className="p-0 w-full" ref={popoverRef} sideOffset={5}>
+                                        <ul className="max-h-64 overflow-y-auto py-1 w-full divide-y divide-gray-200">
                                             {searchedUsers.length === 0 && (
                                                 <li className="text-sm text-muted-foreground px-4 py-2">
                                                     No Users found.
@@ -197,7 +197,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
                                                 </li>
                                             ))}
                                         </ul>
-                                    </PopoverContent>
+                                    </PopoverContent>}
                                 </Popover>
                             </div>
 
