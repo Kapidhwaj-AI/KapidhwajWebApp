@@ -4,9 +4,9 @@ const Input = dynamic(() => import("@/components/ui/input").then((mod) => mod.In
 import { Search } from "lucide-react";
 import dynamic from "next/dynamic";
 
-const SearchBar = ({ search, setSearch, placeholder }: { search: string; setSearch: (e: React.ChangeEvent<HTMLInputElement>) => void; placeholder: string; }) => {
+const SearchBar = ({ search, setSearch, placeholder, className }: { search: string; setSearch: (e: React.ChangeEvent<HTMLInputElement>) => void; placeholder: string; className?:string }) => {
     return (
-        <div className="relative self-end">
+        <div className={`relative self-end ${className}`}>
             <Input name={`search ${placeholder}`}
                 type="text"
                 value={search}

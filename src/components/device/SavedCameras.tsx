@@ -1,6 +1,6 @@
 import { IconDeviceCctvFilled, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { AddNewCameraDialogue } from '@/components/dialogue/AddNewCameraDialogue';
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
 import { DevicesMap, Hub } from "@/models/settings";
 import { Camera, CameraLocation } from "@/models/camera";
@@ -33,10 +33,11 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     const [cameraToggle, setCameraToggle] = useState(false);
     const [cameraId, setCameraId] = useState<string>()
     const [organizationId, setOrganizationId] = useState('')
-    const [nearbyCams, setNearbyCams] = useState<DevicesMap>()
+    const [nearbyCams, setNearbyCams] = useState<DevicesMap>({})
     const [camera, setCamera] = useState<Camera>()
     const [loading, setLoading] = useState(false)
     const [editLoading, setEditLoading] = useState(false)
+    const [search, setSearch] = useState('')
     const { data: organizations, } = useOrganizations();
     const [formData, setFormData] = useState<StreamFormData>({
         name: '',
@@ -79,6 +80,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     useEffect(() => {
         fetchNearByCam();
     }, [])
+    
     const handleAddCamera = () => {
         setIsAddCameraOpen(true);
     };
@@ -171,6 +173,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
         }
     }
     const t = useTranslations()
+    console.log(hub.cameras,"cameras")
     return (
         <>
             <div className={`flex flex-col  scrollbar-hide overflow-y-auto h-full max-h-full px-8 ${className}`}>
@@ -197,9 +200,10 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                                 <div className="w-15 h-15 bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
                                     <IconDeviceCctvFilled size={20} className="text-[#888888]" />
                                 </div>
-                                <div className="ml-3 flex-1 min-w-0">
+                                <div className="ml-3 flex flex-col w-full items-start">
                                     <h3 className="text-sm font-medium truncate">{camera.name}</h3>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex flex-col items-center gap-2">
+                                        <p className="text-xs text-gray-500 truncate">{camera.physical_address}</p>
 
                                         <p className="text-xs text-gray-500 truncate">{camera.organization?.name}</p>
                                     </div>

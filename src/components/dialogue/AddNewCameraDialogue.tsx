@@ -1,7 +1,7 @@
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import Modal from '../ui/Modal';
-import { DevicesMap } from '@/models/settings';
+import { Device, DevicesMap } from '@/models/settings';
 import Spinner from '../ui/Spinner';
 import { InputField } from '../ui/Input.field';
 import { useTranslations } from 'next-intl';
@@ -9,6 +9,7 @@ import { Folders, Organization } from '@/models/organization';
 import { protectApi } from '@/lib/protectApi';
 import { Camera } from '@/models/camera';
 import dynamic from 'next/dynamic';
+import SearchBar from '../common/Searchbar';
 
 const SelectField = dynamic(() => import('../ui/Select.field'))
 const IconRouter = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconRouter))
@@ -20,7 +21,7 @@ const IconCopyPlus = dynamic(() => import('@tabler/icons-react').then((mod) => m
 interface AddNewCameraDialogueProps {
     isOpen: boolean;
     onClose: () => void;
-    nearCams: DevicesMap | undefined
+    nearCams: DevicesMap
     isLoading: boolean;
     fetchNearCams: () => void;
     setSelectedSite: (val: string) => void;
@@ -45,7 +46,16 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, setCamera, handle
     const [subfolderId, setSubfolderId] = useState('')
     const [isSaving, setIsSaving] = useState(false);
     const t = useTranslations()
-
+    const [search, setSearch] = useState('')
+    const filteredNearbyCam = useMemo(() => {
+        const entries = Object.entries(nearCams);
+        if (search.trim() === '') {
+            return entries.filter(([_, info]) => info.status !== 'Registered');
+        }
+        return entries
+            .filter(([_, info]) => info.status !== 'Registered')
+            .filter(([_, info]) => info.ipaddress?.includes(search));
+    }, [nearCams, search])
 
     const handleSave = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -176,11 +186,13 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, setCamera, handle
                     </div>
 
                     <div className="w-full h-[140px] md:h-[160px] xl:h-[240px] bg-[var(--surface-100)] p-3 rounded-[24px]">
-                        <div className="space-y-2 h-full overflow-y-auto pr-2 scrollbar-hide">
+                        <div className="space-y-2 h-full flex flex-col gap-2 overflow-y-auto pr-2 scrollbar-hide">
+                            <SearchBar search={search} setSearch={(e) => setSearch(e.target.value)} placeholder='Search Near by Cameras' className='justify-end flex p-2' />
+
                             {isLoading ? (
                                 <Spinner />
                             ) : nearCams ? (
-                                Object.entries(nearCams).map(([mac, device]) => (
+                                filteredNearbyCam.map(([mac, device]) => (
                                     <div
                                         key={device.ipaddress}
                                         className="flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-[12px] transition-colors min-h-[60px]"
