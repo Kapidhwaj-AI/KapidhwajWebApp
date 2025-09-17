@@ -82,7 +82,7 @@ export default function Sidebar() {
   return (
     <>
       {isMobile && (
-        <div className="flex items-center justify-between bg-[var(--surface-200)] px-4 py-2 rounded-2xl mx-4">
+        <div className="flex items-center justify-between bg-[var(--surface-200)] px-4 py-2 rounded-2xl">
           <div className="flex items-center gap-2">
             <Image
               src="/assets/images/logo-square.webp"
@@ -185,7 +185,7 @@ export default function Sidebar() {
       {!isMobile && (
         <div
           className={cn(
-            'bg-[var(--surface-200)] flex md:flex-col items-center justify-between md:py-4  mx-4 md:transition-[width] md:duration-1000',
+            'bg-[var(--surface-200)] flex md:flex-col items-center justify-between md:py-4  md:transition-[width] md:duration-1000',
             shouldExpand ? 'w-60 rounded-4xl' : 'w-24 rounded-full'
           )}
           onMouseEnter={() => !isMobile && setIsHovering(true)}
