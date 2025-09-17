@@ -142,7 +142,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
 
     const allVisibleSelected = getVisibleStreamIds().every(id => selectedStreams.has(id));
     const t = useTranslations()
-    console.log(searchedUsers.length>0,"searchedUser")
+    console.log(searchedUsers,"searchedUser")
     if (!isOpen) return null;
 
     return (
