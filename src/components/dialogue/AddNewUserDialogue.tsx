@@ -175,7 +175,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
                                         />
                                     </PopoverTrigger>
 
-                                    <PopoverContent className="p-0 w-full" ref={popoverRef} sideOffset={5}>
+                                    <PopoverContent className="p-0 w-full z-[999]"  sideOffset={5}>
                                         <ul className="max-h-64 overflow-y-auto py-1 w-full">
                                             {searchedUsers.length === 0 && (
                                                 <li className="text-sm text-muted-foreground px-4 py-2">
