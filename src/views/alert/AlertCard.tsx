@@ -63,7 +63,7 @@ export function AlertCard({ alert, cameraLocation }: { alert: Alert; cameraLocat
                                         :
                                 <h3 className="text-xs">{alert?.alertType}</h3>
                         }
-                        {cameraLocation && <p className=" flex text-xs items-center justify-between font-light whitespace-nowrap">
+                        {cameraLocation && <p className=" flex text-xs items-center gap-1 font-light whitespace-nowrap">
                             {cameraLocation?.organization} <IconChevronRight size={12} className=" text-gray-400 text-xs" /> {cameraLocation?.parantFolder === "NA" ? '' : <div className=' flex gap-2 items-center'>{cameraLocation?.parantFolder} <IconChevronRight size={12} className=" text-gray-400 text-xs" /></div>}   {alert.camera?.name}
                         </p>}
                     </div>

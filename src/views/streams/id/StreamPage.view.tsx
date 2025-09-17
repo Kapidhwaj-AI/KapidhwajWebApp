@@ -38,7 +38,7 @@ import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 
 
-const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, changeTab,  topRecordingRef, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings,  setSettingDial, setStartTime, settingDial,
+const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading,  topRecordingRef, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, changeTab, setSettingDial, setStartTime, settingDial,
     startTime, stream, fetchAlerts, date, fetchRecordings, filterDial, filteredAlerts, formData, recordingLoading, recordingOffset, recordingref, recordings, alertEndRef, alertOffset, alerts, alertsLoading, handleAiToggle, handleMotionToggle, handleRecordingToggle, handleSave, handleToggleStream, hasMore, hasRecordingMore, endTime, organizations, handleApplyFilter
 
 }) => {
@@ -169,7 +169,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, cha
                     {!isFullscreen && <div className="lg:col-span-2 gap-4 flex flex-col p-2  md:p-5 md:max-h-[82vh] max-h-[35vh] overflow-y-auto h-[35vh] lg:h-full scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
                         <AlertsFiltersButtonAtStream selectedTab={selectedTab} setSelectedTab={changeTab} />
                         {isAllAlertLoading ? <Spinner /> : <div className='flex-1 '>
-                            <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
+                            <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-3 md:gap-6 w-full ">
                                 <InfiniteScrolling<Alert>
                                     setData={setAlerts}
                                     setOffset={setAlertOffset}

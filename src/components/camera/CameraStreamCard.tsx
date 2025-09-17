@@ -78,7 +78,7 @@ export default function CameraStreamCard({
         </div>
       )}
       <Link
-        href={`/streams/${camera?.camera_id}`}
+        href={{ pathname: `/streams/${camera?.camera_id}`, query: { name: camera?.name } }}
         className={cn(
           "w-full px-4 absolute bottom-2 z-20",
           cameraDetailView === "focused" && "hidden"

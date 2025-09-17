@@ -1,15 +1,20 @@
 import SearchBar from '@/components/common/Searchbar'
-import { TimeFiltersDialogue } from '@/components/dialogue/TimeFiltersDialogue'
 import InfiniteScrolling from '@/components/ui/InfiniteScrolling'
 import Spinner from '@/components/ui/Spinner'
 import { PersonDetails, PersonDetailsViewProps } from '@/models/person-details'
 import { filterButtonClassname } from '@/styles/tailwind-class'
-import { IconFilter, IconFilterX } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import React from 'react'
 import { AlertCard } from '../alert/AlertCard'
 import { BASE_URL } from '@/lib/protectApi'
+import dynamic from 'next/dynamic'
+
+const IconFilter = dynamic(() => import('@tabler/icons-react').then((mode) => mode.IconFilter))
+const IconFilterX = dynamic(() => import('@tabler/icons-react').then((mode) => mode.IconFilterX))
+const TimeFiltersDialogue = dynamic(() => import('@/components/dialogue/TimeFiltersDialogue').then((mode) => mode.TimeFiltersDialogue))
+
+
 
 const PersonDetailsView: React.FC<PersonDetailsViewProps> = ({ personDetails, offset, divRef, isLoading, setOffset, date, err, startTime, alertsLoading, hasMore, setAlertsLoading, setHasMore, endTime, handleApplyFilter, filterDial, setFilterDial, setIsDateFiltered, isDateFiltered, fetchAlertsByPersonId, setDate, setEndTime, setIsLoading, setPersonDetails, setStartTime }) => {
     const t = useTranslations()

@@ -65,8 +65,8 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, search, setSearch, setAlert
             <AlertsFiltersButtons setSelectedTab={setSelectedTab} selectedTab={selectedTab} />
             <div className="flex-1 flex flex-col gap-2 mb-2 overflow-y-auto scrollbar-hide">
                 {isLoading ? <Spinner /> :
-                    <div className='flex-1 md:max-h-[59vh] max-h-[35vh] overflow-auto scrollbar-hide'>
-                        <div className={filteredAlerts.length > 0 ? "grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid grid-cols-1 h-full w-full"}>
+                    <div className='flex-1 max-h-full h-full overflow-y-auto scrollbar-hide'>
+                        <div className={filteredAlerts.length > 0 ? "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid grid-cols-1 h-full w-full"}>
                             <InfiniteScrolling<Alert> setData={setAlerts} serviceType={serviceType} setOffset={setAlertOffset} offset={alertOffset} divRef={alertEndRef} data={alerts} fetchData={fetchAlerts} isLoading={alertsLoading} setIsLoading={setAlertsLoading} setHasMore={setHasMore} hasMore={hasMore}>
                                 {filteredAlerts.length > 0 ? <>
 
