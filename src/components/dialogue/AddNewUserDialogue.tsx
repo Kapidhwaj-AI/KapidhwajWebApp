@@ -162,7 +162,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
                         <div className="flex-1">
                             <div className="mb-4">
                                 <Popover open={open && !isEdit && searchedUsers.length > 0} onOpenChange={setOpen} >
-                                    <PopoverTrigger className='w-full' asChild>
+                                    <PopoverTrigger className='w-full'>
                                         <InputField
                                             placeholder={t('settings.enter_username')}
                                             value={username}
