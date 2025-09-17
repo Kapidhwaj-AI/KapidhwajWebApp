@@ -88,7 +88,7 @@ const ManageAccessController = () => {
 
         const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
         try {
-            const res = await fetch(`https://apilive.kapidhwaj.ai/user/exists?username=${debouncedQuery}`, {
+            const res = await fetch(`https://apilive.kapidhwaj.ai/api-backend/user/exists?username=${debouncedQuery}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
