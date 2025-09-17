@@ -8,6 +8,7 @@ import axios, { AxiosResponse } from 'axios'
 import { useTranslations } from 'next-intl'
 import React, { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
+import { getLocalStorageItem } from '@/lib/storage'
 const AddNewAccessDialogue = dynamic(() => import('@/components/dialogue/AddNewAccessDialogue').then((mod) => mod.AddNewAccessDialogue))
 const AddNewUserDialogue = dynamic(() => import('@/components/dialogue/AddNewUserDialogue').then((mod) => mod.AddNewUserDialogue))
 const DeleteDialog = dynamic(() => import('@/components/dialogue/DeleteDialog').then((mod) => mod.DeleteDialog))
@@ -84,12 +85,22 @@ const ManageAccessController = () => {
     }
     const fetchSearchedUser = async () => {
         if (debouncedQuery.trim().length < 3) return;
+
+        const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
         try {
-            const res = await axios.get(`/user/exists?username=${debouncedQuery}`)
-            if (res.status === 200) {
-                setSearchedUsers([{ name: debouncedQuery, userId: res.data.userId }])
-                setOpen(true)
+            const res = await fetch(`/user/exists?username=${debouncedQuery}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (!res.ok) {
+                throw new Error(`Error: ${res.status}`); 
             }
+            const data = await res.json();
+            setSearchedUsers([{ name: debouncedQuery, userId: data.userId }]);
+            setOpen(true)
         } catch (error) {
             console.error("err:", error)
         }
