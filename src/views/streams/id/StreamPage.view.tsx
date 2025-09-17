@@ -166,7 +166,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading,  to
 
                     </div>
 
-                    {!isFullscreen && <div className="lg:col-span-2 flex flex-col p-2 md:p-5 md:max-h-[82vh] max-h-[35vh] overflow-auto scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
+                    {!isFullscreen && <div className="lg:col-span-2 flex flex-col gap-2 p-2 md:p-5 md:max-h-[82vh] max-h-[35vh] overflow-auto scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
                         <AlertsFiltersButtonAtStream selectedTab={selectedTab} setSelectedTab={changeTab} />
                         {isAllAlertLoading ? <Spinner /> : 
                             <div className=" grid grid-cols-1 gap-3 md:gap-6 w-full ">
