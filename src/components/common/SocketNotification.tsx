@@ -85,8 +85,11 @@ const SocketNotification = () => {
                 }
             });
 
-            socket.on('disconnect', (reason) => {
+            socket.on('disconnect', reason => {
                 console.log('Disconnected from server. Reason:', reason);
+                if (reason === 'io server disconnect') {
+                    socket.connect();
+                }
             });
 
             return () => {
