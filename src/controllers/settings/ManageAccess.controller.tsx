@@ -9,6 +9,8 @@ import { useTranslations } from 'next-intl'
 import React, { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { getLocalStorageItem } from '@/lib/storage'
+import { showToast } from '@/lib/showToast'
+import { apiBaseUrl } from '@/services/config'
 const AddNewAccessDialogue = dynamic(() => import('@/components/dialogue/AddNewAccessDialogue').then((mod) => mod.AddNewAccessDialogue))
 const AddNewUserDialogue = dynamic(() => import('@/components/dialogue/AddNewUserDialogue').then((mod) => mod.AddNewUserDialogue))
 const DeleteDialog = dynamic(() => import('@/components/dialogue/DeleteDialog').then((mod) => mod.DeleteDialog))
@@ -38,6 +40,8 @@ const ManageAccessController = () => {
     const [isAccessLoading, setIsAccessLoading] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
+    const storedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
+    const storedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const t = useTranslations()
     const fetchUser = async () => {
         setIsLoading(true)
@@ -83,9 +87,9 @@ const ManageAccessController = () => {
             console.error("Error:", err)
         }
     }
+    const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const fetchSearchedUser = async () => {
         if (debouncedQuery.trim().length < 3) return;
-        const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
         try {
             const res = await fetch(`https://apilive.kapidhwaj.ai/api-backend/user/exists?username=${debouncedQuery}`, {
                 method: "GET",
@@ -162,11 +166,35 @@ const ManageAccessController = () => {
         setUsername(user.name);
         setOpen(false);
     };
+    const syncUser = async () => {
+        try {
+            const res = await fetch(`${apiBaseUrl}/devices/hub/sync/user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    userId: selectedUser?.userId ?? '',
+                    hubId: storedLocalHub?.id || storedRemoteHub?.id
+                }),
+            });
+
+            return res.ok; // true if status is 2xx, false otherwise
+        } catch (error) {
+            console.error('Sync user failed', error);
+            showToast('Sync user failed', 'error')
+            return false;
+        }
+    };
     const handleSave = async () => {
         console.log(selectedStreams.size, selectedUser, "useruser")
         if (selectedStreams.size === 0) return;
         if (!selectedUser?.userId) return;
         setIsSaving(true);
+        const isSync = await syncUser()
+        if (!isSync) return;
+
         const orgCam: { [key: string]: { cameraId: string }[] } = {};
         const revokedCameras: { [key: string]: { cameraId: string }[] } = {};
         shareableOrg.forEach((org) => {
@@ -286,6 +314,7 @@ const ManageAccessController = () => {
         } finally {
             setIsSaving(false);
         }
+
     };
 
 
