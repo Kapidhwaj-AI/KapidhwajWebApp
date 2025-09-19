@@ -31,7 +31,7 @@ const IconTreadmill = dynamic(() => import("@tabler/icons-react").then((mod) => 
 const IconChevronRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconChevronRight),
     { ssr: false });
 
-export function AlertCard({ alert, cameraLocation }: { alert: Alert; cameraLocation?:CameraLocation }) {
+export function AlertCard({ alert, cameraLocation }: { alert: Alert; cameraLocation?: CameraLocation }) {
     const [isPreview, setIsPreview] = useState(false);
     console.log(alert, "Alert")
     const timestamp = alert?.timestamp || 0
@@ -57,15 +57,28 @@ export function AlertCard({ alert, cameraLocation }: { alert: Alert; cameraLocat
                     </div>}
                     <div className="flex flex-col gap-1">
                         {alert.alertType === 'FACE_DETECTION' ? <h3 className="text-xs">{alert?.persons?.[0].name} {`(${alert?.persons?.[0].category?.name ?? ' '})`}</h3>
-                            : alert.alertType === 'PEOPLE_COUNT' ? <h3 className="text-xs">Crowd Aletr: {alert?.meta_data?.PEOPLE_COUNT}</h3>
+                            : alert.alertType === 'PEOPLE_COUNT' ? <h3 className="text-xs">Crowd Alert: {alert?.meta_data?.PEOPLE_COUNT}</h3>
                                 : alert.alertType === 'FIRE_SMOKE_DETECTION' ? <h3 className="text-xs">{alert?.meta_data?.DETECTED_FIRE_SMOKE?.toUpperCase()}</h3>
                                     : alert.alertType === 'LICENSE_PLATE_DETECTION' ? <h3 className="text-xs">{alert?.meta_data?.DETECTED_PLATE}</h3>
                                         :
-                                <h3 className="text-xs">{alert?.alertType}</h3>
+                                        <h3 className="text-xs">{alert?.alertType}</h3>
                         }
-                        {cameraLocation && <p className=" flex text-xs items-center gap-1 font-light whitespace-nowrap">
-                            {cameraLocation?.organization} <IconChevronRight size={12} className=" text-gray-400 text-xs" /> {cameraLocation?.parantFolder === "NA" ? '' : <div className=' flex gap-2 items-center'>{cameraLocation?.parantFolder} <IconChevronRight size={12} className=" text-gray-400 text-xs" /></div>}   {alert.camera?.name}
-                        </p>}
+                        <p className="flex text-xs items-center gap-1 font-light whitespace-normal break-words">
+                            {cameraLocation?.organization && (
+                                <>
+                                    <IconChevronRight size={12} className="text-gray-400 text-xs" />
+                                    {cameraLocation.organization}
+                                </>
+                            )}
+                            {cameraLocation?.parantFolder !== "NA" &&
+                                cameraLocation?.parantFolder !== undefined && (
+                                    <div className="flex gap-2 items-center">
+                                        {cameraLocation?.parantFolder}
+                                        <IconChevronRight size={12} className="text-gray-400 text-xs" />
+                                    </div>
+                                )}
+                            {alert.camera?.name}
+                        </p>
                     </div>
                 </div>
 
@@ -88,7 +101,7 @@ export function AlertCard({ alert, cameraLocation }: { alert: Alert; cameraLocat
                     <IconMovie stroke={'2'} className="text-gray-600 dark:text-gray-300" size={24} />
                 </button>
             </div>
-            {isPreview && <AlertPreviewDialogue onClose={() => setIsPreview(false)} imageUrl={BASE_URL + ':3000/' + alert.frame_url} alertType={alert.alertType} />}
+            {isPreview && <AlertPreviewDialogue onClose={() => setIsPreview(false)} imageUrl={BASE_URL + ':3000/' + alert.frame_url} alertType={alert.alertType === 'FACE_DETECTION' ? `${alert?.persons?.[0].name} ${`(${alert?.persons?.[0].category?.name ?? ' '})`}` : alert.alertType === 'PEOPLE_COUNT' ? `Crowd Alert: ${alert?.meta_data?.PEOPLE_COUNT}` : alert.alertType === 'LICENSE_PLATE_DETECTION' ? `${alert?.meta_data?.DETECTED_PLATE}` : alert.alertType} />}
         </div>
     );
 }

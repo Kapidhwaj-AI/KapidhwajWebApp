@@ -8,7 +8,7 @@ const SavedCameras = dynamic(() => import('@/components/device/SavedCameras').th
 const ManageDeviceView: React.FC<ManageDeviceViewProp> = ({  sites, selectedSite, setSelectedSite, isSavedHubLoading,  selectedHub, fetchSavedHubs, toggleStream,  isDelete, setIsDelete, handleDelete, }) => {
   const t = useTranslations()
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col min-h-0">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 px-2 md:px-4 pt-2 md:pt-3 pb-4">
 
         <h1 className="sm:text-md md:text-lg lg:text-xl xl:text-2xl font-bold ml-2 md:ml-5 whitespace-nowrap">

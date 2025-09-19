@@ -16,7 +16,7 @@ import Spinner from "../ui/Spinner";
 interface SavedCamerasProps {
     hub: Hub;
     className?: string;
-    toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: number) => Promise<AxiosResponse | undefined>;
+    toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: string) => Promise<AxiosResponse>;
     setIsDelete: (val: boolean) => void;
     isDelete: boolean;
     handleDelet: (camearId: string | undefined, organizationId: string) => void;
@@ -48,19 +48,6 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
         overlapSensitivity: 0,
         sceneDensity: 0
     });
-    const handleSwitchToggle = async (newToggle: boolean) => {
-        if (camera) {
-            const res = await toggleStream(
-                newToggle,
-                camera.camera_id,
-                camera.physical_address,
-                camera.hub_id
-            );
-            if (res?.status === 200) {
-                setCameraToggle(newToggle)
-            }
-        }
-    }
     const fetchNearByCam = async () => {
         setLoading(true)
         try {
@@ -79,7 +66,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
     useEffect(() => {
         fetchNearByCam();
     }, [])
-    
+
     const handleAddCamera = () => {
         setIsAddCameraOpen(true);
     };
@@ -90,7 +77,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
         setCamera(camera)
         setCameraToggle(camera.is_ai_stream_active !== 0)
         await fetchCameraLocation(camera.camera_id)
-        setFormData((prev) => ({ ...prev, name: camera.name, people_threshold_count: camera.people_threshold_count, organizationId: camera.organization_id ?? '', detectionSensitivity:camera.obj_thresh, overlapSensitivity:camera.nms_thresh, sceneDensity:camera.topk_pre_nms}))
+        setFormData((prev) => ({ ...prev, name: camera.name, people_threshold_count: camera.people_threshold_count, organizationId: camera.organization_id ?? '', detectionSensitivity: camera.obj_thresh, overlapSensitivity: camera.nms_thresh, sceneDensity: camera.topk_pre_nms }))
     };
     const handleDeleteCamera = (id: string, orgId: string) => {
 
@@ -118,11 +105,6 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
             setEditLoading(false)
         }
     }
-    useEffect(() => {
-        if (camera?.camera_id && !isEditCameraOpen) {
-            handleSwitchToggle(true)
-        }
-    }, [camera, camera?.camera_id])
     const handleSave = async () => {
         setLoading(true)
         const fallbackFolderId =
@@ -150,7 +132,6 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
 
             if (res.status === 200) {
                 setIsEditCameraOpen(false)
-                handleSwitchToggle(true)
                 await fetchSavedHubs()
                 setFormData({
                     name: '',
@@ -160,22 +141,17 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                     subfolder: -1
                 })
             }
-            if (res.status === 201) {
-                setIsEditCameraOpen(false)
-                handleSwitchToggle(true)
-                await fetchSavedHubs()
-                
-            }
+            
         } catch (e) { console.error(e) }
         finally {
             setLoading(false)
         }
     }
     const t = useTranslations()
-    console.log(hub.cameras,"cameras")
+    console.log("nearcams", Object.entries(nearbyCams))
     return (
         <>
-            <div className={`flex flex-col  scrollbar-hide overflow-y-auto h-full max-h-full px-8 ${className}`}>
+            <div className={`flex flex-col h-full px-8 ${className}`}>
                 <div className="flex justify-between items-center pt-6 pb-5 flex-shrink-0">
                     <div>
                         <h2 className="text-sm font-bold">{hub.name}</h2>
@@ -191,38 +167,59 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                 </div>
                 {camLoading ? <Spinner /> : <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-6rem)]  pb-4 scrollbar-hide">
                     <div className="space-y-3">
-                        {hub.cameras.filter((item) => item.camera_id !== cameraId).map((camera, index) => (
-                            <div
-                                key={camera.camera_id + index}
-                                className="flex items-center p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors"
-                            >
-                                <div className="w-15 h-15 bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
-                                    <IconDeviceCctvFilled size={20} className="text-[#888888]" />
-                                </div>
-                                <div className="ml-3 flex flex-col w-full items-start">
-                                    <h3 className="text-sm font-medium truncate">{camera.name}</h3>
-                                    <div className="flex flex-col items-center gap-2">
-                                        <p className="text-xs text-gray-500 truncate">{camera.physical_address}</p>
+                        {hub.cameras.filter((item) => item.camera_id !== cameraId).map((camera, index) => {
+                            const matchedCam = Object.entries(nearbyCams).find(
+                                ([mac]) => mac === camera.physical_address
+                            )?.[1];
+                            return (
+                                <div
+                                    key={camera.camera_id + index}
+                                    className="grid grid-cols-5  p-3 bg-[var(--surface-200)] hover:bg-[var(--surface-300)] rounded-xl transition-colors"
+                                >
+                                    <div className="col-span-3 flex gap-2" >
+                                        <div className="w-15 h-15 bg-[var(--surface-100)] rounded-lg flex items-center justify-center">
+                                            <IconDeviceCctvFilled size={20} className="text-[#888888]" />
+                                        </div>
+                                        <div className="flex flex-col items-start w-full max-w-[70px] md:max-w-[115px]">
+                                            <h3 className="text-sm font-medium truncate w-full">{camera.name}</h3>
+                                            <div className="flex flex-col items-start w-full">
+                                                <p className="text-xs text-gray-500 truncate w-full ">{camera.physical_address}</p>
+                                                {matchedCam ?
+                                                    <p className="text-xs text-gray-400 truncate w-full">{matchedCam.ipaddress}</p>
+                                                    : <p className="text-xs text-gray-400 italic w-full truncate
+                                                    ">IP Not found</p>}
 
-                                        <p className="text-xs text-gray-500 truncate">{camera.organization?.name}</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div className="flex md:gap-1 md:flex-row flex-col col-span-1 items-center justify-center md:justify-start text-start">
+                                        <span
+                                            className={`w-2 h-2 rounded-full ${matchedCam?.connected
+                                                ? "bg-green-500"
+                                                : "bg-red-500"
+                                                }`}
+                                        ></span>
+                                        <p className="text-xs text-gray-400 text-start truncate">{matchedCam?.connected ? 'Connected' : "Not Connected"}</p>
+                                    </div>
+                                    <div className="flex col-span-1 md:gap-1 md:flex-row flex-col col items-center justify-end ">
+                                        <button
+                                            onClick={() => handleEditCamera(camera)}
+                                            className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
+                                        >
+                                            <IconPencil size={24} className="text-gray-600" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDeleteCamera(camera.camera_id, camera.organization_id ?? '')}
+                                            className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
+                                        >
+                                            <IconTrash size={24} className="text-[#FF6868]" />
+                                        </button>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <button
-                                        onClick={() => handleEditCamera(camera)}
-                                        className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
-                                    >
-                                        <IconPencil size={24} className="text-gray-600" />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDeleteCamera(camera.camera_id, camera.organization_id ?? '')}
-                                        className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
-                                    >
-                                        <IconTrash size={24} className="text-[#FF6868]" />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+                            )
+                        })}
                     </div>
                 </div>}
             </div>
@@ -237,9 +234,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                 selectedSite={selectedSite}
                 hubId={hub.id}
                 fetchSavedHubs={fetchSavedHubs}
-                handleSwitchToggle={handleSwitchToggle}
-                camera={camera}
-                setCamera={setCamera}
+                handleSwitchToggle={toggleStream}
             />
             {isEditCameraOpen &&
                 <EditStreamDialogue

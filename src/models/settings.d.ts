@@ -15,7 +15,7 @@ export interface ManageDeviceViewProp {
     isSavedHubLoading: boolean
     setIsHubLoading: (val: boolean) => void;
     fetchSavedHubs: () => Promis<void>;
-    toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: number) => Promise<AxiosResponse | undefined>
+    toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: string) => Promise<AxiosResponse>
     isDelete: boolean;
     setIsDelete: (val: boolean) => void;
     handleDelete: (cameraId: string, organizationId: string) => void

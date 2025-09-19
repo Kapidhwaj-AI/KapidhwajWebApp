@@ -50,10 +50,9 @@ export default function CameraStreamCard({
   const t = useTranslations('settings')
   return (
     <div
-      className={cn(
-        "w-full aspect-video bg-white dark:bg-gray-800 rounded-4xl shadow-lg",
-        "overflow-hidden flex items-center justify-center relative"
-      )}
+      className={
+        "w-full aspect-video bg-white dark:bg-gray-800 rounded-4xl shadow-lg overflow-hidden flex items-center justify-center relative"
+      }
       style={{
         backgroundImage: camera?.webrtc_url ? "none" : "url('/assets/images/image.webp')",
         backgroundSize: "cover",

@@ -98,7 +98,7 @@ export function StreamSettingsDialogue({
             </div>
             <Switch
               enabled={isStream}
-              onChange={() => handleToggleStream(!isStream)}
+              onChange={() => { handleToggleStream(!isStream); setSettings({ recordings: false, people_count: false, motion: false, intrusion_detection: false, license_plate_detection: false, face_detection: false, fire_smoke_detection: false }) }}
               trackColor="bg-white"
             />
           </div>
