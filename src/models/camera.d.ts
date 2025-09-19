@@ -12,7 +12,7 @@ export interface Camera {
   isRegistered: number;
   site_id: number;
   room_id: number;
-  hub_id: number;
+  hub_id: string;
   uri?: string;
   rtsp_url?: string;
   webrtc_url: string;

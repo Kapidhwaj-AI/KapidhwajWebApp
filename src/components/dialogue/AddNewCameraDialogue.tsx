@@ -10,6 +10,8 @@ import { protectApi } from '@/lib/protectApi';
 import { Camera } from '@/models/camera';
 import dynamic from 'next/dynamic';
 import SearchBar from '../common/Searchbar';
+import { AxiosResponse } from 'axios';
+import { showToast } from '@/lib/showToast';
 
 const SelectField = dynamic(() => import('../ui/Select.field'))
 const IconRouter = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconRouter))
@@ -28,13 +30,11 @@ interface AddNewCameraDialogueProps {
     selectedSite: string;
     sites: Organization[];
     hubId: string;
-    handleSwitchToggle: (val: boolean) => Promise<void>
+    handleSwitchToggle: (val: boolean, id: string, physical_address: string, hub_id: string) => Promise<AxiosResponse>
     fetchSavedHubs: () => Promise<void>
-    camera: Camera | undefined;
-    setCamera: (val: Camera) => void
 }
 
-export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, setCamera, handleSwitchToggle, hubId, onClose, isLoading, fetchNearCams, nearCams, selectedSite, setSelectedSite, sites }: AddNewCameraDialogueProps) {
+export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, handleSwitchToggle, hubId, onClose, isLoading, fetchNearCams, nearCams, selectedSite, setSelectedSite, sites }: AddNewCameraDialogueProps) {
     const [ipAddress, setIpAddress] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -45,6 +45,7 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, setCamera, handle
     const [subfolders, setSubfolders] = useState<{ id: string; name: string }[]>([])
     const [subfolderId, setSubfolderId] = useState('')
     const [isSaving, setIsSaving] = useState(false);
+    const [showPassword, setShowPassword] = useState(false)
     const t = useTranslations()
     const [search, setSearch] = useState('')
     const filteredNearbyCam = useMemo(() => {
@@ -79,17 +80,19 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, setCamera, handle
             hubId, username, password, ipaddress: ipAddress,
         }
         setIsSaving(true)
-        console.log("hiiii")
         try {
             const res = await protectApi<Camera, typeof payload>(`/camera?action=add&organizationId=${selectedSite}`, 'POST', payload, undefined, false)
             if (res.status === 201) {
                 onClose()
-                console.log('shwet', "shwet", res.data.data)
-                await fetchSavedHubs()
-                setCamera(res.data.data)
-            }
-        } catch {
+                console.log('shwet', res.data.data)
+                handleSwitchToggle(true, res.data.data.camera_id, res.data.data.physical_address, res.data.data.hub_id)
+                setName(''); setUsername(''); setMac(''); setPassword(''); setIpAddress(''); setSelectedSite(''); setSubfolderId(''); setRoomName('')
 
+                await fetchSavedHubs()
+            }
+        } catch (err) {
+            console.error(err)
+            showToast(err.response.data.error, "error")
         } finally {
             setIsSaving(false)
         }
@@ -128,10 +131,13 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, setCamera, handle
             fetchFolders()
         }
     }, [roomName])
+    const onModalClose = () => {
+        onClose(); setName(''); setUsername(''); setMac(''); setPassword(''); setIpAddress(''); setSelectedSite(''); setSubfolderId(''); setRoomName('')
+    }
     if (!isOpen) return null;
 
     return (
-        <Modal onClose={onClose} title={t('settings.add_new_camera')}>
+        <Modal onClose={onModalClose} title={t('settings.add_new_camera')}>
             <form onSubmit={handleSave} className="h-full w-full flex flex-col gap-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <InputField value={name}
@@ -164,11 +170,13 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, setCamera, handle
                         setValue={setPassword}
                         label={t('settings.password')}
                         placeholder={t('settings.enter_password')}
+                        isPasswordField
+                        showPassword={showPassword}
+                        setShowPassword={setShowPassword}
                     />
                     <SelectField required placeholder={t('settings.select_a_site')} label={t('settings.select_site')} value={selectedSite} setValue={setSelectedSite} data={sites} />
                     <SelectField placeholder={t('settings.select_folder')} label={t('settings.folder_optional')} value={roomName} setValue={setRoomName} data={rooms} />
                     <SelectField placeholder={t('settings.select_subfolder')} label={t('settings.subfolder_optional')} value={subfolderId} setValue={setSubfolderId} data={subfolders} />
-
                 </div>
                 <div>
                     <div className="flex gap-2 items-center mb-2">
@@ -205,7 +213,7 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, setCamera, handle
                                             <p className="text-xs text-gray-500 truncate">{device.ipaddress}</p>
                                         </div>
                                         <button type='button'
-                                            onClick={() => { setName(device.name); setIpAddress(device.ipaddress); setMac(mac) }}
+                                            onClick={() => { setIpAddress(device.ipaddress); setMac(mac) }}
                                             className="p-1.5 hover:bg-[var(--surface-400)] rounded-lg transition-colors"
                                         >
                                             <IconCopyPlus size={16} className="text-gray-600" />
@@ -221,7 +229,7 @@ export function AddNewCameraDialogue({ isOpen, fetchSavedHubs, setCamera, handle
                 <div className="flex justify-end gap-3 mt-10">
                     <button type='button'
                         className="px-5 py-2 bg-[var(--surface-150)] hover:bg-[var(--surface-100)] rounded-full text-base"
-                        onClick={onClose}
+                        onClick={onModalClose}
                     >
                         <span className='flex items-center gap-2 text-[#888888]'><IconX size={16} />{t('close')}</span>
                     </button>

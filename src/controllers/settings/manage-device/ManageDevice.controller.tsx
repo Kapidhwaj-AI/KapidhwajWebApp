@@ -36,7 +36,7 @@ const ManageDevicesController = () => {
                 undefined,
                 undefined,
                 undefined,
-                true
+                false
             );
             if (res.status === 200) {
                 const sites = res.data.data?.map((item) => item.organization);
@@ -101,7 +101,7 @@ const ManageDevicesController = () => {
         fetchAll();
     }, [])
 
-    const handleToggleStream = async (toggleValue: boolean, id: string, physical_address: string, hub_id: number) => {
+    const handleToggleStream = async (toggleValue: boolean, id: string, physical_address: string, hub_id: string) => {
         const url = toggleValue ? `/camera/start?action=add&hubId=${hub_id}` : `/camera/stop?action=remove&hubId=${hub_id}`
         const payload = {
             cameras: [
@@ -123,6 +123,7 @@ const ManageDevicesController = () => {
     const handleDeleHub = async (hubId: string) => {
         const res = await protectApi(`/devices/hub?action=remove&hubId=${hubId}`, 'DELETE', undefined, undefined, true)
         if (res.status === 200) {
+            await fetchSavedHubs()
             setIsHubDelete(false)
         }
     }
