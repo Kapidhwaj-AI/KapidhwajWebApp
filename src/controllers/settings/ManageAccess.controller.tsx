@@ -3,7 +3,7 @@ import ManageAccessView from '@/views/settings/ManageAccess.view'
 import { useDebounce } from '@/hooks/useDebounce'
 import { protectApi } from '@/lib/protectApi'
 import { Organization } from '@/models/organization'
-import { AccessLevel, User } from '@/models/settings'
+import { AccessLevel, Hub, User } from '@/models/settings'
 import { AxiosResponse } from 'axios'
 import { useTranslations } from 'next-intl'
 import React, { useEffect, useRef, useState } from 'react'
@@ -166,8 +166,17 @@ const ManageAccessController = () => {
         setUsername(user.name);
         setOpen(false);
     };
+
     const syncUser = async () => {
         try {
+            const hubs = await protectApi<Hub[]>(
+                            `/devices/hub`,
+                            undefined,
+                            undefined,
+                            undefined,
+                            false
+                        );
+                        const data = hubs.data.data;
             const res = await fetch(`${apiBaseUrl}/devices/hub/sync/user`, {
                 method: "POST",
                 headers: {
@@ -176,7 +185,7 @@ const ManageAccessController = () => {
                 },
                 body: JSON.stringify({
                     userId: selectedUser?.userId ?? '',
-                    hubId: storedLocalHub?.id || storedRemoteHub?.id
+                    hubId: data[0].id
                 }),
             });
 
