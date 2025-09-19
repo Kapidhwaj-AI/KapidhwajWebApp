@@ -59,13 +59,13 @@ export default function CameraStreamCard({
         backgroundPosition: "center",
       }}
     > 
-        <iframe
+      {camera?.webrtc_url &&<iframe
           src={`${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
           allowFullScreen
           style={{ width: "100%", maxWidth: "800px", height: '100%' }}
         >
           Your browser does not support the video tag.
-        </iframe>
+        </iframe>}
       {camera?.webrtc_url && (
         <div className="absolute top-3 left-3 z-5">
           <LiveBadge />
