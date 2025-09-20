@@ -26,8 +26,8 @@ const SocketNotification = () => {
                 },
                 transports: ['websocket', 'polling'],
                 reconnection: true,
-                reconnectionAttempts: 5,
-                reconnectionDelay: 4000,
+                reconnectionAttempts: 50,
+                reconnectionDelay: 8000,
                 secure: true,
                 rejectUnauthorized: false,
             });
@@ -88,7 +88,7 @@ const SocketNotification = () => {
             socket.on('disconnect', reason => {
                 console.log('Disconnected from server. Reason:', reason);
                 if (reason === 'io server disconnect') {
-                    socket.connect();
+                //   /  socket.connect();
                 }
             });
 
@@ -100,7 +100,7 @@ const SocketNotification = () => {
                 socket.off('people_count')
                 socket.off('notification');
                 socket.off('disconnect');
-                socket.disconnect();
+                // socket.disconnect();
             };
         }
         return () => { }; // Add empty cleanup function for when token is not present
