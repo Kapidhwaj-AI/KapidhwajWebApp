@@ -80,10 +80,9 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
         setFormData((prev) => ({ ...prev, name: camera.name, people_threshold_count: camera.people_threshold_count, organizationId: camera.organization_id ?? '', detectionSensitivity: camera.obj_thresh, overlapSensitivity: camera.nms_thresh, sceneDensity: camera.topk_pre_nms }))
     };
     const handleDeleteCamera = (id: string, orgId: string) => {
-
         setIsDelete(true)
-        setCameraId(id)
         setOrganizationId(orgId)
+        setCameraId(id)
     };
 
     const fetchCameraLocation = async (id: string) => {
@@ -167,7 +166,7 @@ export const SavedCameras: React.FC<SavedCamerasProps> = ({ camLoading, hub, fet
                 </div>
                 {camLoading ? <Spinner /> : <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-6rem)]  pb-4 scrollbar-hide">
                     <div className="space-y-3">
-                        {hub.cameras.filter((item) => item.camera_id !== cameraId).map((camera, index) => {
+                        {hub.cameras.map((camera, index) => {
                             const matchedCam = Object.entries(nearbyCams).find(
                                 ([mac]) => mac === camera.physical_address
                             )?.[1];

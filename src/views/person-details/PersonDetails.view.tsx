@@ -16,7 +16,7 @@ const TimeFiltersDialogue = dynamic(() => import('@/components/dialogue/TimeFilt
 
 
 
-const PersonDetailsView: React.FC<PersonDetailsViewProps> = ({ personDetails, offset, divRef, isLoading, setOffset, date, err, startTime, alertsLoading, hasMore, setAlertsLoading, setHasMore, endTime, handleApplyFilter, filterDial, setFilterDial, setIsDateFiltered, isDateFiltered, fetchAlertsByPersonId, setDate, setEndTime, setIsLoading, setPersonDetails, setStartTime }) => {
+const PersonDetailsView: React.FC<PersonDetailsViewProps> = ({ personDetails, offset, divRef, isLoading, setOffset, date, err, startTime, alertsLoading, hasMore,setAlertsLoading, setHasMore, endTime, handleApplyFilter, filterDial, setFilterDial, setIsDateFiltered, isDateFiltered, fetchAlertsByPersonId, setDate, setEndTime, setIsLoading, setPersonDetails, setStartTime }) => {
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col gap-3 min-h-0 px-2 md:px-4">

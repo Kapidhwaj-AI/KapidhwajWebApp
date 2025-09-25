@@ -33,7 +33,6 @@ const IconChevronRight = dynamic(() => import("@tabler/icons-react").then((mod) 
 
 export function AlertCard({ alert, cameraLocation }: { alert: Alert; cameraLocation?: CameraLocation }) {
     const [isPreview, setIsPreview] = useState(false);
-    console.log(alert, "Alert")
     const timestamp = alert?.timestamp || 0
     const alertTimestamp = new Date(timestamp * 1000);
     const formattedDate = alertTimestamp.toLocaleDateString("en-GB");

@@ -7,7 +7,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const handleTogglePlay = () => {
+   const handleTogglePlay = () => {
         const video = videoRef.current;
         if (!video) return;
 
