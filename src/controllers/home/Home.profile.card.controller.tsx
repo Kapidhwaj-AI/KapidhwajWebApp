@@ -22,7 +22,7 @@ export const HomeProfileCardController = ({ devices }: { devices: number }) => {
   useEffect(() => {
     const staticPort = remoteHub?.static_port || savedRemoteHub?.static_port
     const id = localHub?.id || savedLocalHub.id
-    const baseUrl = isValidHub ? remoteHub?.id ? `http://media.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/`: GOOGLE_KPH_BUCKET_URL
+    const baseUrl = isValidHub ? remoteHub?.id ? `http://turn.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/`: GOOGLE_KPH_BUCKET_URL
     const fetchUserDetails = async () => {
       try {
         const res = await protectApi<{ profile_image: string, name: string }>('/user', "GET", undefined, undefined, true)

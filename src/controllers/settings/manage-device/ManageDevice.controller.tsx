@@ -7,6 +7,7 @@ import { Hub, ManageHub } from '@/models/settings';
 import React, { FormEvent, useEffect, useState } from 'react'
 import { Camera } from '@/models/camera';
 import dynamic from 'next/dynamic';
+import { showToast } from '@/lib/showToast';
 
 const ManageDevicesController = () => {
     const [selectedHub, setSelectedHub] = useState<Hub | null>(null);
@@ -115,9 +116,15 @@ const ManageDevicesController = () => {
         return res
     }
     const handleDeleteSavedCamera = async (cameraId: string, organizationId: string) => {
-        const res = await protectApi<unknown, { cameraId: string, organizationId: string }>('/camera/delete?action=remove', 'DELETE', { cameraId, organizationId })
-        if (res.status === 200) {
-            setIsDelete(false)
+        try{
+            const res = await protectApi<unknown, { cameraId: string, organizationId: string }>('/camera/delete?action=remove', 'DELETE', { cameraId, organizationId })
+            if (res.status === 200) {
+                setIsDelete(false)
+                fetchSavedHubs()
+            }
+        }catch (err){
+            showToast(err.response.data.message, "error")
+            console.error("Err:", err.respones.data.message)
         }
     }
     const handleDeleHub = async (hubId: string) => {

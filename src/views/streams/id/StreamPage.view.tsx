@@ -38,14 +38,14 @@ import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 
 
-const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, topRecordingRef, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
+const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, setIsRecordingFiltered, isAlertFullScreen, isAllAlertLoading, topRecordingRef, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
     startTime, stream, fetchAlerts, date, fetchRecordings, filterDial, filteredAlerts, formData, recordingLoading, recordingOffset, recordingref, recordings, alertEndRef, alertOffset, alerts, alertsLoading, handleAiToggle, handleMotionToggle, handleRecordingToggle, handleSave, handleToggleStream, hasMore, hasRecordingMore, endTime, organizations, handleApplyFilter
 
 }) => {
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4">
-            {!isFullscreen && <div className="flex flex-col md:flex-row justify-between items-start  gap-3">
+            {(!isFullscreen || isAlertFullScreen) && <div className="flex flex-col md:flex-row justify-between items-start  gap-3">
                 {cameraLocation && <h1 className="sm:text-md flex gap-1 items-center justify-between md:text-lg lg:text-xl xl:text-2xl font-light ml-2 md:ml-5 whitespace-nowrap">
                     {cameraLocation?.organization} <IconChevronRight className=" text-gray-400" /> {cameraLocation?.parantFolder === "NA" ? '' : <div className=' flex gap-2 items-center'>{cameraLocation?.parantFolder} <IconChevronRight className=" text-gray-400" /></div>}   {camera?.name}
                 </h1>}
@@ -121,13 +121,48 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, top
                         {!isFullscreen && (
                             <div
                                 className={cn(
-                                    "flex flex-col p-3 md:p-6 rounded-2xl md:rounded-4xl bg-[var(--surface-100)] overflow-y-auto scrollbar-hide",
+                                    "flex flex-col gap-2 p-3 md:p-6 rounded-2xl md:rounded-4xl bg-[var(--surface-100)] overflow-y-auto scrollbar-hide",
                                     "h-[33vh] lg:flex-[1/2]"
                                 )}
-                            >   <h3 className="text-sm md:text-md flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-                                    <IconVideo stroke={2} size={18} />
-                                    <span>{t("alerts.recordings")}</span>
-                                </h3>
+                            >
+                                <div className='flex w-full justify-between items-center'>
+
+                                    <h3 className="text-sm md:text-md flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                                        <IconVideo stroke={2} size={18} />
+                                        <span>{t("alerts.recordings")}</span>
+                                    </h3>
+                                    {!isRecordingFiltered && <button
+                                        className={filterButtonClassname}
+                                        onClick={() => { setFilterDial(true); setRecordingOffset(0); setIsRecordingFiltered(true) }}
+                                    >
+                                        <IconFilter stroke={1} size={24} />
+                                        <span className="hidden sm:inline">{t('alerts.filter')}</span>
+                                    </button>}
+                                    {isRecordingFiltered && <button onClick={async () => {
+                                        setDate(new Date())
+                                        setStartTime(() => {
+                                            const start = new Date();
+                                            start.setHours(0, 0, 0, 0);
+                                            return start;
+                                        })
+                                        setEndTime(() => {
+                                            const end = new Date();
+                                            end.setHours(23, 59, 0, 0);
+                                            return end
+                                        })
+                                        setIsRecordingFiltered(false);
+                                        setRecordingOffset(0);
+                                        try {
+                                            const fetchRecording = await fetchRecordings(0);
+                                            setRecordings(fetchRecording);
+                                        } finally {
+                                        
+                                        }
+                                    }} className="bg-[#2B4C88] text-white font-medium py-1 md:py-2 px-2 md:px-4 rounded-full shadow-sm transition-all duration-200 flex items-center gap-1">
+                                        <IconFilterX stroke={1} size={24} />
+                                        <span className="hidden sm:inline">{t('common.clear_filter')}</span>
+                                    </button>}
+                                </div>
 
                                 <InfiniteScrolling<RecordedClip>
                                     setData={setRecordings}
@@ -142,7 +177,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, top
                                     hasMore={hasRecordingMore}
                                     topRef={topRecordingRef}
                                 >
-                                    {recordingOffset > 0 && !recordingLoading && <div ref={topRecordingRef} className="h-1" />}
+                                    {recordingOffset > 0 && !recordingLoading && !isRecordingFiltered &&<div ref={topRecordingRef} className="h-1" />}
                                     {recordingLoading && topRecordingRef.current && <div className="text-center"><Spinner /></div>}
                                     {recordings.length === 0 ? (
                                         <p className="flex items-center justify-center w-full h-full">
@@ -155,7 +190,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, top
                                             ))}
                                         </div>
                                     )}
-                                    {recordings.length > 0 && <div ref={recordingref} className="h-1" />}
+                                    {recordings.length > 0 && !isRecordingFiltered &&<div ref={recordingref} className="h-1" />}
                                 </InfiniteScrolling>
 
                                 {recordingLoading && <div className="text-center"><Spinner /></div>}
@@ -210,7 +245,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isAllAlertLoading, top
                 setStartTime={setStartTime}
                 setEndTime={setEndTime}
                 isOpen={filterDial}
-                onClose={() => setFilterDial(false)}
+                onClose={() => {setFilterDial(false); setIsRecordingFiltered(false);}}
                 handleApplyFilter={handleApplyFilter}
             />}
             {isEdit && <EditStreamDialogue

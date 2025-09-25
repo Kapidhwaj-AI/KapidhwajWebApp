@@ -21,7 +21,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
     }, [savedLocalHub, savedRemoteHub])
     const staticPort = !Number.isNaN(ports.static_port) ? ports.static_port : savedRemoteHub?.static_port
     const id =  savedLocalHub.id
-    const baseUrl = isValidHub ? savedRemoteHub?.id ? `http://media.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/` : 'http://media.kapidhwaj.ai:3000/'
+    const baseUrl = isValidHub ? savedRemoteHub?.id ? `http://turn.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/` : 'http://turn.kapidhwaj.ai:3000/'
     const handleTogglePlay = () => {
         const video = videoRef.current;
         if (!video) return;

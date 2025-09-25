@@ -4,8 +4,10 @@ interface InfiniteScrollingProp<T> {
     setHasMore: (val: boolean) => void;
     hasMore: boolean;
     isLoading: boolean;
-    fetchData: (offSet: number, serviceType?: string | null) => Promise<T[]>;
+    fetchData: (offSet: number, serviceType?: string | null, startTime?:number, endTime?: number) => Promise<T[]>;
     serviceType?: string | null;
+    startTime?:number;
+    endTime?:number;
     setData: (val: T[]) => void;
     divRef: React.RefObject<HTMLDivElement | null>;
     topRef?: React.RefObject<HTMLDivElement | null>;
@@ -27,6 +29,8 @@ function InfiniteScrolling<T>({
     data,
     isLoading,
     serviceType,
+    startTime,
+    endTime,
     topRef
 }: InfiniteScrollingProp<T>) {
     const offsetRef = useRef(offset);
@@ -83,7 +87,7 @@ function InfiniteScrolling<T>({
         const loadItems = async () => {
             setIsLoading(true);
             try {
-                const newData = await fetchData(offset, serviceType);
+                const newData = await fetchData(offset, serviceType, startTime, endTime);
                 if (newData.length <= 0) {
                     setHasMore(false);
                 } else {

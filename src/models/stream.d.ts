@@ -34,9 +34,10 @@ export interface StreamsViewProps {
 export interface StreamsPageViewProps {
     isAllAlertLoading: boolean
     loading: boolean;
+    isAlertFullScreen: boolean
     isFullscreen: boolean;
     cameraLocation: CameraLocation | undefined;
-    camera: Camera | undefined ;
+    camera: Camera | undefined;
     setIsEdit: (val: boolean) => void;
     setSettingDial: (val: boolean) => void;
     setFilterDial: (val: boolean) => void;
@@ -59,14 +60,14 @@ export interface StreamsPageViewProps {
     alertOffset: number;
     alertEndRef: React.RefObject<HTMLDivElement | null>;
     alerts: Alert[];
-    fetchAlerts: (offSet: number, serviceType: string|null) => Promise<Alert[]>;
+    fetchAlerts: (offSet: number, serviceType: string | null) => Promise<Alert[]>;
     alertsLoading: boolean;
     setAlertsLoading: (val: boolean) => void;
     setHasMore: (val: boolean) => void;
     hasMore: boolean;
     filteredAlerts: Alert[];
     isDateFiltered: boolean;
-    setIsDateFiltered:(val:boolean) => void;
+    setIsDateFiltered: (val: boolean) => void;
     date: Date | undefined;
     startTime: Date | undefined;
     endTime: Date | undefined;
@@ -90,6 +91,8 @@ export interface StreamsPageViewProps {
     handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void;
     isAiServiceLoading: boolean;
     serviceType: string | null
-    setIsAllAlertsLoading:(val:boolean) => void;
+    setIsAllAlertsLoading: (val: boolean) => void;
     topRecordingRef: React.RefObject<HTMLDivElement | null>
+    setIsRecordingFiltered: React.Dispatch<React.SetStateAction<boolean>>
+    isRecordingFiltered: boolean
 }
