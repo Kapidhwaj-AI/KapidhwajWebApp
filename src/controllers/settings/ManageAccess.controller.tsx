@@ -177,7 +177,7 @@ const ManageAccessController = () => {
                             false
                         );
                         const data = hubs.data.data;
-            const res = await fetch(`${apiBaseUrl}/devices/hub/sync/user`, {
+            const res = await fetch(`https://apilive.kapidhwaj.ai/api-backend/devices/hub/sync/user`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -189,7 +189,7 @@ const ManageAccessController = () => {
                 }),
             });
 
-            return res.ok; // true if status is 2xx, false otherwise
+            return res.ok; 
         } catch (error) {
             console.error('Sync user failed', error);
             showToast('Sync user failed', 'error')
@@ -202,7 +202,7 @@ const ManageAccessController = () => {
         if (!selectedUser?.userId) return;
         setIsSaving(true);
         const isSync = await syncUser()
-        if (!isSync) return;
+        if (!isSync) {    setIsSaving(false); return; };
 
         const orgCam: { [key: string]: { cameraId: string }[] } = {};
         const revokedCameras: { [key: string]: { cameraId: string }[] } = {};
