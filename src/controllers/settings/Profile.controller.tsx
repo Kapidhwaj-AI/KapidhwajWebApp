@@ -10,7 +10,7 @@ const ProfileController = () => {
     const [file, setFile] = useState<File>()
     const [isLoading, setIsLoading] = useState(false);
     const user = JSON.parse(getLocalStorageItem('user') ?? '{}')
-    const [preview, setPreview] = useState(BASE_URL + ':3000' + user.profile_image)
+    const [preview, setPreview] = useState(BASE_URL + ':3000/' + user.profile_image)
     const [name, setName] = useState(user.name ?? '');
     const [customerId, setCustomerId] = useState(user.id ?? '');
     const [email, setEmail] = useState(user.email ?? '');
@@ -53,7 +53,9 @@ const ProfileController = () => {
         }
         finally {
             setIsProfileOpen(false)
+            setIsLoading(false)
         }
+
     }
     return (
         <ProfileDialogue isLoading={isLoading} name={name} phone={phone} id={customerId} email={email} setName={setName} setPhone={setPhone} setId={setCustomerId} setEmail={setEmail} setFile={setFile} preview={preview} setPreview={setPreview} handleSave={handleProfileSave} handleImageClick={handleImageClick} handleImageChange={handleImageChange} fileInputRef={fileInputRef} file={file} isOpen={showProfileDial} onClose={() => { setIsProfileOpen(false) }} />
