@@ -16,7 +16,7 @@ export const HomeProfileCard = ({
       
       <div className="h-18 w-18 rounded-full bg-[var(--surface-100)] text-[#888888] overflow-hidden">
         <Image
-          src={imagePath}
+          src={imagePath ??null}
           alt="User Profile"
           width={200} 
           height={200} 

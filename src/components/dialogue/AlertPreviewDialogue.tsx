@@ -3,6 +3,7 @@ import Modal from '../ui/Modal'
 import Image from 'next/image';
 import { RootActions, RootState, useStore } from '@/store';
 import dynamic from 'next/dynamic';
+import { IconMinimize } from '@tabler/icons-react';
 const Maximize = dynamic(() => import("lucide-react").then((mod) => mod.Maximize),
     { ssr: false });
 
@@ -39,6 +40,7 @@ const AlertPreviewDialogue: React.FC<AlertPreviewDialogueProps> = ({ onClose, im
                         <button className='absolute top-[1%] right-1 bg-white rounded-lg' onClick={() => { setIsFullScreenMode(!isFullscreen) }}>
                             {isFullscreen ? <Minimize fill="currentColor" stroke={'12'} size={30} /> : <Maximize className='text-4xl' fill="currentColor" stroke={'12'} size={30} />}
                         </button>
+                        <IconMinimize/>
                         <Image
                             src={imageUrl}
                             alt="alert-image"

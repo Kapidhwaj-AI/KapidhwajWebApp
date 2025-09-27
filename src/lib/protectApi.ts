@@ -71,6 +71,9 @@ export async function protectApi<T, D = undefined>(
             }
         }
         else if (isAxiosError(err) && err?.response?.status === 400 && err.response?.data.error === `Hub with ID "${remoteHub.id || localHub.id}" is not connected.`) {
+
+            console.error("Hub not connected, logging out...");
+            showToast(`${err.response?.data.error}...`, "error")
             removeLocalStorageItem(['Remotehub', 'Localhub', 'Remotetemphub'])
             window.location.assign('/home')
         }
