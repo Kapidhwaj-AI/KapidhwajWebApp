@@ -53,6 +53,7 @@ interface SingleCameraState {
     currentCameraIsIntrusion: boolean;
     currentCameraIsFaceDetection: boolean;
     peopleCount: { camera_id: string; people_count: string, } | null;
+    footFallCount?: { camera_id: string; inCount: number; outCount: number } | null;
     currentCameraIsMotionDetection: boolean;
     currentCameraIsLicenseDetection: boolean;
     currentCameraIsFireDetection: boolean;
@@ -131,6 +132,7 @@ export interface RootActions {
     setCurrentCameraIsFireDetection: (isFireDetection: boolean) => void;
     setActiveTabRedux: (tab: FeatureKeys) => void;
     setPeopleCount: (data: { camera_id: string; people_count: string }) => void;
+    setFootFallCount: (data: { camera_id: string; inCount: number; outCount: number }) => void;
     setIsPeople: (isPeople: boolean) => void;
     setPorts: (data: { static_port: number; live_port: number }) => void;
     setCurrentCameraName: (data: { name: string }) => void;
@@ -187,6 +189,7 @@ export const useStore = create<RootState & RootActions>((set, get) => ({
         currentCameraIsLicenseDetection: false,
         currentCameraIsFireDetection: false,
         peopleCount: { camera_id: '', people_count: '0' },
+        footFallCount: { camera_id: '', inCount: 0, outCount: 0 },
         currentCameraName: '',
         isMoveable: true,
         storage_type: '',
@@ -208,52 +211,57 @@ export const useStore = create<RootState & RootActions>((set, get) => ({
     setToggleCameraDetailsView: (view) => set(state => ({ camera: { ...state.camera, cameraDetailView: view } })),
     setToggleColumns: (columns) => set(state => ({ camera: { ...state.camera, toogleColumns: columns } })),
     setIsFullScreenMode: (isFullScreen) => set(state => ({ camera: { ...state.camera, isFullScreen } })),
-    setIsAlertFullScreen: (isAlertFullScreen: boolean) => set(state => ({camera: {...state.camera, isAlertFullScreen}})),
+    setIsAlertFullScreen: (isAlertFullScreen: boolean) => set(state => ({ camera: { ...state.camera, isAlertFullScreen } })),
     setRemoteHub: (hub) => {
-    setLocalStorageItem('Remotehub', JSON.stringify(hub));
-    removeLocalStorageItem('Localhub');
-    set(state => ({ hub: { ...state.hub, remoteHub: hub } }));
-},
-setLocalHUb: (hub) => {
-    setLocalStorageItem('Localhub', JSON.stringify(hub));
-    removeLocalStorageItem('Remotehub');
-    set(state => ({ hub: { ...state.hub, localHub: hub } }));
-},
+        setLocalStorageItem('Remotehub', JSON.stringify(hub));
+        removeLocalStorageItem('Localhub');
+        set(state => ({ hub: { ...state.hub, remoteHub: hub } }));
+    },
+    setLocalHUb: (hub) => {
+        setLocalStorageItem('Localhub', JSON.stringify(hub));
+        removeLocalStorageItem('Remotehub');
+        set(state => ({ hub: { ...state.hub, localHub: hub } }));
+    },
 
     setIsProfileOpen: (isOpen) => set(state => ({ settings: { ...state.settings, isProfileOpen: isOpen } })),
-        setIsChangePasswordOpen: (isOpen) => set(state => ({ settings: { ...state.settings, isChangePasswordOpen: isOpen } })),
+    setIsChangePasswordOpen: (isOpen) => set(state => ({ settings: { ...state.settings, isChangePasswordOpen: isOpen } })),
 
-            togglePeopleDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, peopleDetected: state.singleCameraSettings.peopleDetected + 1 } })),
-                toggleIntrusionDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, intrusionDetected: state.singleCameraSettings.intrusionDetected + 1 } })),
-                    togglePeopleCountDetected: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, peopleCountDetected: state.singleCameraSettings.peopleCountDetected + 1 } })),
-                        toggleMotionDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, motionDetected: state.singleCameraSettings.motionDetected + 1 } })),
-                            toggleLicensePlateDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, licensePlateDetected: state.singleCameraSettings.licensePlateDetected + 1 } })),
-                                toggleFireSmokeDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, fireSmokeDetected: state.singleCameraSettings.fireSmokeDetected + 1 } })),
-                                    toggleFaceDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, faceDetection: state.singleCameraSettings.faceDetection + 1 } })),
-                                        toggleAllRecordings: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, allRecordings: !state.singleCameraSettings.allRecordings } })),
-                                            setCameraSettings: (settings) => set({ singleCameraSettings: settings }),
-                                                toggleAddToFavouritesDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, addToFavourites: !state.singleCameraSettings.addToFavourites } })),
+    togglePeopleDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, peopleDetected: state.singleCameraSettings.peopleDetected + 1 } })),
+    toggleIntrusionDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, intrusionDetected: state.singleCameraSettings.intrusionDetected + 1 } })),
+    togglePeopleCountDetected: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, peopleCountDetected: state.singleCameraSettings.peopleCountDetected + 1 } })),
+    toggleMotionDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, motionDetected: state.singleCameraSettings.motionDetected + 1 } })),
+    toggleLicensePlateDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, licensePlateDetected: state.singleCameraSettings.licensePlateDetected + 1 } })),
+    toggleFireSmokeDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, fireSmokeDetected: state.singleCameraSettings.fireSmokeDetected + 1 } })),
+    toggleFaceDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, faceDetection: state.singleCameraSettings.faceDetection + 1 } })),
+    toggleAllRecordings: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, allRecordings: !state.singleCameraSettings.allRecordings } })),
+    setCameraSettings: (settings) => set({ singleCameraSettings: settings }),
+    toggleAddToFavouritesDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, addToFavourites: !state.singleCameraSettings.addToFavourites } })),
 
-                                                    setCurrentCameraId: ({ id }) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraId: id } })),
-                                                        setCurrentCameraIsRecording: (isRecording) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsRecording: isRecording } })),
-                                                            setCurrentCameraIsIntrusion: (isIntrusion) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsIntrusion: isIntrusion } })),
-                                                                setCurrentCameraIsFaceDetection: (isFaceDetection) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsFaceDetection: isFaceDetection } })),
-                                                                    setCurrentCameraIsMotionDetection: (isMotionDetection) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsMotionDetection: isMotionDetection } })),
-                                                                        setCurrentCameraIsLicenseDetection: (isLicenseDetection) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsLicenseDetection: isLicenseDetection } })),
-                                                                            setCurrentCameraIsFireDetection: (isFireDetection) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsFireDetection: isFireDetection } })),
-                                                                                setActiveTabRedux: (tab) => set(state => ({ singleCamera: { ...state.singleCamera, activeTab: tab } })),
-                                                                                    setPeopleCount: (data) => {
-                                                                                        const currentState = get().singleCamera;
-                                                                                        const peopleCount = currentState.currentCameraId === data.camera_id ? data : { camera_id: '', people_count: '0' };
-                                                                                        set({ singleCamera: { ...currentState, peopleCount } });
-                                                                                    },
-                                                                                        setIsPeople: (isPeople) => set(state => ({ singleCamera: { ...state.singleCamera, isPeople } })),
-                                                                                            setIsFilterLoading: (filterrDial) => set(state => ({ singleCamera: { ...state.singleCamera, filterLoading: filterrDial } })),
-                                                                                                setPorts: (data) => {
-                                                                                                    set((state) => ({ singleCamera: { ...state.singleCamera, ports: data } }))
-                                                                                                },
-                                                                                                    setCurrentCameraName: ({ name }) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraName: name } })),
-                                                                                                        setIsMoveable: (isMoveable) => set(state => ({ singleCamera: { ...state.singleCamera, isMoveable } })),
-                                                                                                            setCurrentStorageType: (storageType) => set(state => ({ singleCamera: { ...state.singleCamera, storage_type: storageType } })),
+    setCurrentCameraId: ({ id }) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraId: id } })),
+    setCurrentCameraIsRecording: (isRecording) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsRecording: isRecording } })),
+    setCurrentCameraIsIntrusion: (isIntrusion) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsIntrusion: isIntrusion } })),
+    setCurrentCameraIsFaceDetection: (isFaceDetection) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsFaceDetection: isFaceDetection } })),
+    setCurrentCameraIsMotionDetection: (isMotionDetection) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsMotionDetection: isMotionDetection } })),
+    setCurrentCameraIsLicenseDetection: (isLicenseDetection) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsLicenseDetection: isLicenseDetection } })),
+    setCurrentCameraIsFireDetection: (isFireDetection) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsFireDetection: isFireDetection } })),
+    setActiveTabRedux: (tab) => set(state => ({ singleCamera: { ...state.singleCamera, activeTab: tab } })),
+    setPeopleCount: (data) => {
+        const currentState = get().singleCamera;
+        const peopleCount = currentState.currentCameraId === data.camera_id ? data : { camera_id: '', people_count: '0' };
+        set({ singleCamera: { ...currentState, peopleCount } });
+    },
+    setFootFallCount: (data) => {
+        const currentState = get().singleCamera;
+        const footFallCount = currentState.currentCameraId === data.camera_id ? data : { camera_id: '', inCount: 0, outCount: 0 };
+        set({ singleCamera: { ...currentState, footFallCount } });
+    },
+    setIsPeople: (isPeople) => set(state => ({ singleCamera: { ...state.singleCamera, isPeople } })),
+    setIsFilterLoading: (filterrDial) => set(state => ({ singleCamera: { ...state.singleCamera, filterLoading: filterrDial } })),
+    setPorts: (data) => {
+        set((state) => ({ singleCamera: { ...state.singleCamera, ports: data } }))
+    },
+    setCurrentCameraName: ({ name }) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraName: name } })),
+    setIsMoveable: (isMoveable) => set(state => ({ singleCamera: { ...state.singleCamera, isMoveable } })),
+    setCurrentStorageType: (storageType) => set(state => ({ singleCamera: { ...state.singleCamera, storage_type: storageType } })),
 
 }))

@@ -23,7 +23,6 @@ export async function protectApi<T, D = undefined>(
     const hasLocalHub = localHub && typeof localHub === "object" && "id" in localHub;
 
     const token = JSON.parse(getLocalStorageItem(LOCALSTORAGE_KEY) ?? "{}").token;
-
     let baseUrl = apiBaseUrl;
     if (hasRemoteHub) {
         baseUrl = apiBaseUrl;

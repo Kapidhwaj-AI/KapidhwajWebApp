@@ -37,6 +37,7 @@ import { StreamsPageViewProps } from '@/models/stream';
 import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import CameraMovement from '@/components/camera/CameraMovement';
+import { RootState, useStore } from '@/store';
 
 
 const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, setIsRecordingFiltered, isAlertFullScreen, isAllAlertLoading, topRecordingRef, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
@@ -44,6 +45,12 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
 
 }) => {
     const t = useTranslations()
+    const isPeople = useStore(
+            (state: RootState) => state.singleCamera.isPeople,
+        );
+        const footFallCount = useStore(
+            (state: RootState) => state.singleCamera.footFallCount,
+        );
     return (
         <div className="h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4">
             {(!isFullscreen || isAlertFullScreen) && <div className="flex flex-col md:flex-row justify-between items-start  gap-3">
@@ -51,6 +58,11 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                     {cameraLocation?.organization} <IconChevronRight className=" text-gray-400" /> {cameraLocation?.parantFolder === "NA" ? '' : <div className=' flex gap-2 items-center'>{cameraLocation?.parantFolder} <IconChevronRight className=" text-gray-400" /></div>}   {camera?.name}
                 </h1>}
                 <div className="flex items-center flex-wrap gap-2 justify-end  self-end">
+                    {<button className={filterButtonClassname}>
+
+                        <span className="hidden sm:inline">Peopele In Count:{footFallCount?.inCount} Peopele Out count:{footFallCount?.outCount}</span>
+
+                    </button>}
                     <button className={filterButtonClassname} onClick={toggleStreamFav}>
                         <IconHeart
                             stroke={makeFav ? 0 : 1}
@@ -157,7 +169,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                                             const fetchRecording = await fetchRecordings(0);
                                             setRecordings(fetchRecording);
                                         } finally {
-                                        
+
                                         }
                                     }} className="bg-[#2B4C88] text-white font-medium py-1 md:py-2 px-2 md:px-4 rounded-full shadow-sm transition-all duration-200 flex items-center gap-1">
                                         <IconFilterX stroke={1} size={24} />
@@ -178,7 +190,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                                     hasMore={hasRecordingMore}
                                     topRef={topRecordingRef}
                                 >
-                                    {recordingOffset > 0 && !recordingLoading && !isRecordingFiltered &&<div ref={topRecordingRef} className="h-1" />}
+                                    {recordingOffset > 0 && !recordingLoading && !isRecordingFiltered && <div ref={topRecordingRef} className="h-1" />}
                                     {recordingLoading && topRecordingRef.current && <div className="text-center"><Spinner /></div>}
                                     {recordings.length === 0 ? (
                                         <p className="flex items-center justify-center w-full h-full">
@@ -191,7 +203,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                                             ))}
                                         </div>
                                     )}
-                                    {recordings.length > 0 && !isRecordingFiltered &&<div ref={recordingref} className="h-1" />}
+                                    {recordings.length > 0 && !isRecordingFiltered && <div ref={recordingref} className="h-1" />}
                                 </InfiniteScrolling>
 
                                 {recordingLoading && <div className="text-center"><Spinner /></div>}
@@ -204,7 +216,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                     {!isFullscreen && <div className="lg:col-span-2 gap-4 flex flex-col p-2  md:p-5 lg:max-h-full max-h-[35vh] overflow-y-auto h-[35vh] lg:h-full scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
                         <AlertsFiltersButtonAtStream selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
                         {selectedTab === 'move' ? <div className="flex flex-col items-center mt-10 space-y-6">
-                                <CameraMovement camId={camera?.camera_id ?? ''}/> </div>: isAllAlertLoading ? <Spinner /> :
+                            <CameraMovement camId={camera?.camera_id ?? ''} /> </div> : isAllAlertLoading ? <Spinner /> :
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-3 md:gap-6 w-full ">
                                 <InfiniteScrolling<Alert>
                                     setData={setAlerts}
@@ -247,7 +259,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                 setStartTime={setStartTime}
                 setEndTime={setEndTime}
                 isOpen={filterDial}
-                onClose={() => {setFilterDial(false); setIsRecordingFiltered(false);}}
+                onClose={() => { setFilterDial(false); setIsRecordingFiltered(false); }}
                 handleApplyFilter={handleApplyFilter}
             />}
             {isEdit && <EditStreamDialogue
@@ -277,6 +289,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                 handleAiStremToggle={handleAiToggle}
                 handleMotionToggle={handleMotionToggle}
                 handleRecordingToggle={handleRecordingToggle}
+                peopleCountLine={camera ? camera?.is_footfall_active > 0 : false}
             />}
         </div>
     )

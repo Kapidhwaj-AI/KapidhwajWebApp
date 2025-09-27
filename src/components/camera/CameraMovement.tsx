@@ -1,9 +1,8 @@
 import { protectApi } from '@/lib/protectApi';
 import { showToast } from '@/lib/showToast';
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 const CameraMovement = ({ camId }: { camId: string }) => {
-
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const sendCameraCommand = async (movementInput: string, camId: string) => {
         try {
@@ -25,10 +24,10 @@ const CameraMovement = ({ camId }: { camId: string }) => {
         }
     };
     const moveCamera = (direction: string, camId: string,) =>
-        sendCameraCommand(`/camera/ptz/${direction}`, camId,);
+        sendCameraCommand(`/camera/ptz/${direction}`, camId);
 
     const zoomCamera = (zoomType: string, camId: string,) =>
-        sendCameraCommand(`/camera/zoom/${zoomType}`, JSON.stringify(camId),);
+        sendCameraCommand(`/camera/zoom/${zoomType}`, camId);
     const handlePress = (direction: string) => {
         console.log(direction, "direction")
         if (direction === 'plus' || direction === 'minus') {
@@ -37,19 +36,21 @@ const CameraMovement = ({ camId }: { camId: string }) => {
             moveCamera(direction, camId,);
         }
     };
-
+    const startTimeRef = useRef<number | null>(null);
     const startRepeating = (direction: string) => {
+        startTimeRef.current = Date.now();
         handlePress(direction);
-       
-
     };
+    const [duration, setDuration] = useState(0);
 
     const stopRepeating = () => {
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
+        if (startTimeRef.current) {
+            const endTime = Date.now();
+            const elapsed = endTime - startTimeRef.current;
+            stopMovement(camId);
+            setDuration(elapsed);
+            startTimeRef.current = null;
         }
-        stopMovement(camId);
     };
 
     return (
@@ -59,15 +60,16 @@ const CameraMovement = ({ camId }: { camId: string }) => {
                     className="absolute top-2 w-14 h-14 bg-gray-400 rounded-md flex items-center justify-center"
                     onMouseDown={() => startRepeating("up")}
                     onMouseUp={stopRepeating}
-                   onMouseLeave={stopRepeating}
-                >
-                    ↑
+                    onTouchStart={() => startRepeating("up")}
+                    onTouchEnd={stopRepeating}
+                >                    ↑
                 </button>
                 <button
-                    className="absolute bottom-2 w-14 h-14 bg-gray-400 roundedro-md flex items-center justify-center"
+                    className="absolute bottom-2 w-14 h-14 bg-gray-400 rounded-md flex items-center justify-center"
                     onMouseDown={() => startRepeating("down")}
                     onMouseUp={stopRepeating}
-                    onMouseLeave={stopRepeating}
+                    onTouchStart={() => startRepeating("down")}
+                    onTouchEnd={stopRepeating}
                 >
                     ↓
                 </button>
@@ -75,7 +77,8 @@ const CameraMovement = ({ camId }: { camId: string }) => {
                     className="absolute left-2 w-14 h-14 bg-gray-400 rounded-md flex items-center justify-center"
                     onMouseDown={() => startRepeating("left")}
                     onMouseUp={stopRepeating}
-                    onMouseLeave={stopRepeating}
+                    onTouchStart={() => startRepeating("left")}
+                    onTouchEnd={stopRepeating}
                 >
                     ←
                 </button>
@@ -85,7 +88,9 @@ const CameraMovement = ({ camId }: { camId: string }) => {
                     className="absolute right-2 w-14 h-14 bg-gray-400 rounded-md flex items-center justify-center"
                     onMouseDown={() => startRepeating("right")}
                     onMouseUp={stopRepeating}
-                    onMouseLeave={stopRepeating}
+                    onTouchStart={() => startRepeating("right")}
+                    onTouchEnd={stopRepeating}
+                    
                 >
                     →
                 </button>
@@ -100,7 +105,8 @@ const CameraMovement = ({ camId }: { camId: string }) => {
                     className="w-16 h-16 bg-gray-400 rounded-lg flex items-center justify-center text-2xl"
                     onMouseDown={() => startRepeating("minus")}
                     onMouseUp={stopRepeating}
-                    onMouseLeave={stopRepeating}
+                    onTouchStart={() => startRepeating("minus")}
+                    onTouchEnd={stopRepeating}
                 >
                     -
                 </button>
@@ -108,11 +114,17 @@ const CameraMovement = ({ camId }: { camId: string }) => {
                     className="w-16 h-16 bg-gray-400 rounded-lg flex items-center justify-center text-2xl"
                     onMouseDown={() => startRepeating("plus")}
                     onMouseUp={stopRepeating}
-                    onMouseLeave={stopRepeating}
+                    onTouchStart={() => startRepeating("plus")}
+                    onTouchEnd={stopRepeating}
                 >
                     +
                 </button>
             </div>
+            <div>
+               
+                <p>Held for: {duration} ms</p>
+            </div>
+
         </div>
     )
 }

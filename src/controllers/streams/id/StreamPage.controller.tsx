@@ -183,7 +183,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         licensePlateDetected,
         fireSmokeDetected,
         faceDetection, serviceType])
-    const handleAiToggle = async (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean,) => {
+    const handleAiToggle = async (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection' | 'footfall_count', toggleValue: boolean,) => {
         setIsMlService(true)
         try {
             const endpoint = toggleValue ? `/camera/stream/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
@@ -251,15 +251,15 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const handleApplyFilter = async (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => {
         console.log("date", date, startTime, endTime)
         if (date && startTime && endTime) {
-            
+
             setIsFilterLoading(true)
-            if(isRecordingFIltered){
+            if (isRecordingFIltered) {
                 const start = getUtcTimestamp(date, startTime)
                 const end = getUtcTimestamp(date, endTime)
-                const res = await  fetchRecordings(recordingOffset, start, end)
+                const res = await fetchRecordings(recordingOffset, start, end)
                 setRecordings(res)
             }
-            else{
+            else {
                 const start = getUtcTimestamp(date, startTime, true)
                 const end = getUtcTimestamp(date, endTime, true)
                 const res = await fetchAlerts(alertOffset, serviceType, start, end)
@@ -347,7 +347,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
     const changeTab = async (tab: string) => {
         setSelectedTab(tab);
-        if (tab === selectedTab || tab=== 'move') {
+        if (tab === selectedTab || tab === 'move') {
             return
         }
         setIsDateFiltered(false)
@@ -372,7 +372,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         } else {
             setServiceType(null);
         }
-       
+
         setAlertOffset(0)
         setHasMore(true)
     }

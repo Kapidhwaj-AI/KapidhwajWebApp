@@ -1,6 +1,5 @@
 {
     "language": "Language",
-   
     "choose_language": "Choose language...",
     "close": "Close",
     "save": "Save",
@@ -23,8 +22,8 @@
     "no": "No",
     "settings": {
         "select_language": "Select Language",
-        "detection_sensitivity":"Detection Sensitivity",
-        "overlap_sensitivity":"Overlap Sensitivity",
+        "detection_sensitivity": "Detection Sensitivity",
+        "overlap_sensitivity": "Overlap Sensitivity",
         "scene_density": "Scene Density",
         "title": "Settings",
         "profile": "Profile",
@@ -223,7 +222,8 @@
         "all": "All Alerts",
         "recordings": "Recordings",
         "intrusion_detection": "Intrusion Detection",
-        "people_count": "People Count",
+        "people_count": "People Count: In Frame",
+        "footfall_count": "People Count: Line Crossing",
         "face_detection": "Face Recognition",
         "motion_detection": "Motion Detection",
         "license_plate_detection": "Vehicle Recognition",
@@ -280,8 +280,8 @@
             "settings": "Settings"
         }
     },
-    "person_details":{
-        "title":"Person Details",
+    "person_details": {
+        "title": "Person Details",
         "single_streams_page": "Single Person Details Page"
     },
     "managePeople": {

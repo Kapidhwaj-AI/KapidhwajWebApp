@@ -85,7 +85,7 @@ export interface StreamsPageViewProps {
     handleToggleStream: (val: boolean) => void;
     handleSave: (formData: StreamFormData) => void;
     settingDial: boolean;
-    handleAiToggle: (key: "intrusion_detection" | "people_count" | "license_plate_detection", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
+    handleAiToggle: (key: "intrusion_detection" | "people_count" | "license_plate_detection" | "footfall_count", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void;

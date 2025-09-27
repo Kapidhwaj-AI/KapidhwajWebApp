@@ -20,6 +20,8 @@ const SocketNotification = () => {
     const togglePeopleCountDetected = useStore((state: RootActions) => state.togglePeopleCountDetected);
     const setNotificationCount = useStore((state: RootActions) => state.setNotificationCount);
     const setPeopleCount = useStore((state: RootActions) => state.setPeopleCount);
+    const setFootFallCount = useStore((state: RootActions) => state.setFootFallCount);
+
     const setPorts = useStore((state: RootActions) => state.setPorts);
 
     const [isValid, setIsValid] = useState(false)
@@ -29,8 +31,8 @@ const SocketNotification = () => {
         }
     }, [reduxLocal, reduxRemote])
 
-    const baseUrl = isValid && (!remoteHub.id || !reduxRemote?.id) ? `ws://${localHub.id}.local:8084` : apiSocketUrl
-    console.log(baseUrl, "socketBaseUrl")
+    const baseUrl =  (!remoteHub.id || !reduxRemote?.id) ? `ws://${localHub.id}.local:8084` : apiSocketUrl
+    console.log(baseUrl, remoteHub, reduxRemote, "socketBaseUrl")
     useEffect(() => {
         if (token) {
             console.log(isValid, "socketValid", (!remoteHub.id || !reduxRemote?.id))
@@ -71,7 +73,14 @@ const SocketNotification = () => {
             }) => {
                 setPeopleCount(data);
             });
-
+            socket.on('footfall_count', (data: {
+                camera_id: string;
+                inCount: number;
+                outCount: number;
+            }) => {
+                console.log(data, "footfall_count_socket")
+                setFootFallCount(data);
+            });
             socket.on('update_ports', (data: {
                 static_port: number;
                 live_port: number;
