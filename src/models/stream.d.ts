@@ -96,5 +96,6 @@ export interface StreamsPageViewProps {
     setIsAllAlertsLoading: (val: boolean) => void;
     topRecordingRef: React.RefObject<HTMLDivElement | null>
     setIsRecordingFiltered: React.Dispatch<React.SetStateAction<boolean>>
-    isRecordingFiltered: boolean
+    isRecordingFiltered: boolean;
+    resetCounters: () => void;
 }
