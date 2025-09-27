@@ -20,8 +20,8 @@ import Modal from "../ui/Modal";
 import { AxiosResponse } from "axios";
 import { ApiResponse } from "@/lib/protectApi";
 import { useTranslations } from "next-intl";
-import Spinner from "../ui/Spinner";
 import dynamic from "next/dynamic";
+import LogoSpinner from "../ui/LogoSpinner";
 
 export function StreamSettingsDialogue({
   isOpen,
@@ -88,7 +88,7 @@ export function StreamSettingsDialogue({
     return (
       <Modal onClose={onClose} title={t('streams.options.settings')}>
 
-        {loading ? <Spinner className="h-[70vh]" /> : <div className="space-y-3 ">
+        {loading ? <LogoSpinner/> : <div className="space-y-3 ">
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">
               <div className="p-2 bg-[#2B4C88] rounded-xl">
@@ -115,8 +115,6 @@ export function StreamSettingsDialogue({
               trackColor="bg-white"
             />
           </div>
-
-          {/* Intrusion Detection */}
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">
               <div className="p-2 bg-[#2B4C88] rounded-xl">
@@ -124,7 +122,6 @@ export function StreamSettingsDialogue({
               </div>
               <span>{t('intrusion_detection')}</span>
             </div>
-
             <Switch
               enabled={settings.intrusion_detection}
               onChange={() => toggleSetting("intrusion_detection", !settings.intrusion_detection)}
@@ -138,7 +135,6 @@ export function StreamSettingsDialogue({
               </div>
               <span>{t('alerts.face_detection')}</span>
             </div>
-
             <Switch
               enabled={settings.face_detection}
               onChange={() => toggleSetting("face_detection", !settings.face_detection)}
@@ -152,14 +148,12 @@ export function StreamSettingsDialogue({
               </div>
               <span>{t('alerts.fire_smoke_detection')}</span>
             </div>
-
             <Switch
               enabled={settings.fire_smoke_detection}
               onChange={() => toggleSetting("fire_smoke_detection", !settings.fire_smoke_detection)}
               trackColor="bg-white"
             />
           </div>
-          {/* Motion Detection */}
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">
               <div className="p-2 bg-[#2B4C88] rounded-xl">
@@ -173,8 +167,6 @@ export function StreamSettingsDialogue({
               trackColor="bg-white"
             />
           </div>
-
-          {/* People Detection */}
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">
               <div className="p-2 bg-[#2B4C88] rounded-xl">
@@ -188,8 +180,6 @@ export function StreamSettingsDialogue({
               trackColor="bg-white"
             />
           </div>
-
-          {/* Audio */}
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex items-center gap-2">
               <div className="flex gap-4 items-center">

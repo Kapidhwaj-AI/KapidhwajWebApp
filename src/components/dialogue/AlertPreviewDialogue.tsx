@@ -23,7 +23,7 @@ const AlertPreviewDialogue: React.FC<AlertPreviewDialogueProps> = ({ onClose, im
     const resetZoom = () => setZoom(1);
     const isFullscreen = useStore((state: RootState) => state.camera.isAlertFullScreen);
     const setIsFullScreenMode = useStore((state: RootActions) => state.setIsAlertFullScreen);
-    const className = isFullscreen ? 'h-[100vh] w-[100vw] overflow-auto rounded-[29px]  shadow-xl flex flex-col' : 'max-h-[90vh] overflow-auto scrollbar-hide rounded-[29px] w-[90%] md:w-[748px] h-auto  p-4 md:p-8 shadow-xl flex flex-col'
+    const className = isFullscreen ? 'h-[100vh] w-[100vw] overflow-auto rounded-[29px]  shadow-xl flex flex-col' : 'max-h-[90vh] overflow-auto rounded-[29px] w-[90%] md:w-[748px] h-auto  p-4 md:p-8 shadow-xl flex flex-col'
     return (
         <Modal onClose={() => { onClose(); setIsFullScreenMode(false); }} title={alertType} className={className}>
 

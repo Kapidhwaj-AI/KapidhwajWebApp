@@ -76,7 +76,7 @@ const SettingsController = () => {
         },
         {
             id: 10,
-            title: t("settings.network_configuration"),
+            title: t("network_configuration"),
             icon: <IconNetwork size={40} />,
             path: "/settings/network-configuration"
         },

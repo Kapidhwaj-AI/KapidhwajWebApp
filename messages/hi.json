@@ -171,6 +171,7 @@
         "access": "प्रबंधित",
         "select_access": "प्रबंधित चुनें",
         "network_configuration": "नेटवर्क कॉन्फ़िगरेशन",
+        "manage_site_folders": "फ़ोल्डरस प्रबंधित करें",
         "custom_services": "कस्टम सेवा",
         "network": {
             "dhcp": "डीएचसीपी",
