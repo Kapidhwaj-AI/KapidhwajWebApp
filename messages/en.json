@@ -1,6 +1,6 @@
 {
     "language": "Language",
-    "select_language": "Select Language",
+   
     "choose_language": "Choose language...",
     "close": "Close",
     "save": "Save",
@@ -22,6 +22,7 @@
     "yes": "Yes",
     "no": "No",
     "settings": {
+        "select_language": "Select Language",
         "detection_sensitivity":"Detection Sensitivity",
         "overlap_sensitivity":"Overlap Sensitivity",
         "scene_density": "Scene Density",

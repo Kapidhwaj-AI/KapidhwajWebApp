@@ -33,7 +33,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const [recordingLoading, setRecordingLoading] = useState(false)
     const recordingref = useRef<HTMLDivElement>(null)
     const topRecordingRef = useRef<HTMLDivElement>(null)
-    const [selectedTab, setSelectedTab] = useState('all')
+    const [selectedTab, setSelectedTab] = useState('move')
     const [date, setDate] = useState<Date | undefined>(new Date());
     const [startTime, setStartTime] = useState<Date | undefined>(() => {
         const start = new Date();
@@ -344,7 +344,8 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     }
    
     const changeTab = async (tab: string) => {
-        if (tab === selectedTab) {
+        setSelectedTab(tab);
+        if (tab === selectedTab || tab=== 'move') {
             return
         }
         setIsDateFiltered(false)
@@ -369,7 +370,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         } else {
             setServiceType(null);
         }
-        setSelectedTab(tab);
+       
         setAlertOffset(0)
         setHasMore(true)
     }

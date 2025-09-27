@@ -3,6 +3,8 @@ import React from 'react'
 import { useTranslations } from "next-intl";
 import dynamic from 'next/dynamic';
 import { RootState, useStore } from '@/store';
+const IconArrowsMove = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconArrowsMove),
+    { ssr: false });
 const IconBounceRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBounceRight),
     { ssr: false });
 const IconFireExtinguisher = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFireExtinguisher),
@@ -28,13 +30,14 @@ function AlertsFiltersButtonAtStream({ selectedTab, setSelectedTab }: { selected
         (state: RootState) => state.singleCamera.peopleCount,
     );
     const tabFilters = [
-        { id: 0, label: `${t("alerts.all")}`, value: 'all', icon: <IconLayoutDashboard stroke={'2'} /> },
-        { id: 1, label: `${t("alerts.intrusion_detection")}`, value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={'2'} /> },
-        { id: 2, label: `${t("alerts.motion_detection")}`, value: 'MOTION_DETECTION', icon: <IconBounceRight stroke={'2'} /> },
-        { id: 3, label: `${t("alerts.people_count")}`, value: 'PEOPLE_COUNT', icon: <IconFriends stroke={'2'} /> },
-        { id: 4, label: `${t("alerts.face_detection")}`, value: 'FACE_DETECTION', icon: <IconUserScan stroke={'2'} /> },
-        { id: 5, label: `${t("alerts.license_plate_detection")}`, value: 'LICENSE_PLATE_DETECTION', icon: <IconLicense stroke={'2'} /> },
-        { id: 6, label: `${t("alerts.fire_smoke_detection")}`, value: 'FIRE_SMOKE_DETECTION', icon: <IconFireExtinguisher stroke={'2'} /> },
+        { id: 0, label: `${`Movement`}`, value: 'move', icon: <IconArrowsMove stroke={'2'} /> },
+        { id: 1, label: `${t("alerts.all")}`, value: 'all', icon: <IconLayoutDashboard stroke={'2'} /> },
+        { id: 2, label: `${t("alerts.intrusion_detection")}`, value: 'INTRUSION_DETECTION', icon: <IconTreadmill stroke={'2'} /> },
+        { id: 3, label: `${t("alerts.motion_detection")}`, value: 'MOTION_DETECTION', icon: <IconBounceRight stroke={'2'} /> },
+        { id: 4, label: `${t("alerts.people_count")}`, value: 'PEOPLE_COUNT', icon: <IconFriends stroke={'2'} /> },
+        { id: 5, label: `${t("alerts.face_detection")}`, value: 'FACE_DETECTION', icon: <IconUserScan stroke={'2'} /> },
+        { id: 6, label: `${t("alerts.license_plate_detection")}`, value: 'LICENSE_PLATE_DETECTION', icon: <IconLicense stroke={'2'} /> },
+        { id: 7, label: `${t("alerts.fire_smoke_detection")}`, value: 'FIRE_SMOKE_DETECTION', icon: <IconFireExtinguisher stroke={'2'} /> },
     ];
     return (
         <div className="flex gap-2 md:gap-4 min-h-min overflow-x-auto w-full scrollbar-hide px-4 justify-start md:justify-normal">

@@ -1,4 +1,4 @@
-import axios, { Method } from "axios";
+import axios, { isAxiosError, Method } from "axios";
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
 import { showToast } from "./showToast";
@@ -79,7 +79,8 @@ export async function protectApi<T, D = undefined>(url: string,
                 window.location.assign('/login');
             }
         }
-        console.error(err, "err from protectApi")
+       
+        console.error(err, "err from protectApi");
         throw err;
     }
 }
