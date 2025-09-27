@@ -40,7 +40,7 @@
         }
     },
     "settings": {
-       "select_language": "भाषा चुनें",
+        "select_language": "भाषा चुनें",
         "detection_sensitivity": "डिटेक्शन संवेदनशीलता",
         "overlap_sensitivity": "ओवरलैप संवेदनशीलता",
         "scene_density": "दृश्य घनत्व",
@@ -236,7 +236,8 @@
         "all": "सभी अलर्ट",
         "recordings": "रिकॉर्डिंग्स",
         "intrusion_detection": "घुसपैठ का पता लगाना",
-        "people_count": "लोगों की गिनती",
+        "people_count": "लोगों की गिनती: फ्रेम में",
+        "footfall_count": "लोगों की गिनती: रेखा पार करना",
         "face_detection": "चेहरे की पहचान",
         "fire_smoke_detection": "आग का पता लगाना",
         "motion_detection": "गतिविधि पहचान",

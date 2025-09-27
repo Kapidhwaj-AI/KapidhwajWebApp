@@ -37,6 +37,7 @@ export interface Camera {
   topk_pre_nms: number;
   createdAt?: Date;
   updatedAt?: Date;
+  is_footfall_active: number;
 }
 
 export interface CameraLocation {
