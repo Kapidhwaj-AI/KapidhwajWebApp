@@ -63,6 +63,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const setIsPeople = useStore((state: RootActions) => state.setIsPeople);
     const setCurrentCameraId = useStore((state: RootActions) => state.setCurrentCameraId);
     const setIsFilterLoading = useStore((state: RootActions) => state.setIsFilterLoading);
+    const setFootFallCount = useStore((state: RootActions) => state.setFootFallCount);
     const [isEditLoading, setIsEditLoading] = useState(false)
     const [stream, setStream] = useState(false)
     const {
@@ -190,6 +191,9 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                 : `/camera/stream/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`;
             const res = await protectApi<unknown, { cameraId: string, serviceType: typeof key }>(endpoint, 'POST', { cameraId: camera?.camera_id.toString() ?? '', serviceType: key })
             if (res.status === 200) {
+                if (key === "footfall_count" && !toggleValue) {
+                    setFootFallCount({ camera_id: '', inCount: 0, outCount: 0 })
+                }
                 showToast(`Camera stream ${key} ${toggleValue ? 'started ' : 'stoped'} successfully`, "success")
                 const cameraRes = await fetchCamera(id)
                 setCamera(cameraRes)
@@ -376,10 +380,21 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         setAlertOffset(0)
         setHasMore(true)
     }
+    const resetCounters = async () => {
+        try {
+            const res = await protectApi<unknown, { cameraId: string }>(`footfall-reset`, 'POST', { cameraId: camera?.camera_id ?? '' })
+            if (res.status === 200) {
+                setFootFallCount({ camera_id: '', inCount: 0, outCount: 0 })
+            }
+        } catch (error) {
+            showToast(error.response.data.message, "error")
+            console.error(error)
+        }
+    }
     const isFullscreen = useStore((state: RootState) => state.camera.isFullScreen)
     const isAlertFullScreen = useStore((state: RootState) => state.camera.isAlertFullScreen)
     return (
-        <StreamPageView isAlertFullScreen={isAlertFullScreen} setIsRecordingFiltered={setIsRecordingFiltered} isRecordingFiltered={isRecordingFIltered} topRecordingRef={topRecordingRef} setIsAllAlertsLoading={setIsAllAlertLoading} isAllAlertLoading={isAllAlertLoading} isAiServiceLoading={isMlService} loading={loading} selectedTab={selectedTab} setAlertOffset={setAlertOffset} setAlerts={setAlerts} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setFormData={setFormData} setHasMore={setHasMore} setHasRecordingMore={setHasRecordingMore} setIsDateFiltered={setIsDateFiltered} setIsEdit={setIsEdit} setRecordingLoading={setRecordingLoading} setRecordingOffset={setRecordingOffset} setRecordings={setRecordings} setSelectedTab={changeTab} setSettingDial={setSettingDial} setStartTime={setStartTime} settingDial={settingDial} startTime={startTime} stream={stream} isDateFiltered={isDateFiltered} isEdit={isEdit} isEditLoading={isEditLoading} isFullscreen={isFullscreen} camera={camera} cameraLocation={cameraLocation} makeFav={makeFav} toggleStreamFav={toggleStreamFav} handleAiToggle={handleAiToggle} handleApplyFilter={handleApplyFilter} handleMotionToggle={handleMotionToggle} handleRecordingToggle={handleRecordinToggle} serviceType={serviceType} handleSave={handleSave} handleToggleStream={handleToggleStream} hasMore={hasMore} hasRecordingMore={hasRecordingMore} fetchAlerts={fetchAlerts} fetchRecordings={fetchRecordings} filterDial={filterDial} filteredAlerts={filteredAlerts} formData={formData} recordingLoading={recordingLoading} recordingOffset={recordingOffset} recordingref={recordingref} recordings={recordings} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} date={date} endTime={endTime} organizations={organizations} />
+        <StreamPageView resetCounters={resetCounters} isAlertFullScreen={isAlertFullScreen} setIsRecordingFiltered={setIsRecordingFiltered} isRecordingFiltered={isRecordingFIltered} topRecordingRef={topRecordingRef} setIsAllAlertsLoading={setIsAllAlertLoading} isAllAlertLoading={isAllAlertLoading} isAiServiceLoading={isMlService} loading={loading} selectedTab={selectedTab} setAlertOffset={setAlertOffset} setAlerts={setAlerts} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setFormData={setFormData} setHasMore={setHasMore} setHasRecordingMore={setHasRecordingMore} setIsDateFiltered={setIsDateFiltered} setIsEdit={setIsEdit} setRecordingLoading={setRecordingLoading} setRecordingOffset={setRecordingOffset} setRecordings={setRecordings} setSelectedTab={changeTab} setSettingDial={setSettingDial} setStartTime={setStartTime} settingDial={settingDial} startTime={startTime} stream={stream} isDateFiltered={isDateFiltered} isEdit={isEdit} isEditLoading={isEditLoading} isFullscreen={isFullscreen} camera={camera} cameraLocation={cameraLocation} makeFav={makeFav} toggleStreamFav={toggleStreamFav} handleAiToggle={handleAiToggle} handleApplyFilter={handleApplyFilter} handleMotionToggle={handleMotionToggle} handleRecordingToggle={handleRecordinToggle} serviceType={serviceType} handleSave={handleSave} handleToggleStream={handleToggleStream} hasMore={hasMore} hasRecordingMore={hasRecordingMore} fetchAlerts={fetchAlerts} fetchRecordings={fetchRecordings} filterDial={filterDial} filteredAlerts={filteredAlerts} formData={formData} recordingLoading={recordingLoading} recordingOffset={recordingOffset} recordingref={recordingref} recordings={recordings} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} date={date} endTime={endTime} organizations={organizations} />
     )
 }
 
