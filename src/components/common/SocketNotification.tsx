@@ -106,7 +106,9 @@ const SocketNotification = () => {
                 socket.off('connect_error');
                 socket.off('error');
                 socket.off('unseen_count');
-                socket.off('people_count')
+                socket.off('people_count');
+                socket.off('footfall_count');
+                socket.off('update_ports');
                 socket.off('notification');
                 socket.off('disconnect');
                 // socket.disconnect();
