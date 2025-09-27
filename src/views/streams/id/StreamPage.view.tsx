@@ -63,7 +63,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ resetCounters, isRecor
                     </button>}
                     <button className={filterButtonClassname} onClick={resetCounters}>
 
-                        <span className="hidden sm:inline">Reset Count</span>
+                        <span className="hidden sm:inline">Reset Count</span>   
                     </button>
                     <button className={filterButtonClassname} onClick={toggleStreamFav}>
                         <IconHeart
