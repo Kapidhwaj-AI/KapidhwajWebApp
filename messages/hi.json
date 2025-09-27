@@ -1,6 +1,5 @@
 {
     "language": "भाषा",
-    "select_language": "भाषा चुनें",
     "choose_language": "भाषा चुनें...",
     "close": "बंद करें",
     "save": "सहेजें",
@@ -41,6 +40,7 @@
         }
     },
     "settings": {
+       "select_language": "भाषा चुनें",
         "detection_sensitivity": "डिटेक्शन संवेदनशीलता",
         "overlap_sensitivity": "ओवरलैप संवेदनशीलता",
         "scene_density": "दृश्य घनत्व",

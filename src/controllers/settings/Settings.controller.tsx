@@ -16,7 +16,7 @@ const IconUser = dynamic(() => import('@tabler/icons-react').then((mod) => mod.I
 const SettingsController = () => {
     const [showSelectLanguageDial, setShowSelectLanguageDial] = useState(false);
     const [showHelpDial, setShowHelpDial] = useState(false);
-    const t = useTranslations()
+    const t = useTranslations('settings')
 
     const settingsItems = [
         {
@@ -39,37 +39,37 @@ const SettingsController = () => {
         },
         {
             id: 4,
-            title: t("settings.profile"),
+            title: t("profile"),
             icon: <IconUser size={40} />,
             path: "/settings"
         },
         {
             id: 5,
-            title: t("settings.change_password"),
+            title: t("change_password"),
             icon: <IconLockSquareRounded size={40} />,
             path: "/settings"
         },
         {
             id: 6,
-            title: t("settings.help_support"),
+            title: t("help_support"),
             icon: <IconLifebuoy size={40} />,
             path: "/settings"
         },
         {
             id: 7,
-            title: t("settings.manage_people"),
+            title: t("manage_people"),
             icon: <IconFriends size={40} />,
             path: "/settings/manage-people"
         },
         {
             id: 8,
-            title: t("settings.manage_access"),
+            title: t("manage_access"),
             icon: <IconLockAccess size={40} />,
             path: "/settings/manage-access"
         },
         {
             id: 9,
-            title: t("settings.custom_services"),
+            title: t("custom_services"),
             icon: <IconPlus size={40} />,
             path: "/settings/custom-services"
         },

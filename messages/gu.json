@@ -41,6 +41,7 @@
         }
     },
     "settings": {
+        "select_language": "ભાષા પસંદ કરો",
         "detection_sensitivity": "અનેકતા સંવેદનશીલતા",
         "overlap_sensitivity": "ઓવરલેપ સંવેદનશીલતા",
         "scene_density": "દ્રિશ્ય ઘનતા",
