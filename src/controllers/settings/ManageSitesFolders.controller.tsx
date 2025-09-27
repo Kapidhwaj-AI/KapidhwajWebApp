@@ -33,6 +33,10 @@ const ManageSitesFoldersController = () => {
                     (item) => item.organization,
                 );
                 setSites(sites)
+                if (sites.length && !orgId) {
+                    setOrgId(sites[0].id)
+                    setFolders(sites[0].folders ?? [])
+                }
             }
         } catch (error) {
             console.error("err:", error)
@@ -104,7 +108,6 @@ const ManageSitesFoldersController = () => {
             const method = isEdit ? 'PUT' : 'POST';
             const res = await protectApi<unknown, typeof payload>(url, method, payload, undefined, isOrgId && !isFolder);
             if (res?.status === 201 || res?.status === 200) {
-
                 setIsOpen(false)
                 setIsEdit(false)
                 setName('')

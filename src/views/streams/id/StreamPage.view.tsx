@@ -158,7 +158,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                                             const fetchRecording = await fetchRecordings(0);
                                             setRecordings(fetchRecording);
                                         } finally {
-                                        
+
                                         }
                                     }} className="bg-[#2B4C88] text-white font-medium py-1 md:py-2 px-2 md:px-4 rounded-full shadow-sm transition-all duration-200 flex items-center gap-1">
                                         <IconFilterX stroke={1} size={24} />
@@ -179,7 +179,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                                     hasMore={hasRecordingMore}
                                     topRef={topRecordingRef}
                                 >
-                                    {recordingOffset > 0 && !recordingLoading && !isRecordingFiltered &&<div ref={topRecordingRef} className="h-1" />}
+                                    {recordingOffset > 0 && !recordingLoading && !isRecordingFiltered && <div ref={topRecordingRef} className="h-1" />}
                                     {recordingLoading && topRecordingRef.current && <div className="text-center"><Spinner /></div>}
                                     {recordings.length === 0 ? (
                                         <p className="flex items-center justify-center w-full h-full">
@@ -192,7 +192,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                                             ))}
                                         </div>
                                     )}
-                                    {recordings.length > 0 && !isRecordingFiltered &&<div ref={recordingref} className="h-1" />}
+                                    {recordings.length > 0 && !isRecordingFiltered && <div ref={recordingref} className="h-1" />}
                                 </InfiniteScrolling>
 
                                 {recordingLoading && <div className="text-center"><Spinner /></div>}
@@ -202,10 +202,10 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
 
                     </div>
 
-                    {!isFullscreen && <div className="lg:col-span-2 gap-4 flex flex-col p-2  md:p-5 lg:max-h-full max-h-[35vh] overflow-y-auto h-[35vh] lg:h-full scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
+                    {!isFullscreen && <div className="lg:col-span-2 gap-4 flex flex-col p-2  md:p-5 lg:max-h-full max-h-[35vh] overflow-auto h-[35vh] lg:h-full scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
                         <AlertsFiltersButtonAtStream selectedTab={selectedTab} setSelectedTab={changeTab} />
                         {selectedTab === 'move' ? <div className="flex flex-col items-center mt-10 space-y-6">
-                                <CameraMovement camId={camera?.camera_id ?? ''}/> </div>: isAllAlertLoading ? <Spinner /> :
+                            <CameraMovement camId={camera?.camera_id ?? ''} /> </div> : isAllAlertLoading ? <Spinner /> :
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-3 md:gap-6 w-full ">
                                 <InfiniteScrolling<Alert>
                                     setData={setAlerts}
@@ -240,8 +240,8 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                     </div>}
                 </div>
             }
-        
-            
+
+
             {filterDial && <TimeFiltersDialogue
                 date={date}
                 startTime={startTime}
@@ -250,13 +250,24 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ isRecordingFiltered, s
                 setStartTime={setStartTime}
                 setEndTime={setEndTime}
                 isOpen={filterDial}
-                onClose={() => {setFilterDial(false); setIsRecordingFiltered(false);}}
+                onClose={() => { setFilterDial(false); setIsRecordingFiltered(false); }}
                 handleApplyFilter={handleApplyFilter}
             />}
             {isEdit && <EditStreamDialogue
                 isLoading={isEditLoading}
                 formData={formData}
-                onClose={() => setIsEdit(false)}
+                onClose={() => {
+                    setIsEdit(false); setFormData({
+                        name: camera?.name ?? '',
+                        people_threshold_count: camera?.people_threshold_count ?? NaN,
+                        organizationId: camera?.organization_id ?? '',
+                        folderId: cameraLocation?.parantFolderId ?? NaN,
+                        subfolder: cameraLocation?.folderId ?? NaN,
+                        detectionSensitivity: camera?.obj_thresh,
+                        overlapSensitivity: camera?.nms_thresh,
+                        sceneDensity: camera?.topk_pre_nms
+                    })
+                }}
                 setFormData={setFormData}
                 folders={organizations?.find((item) => item.id === formData.organizationId)?.folders.map((folder) => ({ key: folder.id.toString(), value: folder.name }))}
                 organizations={organizations?.map((item) => ({ key: item.id, value: item.name }))}
