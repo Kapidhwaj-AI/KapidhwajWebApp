@@ -25,6 +25,7 @@ import { useTranslations } from 'next-intl';
 import { getLocalStorageItem } from '@/lib/storage';
 import dynamic from 'next/dynamic';
 import { RootState, useStore } from '@/store';
+import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
 
 type SidebarTabs = "/home" | "/streams" | "/alerts" | "/favourites" | "/notifications" | "/settings";
 
@@ -52,6 +53,9 @@ export default function Sidebar() {
       setIsValidHub(true)
     }
   }, [localHub, remoteHub])
+  const staticPort = remoteHub?.static_port || savedRemoteHub?.static_port
+  const id = localHub?.id || savedLocalHub.id
+  const baseUrl = isValidHub ? remoteHub?.id ? `http://turn.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/`: GOOGLE_KPH_BUCKET_URL
   const menuItems: MenuItemType[] = [
     { icon: <IconSmartHome />, label: t('home_title'), path: '/home' },
     { icon: <IconShareplay />, label: t('streams.title'), path: '/streams' },
@@ -72,7 +76,7 @@ export default function Sidebar() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+  const userProfile = JSON.parse(getLocalStorageItem('user') ?? '{}').profile_image;
   const shouldExpand = isMobile ? isExpanded : (isExpanded || isHovering);
   useEffect(() => {
     if (!isHovering || !isExpanded) {
@@ -160,7 +164,7 @@ export default function Sidebar() {
                 className="flex items-center gap-3 w-full rounded-lg px-4 py-2 hover:ring-2 hover:ring-blue-500"
               >
                 <Image
-                  src="/assets/images/person-logo.webp"
+                  src={userProfile ? baseUrl+ userProfile : "/assets/images/person-logo.webp"}
                   alt="Profile"
                   width={40}
                   height={40}
@@ -255,7 +259,7 @@ export default function Sidebar() {
               )}
             >
               <Image
-                src="/assets/images/person-logo.webp"
+                src={userProfile ? baseUrl + userProfile : "/assets/images/person-logo.webp"}
                 alt="Profile"
                 width={48}
                 height={48}

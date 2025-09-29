@@ -13,7 +13,9 @@ const ProfileController = () => {
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-    const baseUrl = isValidHub ? remoteHub ? `http://turn.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
+    const staticPort = remoteHub?.static_port
+    const id = localHub?.id
+    const baseUrl = isValidHub ? remoteHub.id ? `http://turn.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
     const user = JSON.parse(getLocalStorageItem('user') ?? '{}')
     const [preview, setPreview] = useState(baseUrl + user.profile_image)
     const [name, setName] = useState(user.name ?? '');
@@ -59,6 +61,7 @@ const ProfileController = () => {
         }
         finally {
             setIsProfileOpen(false)
+            setIsLoading(false)
         }
     }
     return (

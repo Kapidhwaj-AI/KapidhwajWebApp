@@ -42,8 +42,7 @@ export function ProfileDialogue({ isOpen, isLoading, onClose, name, setName, id,
                 </div>
                 <div className="flex-1 w-full space-y-3">
                     <InputField value={id} label={t('settings.customer_id')} placeholder={"CUS07621"} disabled setValue={setId}/>
-                   
-                    {/* Name Field */}
+
                     <InputField value={name} label={t('settings.name')} placeholder={t('settings.enter_name_here')} setValue={setName} />
                     <InputField disabled value={email} setValue={setEmail} placeholder={t('settings.enter_email')} label={t('settings.email')}/>
                     <InputField disabled value={phone} setValue={setPhone} placeholder={t('settings.enter_phone')} label={t('settings.phone')} />

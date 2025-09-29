@@ -23,7 +23,6 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const localHub = useStore((state: RootState) => state.hub.localHub);
   const remoteHub = useStore((state: RootState) => state.hub.remoteHub);
   const clearAuthToken = useStore((state: RootActions) => state.clearAuthToken);
-
   useEffect(() => {
     if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub?.id || savedRemoteHub?.id)) {
       setIsValidHub(true)
