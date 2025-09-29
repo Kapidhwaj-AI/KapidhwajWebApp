@@ -390,9 +390,10 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     }
     const resetCounters = async () => {
         try {
-            const res = await protectApi<unknown, { cameraId: string }>(`/footfall-reset`, 'POST', { cameraId: camera?.camera_id ?? '' })
+            const res = await protectApi<unknown, { cameraId: string }>(`/camera/footfall-reset`, 'POST', { cameraId: camera?.camera_id ?? '' })
             if (res.status === 200) {
                 setFootFallCount({ camera_id: '', inCount: 0, outCount: 0 })
+                showToast(res.data?.message ?? "", "success")
             }
         } catch (error) {
             showToast(error.response.data.message, "error")

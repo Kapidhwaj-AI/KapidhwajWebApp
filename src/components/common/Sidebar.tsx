@@ -22,6 +22,8 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import dynamic from 'next/dynamic';
+import { getLocalStorageItem } from '@/lib/storage';
+import { BASE_URL } from '@/lib/protectApi';
 
 type SidebarTabs = "/home" | "/streams" | "/alerts" | "/favourites" | "/notifications" | "/settings";
 
@@ -59,7 +61,7 @@ export default function Sidebar() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+  const userProfile = JSON.parse(getLocalStorageItem('user') ?? '{}').profile_image;
   const shouldExpand = isMobile ? isExpanded : (isExpanded || isHovering);
   useEffect(() => {
     if (!isHovering || !isExpanded) {
@@ -147,7 +149,7 @@ export default function Sidebar() {
                 className="flex items-center gap-3 w-full rounded-lg px-4 py-2 hover:ring-2 hover:ring-blue-500"
               >
                 <Image
-                  src="/assets/images/person-logo.webp"
+                  src={userProfile ? BASE_URL+ userProfile : "/assets/images/person-logo.webp"}
                   alt="Profile"
                   width={40}
                   height={40}
@@ -242,7 +244,7 @@ export default function Sidebar() {
               )}
             >
               <Image
-                src="/assets/images/person-logo.webp"
+                src={userProfile ? BASE_URL + userProfile : "/assets/images/person-logo.webp"}
                 alt="Profile"
                 width={48}
                 height={48}

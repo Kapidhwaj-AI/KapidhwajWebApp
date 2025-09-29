@@ -16,7 +16,6 @@ export function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
   const router = useRouter();
  
   const clearAuthToken = useStore((state: RootActions) => state.clearAuthToken);
-
   const handleLogoutClick = async () => {
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     try {
