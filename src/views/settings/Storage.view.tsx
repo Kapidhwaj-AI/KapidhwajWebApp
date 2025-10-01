@@ -1,7 +1,7 @@
 "use client"
 
-import React from "react"
-import { Label, Pie, PieChart, Tooltip, TooltipProps } from "recharts"
+import React, {useState} from "react"
+import { Label, Pie, PieChart, Tooltip } from "recharts"
 
 
 import {
@@ -39,13 +39,12 @@ const StorageView: React.FC<StorageUsageViewProps> = ({ storageUsage }) => {
     if (!storageUsage) {
         return <div>Loading storage data...</div>
     }
-    const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 })
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
     const storageData = [
         { type: "images", storage: parseInt(storageUsage?.imagesGB.toString()), fill: "var(--chart-1)" },
         { type: "clips", storage: parseInt(storageUsage?.clipsGB.toString()), fill: "var(--chart-2)" },
         { type: "free", storage: parseInt(storageUsage?.freeGB.toString()), fill: "var(--chart-3)" },
     ]
-console.log("Storage Data:", mousePos)
     return (
         <Card data-chart={id} className="flex flex-col h-full w-full bg-[var(--surface-400)] border-0">
             <CardHeader className="flex-row items-start space-y-0 pb-0">
