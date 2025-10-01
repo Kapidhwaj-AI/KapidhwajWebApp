@@ -33,11 +33,7 @@ const NetworkConfigurationController = () => {
     } catch (error) {     
       console.error("err", error)
       setStatus(undefined) 
-    } finally {
-      setTimeout(() => {  
-        healthCheck() 
-      }, 30000);                      
-    }   
+    }
   } 
   const handleSave = async (data: NetworkData) => {
     if (data.mode === 'static') {
@@ -47,12 +43,7 @@ const NetworkConfigurationController = () => {
         return
       }
     }
-    // if (!data.autoDns) {
-    //   if (!data.dns?.alternate || !data.dns.preferrd) {
-    //     toast.error('Please Fill all the feilds')
-    //     return
-    //   }
-    // }
+   
     setLoading(true)
     data.nic = nic
     try {
@@ -71,8 +62,11 @@ const NetworkConfigurationController = () => {
 
   }
   useEffect(() => {
+    let intervalId: NodeJS.Timeout
     getNetwork()
     healthCheck()
+    intervalId = setInterval(healthCheck, 10000);
+    return () => clearInterval(intervalId);
   }, [])
   return (
     <>
