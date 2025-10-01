@@ -159,6 +159,8 @@
         "enter_people_threshold_count": "Enter People Threshold Count",
         "network_configuration": "Network Configuration",
         "custom_services": "Custom Services",
+        "storage": "Storage",
+        "manage_site_folders": "Manage Folders",
         "network": {
             "dhcp": "DHCP",
             "ipv4": "IPv4 Address",
@@ -179,7 +181,6 @@
     "no_user_data": " No users available",
     "no_access_data": "No access data found",
     "update_user": "Update User",
-    "manage_site_folders": "Manage Folders",
     "main_settings": "Main Settings",
     "manage_cameras": "Manage Cameras",
     "manage_sites_and_folders": "Manage Folders",

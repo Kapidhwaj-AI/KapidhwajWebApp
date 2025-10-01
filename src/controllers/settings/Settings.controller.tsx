@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react'
 const IconCameraDown = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconCameraDown))
+const IconServer2 = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconServer2))
 const IconFriends = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconFriends))
 const IconLanguage = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconLanguage))
 const IconLifebuoy = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconLifebuoy))
@@ -79,6 +80,12 @@ const SettingsController = () => {
         //     icon: <IconNetwork size={40} />,
         //     path: "/settings/network-configuration"
         // },
+        {
+            id: 11,
+            title: t("storage"),
+            icon: <IconServer2 size={40} />,
+            path: "/settings/storage"
+        },
     ];
     return (
         <SettingsView

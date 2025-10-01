@@ -31,11 +31,10 @@ const SocketNotification = () => {
         }
     }, [reduxLocal, reduxRemote])
 
-    const baseUrl =  (!remoteHub.id || !reduxRemote?.id) ? `ws://${localHub.id}.local:8084` : apiSocketUrl
-    console.log(baseUrl, remoteHub, reduxRemote, "socketBaseUrl")
+    const baseUrl =  (localHub.id || reduxLocal?.id) ? `ws://${localHub.id || reduxLocal?.id}.local:8084` : apiSocketUrl
     useEffect(() => {
         if (token) {
-            console.log(isValid, "socketValid", (!remoteHub.id || !reduxRemote?.id))
+            console.log(isValid, "socketValid", (!remoteHub.id || !reduxRemote?.id), remoteHub.id, reduxRemote?.id)
             const socket = io(baseUrl, {
                 auth: {
                     token,
