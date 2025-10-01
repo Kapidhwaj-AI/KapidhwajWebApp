@@ -36,10 +36,10 @@ const chartConfig = {
 
 const StorageView: React.FC<StorageUsageViewProps> = ({ storageUsage }) => {
     const id = "pie-interactive"
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
     if (!storageUsage) {
         return <div>Loading storage data...</div>
     }
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
     const storageData = [
         { type: "images", storage: parseInt(storageUsage?.imagesGB.toString()), fill: "var(--chart-1)" },
         { type: "clips", storage: parseInt(storageUsage?.clipsGB.toString()), fill: "var(--chart-2)" },
