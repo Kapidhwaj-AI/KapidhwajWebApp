@@ -1,7 +1,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import Modal from '../ui/Modal';
-import { Device, DevicesMap } from '@/models/settings';
+import {  DevicesMap } from '@/models/settings';
 import Spinner from '../ui/Spinner';
 import { InputField } from '../ui/Input.field';
 import { useTranslations } from 'next-intl';

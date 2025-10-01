@@ -29,6 +29,7 @@ import Spinner from "../ui/Spinner";
 export function TimeFiltersDialogue({ isOpen, onClose, date, startTime, endTime, setDate, setEndTime, setStartTime, handleApplyFilter }: { isOpen: boolean; onClose: () => void; date: Date | undefined, startTime: Date | undefined; endTime: Date | undefined; setDate: (val: Date | undefined) => void; setStartTime: (val: Date | undefined) => void; setEndTime: (val: Date | undefined) => void; handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void }) {
     const t = useTranslations()
     const filterLoading = useStore(state => state.singleCamera.filterLoading)
+    if(!isOpen) return null;
     return (
         <Modal onClose={onClose} title={t('alerts.apply_filter')}>
             <form onSubmit={(e) => { e.preventDefault(); handleApplyFilter(date, startTime, endTime) }} className="flex-1 space-y-4 mb-6">

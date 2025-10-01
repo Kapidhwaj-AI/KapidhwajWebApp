@@ -3,7 +3,6 @@ import { showToast } from '@/lib/showToast';
 import React, { useRef, useState } from 'react'
 
 const CameraMovement = ({ camId }: { camId: string }) => {
-    const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const sendCameraCommand = async (movementInput: string, camId: string) => {
         try {
             await protectApi(`${movementInput}`, "POST", { camId });

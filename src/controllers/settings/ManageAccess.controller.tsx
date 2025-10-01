@@ -6,11 +6,10 @@ import { Organization } from '@/models/organization'
 import { AccessLevel, Hub, User } from '@/models/settings'
 import { AxiosResponse } from 'axios'
 import { useTranslations } from 'next-intl'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect,  useState } from 'react'
 import dynamic from 'next/dynamic'
 import { getLocalStorageItem } from '@/lib/storage'
 import { showToast } from '@/lib/showToast'
-import { apiBaseUrl } from '@/services/config'
 const AddNewAccessDialogue = dynamic(() => import('@/components/dialogue/AddNewAccessDialogue').then((mod) => mod.AddNewAccessDialogue))
 const AddNewUserDialogue = dynamic(() => import('@/components/dialogue/AddNewUserDialogue').then((mod) => mod.AddNewUserDialogue))
 const DeleteDialog = dynamic(() => import('@/components/dialogue/DeleteDialog').then((mod) => mod.DeleteDialog))
@@ -30,7 +29,6 @@ const ManageAccessController = () => {
     const [selectedUser, setSelectedUser] = useState<{ name: string, userId: string } | null>(null)
     const [shareableOrg, setShareableOrg] = useState<Organization[]>([])
     const [open, setOpen] = useState(false)
-    const popoverRef = useRef<HTMLDivElement>(null)
     const [selectedTab, setSelectedTab] = useState('all')
     const debouncedQuery = useDebounce(userName, 300)
     const [searchQuery, setSearchQuery] = useState('');
@@ -40,8 +38,6 @@ const ManageAccessController = () => {
     const [isAccessLoading, setIsAccessLoading] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
-    const storedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
-    const storedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const t = useTranslations()
     const fetchUser = async () => {
         setIsLoading(true)
@@ -339,7 +335,6 @@ const ManageAccessController = () => {
                 organizations={shareableOrg}
                 handleSelectUser={handleSelectUser}
                 selectedUser={selectedUser}
-                popoverRef={popoverRef}
                 setSelectedUser={setSelectedUser}
                 open={open}
                 setOpen={setOpen}

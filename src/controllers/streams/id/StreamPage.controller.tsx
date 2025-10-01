@@ -292,7 +292,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             }
         } catch (error) {
             console.error("err:", error),
-                showToast(error.response.data.message, "error")
+            showToast(error.response.data.message, "error")
         } finally {
             setIsMlService(false)
         }

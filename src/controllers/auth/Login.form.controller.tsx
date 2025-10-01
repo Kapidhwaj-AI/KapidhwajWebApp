@@ -4,7 +4,6 @@ import { LoginForm } from "@/views/auth/Login.form";
 import { setLocalStorageItem } from "@/lib/storage";
 import { LOCALSTORAGE_KEY } from "@/services/config";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { RootActions, useStore } from "@/store";
 import { showToast } from "@/lib/showToast";
@@ -14,7 +13,6 @@ export const LoginFormController = () => {
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState<boolean>(false)
-  const router = useRouter();
   const setAuthToken = useStore((state:RootActions) => state.setAuthToken);
 
   const [username, setUsername] = useState("");

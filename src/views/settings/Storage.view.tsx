@@ -173,3 +173,5 @@ console.log("Storage Data:", mousePos)
         </Card>
     )
 }
+
+export default StorageView

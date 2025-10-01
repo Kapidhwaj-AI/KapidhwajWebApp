@@ -13,7 +13,6 @@ const Minimize = dynamic(() => import("lucide-react").then((mod) => mod.Minimize
 import dynamic from "next/dynamic";
 import { RootActions, RootState, useStore } from "@/store";
 import { BASE_URL } from "@/lib/protectApi";
-import Image from "next/image";
 
 
 export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {

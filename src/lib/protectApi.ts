@@ -1,6 +1,6 @@
-import axios, { isAxiosError, Method } from "axios";
+import axios, {  Method } from "axios";
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage";
-import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
+import {  LOCALSTORAGE_KEY } from "@/services/config";
 import { showToast } from "./showToast";
 export interface ApiResponse<T> {
     data: T;
