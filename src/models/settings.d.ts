@@ -188,6 +188,7 @@ export interface NetworkViewProps {
     nicsData: NicsData[]
     nic: string;
     setNic: (val: string) => void;
+    status?: { isInternetConnected: boolean, isSocketConnected: boolean, isTunnelAlive: boolean }
 }
 export interface NicsData {
     id: string;

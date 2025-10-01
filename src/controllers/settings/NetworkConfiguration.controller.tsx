@@ -10,6 +10,7 @@ const NetworkConfigurationController = () => {
   const [newtworkData, setNetworkData] = useState<NetworkData>()
   const [nics, setNics] = useState<NicsData[]>([])
   const [nic, setNic] = useState('')
+  const [status, setStatus] = useState<{ isInternetConnected: boolean, isSocketConnected: boolean, isTunnelAlive: boolean }>()
   const getNetwork = async () => {
     try {
       const res = await protectApi<NetworkData>(`/network`)
@@ -23,6 +24,21 @@ const NetworkConfigurationController = () => {
 
     }
   }
+  const healthCheck = async () => {
+    try {
+      const res = await protectApi<{ isInternetConnected: boolean, isSocketConnected: boolean, isTunnelAlive: boolean }>('/devices/hub/health')   
+      if( res?.status === 200  ){
+        setStatus(res?.data.data)      
+      }    
+    } catch (error) {     
+      console.error("err", error)
+      setStatus(undefined) 
+    } finally {
+      setTimeout(() => {  
+        healthCheck() 
+      }, 30000);                      
+    }   
+  } 
   const handleSave = async (data: NetworkData) => {
     if (data.mode === 'static') {
       if (!data.ipv4?.address || !data.ipv4.gateway || !data.ipv4.subnetMask) {
@@ -56,6 +72,7 @@ const NetworkConfigurationController = () => {
   }
   useEffect(() => {
     getNetwork()
+    healthCheck()
   }, [])
   return (
     <>

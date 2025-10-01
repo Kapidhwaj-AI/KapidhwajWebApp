@@ -5,10 +5,11 @@ import { NetworkData, NetworkViewProps } from "@/models/settings";
 import Spinner from "@/components/ui/Spinner";
 import IPv4Input from "@/components/ui/IPv4Input";
 import SelectField from "@/components/ui/Select.field";
+import { filterButtonClassname } from "@/styles/tailwind-class";
 
 
 
-export default function NetworkConfigurationView({ networkData, loading, handleSave, nic, nicsData, setNic }: NetworkViewProps) {
+export default function NetworkConfigurationView({ networkData, loading, handleSave, nic, nicsData, setNic,status }: NetworkViewProps) {
     const [newData, setNewData] = useState<NetworkData | undefined>(networkData)
     const t = useTranslations()
     useEffect(() => {
@@ -25,6 +26,12 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
     }, [newData]);
     console.log(networkData, "netw")
     return (
+        <div className="flex flex-col gap-6">
+            <div className={filterButtonClassname} >
+                {dot(status?.isInternetConnected ? "bg-green-500" : "bg-red-500", status?.isInternetConnected ? "Internet Connected" : "Internet Disconnected")}
+                {dot(status?.isSocketConnected ? "bg-green-500" : "bg-red-500", status?.isSocketConnected ? "Socket Connected" : "Socket Disconnected")}
+                {dot(status?.isTunnelAlive ? "bg-green-500" : "bg-red-500", status?.isTunnelAlive ? "Tunnel Alive" : "Tunnel Down")}
+            </div>
         <form onSubmit={(e) => { e.preventDefault(); handleSave(newData) }} className="space-y-5 md:w-[40rem] w-full self-center p-6 bg-[var(--surface-200)] dark:bg-gray-800 flex flex-col py-3 px-4 rounded-2xl border">
             <SelectField value={nic} setValue={setNic} data={nicsData.map((item) => ({ id: item.id, name: item.id }))} label={t('settings.select_type')} placeholder={'Select Network interface'} />
             <div className="flex justify-between items-center py-3 px-4 rounded-2xl border ">
@@ -112,5 +119,11 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
             <button type="submit" className="self-end h-[35px] sm:h-[40px] md:h-[45px] bg-[#2B4C88] hover:bg-blue-700 text-white text-sm sm:text-base rounded-full px-5 transition-colors"
             >{loading ? <Spinner /> : t('save')}</button>
         </form>
+        </div>
     );
 }
+
+
+const dot = (color: string, name: string) => (
+    <span title={name} className={`h-3 w-3 ${color} rounded-full inline-block mr-2`}></span>
+);
