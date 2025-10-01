@@ -1,0 +1,207 @@
+"use client"
+
+import React from "react"
+import { Label, Pie, PieChart, Tooltip, TooltipProps } from "recharts"
+
+
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import {
+    ChartConfig,
+    ChartContainer,
+    ChartStyle,
+} from "@/components/ui/chart"
+import { StorageUsageViewProps } from "@/models/settings"
+
+export const description = "An interactive pie chart"
+const chartConfig = {
+    images: {
+        label: "Alerts",
+        color: "var(--chart-1)",
+    },
+    clips: {
+        label: "Clips",
+        color: "var(--chart-2)",
+    },
+    free: {
+        label: "Free",
+        color: "var(--chart-3)",
+    },
+} satisfies ChartConfig
+
+const StorageView: React.FC<StorageUsageViewProps> = ({ storageUsage }) => {
+    const id = "pie-interactive"
+    if (!storageUsage) {
+        return <div>Loading storage data...</div>
+    }
+    const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 })
+    const storageData = [
+        { type: "images", storage: parseInt(storageUsage?.imagesGB.toString()), fill: "var(--chart-1)" },
+        { type: "clips", storage: parseInt(storageUsage?.clipsGB.toString()), fill: "var(--chart-2)" },
+        { type: "free", storage: parseInt(storageUsage?.freeGB.toString()), fill: "var(--chart-3)" },
+    ]
+console.log("Storage Data:", mousePos)
+    return (
+        <Card data-chart={id} className="flex flex-col h-full w-full bg-[var(--surface-400)] border-0">
+            <CardHeader className="flex-row items-start space-y-0 pb-0">
+                <div className="grid gap-1">
+                    <CardTitle>Storage Usage Details</CardTitle>
+                    <CardDescription>{storageUsage.sizeGB}GB</CardDescription>
+                </div>
+            </CardHeader>
+            <CardContent className="grid grid-cols-2 h-full w-full  pb-0">
+                <ChartStyle id={id} config={chartConfig} />
+                <ChartContainer
+                    id={id}
+                    config={chartConfig}
+                    className="col-span-1 w-full h-full max-w-[410px]"
+                >
+                        <PieChart width={400} height={400} onMouseMove={(e) => {
+                            if (e && e.activeCoordinate) {
+                                setMousePos({ x: e.activeCoordinate.x, y: e.activeCoordinate.y })
+                            } 
+                        }}
+                        > 
+                            <Tooltip
+                                cursor={{ stroke: "#2B4C88", strokeWidth: 2 }}
+
+                                content={({ active, payload }) => {
+                                    if (active && payload && payload.length) {
+                                        const item = payload[0]
+                                        console.log("Tooltip payload item:", item.payload.fill)
+                                        const label = chartConfig[item?.name ?? ""]?.label || item.name
+                                        return (
+                                            <div
+                                                className="absolute pointer-events-none bg-background border border-muted rounded-md p-2 shadow-md text-sm"
+                                                style={{
+                                                    left: mousePos.x ,
+                                                    top: mousePos.y ,
+                                                    position: "absolute",
+                                                }}
+                                             >
+                                                <p className="font-semibold">{label}</p>
+                                                <p className="text-muted-foreground">{item.value}GB used</p>
+                                            </div>
+                                        )
+                                    }
+                                    return null
+                                }}
+                            />
+                            <Pie
+                                data={storageData}
+                                dataKey="storage"
+                                nameKey="type"
+                                innerRadius={120}
+                                strokeWidth={2}
+                            >
+                                <Label
+                                    content={({ viewBox }) => {
+                                        if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                                            return (
+                                                <text
+                                                    x={viewBox.cx}
+                                                    y={viewBox.cy}
+                                                    textAnchor="middle"
+                                                    dominantBaseline="middle"
+                                                >
+                                                    <tspan
+                                                        x={viewBox.cx}
+                                                        y={viewBox.cy}
+                                                        className="fill-foreground text-wrap  text-xl font-bold"
+                                                    >
+                                                        {Number(storageUsage?.usedGB).toFixed(2) + 'GB Used out of'}
+
+                                                    </tspan>
+                                                    <tspan
+                                                        x={viewBox.cx}
+                                                        y={(viewBox.cy || 0) + 24}
+                                                        className="fill-muted-foreground"
+                                                    >
+                                                        {storageUsage.sizeGB.toLocaleString() + 'GB'}
+                                                    </tspan>
+                                                </text>
+                                            )
+                                        }
+                                    }}
+                                />
+                            </Pie>
+                        </PieChart>
+                </ChartContainer>
+                <div className="col-span-0.5 h-full flex items-start gap-3 flex-col justify-center p-2">
+                    <h2 className="border-b-2 border-[#2B4C88]  text-start">Storage Overview</h2>
+                    <div className="flex flex-col gap-2">
+                        <div className="flex flex-col border-[#2B4C88] border-2 rounded-xl p-2">
+                            <span>Total Size:</span>
+                            <span>{storageUsage.sizeGB}GB</span>
+                        </div>
+                        <div className="flex flex-col border-[#2B4C88] border-2 rounded-xl p-2">
+                            <span>Used Size:</span>
+                            <span>{storageUsage.usedGB}GB</span>
+                        </div>
+                        <div className="flex gap-2 w-full">
+                            <div className="flex flex-col w-full border-[#2B4C88] border-2 rounded-xl p-2">
+                                <span>Alerts :</span>
+                                <span>{storageUsage.imagesGB}GB</span>
+                            </div>
+                            <div className="flex flex-col border-[#2B4C88] border-2 w-full rounded-xl p-2">
+                                <span>Clips Size:</span>
+                                <span>{storageUsage.clipsGB}GB</span>
+                            </div>
+                        </div>
+                        <div className="flex flex-col border-[#2B4C88] border-2 rounded-xl p-2">
+                            <span>Free Size:</span>
+                            <span>{storageUsage.freeGB}GB</span>
+                        </div>
+                        <div className="flex gap-2">
+                            <div className="flex flex-col border-[#2B4C88] border-2 rounded-xl p-2">
+                                <span>Used Percent:</span>
+                                <span>{storageUsage.usedPercent}</span>
+                            </div>
+                            <div className="flex flex-col border-[#2B4C88] border-2 rounded-xl p-2">
+                                <span>Free Percent:</span>
+                                <span>{storageUsage.freePercent}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+const CustomTooltip = ({
+    active,
+    payload,
+    label,
+    coordinate,
+}: TooltipProps<any, any>) => {
+    if (active && payload && payload.length) {
+        const { x, y } = coordinate ?? { x: 0, y: 0 }
+
+        return (
+            <div
+                style={{
+                    position: "fixed", // important: relative to viewport
+                    top: y,
+                    left: x,
+                    transform: "translate(-50%, -120%)", // adjust offset above cursor
+                    background: "white",
+                    border: "1px solid #ccc",
+                    padding: "6px 10px",
+                    borderRadius: "4px",
+                    pointerEvents: "none",
+                    zIndex: 9999,
+                }}
+            >
+                <p>{payload[0].name}</p>
+                <p>{payload[0].value} GB</p>
+            </div>
+        )
+    }
+    return null
+}
+export default StorageView

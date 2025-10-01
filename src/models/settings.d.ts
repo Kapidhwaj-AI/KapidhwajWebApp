@@ -211,3 +211,18 @@ export interface AttendanceViewProps {
     categories: Category[]
     setIsStartModal: (val: boolean) => void;
 }
+
+
+export interface StorageUsage {
+    sizeGB: number;
+    usedGB: number;
+    freeGB: number;
+    usedPercent: number;
+    freePercent: number;
+    imagesGB: number;
+    clipsGB: number;
+}
+
+export interface StorageUsageViewProps {
+    storageUsage: StorageUsage ;
+}

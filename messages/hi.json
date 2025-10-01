@@ -173,6 +173,8 @@
         "network_configuration": "नेटवर्क कॉन्फ़िगरेशन",
         "manage_site_folders": "फ़ोल्डरस प्रबंधित करें",
         "custom_services": "कस्टम सेवा",
+        "storage": "स्टोरेज",
+        "manage_site_folders": "फ़ोल्डरस प्रबंधित करें",
         "network": {
             "dhcp": "डीएचसीपी",
             "ipv4": "IPv4 पता",
@@ -193,7 +195,6 @@
     "update_user": "उपयोगकर्ता अपडेट करें",
     "no_user_data": "कोई उपयोगकर्ता उपलब्ध नहीं है",
     "no_access_data": "कोई एक्सेस डेटा नहीं मिला",
-    "manage_site_folders": "फ़ोल्डरस प्रबंधित करें",
     "main_settings": "मुख्य सेटिंग्स",
     "manage_cameras": "कैमरे प्रबंधित करें",
     "manage_sites_and_folders": "फ़ोल्डरस प्रबंधित करें",
