@@ -173,35 +173,3 @@ console.log("Storage Data:", mousePos)
         </Card>
     )
 }
-const CustomTooltip = ({
-    active,
-    payload,
-    label,
-    coordinate,
-}: TooltipProps<any, any>) => {
-    if (active && payload && payload.length) {
-        const { x, y } = coordinate ?? { x: 0, y: 0 }
-
-        return (
-            <div
-                style={{
-                    position: "fixed", // important: relative to viewport
-                    top: y,
-                    left: x,
-                    transform: "translate(-50%, -120%)", // adjust offset above cursor
-                    background: "white",
-                    border: "1px solid #ccc",
-                    padding: "6px 10px",
-                    borderRadius: "4px",
-                    pointerEvents: "none",
-                    zIndex: 9999,
-                }}
-            >
-                <p>{payload[0].name}</p>
-                <p>{payload[0].value} GB</p>
-            </div>
-        )
-    }
-    return null
-}
-export default StorageView
