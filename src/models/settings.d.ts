@@ -225,4 +225,6 @@ export interface StorageUsage {
 
 export interface StorageUsageViewProps {
     storageUsage: StorageUsage ;
+    loading: boolean
 }
+
