@@ -27,10 +27,10 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
     console.log(networkData, "netw")
     return (
         <div className="flex flex-col gap-6">
-            <div className={filterButtonClassname} >
+            <div className={filterButtonClassname + 'justify-end self-end'} >
                 {dot(status?.isInternetConnected ? "bg-green-500" : "bg-red-500", status?.isInternetConnected ? "Internet Connected" : "Internet Disconnected")}
                 {dot(status?.isSocketConnected ? "bg-green-500" : "bg-red-500", status?.isSocketConnected ? "Socket Connected" : "Socket Disconnected")}
-                {dot(status?.isTunnelAlive ? "bg-green-500" : "bg-red-500", status?.isTunnelAlive ? "Tunnel Alive" : "Tunnel Down")}
+                {dot(status?.isTunnelAlive ? "bg-green-500" : "bg-red-500", status?.isTunnelAlive ? "Tunnel Started" : "Tunnel Stopped")}
             </div>
             <form onSubmit={(e) => { e.preventDefault(); handleSave(newData) }} className="space-y-5 md:w-[40rem] w-full self-center p-6 bg-[var(--surface-200)] dark:bg-gray-800 flex flex-col py-3 px-4 rounded-2xl border">
                 <SelectField value={nic} setValue={setNic} data={nicsData.map((item) => ({ id: item.id, name: item.id }))} label={t('settings.select_type')} placeholder={'Select Network interface'} />
