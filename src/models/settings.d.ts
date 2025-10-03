@@ -190,7 +190,11 @@ interface NetworkData {
     autoDns?: boolean,
     mtu?: number
 }
-
+export interface NicsData {
+    id: string;
+    label: string;
+    mac: string
+}
 export interface NetworkViewProps {
     networkData?: NetworkData;
     loading: boolean;
