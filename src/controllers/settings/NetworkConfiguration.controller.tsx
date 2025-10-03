@@ -69,7 +69,7 @@ const NetworkConfigurationController = () => {
   }, [])
   return (
     <>
-      <NetworkConfigurationView nic={nic} setNic={setNic} nicsData={nics} loading={loading} networkData={newtworkData} handleSave={handleSave} />
+      <NetworkConfigurationView status={status} nic={nic} setNic={setNic} nicsData={nics} loading={loading} networkData={newtworkData} handleSave={handleSave} />
     </>
   )
 }

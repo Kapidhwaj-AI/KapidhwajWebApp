@@ -6,7 +6,6 @@ import { Label, Pie, PieChart, Tooltip } from "recharts"
 
 
 import {
-    Card,
     CardContent,
     CardDescription,
     CardHeader,
@@ -49,15 +48,15 @@ const StorageView: React.FC<StorageUsageViewProps> = ({ storageUsage, loading })
     ]
     return (
         <>
-            <Card data-chart={id} className="flex flex-col h-full w-full bg-[var(--surface-400)] border-0">
+            <div data-chart={id} className="flex flex-col h-full w-full bg-[var(--surface-400)] border-0">
                 {loading ? <Spinner /> : <>
-                    <CardHeader className="flex-row items-start space-y-0 pb-0">
+                    <h1 className="flex-row items-start space-y-0 pb-0">
                         <div className="grid gap-1">
                             <CardTitle>Storage Usage Details</CardTitle>
                             <CardDescription>{storageUsage.sizeGB}GB</CardDescription>
                         </div>
-                    </CardHeader>
-                    <CardContent className="grid grid-cols-2 h-full w-full  pb-0">
+                    </h1>
+                    <div className="grid grid-cols-2 h-full w-full  pb-0">
                         <ChartStyle id={id} config={chartConfig} />
                         <ChartContainer
                             id={id}
@@ -172,9 +171,9 @@ const StorageView: React.FC<StorageUsageViewProps> = ({ storageUsage, loading })
                                 </div>
                             </div>
                         </div>
-                    </CardContent>
+                    </div>
                 </>}
-            </Card>
+            </div>
         </>
     )
 }
