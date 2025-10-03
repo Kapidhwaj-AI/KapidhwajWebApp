@@ -22,6 +22,7 @@ import { ApiResponse } from "@/lib/protectApi";
 import { useTranslations } from "next-intl";
 import Spinner from "../ui/Spinner";
 import dynamic from "next/dynamic";
+import LogoSpinner from "../ui/LogoSpinner";
 
 export function StreamSettingsDialogue({
   isOpen,
@@ -90,8 +91,7 @@ export function StreamSettingsDialogue({
   if (isOpen) {
     return (
       <Modal onClose={onClose} title={t('streams.options.settings')}>
-
-        {loading ? <Spinner className="h-[70vh]" /> : <div className="space-y-3 ">
+        {loading ? <LogoSpinner /> : <div className="space-y-3 ">
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">
               <div className="p-2 bg-[#2B4C88] rounded-xl">
