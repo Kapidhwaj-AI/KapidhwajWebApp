@@ -62,10 +62,9 @@ const NetworkConfigurationController = () => {
 
   }
   useEffect(() => {
-    let intervalId: NodeJS.Timeout
     getNetwork()
     healthCheck()
-    intervalId = setInterval(healthCheck, 10000);
+    const intervalId: NodeJS.Timeout = setInterval(healthCheck, 10000);
     return () => clearInterval(intervalId);
   }, [])
   return (
