@@ -27,7 +27,7 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
     console.log(networkData, "netw")
     return (
         <div className="flex flex-col gap-6">
-            <div className="flex gap-3 items-center">
+            <div className="flex gap-3 items-center self-end">
                 <div className={filterButtonClassname + 'justify-end self-end gap-3'} >
                     <span className=" font-medium">Device Health Check:</span>
                     {dot(status?.isInternetConnected ? "bg-green-500" : "bg-red-500", status?.isInternetConnected ? "Internet Connected" : "Internet Disconnected")}
