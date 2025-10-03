@@ -1,24 +1,15 @@
 "use client"
 
 import React, {useState} from "react"
-import { Label, Pie, PieChart, Tooltip } from "recharts"
-
-
-
-import {
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import {
-    ChartConfig,
-    ChartContainer,
-    ChartStyle,
-} from "@/components/ui/chart"
+const Label = dynamic(() => import("recharts").then((mod) => mod.Label), { ssr: false });
+const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
+const ChartContainer = dynamic(() => import("@/components/ui/chart").then((mod) => mod.ChartContainer), { ssr: false });
+const ChartStyle = dynamic(() => import("@/components/ui/chart").then((mod) => mod.ChartStyle), { ssr: false });    
 import { StorageUsageViewProps } from "@/models/settings"
 import Spinner from "@/components/ui/Spinner"
-
+import dynamic from "next/dynamic";
+import { ChartConfig } from "@/components/ui/chart";
+import { Pie, Tooltip } from "recharts";
 export const description = "An interactive pie chart"
 const chartConfig = {
     images: {
@@ -52,8 +43,8 @@ const StorageView: React.FC<StorageUsageViewProps> = ({ storageUsage, loading })
                 {loading ? <Spinner /> : <>
                     <h1 className="flex-row items-start space-y-0 pb-0">
                         <div className="grid gap-1">
-                            <CardTitle>Storage Usage Details</CardTitle>
-                            <CardDescription>{storageUsage.sizeGB}GB</CardDescription>
+                            <h1 className="font-semibold leading-none tracking-tight">Storage Usage Details</h1>
+                            <span className="text-sm text-muted-foreground">{storageUsage.sizeGB}GB</span>
                         </div>
                     </h1>
                     <div className="grid grid-cols-2 h-full w-full  pb-0">

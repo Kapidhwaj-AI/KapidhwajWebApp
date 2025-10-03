@@ -6,7 +6,8 @@ import Spinner from "@/components/ui/Spinner";
 import IPv4Input from "@/components/ui/IPv4Input";
 import SelectField from "@/components/ui/Select.field";
 import { filterButtonClassname } from "@/styles/tailwind-class";
-
+import dynamic from "next/dynamic";
+const IconRefresh = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconRefresh),)
 
 
 export default function NetworkConfigurationView({ networkData, loading, handleSave, nic, nicsData, setNic, status, healthCheck }: NetworkViewProps) {
@@ -35,7 +36,7 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
                     {dot(status?.isTunnelAlive ? "bg-green-500" : "bg-red-500", status?.isTunnelAlive ? "Tunnel Started" : "Tunnel Stopped")}
                 </div>
                 <button onClick={healthCheck} type="button" className={filterButtonClassname}>
-                    Refresh Health Status
+                    <IconRefresh/>
                 </button>
             </div>
             <form onSubmit={(e) => { e.preventDefault(); handleSave(newData) }} className="space-y-5 md:w-[40rem] w-full self-center p-6 bg-[var(--surface-200)] dark:bg-gray-800 flex flex-col py-3 px-4 rounded-2xl border">
