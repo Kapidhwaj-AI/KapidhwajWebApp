@@ -9,7 +9,7 @@ import { filterButtonClassname } from "@/styles/tailwind-class";
 
 
 
-export default function NetworkConfigurationView({ networkData, loading, handleSave, nic, nicsData, setNic, status }: NetworkViewProps) {
+export default function NetworkConfigurationView({ networkData, loading, handleSave, nic, nicsData, setNic, status, healthCheck }: NetworkViewProps) {
     const [newData, setNewData] = useState<NetworkData | undefined>(networkData)
     const t = useTranslations()
     useEffect(() => {
@@ -27,10 +27,16 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
     console.log(networkData, "netw")
     return (
         <div className="flex flex-col gap-6">
-            <div className={filterButtonClassname + 'justify-end self-end'} >
-                {dot(status?.isInternetConnected ? "bg-green-500" : "bg-red-500", status?.isInternetConnected ? "Internet Connected" : "Internet Disconnected")}
-                {dot(status?.isSocketConnected ? "bg-green-500" : "bg-red-500", status?.isSocketConnected ? "Socket Connected" : "Socket Disconnected")}
-                {dot(status?.isTunnelAlive ? "bg-green-500" : "bg-red-500", status?.isTunnelAlive ? "Tunnel Started" : "Tunnel Stopped")}
+            <div className="flex gap-3 items-center">
+                <div className={filterButtonClassname + 'justify-end self-end gap-3'} >
+                    <span className=" font-medium">Device Health Check:</span>
+                    {dot(status?.isInternetConnected ? "bg-green-500" : "bg-red-500", status?.isInternetConnected ? "Internet Connected" : "Internet Disconnected")}
+                    {dot(status?.isSocketConnected ? "bg-green-500" : "bg-red-500", status?.isSocketConnected ? "Socket Connected" : "Socket Disconnected")}
+                    {dot(status?.isTunnelAlive ? "bg-green-500" : "bg-red-500", status?.isTunnelAlive ? "Tunnel Started" : "Tunnel Stopped")}
+                </div>
+                <button onClick={healthCheck} type="button" className={filterButtonClassname}>
+                    Refresh Health Status
+                </button>
             </div>
             <form onSubmit={(e) => { e.preventDefault(); handleSave(newData) }} className="space-y-5 md:w-[40rem] w-full self-center p-6 bg-[var(--surface-200)] dark:bg-gray-800 flex flex-col py-3 px-4 rounded-2xl border">
                 <SelectField value={nic} setValue={setNic} data={nicsData.map((item) => ({ id: item.id, name: item.id }))} label={t('settings.select_type')} placeholder={'Select Network interface'} />
@@ -125,5 +131,5 @@ export default function NetworkConfigurationView({ networkData, loading, handleS
 
 
 const dot = (color: string, name: string) => (
-    <span title={name} className={`h-3 w-3 ${color} rounded-full inline-block mr-2`}></span>
+    <span title={name} className={`h-3 w-3 ${color} rounded-full inline-block`}></span>
 );

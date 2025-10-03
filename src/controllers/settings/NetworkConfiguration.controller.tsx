@@ -64,12 +64,10 @@ const NetworkConfigurationController = () => {
   useEffect(() => {
     getNetwork()
     healthCheck()
-    const intervalId: NodeJS.Timeout = setInterval(healthCheck, 10000);
-    return () => clearInterval(intervalId);
   }, [])
   return (
     <>
-      <NetworkConfigurationView status={status} nic={nic} setNic={setNic} nicsData={nics} loading={loading} networkData={newtworkData} handleSave={handleSave} />
+      <NetworkConfigurationView status={status} healthCheck={healthCheck} nic={nic} setNic={setNic} nicsData={nics} loading={loading} networkData={newtworkData} handleSave={handleSave} />
     </>
   )
 }
