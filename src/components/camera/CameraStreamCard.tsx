@@ -62,7 +62,7 @@ export default function CameraStreamCard({
       {camera?.webrtc_url &&<iframe
           src={`${BASE_URL}:8889/${camera?.camera_id}/?net=offline`}
           allowFullScreen
-          style={{ width: "100%", maxWidth: "800px", height: '100%' }}
+          className="w-full h-full"
         >
           Your browser does not support the video tag.
         </iframe>}

@@ -35,6 +35,7 @@ interface SingleCameraSettingsState {
     addToFavourites: boolean;
     fireSmokeDetected: number;
     faceDetection: number;
+    isFootFallCountEnabled?: boolean
 }
 export type FeatureKeys =
     | 'cameraMovement'
@@ -121,7 +122,7 @@ export interface RootActions {
     toggleAllRecordings: () => void;
     setCameraSettings: (settings: SingleCameraSettingsState) => void;
     toggleAddToFavouritesDetection: () => void;
-
+    setIsFootFallCount: (isFootFallCountEnabled:boolean) => void;
     // Single Camera actions
     setCurrentCameraId: (id: { id: string }) => void;
     setCurrentCameraIsRecording: (isRecording: boolean) => void;
@@ -172,6 +173,7 @@ export const useStore = create<RootState & RootActions>((set, get) => ({
         allRecordings: false,
         addToFavourites: false,
         faceDetection: 0,
+        isFootFallCountEnabled: false,
     },
     user: {
         email: '',
@@ -236,6 +238,7 @@ export const useStore = create<RootState & RootActions>((set, get) => ({
     toggleAllRecordings: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, allRecordings: !state.singleCameraSettings.allRecordings } })),
     setCameraSettings: (settings) => set({ singleCameraSettings: settings }),
     toggleAddToFavouritesDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, addToFavourites: !state.singleCameraSettings.addToFavourites } })),
+    setIsFootFallCount: (isFootFallCountEnabled) => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, isFootFallCountEnabled} })),
 
     setCurrentCameraId: ({ id }) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraId: id } })),
     setCurrentCameraIsRecording: (isRecording) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsRecording: isRecording } })),

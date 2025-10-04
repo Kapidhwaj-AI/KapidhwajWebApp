@@ -180,7 +180,6 @@ interface NetworkData {
     autoDns?: boolean,
     mtu?: number
 }
-
 export interface NetworkViewProps {
     networkData?: NetworkData;
     loading: boolean;
