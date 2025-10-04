@@ -17,7 +17,7 @@ import React from 'react'
 const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFolder, setSearchQuery, setSelectedChildFolder, selectedData, selectedFolder, visibleCameras, cameraCount, selectedOrganization, isLoading, organizations, handleFolderSelect, handleOrganizationSelect, toogleColumnValue,}) => {
     const t = useTranslations()
   return (
-      <div className="flex flex-col  scrollbar-hide gap-4 p-4">
+      <div className="flex flex-col  scrollbar-hide gap-4 p-6">
           <div className="flex flex-wrap justify-between items-center">
               <h1 className="text-2xl font-bold">{t('streams.title')}</h1>
               <div className="flex md:flex-row flex-col gap-2">

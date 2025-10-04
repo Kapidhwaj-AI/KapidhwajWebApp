@@ -108,7 +108,6 @@ const StorageView: React.FC<StorageUsageViewProps> = ({ storageUsage, loading })
                                                             className="fill-foreground text-wrap  text-xl font-bold"
                                                         >
                                                             {Number(storageUsage?.usedGB).toFixed(2) + 'GB Used out of'}
-
                                                         </tspan>
                                                         <tspan
                                                             x={viewBox.cx}

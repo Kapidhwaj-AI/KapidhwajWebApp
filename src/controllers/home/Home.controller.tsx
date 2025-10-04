@@ -1,7 +1,7 @@
 'use client'
 import HomeView from '@/views/home/Home.view'
 import { protectApi } from '@/lib/protectApi'
-import { getLocalStorageItem, setLocalStorageItem } from '@/lib/storage'
+import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from '@/lib/storage'
 import { Hub, ManageHub } from '@/models/settings'
 import React, { useEffect, useState } from 'react'
 const HubDialogue = dynamic(() => import('@/components/dialogue/HubDialogue'), { ssr: false })
@@ -96,11 +96,13 @@ const HomeController = () => {
     }, [savedHubs, nearbyHubs]);
 
     const handleAccessRemotely = (hub: Hub) => {
+        setLocalHUb(null)
         setRemoteHub(hub)
+        removeLocalStorageItem('Localhub')
         if (storedRemoteHub) {
-            setLocalStorageItem('Remotetemphub', JSON.stringify(storedRemoteHub))
+            setLocalStorageItem([['Remotetemphub', JSON.stringify(storedRemoteHub)], ['Remotehub', JSON.stringify(hub)]])
         } else {
-            setLocalStorageItem('Remotetemphub', JSON.stringify(hub))
+            setLocalStorageItem([['Remotetemphub', JSON.stringify(hub)], ['Remotehub', JSON.stringify(hub)]])
         }
     }
     const handleAccessNearbyHubs = (hub: ManageHub) => {

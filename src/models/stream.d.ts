@@ -96,4 +96,5 @@ export interface StreamsPageViewProps {
     setIsRecordingFiltered: React.Dispatch<React.SetStateAction<boolean>>
     isRecordingFiltered: boolean;
     resetCounters: () => void;
+    setIsAiLoading: (val: boolean) => void;
 }

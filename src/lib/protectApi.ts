@@ -26,7 +26,7 @@ export async function protectApi<T, D = undefined>(
     let baseUrl = apiBaseUrl;
     if (hasRemoteHub) {
         baseUrl = apiBaseUrl;
-    } else if (hasLocalHub) {
+    } else if (hasLocalHub && !isNotCustomHeader) {
         baseUrl = `http://${localHub.id}.local:8084`;
     }
 

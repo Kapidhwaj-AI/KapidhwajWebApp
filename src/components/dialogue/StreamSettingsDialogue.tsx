@@ -20,9 +20,9 @@ import Modal from "../ui/Modal";
 import { AxiosResponse } from "axios";
 import { ApiResponse } from "@/lib/protectApi";
 import { useTranslations } from "next-intl";
-import Spinner from "../ui/Spinner";
 import dynamic from "next/dynamic";
 import LogoSpinner from "../ui/LogoSpinner";
+import { RootActions, useStore } from "@/store";
 
 export function StreamSettingsDialogue({
   isOpen,
@@ -40,7 +40,8 @@ export function StreamSettingsDialogue({
   loading,
   handleToggleStream,
   isStream,
-  peopleCountLine
+  peopleCountLine,
+  temp
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -52,13 +53,16 @@ export function StreamSettingsDialogue({
   face: boolean;
   fireSmoke: boolean;
   loading: boolean;
-  handleAiStremToggle: (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection' | "footfall_count", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
+  temp: boolean;
+  handleAiStremToggle: (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection' | "footfall_count" | "temp", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
   handleToggleStream: (isStream: boolean) => void;
   isStream: boolean
   peopleCountLine: boolean;
 }) {
+  const setIsFootFallCount = useStore((state: RootActions) => state.setIsFootFallCount);
+  console.log("temp:",temp)
   const [settings, setSettings] = useState({
     recordings: recordings,
     motion: motion,
@@ -67,10 +71,9 @@ export function StreamSettingsDialogue({
     license_plate_detection: license,
     face_detection: face,
     fire_smoke_detection: fireSmoke,
-    footfall_count: peopleCountLine
+    footfall_count: peopleCountLine,
+    temp:temp
   });
-
-
 
   const toggleSetting = async (key: keyof typeof settings, toggleValue: boolean) => {
     let res;
@@ -81,12 +84,19 @@ export function StreamSettingsDialogue({
       res = await handleMotionToggle(toggleValue)
     }
     else {
-      res = await handleAiStremToggle(key, toggleValue)
+      if (key === "footfall_count" && toggleValue) {
+        setIsFootFallCount(true);
+      }
+      else{
+        res = await handleAiStremToggle(key, toggleValue)
+      }
     }
-    if (res.status === 200) {
+    if (res.status === 200 || (key === "footfall_count" && !loading && toggleValue) ) {
+      console.log("response:", !loading, key === "footfall_count" && !loading && toggleValue)
       setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
     }
   };
+  console.log("settings:", loading)
   const t = useTranslations()
   if (isOpen) {
     return (
@@ -101,7 +111,7 @@ export function StreamSettingsDialogue({
             </div>
             <Switch
               enabled={isStream}
-              onChange={() => { handleToggleStream(!isStream); setSettings({ recordings: false, people_count: false, motion: false, intrusion_detection: false, license_plate_detection: false, face_detection: false, fire_smoke_detection: false, footfall_count: false }) }}
+              onChange={() => { handleToggleStream(!isStream); setSettings({ recordings: false, people_count: false, motion: false, intrusion_detection: false, license_plate_detection: false, face_detection: false, fire_smoke_detection: false, footfall_count: false, temp: false }) }}
               trackColor="bg-white"
             />
           </div>
@@ -145,6 +155,20 @@ export function StreamSettingsDialogue({
             <Switch
               enabled={settings.face_detection}
               onChange={() => toggleSetting("face_detection", !settings.face_detection)}
+              trackColor="bg-white"
+            />
+          </div>
+          <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
+            <div className="flex gap-4 items-center">
+              <div className="p-2 bg-[#2B4C88] rounded-xl">
+                <IconUserScan stroke={2} color="white" />
+              </div>
+              <span>Face Recognition 2</span>
+            </div>
+
+            <Switch
+              enabled={settings.temp}
+              onChange={() => toggleSetting("temp", !settings.temp)}
               trackColor="bg-white"
             />
           </div>

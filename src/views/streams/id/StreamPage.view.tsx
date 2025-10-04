@@ -37,10 +37,11 @@ import { StreamsPageViewProps } from '@/models/stream';
 import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import CameraMovement from '@/components/camera/CameraMovement';
-import { RootState, useStore } from '@/store';
+import { RootActions, RootState, useStore } from '@/store';
+import FootFallDialogue from '@/components/dialogue/FootFallDialogue';
 
 
-const StreamPageView: React.FC<StreamsPageViewProps> = ({ resetCounters, isRecordingFiltered, setIsRecordingFiltered, isAlertFullScreen, isAllAlertLoading, topRecordingRef, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
+const StreamPageView: React.FC<StreamsPageViewProps> = ({ setIsAiLoading, resetCounters, isRecordingFiltered, setIsRecordingFiltered, isAlertFullScreen, isAllAlertLoading, topRecordingRef, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, setSelectedTab, setSettingDial, setStartTime, settingDial,
     startTime, stream, fetchAlerts, date, fetchRecordings, filterDial, filteredAlerts, formData, recordingLoading, recordingOffset, recordingref, recordings, alertEndRef, alertOffset, alerts, alertsLoading, handleAiToggle, handleMotionToggle, handleRecordingToggle, handleSave, handleToggleStream, hasMore, hasRecordingMore, endTime, organizations, handleApplyFilter
 
 }) => {
@@ -49,21 +50,21 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ resetCounters, isRecor
     const footFallCount = useStore(
         (state: RootState) => state.singleCamera.footFallCount,
     );
+    const isFootFallCountEnabled = useStore((state: RootState) => state.singleCameraSettings.isFootFallCountEnabled);
+    const setIsFootFallCount = useStore((state: RootActions) => state.setIsFootFallCount);
     return (
-        <div className="h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4">
+        <div className={isFullscreen ? "h-full" : "h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4"}>
             {(!isFullscreen || isAlertFullScreen) && <div className="flex flex-col md:flex-row justify-between items-start  gap-3">
                 {cameraLocation && <h1 className="sm:text-md flex gap-1 items-center justify-between md:text-lg lg:text-xl xl:text-2xl font-light ml-2 md:ml-5 whitespace-nowrap">
                     {cameraLocation?.organization} <IconChevronRight className=" text-gray-400" /> {cameraLocation?.parantFolder === "NA" ? '' : <div className=' flex gap-2 items-center'>{cameraLocation?.parantFolder} <IconChevronRight className=" text-gray-400" /></div>}   {camera?.name}
                 </h1>}
                 <div className="flex items-center flex-wrap gap-2 justify-end  self-end">
                     {<button className={filterButtonClassname}>
-
                         <span className="hidden sm:inline">People In Count:{footFallCount?.inCount} People Out count:{footFallCount?.outCount}</span>
-
                     </button>}
                     <button className={filterButtonClassname} onClick={resetCounters}>
 
-                        <span className="hidden sm:inline">Reset Count</span>   
+                        <span className="hidden sm:inline">Reset Count</span>
                     </button>
                     <button className={filterButtonClassname} onClick={toggleStreamFav}>
                         <IconHeart
@@ -121,13 +122,12 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ resetCounters, isRecor
             {loading ? <Spinner /> :
                 <div className={isFullscreen ? "relative top-0 left-0 right-0 w-full h-full rounded-2xl" : "grid grid-cols-1 lg:grid-cols-6 gap-3 md:gap-4   md:h-full  h-auto overflow-y-auto scrollbar-hide"}>
                     <div className={isFullscreen ? "w-full h-full" : "lg:col-span-4 flex flex-col gap-3 md:gap-5 h-full"}>
-                        {/* Camera */}
                         <div
                             className={cn(
                                 "overflow-y-auto scrollbar-hide rounded-2xl",
                                 isFullscreen
                                     ? "h-full"
-                                    : "h-[33vh] lg:flex-[1]" // mobile fixed 33vh, desktop grow ratio 3
+                                    : "h-auto lg:flex-[1]" // mobile fixed 33vh, desktop grow ratio 3
                             )}
                         >
                             <CameraStreamCardMedium camera={camera} camLocation={cameraLocation} />
@@ -292,7 +292,9 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ resetCounters, isRecor
                 handleMotionToggle={handleMotionToggle}
                 handleRecordingToggle={handleRecordingToggle}
                 peopleCountLine={camera ? camera?.is_footfall_active > 0 : false}
+                temp={camera ? camera?.is_temp_ai_stream_active > 0 : false}
             />}
+            {isFootFallCountEnabled && <FootFallDialogue setAiLoading={setIsAiLoading} handleToggleAiStream={handleAiToggle} cameraId={camera?.camera_id} url={camera?.webrtc_url ?? ''} onClose={() => setIsFootFallCount(false)} />}
         </div>
     )
 }
