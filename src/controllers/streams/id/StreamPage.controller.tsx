@@ -103,7 +103,6 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         const res = await protectApi<{ is_fav: boolean }>(`/camera/fav-status?cameraId=${id}`)
         return res.data.data
     }
-    console.log(formData, "Form data")
     useEffect(() => {
         setLoading(true);
         Promise.allSettled([
@@ -301,6 +300,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         }
 
     }
+    
     const handleSave = async () => {
         setIsEditLoading(true)
         const fallbackFolderId =
@@ -352,7 +352,8 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
     const changeTab = async (tab: string) => {
         setSelectedTab(tab);
-        if (tab === selectedTab || tab === 'move') {
+        if (tab === selectedTab || tab === 'move' || tab === 'occu') {
+            console.log("returning")
             return
         }
         setIsDateFiltered(false)

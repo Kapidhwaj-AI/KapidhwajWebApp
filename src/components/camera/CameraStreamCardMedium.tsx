@@ -12,10 +12,11 @@ const Minimize = dynamic(() => import("lucide-react").then((mod) => mod.Minimize
   { ssr: false });
 import dynamic from "next/dynamic";
 import { RootActions, RootState, useStore } from "@/store";
+import { getLocalStorageItem } from "@/lib/storage";
 
 
 export default function CameraStreamCardMedium({ camera, camLocation }: { camera?: Camera; camLocation?: CameraLocation }) {
-  
+
   const isFullscreen = useStore((state: RootState) => state.camera.isFullScreen);
 
   useEffect(() => {
@@ -40,6 +41,9 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
     return () => window.removeEventListener('pageshow', handlePageShow);
   }, [camera?.webrtc_url]);
   const setIsFullScreenMode = useStore((state: RootActions) => state.setIsFullScreenMode);
+  const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
+  const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
+  const url = savedLocalHub.id ? `http://${savedLocalHub.id}.local:8889/${camera?.camera_id}` : savedRemoteHub?.id ? `http://turn.kapidhwaj.ai:${savedRemoteHub?.live_port}/${camera?.camera_id}` : camera?.webrtc_url
 
   return (
     <div
@@ -53,10 +57,10 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
       )}
     >
       {camera?.webrtc_url && <iframe
-        src={camera?.webrtc_url}
+        src={url}
         allowFullScreen
 
-      className='w-full h-full'
+        className='w-full h-full'
       >
         Your browser does not support the video tag.
       </iframe>}

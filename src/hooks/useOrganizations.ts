@@ -14,9 +14,6 @@ export const useOrganizations = (organizationId?: string, isNotCustomHeader?: bo
       return res.data.data.map((item: { organization: Organization }) => item.organization);
     },
     refetchOnMount: 'always',  
-    refetchOnWindowFocus: true,
-    staleTime: 0, 
-    structuralSharing: false
   });
 
   return {

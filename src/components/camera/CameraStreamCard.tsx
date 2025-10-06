@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { RootState, useStore } from "@/store";
+import { getLocalStorageItem } from "@/lib/storage";
 const DeleteDialog = dynamic(() => import("../dialogue/DeleteDialog").then((mod) => mod.DeleteDialog));
 const IconBorderCornerSquare = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBorderCornerSquare));
 const IconTrash = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTrash),);
@@ -26,7 +27,7 @@ export default function CameraStreamCard({
   );
   useEffect(() => {
     const handlePageHide = () => {
-      
+
       const iframe = document.querySelector<HTMLIFrameElement>('iframe');
       if (iframe) iframe.src = 'about:blank';
     };
@@ -47,6 +48,9 @@ export default function CameraStreamCard({
   }, [camera?.webrtc_url]);
 
   const t = useTranslations('settings')
+  const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
+  const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
+  const url = savedLocalHub.id ? `http://${savedLocalHub.id}.local:8889/${camera?.camera_id}` : savedRemoteHub?.id ? `http://turn.kapidhwaj.ai:${savedRemoteHub?.live_port}/${camera?.camera_id}` : camera?.webrtc_url
   return (
     <div
       className={
@@ -60,14 +64,14 @@ export default function CameraStreamCard({
     >
       {camera?.webrtc_url && (
         <iframe
-          src={camera.webrtc_url}
+          src={url}
           allowFullScreen
           className="w-full h-full"
         >
           Your browser does not support the video tag.
         </iframe>
       )}
-      { camera?.webrtc_url && (
+      {camera?.webrtc_url && (
         <div className="absolute top-3 left-3 z-5">
           <LiveBadge />
         </div>

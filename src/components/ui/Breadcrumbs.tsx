@@ -29,7 +29,7 @@ const Breadcrumbs = () => {
     const t = useTranslations()
     if (isFullscreen) return null
     return (
-        <div className='flex gap-2 p-4 items-center flex-wrap'>
+        <div className='flex gap-2 pt-4  px-4 items-center flex-wrap'>
             <BackButton />
             <Link href="/" className={style}>{t('home_title')}</Link>
             {paths.map((item, index) => {

@@ -35,7 +35,19 @@ interface SingleCameraSettingsState {
     addToFavourites: boolean;
     fireSmokeDetected: number;
     faceDetection: number;
-    isFootFallCountEnabled?: boolean
+    isFootFallCountEnabled?: boolean;
+    settings: {
+        recordings: boolean;
+        motion: boolean;
+        intrusion_detection: boolean;
+        people_count: boolean;
+        license_plate_detection: boolean;
+        face_detection: boolean;
+        fire_smoke_detection: boolean;
+        footfall_count: boolean;
+        temp: boolean;
+    }
+
 }
 export type FeatureKeys =
     | 'cameraMovement'
@@ -122,8 +134,18 @@ export interface RootActions {
     toggleAllRecordings: () => void;
     setCameraSettings: (settings: SingleCameraSettingsState) => void;
     toggleAddToFavouritesDetection: () => void;
-    setIsFootFallCount: (isFootFallCountEnabled:boolean) => void;
-    // Single Camera actions
+    setIsFootFallCount: (isFootFallCountEnabled: boolean) => void;
+    setSettings: (settings: {
+        recordings: boolean;
+        motion: boolean;
+        intrusion_detection: boolean;
+        people_count: boolean;
+        license_plate_detection: boolean;
+        face_detection: boolean;
+        fire_smoke_detection: boolean;
+        footfall_count: boolean;
+        temp: boolean;
+    }) => void;
     setCurrentCameraId: (id: { id: string }) => void;
     setCurrentCameraIsRecording: (isRecording: boolean) => void;
     setCurrentCameraIsIntrusion: (isIntrusion: boolean) => void;
@@ -174,6 +196,17 @@ export const useStore = create<RootState & RootActions>((set, get) => ({
         addToFavourites: false,
         faceDetection: 0,
         isFootFallCountEnabled: false,
+        settings: {
+            recordings: false,
+            motion: false,
+            intrusion_detection: false,
+            people_count: false,
+            license_plate_detection: false,
+            face_detection: false,
+            fire_smoke_detection: false,
+            footfall_count: false,
+            temp: false,
+        },
     },
     user: {
         email: '',
@@ -238,8 +271,8 @@ export const useStore = create<RootState & RootActions>((set, get) => ({
     toggleAllRecordings: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, allRecordings: !state.singleCameraSettings.allRecordings } })),
     setCameraSettings: (settings) => set({ singleCameraSettings: settings }),
     toggleAddToFavouritesDetection: () => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, addToFavourites: !state.singleCameraSettings.addToFavourites } })),
-    setIsFootFallCount: (isFootFallCountEnabled) => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, isFootFallCountEnabled} })),
-
+    setIsFootFallCount: (isFootFallCountEnabled) => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, isFootFallCountEnabled } })),
+    setSettings: (settings) => set(state => ({ singleCameraSettings: { ...state.singleCameraSettings, settings: { ...state.singleCameraSettings.settings, ...settings } } })),
     setCurrentCameraId: ({ id }) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraId: id } })),
     setCurrentCameraIsRecording: (isRecording) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsRecording: isRecording } })),
     setCurrentCameraIsIntrusion: (isIntrusion) => set(state => ({ singleCamera: { ...state.singleCamera, currentCameraIsIntrusion: isIntrusion } })),

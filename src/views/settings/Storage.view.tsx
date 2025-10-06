@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState } from "react"
-const Label = dynamic(() => import("recharts").then((mod) => mod.Label), { ssr: false });
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
 const ChartContainer = dynamic(() => import("@/components/ui/chart").then((mod) => mod.ChartContainer), { ssr: false });
 const ChartStyle = dynamic(() => import("@/components/ui/chart").then((mod) => mod.ChartStyle), { ssr: false });
@@ -9,7 +8,7 @@ import { StorageUsageViewProps } from "@/models/settings"
 import Spinner from "@/components/ui/Spinner"
 import dynamic from "next/dynamic";
 import { ChartConfig } from "@/components/ui/chart";
-import { Pie, Tooltip } from "recharts";
+import { Pie, Tooltip, Label } from "recharts";
 export const description = "An interactive pie chart"
 const chartConfig = {
     images: {
@@ -38,8 +37,8 @@ const StorageView: React.FC<StorageUsageViewProps> = ({ storageUsage, loading })
         { type: "free", storage: parseInt(storageUsage?.freeGB.toString()), fill: "var(--chart-3)" },
     ]
     return (
-        <>
-            <div data-chart={id} className="flex flex-col h-full w-full bg-[var(--surface-400)] border-0">
+        <div className="p-4 h-full w-full">
+            <div data-chart={id} className="flex flex-col h-full w-full bg-[var(--surface-400)] rounded-2xl p-2 border-0">
                 {loading ? <Spinner /> : <>
                     <h1 className="flex-row items-start space-y-0 pb-0">
                         <div className="grid gap-1">
@@ -164,7 +163,7 @@ const StorageView: React.FC<StorageUsageViewProps> = ({ storageUsage, loading })
                     </div>
                 </>}
             </div>
-        </>
+        </div>
     )
 }
 export default StorageView
