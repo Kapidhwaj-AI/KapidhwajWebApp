@@ -41,7 +41,6 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
     return () => window.removeEventListener('pageshow', handlePageShow);
   }, [camera?.webrtc_url]);
   const setIsFullScreenMode = useStore((state: RootActions) => state.setIsFullScreenMode);
-
   return (
     <div
       style={{
@@ -61,6 +60,7 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
         >
           Your browser does not support the video tag.
         </iframe>}
+
       {camera?.webrtc_url && <div className="absolute top-2 left-2 md:top-3 md:left-3">
         <LiveBadge />
       </div>}

@@ -22,7 +22,7 @@ interface SelectFieldProps {
     setValue: (val: string) => void;
     data?: { id: string | number; name: string }[];
     label?: string;
-    placeholder?: string;
+    placeholder: string;
     required?: boolean;
 }
 
@@ -39,10 +39,10 @@ const SelectField: React.FC<SelectFieldProps> = ({
     return (
         <Select required={required} value={value.toString()} onValueChange={(e) => setValue(e)}>
             <SelectGroup className='space-y-1.5 sm:space-y-2'>
-                {label && <SelectLabel className='flex gap-1 text-xs sm:text-sm text-black dark:text-white p-0'>
+                {label &&<SelectLabel className='flex gap-1 text-xs sm:text-sm text-black dark:text-white p-0'>
                     {label}
                    {required && <span className='text-red-500'>*</span>}
-                    </SelectLabel>}
+                </SelectLabel>}
                 <SelectTrigger
                     className="w-full min-h-[35px] sm:min-h-[40px] md:min-h-[45px] bg-transparent  px-4  rounded-full focus:outline-none border-2 border-[#2B4C88] dark:text-gray-400">
                     <SelectValue className='text-gray-500 placeholder-gray-400 focus:placeholder-gray-600' placeholder={placeholder} />

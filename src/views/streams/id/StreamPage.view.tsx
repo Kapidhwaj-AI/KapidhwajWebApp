@@ -39,6 +39,7 @@ import dynamic from 'next/dynamic';
 import CameraMovement from '@/components/camera/CameraMovement';
 import { RootActions, RootState, useStore } from '@/store';
 import FootFallDialogue from '@/components/dialogue/FootFallDialogue';
+import OccupancyTrends from '@/components/camera/OccupancyTrends';
 
 
 const StreamPageView: React.FC<StreamsPageViewProps> = ({ setIsAiLoading, resetCounters, isRecordingFiltered, setIsRecordingFiltered, isAlertFullScreen, isAllAlertLoading, topRecordingRef, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, changeTab, setSettingDial, setStartTime, settingDial,
@@ -218,38 +219,38 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ setIsAiLoading, resetC
                     {!isFullscreen && <div className="lg:col-span-2 gap-4 flex flex-col p-2  md:p-5 lg:max-h-full max-h-[35vh] overflow-auto h-[35vh] lg:h-full scrollbar-hide rounded-2xl md:rounded-4xl bg-[var(--surface-100)]">
                         <AlertsFiltersButtonAtStream selectedTab={selectedTab} setSelectedTab={changeTab} />
                         {selectedTab === 'move' ? <div className="flex flex-col items-center mt-10 space-y-6">
-                            <CameraMovement camId={camera?.camera_id ?? ''} /> </div> : isAllAlertLoading ? <Spinner /> :
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-3 md:gap-6 w-full ">
-                                <InfiniteScrolling<Alert>
-                                    setData={setAlerts}
-                                    setOffset={setAlertOffset}
-                                    offset={alertOffset}
-                                    divRef={alertEndRef}
-                                    data={alerts}
-                                    fetchData={fetchAlerts}
-                                    isLoading={alertsLoading}
-                                    setIsLoading={setAlertsLoading}
-                                    setHasMore={setHasMore}
-                                    serviceType={serviceType}
-                                    hasMore={hasMore}
-                                >
-                                    {filteredAlerts.length > 0 ? (
-                                        filteredAlerts.map((item, index) => (
-                                            <AlertCard alert={item} key={index} />
-                                        ))
-                                    ) : (
-                                        <p className="text-center h-full w-full flex items-center justify-center">
-                                            {t("alerts.no_found")}
-                                        </p>
+                            <CameraMovement camId={camera?.camera_id ?? ''} /> </div> : isAllAlertLoading ? <Spinner /> : selectedTab === 'occu' ? <OccupancyTrends loading={alertsLoading} setLoading={setAlertsLoading} camera_id={camera?.camera_id ?? ''} /> :
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-3 md:gap-6 w-full ">
+                                    <InfiniteScrolling<Alert>
+                                        setData={setAlerts}
+                                        setOffset={setAlertOffset}
+                                        offset={alertOffset}
+                                        divRef={alertEndRef}
+                                        data={alerts}
+                                        fetchData={fetchAlerts}
+                                        isLoading={alertsLoading}
+                                        setIsLoading={setAlertsLoading}
+                                        setHasMore={setHasMore}
+                                        serviceType={serviceType}
+                                        hasMore={hasMore}
+
+                                    >
+                                        {filteredAlerts.length > 0 ? (
+                                            filteredAlerts.map((item, index) => (
+                                                <AlertCard cameraLocation={cameraLocation} alert={item} key={index} />
+                                            ))
+                                        ) : (
+                                            <p className="text-center h-full w-full flex items-center justify-center">
+                                                {t("alerts.no_found")}
+                                            </p>
+                                        )}
+                                        {filteredAlerts.length > 0 && !isDateFiltered && <div ref={alertEndRef} className="h-1" />}
+                                    </InfiniteScrolling>
+                                    {alertsLoading && <div className="text-center"><Spinner /></div>}
+                                    {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (
+                                        <p className="text-center">{t("no_more_data")}</p>
                                     )}
-                                    {filteredAlerts.length > 0 && <div ref={alertEndRef} className="h-1" />}
-                                </InfiniteScrolling>
-                                {alertsLoading && <div className="text-center"><Spinner /></div>}
-                                {!alertsLoading && !hasMore && filteredAlerts.length > 0 && (
-                                    <p className="text-center">{t("no_more_data")}</p>
-                                )}
-                            </div>
-                        }
+                                </div>}
                     </div>}
                 </div>
             }

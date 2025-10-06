@@ -4,6 +4,8 @@ import Modal from "../ui/Modal";
 import { IconRefresh, IconTrash } from "@tabler/icons-react";
 import { ApiResponse, protectApi } from "@/lib/protectApi";
 import { AxiosResponse } from "axios";
+import { getLocalStorageItem } from "@/lib/storage";
+import { RootActions, RootState, useStore } from "@/store";
 
 interface Line {
     id: string;
@@ -25,48 +27,48 @@ const FootFallDialogue = ({
     url: string;
     cameraId?: string;
     setAiLoading: (val: boolean) => void;
-    handleToggleAiStream:(key: "fire_smoke_detection" | "face_detection" | "intrusion_detection" | "people_count" | "license_plate_detection" | "footfall_count", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
+    handleToggleAiStream: (key: "fire_smoke_detection" | "face_detection" | "intrusion_detection" | "people_count" | "license_plate_detection" | "footfall_count", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
 }) => {
     const [lines, setLines] = useState<Line[]>([]);
     const [loading, setLoading] = useState(true);
+    const setSettings = useStore((state: RootActions) => state.setSettings);
+    const settings = useStore((state: RootState) => state.singleCameraSettings.settings);
+    const fetchLines = async () => {
+        try {
+            const res = await protectApi<{
+                lineCoords: {
+                    lx1: number; ly1: number; lx2: number; ly2: number;
+                }, footfallOrientationFlag: boolean
+            }>(`/camera/config?cameraId=${cameraId}`, 'GET'); // adjust endpoint
+            const data = await res?.data?.data;
 
-    // Fetch last saved coordinates
+
+            setLines([{
+                id: Date.now().toString(),
+                x1: data.lineCoords.lx1 / 2,
+                y1: data.lineCoords.ly1 / 2,
+                x2: data.lineCoords.lx2 / 2,
+                y2: data.lineCoords.ly2 / 2,
+                direction: data.footfallOrientationFlag ? "in-out" : 'out-in',
+            }]);
+
+        } catch (err) {
+            console.error("Error fetching lines:", err);
+            // Fallback default
+            const defaultLine: Line = {
+                id: Date.now().toString(),
+                x1: 300,
+                y1: 200,
+                x2: 500,
+                y2: 200,
+                direction: "in-out",
+            };
+            setLines([defaultLine]);
+        } finally {
+            setLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchLines = async () => {
-            try {
-                const res = await protectApi<{
-                    lineCoords: {
-                        lx1: number; ly1: number; lx2: number; ly2: number;
-                    }, footfallOrientationFlag: boolean
-                }>(`/camera/config?cameraId=${cameraId}`, 'GET'); // adjust endpoint
-                const data = await res.data.data;
-
-
-                setLines([{
-                    id: Date.now().toString(),
-                    x1: data.lineCoords.lx1/2,
-                    y1: data.lineCoords.ly1/2,
-                    x2: data.lineCoords.lx2/2,
-                    y2: data.lineCoords.ly2/2,
-                    direction: data.footfallOrientationFlag ? "in-out" : 'out-in',
-                }]);
-
-            } catch (err) {
-                console.error("Error fetching lines:", err);
-                // Fallback default
-                const defaultLine: Line = {
-                    id: Date.now().toString(),
-                    x1: 300,
-                    y1: 200,
-                    x2: 500,
-                    y2: 200,
-                    direction: "in-out",
-                };
-                setLines([defaultLine]);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchLines();
     }, []);
 
@@ -136,22 +138,28 @@ const FootFallDialogue = ({
     const handleSave = async () => {
         setAiLoading(true);
         try {
-            const res = await protectApi('/camera/config', 'POST', { cameraId: cameraId, lineCoords: { lx1: lines[0].x1 *2, ly1: lines[0].y1*2, lx2: lines[0].x2*2, ly2: lines[0].y2*2 }, maskedLineCoords:{w1:50, h1:400, w2:250, h2:800}, footfallOrientationFlag: lines[0].direction === 'in-out' ? true : false });
-            if(res.status === 200){
+            const res = await protectApi('/camera/config', 'POST', { cameraId: cameraId, lineCoords: { lx1: lines[0].x1 * 2, ly1: lines[0].y1 * 2, lx2: lines[0].x2 * 2, ly2: lines[0].y2 * 2 }, maskedLineCoords: { w1: 50, h1: 400, w2: 250, h2: 800 }, footfallOrientationFlag: lines[0].direction === 'in-out' ? true : false });
+            if (res?.status === 200) {
+                const res = await handleToggleAiStream("footfall_count", true)
                 onClose();
-                await handleToggleAiStream("footfall_count", true)
+                if (res.status) {
+                    setSettings({ ...settings, footfall_count: true });
+                }
             }
         } catch (err) {
             console.error("Error saving lines:", err);
         }
     };
-    console.log("lines", lines);
+    const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
+    const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
+    const streamUrl = savedLocalHub.id ? `http://${savedLocalHub.id}.local:8889/${cameraId}` : savedRemoteHub?.id ? `http://turn.kapidhwaj.ai:${savedRemoteHub?.live_port}/${cameraId}` : url
+
     return (
         <Modal className="bg-[var(--surface-200)] dark:bg-gray-800 max-h-[90vh] overflow-auto scrollbar-hide rounded-[29px] w-auto h-auto  p-4 md:p-8 shadow-xl flex flex-col" onClose={onClose} title="Foot Fall Count">
             <div className="relative  mx-auto w-[960px] aspect-[16/9]">
 
                 <iframe
-                    src={url}
+                    src={streamUrl}
                     allowFullScreen
                     className="absolute top-0 left-0 w-full h-full rounded"
                 />

@@ -15,14 +15,14 @@ const IconUserScan = dynamic(() => import("@tabler/icons-react").then((mod) => m
   { ssr: false });
 const IconTreadmill = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTreadmill),
   { ssr: false });
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../ui/Modal";
 import { AxiosResponse } from "axios";
 import { ApiResponse } from "@/lib/protectApi";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import LogoSpinner from "../ui/LogoSpinner";
-import { RootActions, useStore } from "@/store";
+import { RootActions, RootState, useStore } from "@/store";
 
 export function StreamSettingsDialogue({
   isOpen,
@@ -62,18 +62,8 @@ export function StreamSettingsDialogue({
   peopleCountLine: boolean;
 }) {
   const setIsFootFallCount = useStore((state: RootActions) => state.setIsFootFallCount);
-  console.log("temp:",temp)
-  const [settings, setSettings] = useState({
-    recordings: recordings,
-    motion: motion,
-    intrusion_detection: intrusion,
-    people_count: people,
-    license_plate_detection: license,
-    face_detection: face,
-    fire_smoke_detection: fireSmoke,
-    footfall_count: peopleCountLine,
-    temp:temp
-  });
+  const setSettings = useStore((state: RootActions) => state.setSettings);
+  const settings = useStore((state: RootState) => state.singleCameraSettings.settings);
 
   const toggleSetting = async (key: keyof typeof settings, toggleValue: boolean) => {
     let res;
@@ -87,16 +77,16 @@ export function StreamSettingsDialogue({
       if (key === "footfall_count" && toggleValue) {
         setIsFootFallCount(true);
       }
-      else{
+      else {
         res = await handleAiStremToggle(key, toggleValue)
       }
     }
-    if (res.status === 200 || (key === "footfall_count" && !loading && toggleValue) ) {
-      console.log("response:", !loading, key === "footfall_count" && !loading && toggleValue)
-      setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
+    if (res.status === 200) {
+      setSettings({ ...settings, [key]: !settings[key] });
     }
-  };
-  console.log("settings:", loading)
+  }
+
+ 
   const t = useTranslations()
   if (isOpen) {
     return (
