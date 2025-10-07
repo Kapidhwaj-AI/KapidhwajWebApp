@@ -1,61 +1,25 @@
-# syntax=docker/dockerfile:1.7
+# Use an official Node.js Alpine image
+FROM node:20-alpine
 
-# -----------------------------
-# Base image with shared setup
-# -----------------------------
-FROM node:22-alpine AS base
 WORKDIR /app
 
-# Disable Next.js telemetry
-ENV NEXT_TELEMETRY_DISABLED=1
+# Copy package manifests
+COPY package.json pnpm-lock.yaml ./
 
-# Install required build tools
-RUN apk add --no-cache python3 make g++ libc6-compat
+# Install git and pnpm
+RUN apk add --no-cache git && npm install -g pnpm
 
-# -----------------------------
-# Dependencies stage
-# -----------------------------
-FROM base AS deps
+# Install dependencies
+RUN pnpm install
 
-# Copy only package manifests for better caching
-COPY package*.json ./
-
-# Install git (fixes ENOENT error) and pnpm + dependencies
-RUN apk add --no-cache git && \
-    npm install -g pnpm && \
-    pnpm install
-
-# -----------------------------
-# Build stage
-# -----------------------------
-FROM base AS build
-
-# Copy node_modules from deps
-COPY --from=deps /app/node_modules ./node_modules
-# Copy rest of the source code
+# Copy rest of your app
 COPY . .
 
-# Build the Next.js app
-RUN npm install -g pnpm
-RUN pnpm install
-RUN pnpm run build
+# Build your app (add if you have a build step)
+RUN pnpm build
 
-# -----------------------------
-# Runtime image
-# -----------------------------
-FROM node:22-alpine AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
-ENV PORT=3001
-RUN apk add --no-cache libc6-compat
-
-# Copy necessary files from build stages
-COPY package*.json ./
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=build /app/.next ./.next
-COPY --from=build /app/public ./public
-COPY --from=build /app/next.config.* ./
-
+# Expose port (optional, if your app runs on a port, e.g. 3000)
 EXPOSE 3001
-CMD ["pnpm", "run", "start", "--", "-p", "3001"]
+
+# Start your app (customize as needed)
+CMD ["pnpm", "start"]
