@@ -23,7 +23,7 @@ COPY package*.json ./
 # Install pnpm and project dependencies
 RUN --mount=type=cache,target=/root/.npm \
     npm install -g pnpm && \
-    pnpm install --frozen-lockfile --no-audit --no-fund
+    pnpm install 
 
 # -----------------------------
 # Build stage
