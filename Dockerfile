@@ -20,10 +20,10 @@ FROM base AS deps
 # Copy only package manifests for better caching
 COPY package*.json ./
 
-# Install pnpm and project dependencies
-RUN --mount=type=cache,target=/root/.npm \
+# Install git (fixes ENOENT error) and pnpm + dependencies
+RUN apk add --no-cache git && \
     npm install -g pnpm && \
-    pnpm install 
+    pnpm install
 
 # -----------------------------
 # Build stage
