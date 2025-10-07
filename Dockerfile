@@ -1,32 +1,25 @@
-# syntax=docker/dockerfile:1.7
+# Use an official Node.js Alpine image
+FROM node:20-alpine
 
-FROM node:22-alpine AS base
 WORKDIR /app
-ENV NEXT_TELEMETRY_DISABLED=1
-RUN apk add --no-cache python3 make g++ libc6-compat
 
-FROM base AS deps
-COPY package*.json ./
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci --no-audit --no-fund
+# Copy package manifests
+COPY package.json package-lock.json ./
 
-FROM base AS build
-COPY --from=deps /app/node_modules ./node_modules
+# Install git and pnpm
+RUN apk add --no-cache git && npm install -g pnpm
+
+# Install dependencies
+RUN pnpm install
+
+# Copy rest of your app
 COPY . .
-RUN --mount=type=cache,target=/root/.npm \
-    npm run build
 
-FROM node:22-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-ENV PORT=3001
-RUN apk add --no-cache libc6-compat
+# Build your app (add if you have a build step)
+RUN pnpm build
 
-COPY package*.json ./
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=build /app/.next ./.next
-COPY --from=build /app/public ./public
-COPY --from=build /app/next.config.* ./
-
+# Expose port (optional, if your app runs on a port, e.g. 3000)
 EXPOSE 3001
-CMD ["npm", "run", "start", "--", "-p", "3001"]
+
+# Start your app (customize as needed)
+CMD ["pnpm", "start"]
