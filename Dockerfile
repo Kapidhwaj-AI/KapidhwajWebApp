@@ -4,7 +4,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Copy package manifests
-COPY package.json package-lock.json ./
+COPY package.json pnpm-lock.yaml ./
 
 # Install git and pnpm
 RUN apk add --no-cache git && npm install -g pnpm
