@@ -1,9 +1,9 @@
-"use client";
-
 import * as React from "react";
-import { Slider } from "./slider";
-import { Input } from "@/components/ui/input";
-
+import dynamic from "next/dynamic";
+const Slider = dynamic(() => import("./slider").then((mod) => mod.Slider),
+    { ssr: false });
+const Input = dynamic(() => import("@/components/ui/input").then((mod) => mod.Input),
+    { ssr: false });
 const CustomSlider = ({
     label,
     value,

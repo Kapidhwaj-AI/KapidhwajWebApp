@@ -7,14 +7,13 @@ import { Camera, CameraLocation } from '@/models/camera';
 import { RecordedClip } from '@/models/clip';
 
 import { StreamFormData } from '@/models/stream';
-import { RootState } from '@/redux/store';
 import { getUtcTimestamp } from '@/utils/getUTCTimestamp';
 import React, { use, useEffect, useMemo, useRef, useState } from 'react'
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+
+import { showToast } from '@/lib/showToast';
+import { RootActions, RootState, useStore } from '@/store';
 
 const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) => {
-
     const { id } = use(params);
     const [filterDial, setFilterDial] = useState(false);
     const [settingDial, setSettingDial] = useState(false);
@@ -33,12 +32,22 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
     const [hasRecordingMore, setHasRecordingMore] = useState(true)
     const [recordingLoading, setRecordingLoading] = useState(false)
     const recordingref = useRef<HTMLDivElement>(null)
-    const [selectedTab, setSelectedTab] = useState('all')
-    const [date, setDate] = useState<Date | undefined>();
-    const [startTime, setStartTime] = useState<Date | undefined>();
-    const [endTime, setEndTime] = useState<Date | undefined>();
+    const topRecordingRef = useRef<HTMLDivElement>(null)
+    const [selectedTab, setSelectedTab] = useState('move')
+    const [date, setDate] = useState<Date | undefined>(new Date());
+    const [startTime, setStartTime] = useState<Date | undefined>(() => {
+        const start = new Date();
+        start.setHours(0, 0, 0, 0);
+        return start;
+    });
+    const [endTime, setEndTime] = useState<Date | undefined>(() => {
+        const end = new Date();
+        end.setHours(23, 59, 0, 0);
+        return end
+    });
     const [isDateFiltered, setIsDateFiltered] = useState(false)
-    const [serviceType, setServiceType] = useState<string | null>('')
+    const [isRecordingFIltered, setIsRecordingFiltered] = useState(false)
+    const [serviceType, setServiceType] = useState<string | null>('all')
     const [isMlService, setIsMlService] = useState(false)
     const [isAllAlertLoading, setIsAllAlertLoading] = useState(false)
     const [formData, setFormData] = useState<StreamFormData>({
@@ -51,6 +60,10 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         overlapSensitivity: 0,
         sceneDensity: 0
     });
+    const setIsPeople = useStore((state: RootActions) => state.setIsPeople);
+    const setCurrentCameraId = useStore((state: RootActions) => state.setCurrentCameraId);
+    const setIsFilterLoading = useStore((state: RootActions) => state.setIsFilterLoading);
+    const setFootFallCount = useStore((state: RootActions) => state.setFootFallCount);
     const [isEditLoading, setIsEditLoading] = useState(false)
     const [stream, setStream] = useState(false)
     const {
@@ -61,11 +74,15 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         licensePlateDetected,
         fireSmokeDetected,
         faceDetection
-    } = useSelector((state: RootState) => state.singleCameraSetting);
+    } = useStore((state: RootState) => state.singleCameraSettings);
+
+
+
     const { data: organizations } = useOrganizations();
-    console.log('serviceType', serviceType)
     const fetchCamera = async (id: string) => {
         const res = await protectApi<Camera, undefined>(`/camera?cameraId=${id}`)
+        setIsPeople(res?.data.data.is_people_count_active !== 0)
+
         return res.data.data
     }
     const fetchCameraLocation = async () => {
@@ -73,33 +90,33 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         return res.data.data
     }
     const fetchAlerts = async (offset: number, serviceType: string | null, startTime?: number, endTime?: number) => {
-        const endpoint = startTime ? serviceType !== null && serviceType !== 'all' ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}` : `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}` : `/alert/recent?offset=${offset}`
+        const endpoint = serviceType !== null && serviceType !== 'all' && startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&serviceType=${serviceType}&cameraId=${id}` : serviceType !== null && serviceType !== 'all' ? `/alert/recent?offset=${offset}&serviceType=${serviceType}&cameraId=${id}` : startTime ? `/alert/recent?offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}&cameraId=${id}` : `/alert/recent?offset=${offset}&cameraId=${id}`
         const res = await protectApi<Alert[]>(endpoint)
         return res.data.data
     }
-    const fetchRecordings = async (offset: number) => {
-        const res = await protectApi<RecordedClip[]>(`/recorded-clip?cameraId=${id}&offset=${offset}`)
+    const fetchRecordings = async (offset: number, startTime?: number, endTime?: number) => {
+        const url = startTime ? `/recorded-clip?cameraId=${id}&offset=${offset}&startUtcTimestamp=${startTime}&endUtcTimestamp=${endTime}` : `/recorded-clip?cameraId=${id}&offset=${offset}`
+        const res = await protectApi<RecordedClip[]>(url)
         return res.data.data
     }
     const fetchIsFav = async (id: string) => {
         const res = await protectApi<{ is_fav: boolean }>(`/camera/fav-status?cameraId=${id}`)
         return res.data.data
     }
-
     useEffect(() => {
         setLoading(true);
         Promise.allSettled([
             fetchCamera(id),
-            fetchAlerts(0, serviceType),
-            fetchRecordings(recordingOffset),
+            fetchRecordings(0),
             fetchIsFav(id),
             fetchCameraLocation()
         ])
-            .then(([camRes, alertsRes, recRes, isFav, location]) => {
+            .then(([camRes, recRes, isFav, location]) => {
                 const newFormData: Partial<StreamFormData> = {};
                 if (camRes.status === "fulfilled") {
                     setCamera(camRes.value);
                     setStream(camRes.value.webrtc_url !== null && camRes.value?.rtsp_url !== null);
+                    setCurrentCameraId({ id: camRes.value.camera_id })
                     newFormData.name = camRes.value.name ?? '';
                     newFormData.people_threshold_count = camRes.value.people_threshold_count ?? 0;
                     newFormData.organizationId = camRes.value.organization_id ?? '';
@@ -108,9 +125,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
                     newFormData.sceneDensity = camRes.value.topk_pre_nms;
                 }
 
-                if (alertsRes.status === "fulfilled") setAlerts(alertsRes.value);
-
-                if (recRes.status === "fulfilled") setRecordings(recRes.value);
+                if (recRes.status === "fulfilled") { setRecordings(recRes.value) };
 
                 if (isFav.status === "fulfilled") setMakeFav(isFav.value.is_fav);
                 if (location.status === 'fulfilled') {
@@ -142,7 +157,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         const url = !makeFav ? `/camera/fav/add?cameraId=${id}` : `/camera/fav/remove?cameraId=${id}`
         const res = await protectApi<unknown, { cameraId: string }>(url, 'POST', { cameraId: id })
         if (res.status === 200) {
-            toast.success(`Stream ${makeFav ? 'Deleted from ' : 'Added in'} Favourites`)
+            showToast(`Stream ${makeFav ? 'Deleted from ' : 'Added in'} Favourites`, "success")
             setMakeFav((prev) => !prev)
         }
     };
@@ -150,7 +165,9 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         const alertFetch = async () => {
             setIsAllAlertLoading(true)
             try {
-                const res = await fetchAlerts(0, serviceType)
+                const start = alertOffset > 0 && date && startTime ? getUtcTimestamp(date, startTime) : undefined
+                const end = alertOffset > 0 && date && endTime ? getUtcTimestamp(date, endTime) : undefined
+                const res = await fetchAlerts(alertOffset, serviceType, start, end)
                 setAlerts(res)
             } catch (error) {
                 console.error(error, "Err")
@@ -166,21 +183,25 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         licensePlateDetected,
         fireSmokeDetected,
         faceDetection, serviceType])
-    const handleAiToggle = async (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean,) => {
+    const handleAiToggle = async (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection' | 'footfall_count'  | 'temp', toggleValue: boolean,) => {
         setIsMlService(true)
         try {
-            const endpoint = toggleValue ? `/camera/stream/start?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
-                : `/camera/stream/stop?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`;
-            const res = await protectApi<unknown, { cameraId: string, serviceType: typeof key }>(endpoint, 'POST', { cameraId: camera?.camera_id.toString() ?? '', serviceType: key })
+            const endpoint = toggleValue ? `/camera/stream/start${key === 'temp' ? '-frs':''}?action=add&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`
+                : `/camera/stream/stop${key === 'temp' ? '-frs' : ''}?action=remove&organizationId=${camera?.organization_id}&cameraId=${camera?.camera_id}`;
+          
+            const res = await protectApi<unknown, { cameraId: string, serviceType: typeof key }>(endpoint, 'POST', { cameraId: camera?.camera_id.toString() ?? '', serviceType: key === 'temp' ? 'face_detection' : key })
             if (res.status === 200) {
-                toast.success(`Camera stream ${key} ${toggleValue ? 'started ' : 'stoped'} successfully`)
+                if (key === "footfall_count" && !toggleValue) {
+                    setFootFallCount({ camera_id: '', inCount: 0, outCount: 0 })
+                }
+                showToast(`Camera stream ${key} ${toggleValue ? 'started ' : 'stoped'} successfully`, "success")
                 const cameraRes = await fetchCamera(id)
                 setCamera(cameraRes)
             }
             return res
         } catch (error) {
             console.error(error)
-            toast.error(error.response.data.message)
+            showToast(error.response.data.message, "error")
         } finally {
             setIsMlService(false)
         }
@@ -191,7 +212,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             const endpoint = toggleValue ? '/camera/motion/start' : '/camera/motion/stop'
             const res = await protectApi<unknown, { camId: string }>(endpoint, "POST", { camId: camera?.camera_id ?? '' })
             if (res.status === 200) {
-                toast.success(`Camera streams motion detection  ${toggleValue ? 'started ' : 'stoped'} successfully`)
+                showToast(`Camera streams motion detection  ${toggleValue ? 'started ' : 'stoped'} successfully`, "success")
                 const cameraRes = await fetchCamera(id)
                 setCamera(cameraRes)
             }
@@ -199,7 +220,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
         } catch (error) {
             console.error(error)
-            toast.error(error.response.data.message)
+            showToast(error.response.data.message, "error")
         }
         finally {
             setIsMlService(false)
@@ -216,7 +237,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
             const res = await protectApi(url, "POST", { cameraId: camera?.camera_id, serviceType: 'cloud_storage' })
             if (res.status === 200) {
-                toast.success(`Camera stream recording ${isRecord ? 'started ' : 'stoped'} successfully`)
+                showToast(`Camera stream recording ${isRecord ? 'started ' : 'stoped'} successfully`, "success")
                 const cameraRes = await fetchCamera(id)
                 setCamera(cameraRes)
 
@@ -225,22 +246,32 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
         } catch (error) {
             console.error(error)
-            toast.error(error.response.data.message)
+            showToast(error.response.data.message, "error")
         } finally {
             setIsMlService(false)
         }
 
     }
     const handleApplyFilter = async (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => {
+        console.log("date", date, startTime, endTime)
         if (date && startTime && endTime) {
-            const start = getUtcTimestamp(date, startTime)
-            const end = getUtcTimestamp(date, endTime)
-            console.log(start, end, "times")
-            const res = await fetchAlerts(alertOffset, serviceType, start, end)
-            console.log("hello", res)
-            setIsDateFiltered(true)
-            setAlerts(res)
+
+            setIsFilterLoading(true)
+            if (isRecordingFIltered) {
+                const start = getUtcTimestamp(date, startTime)
+                const end = getUtcTimestamp(date, endTime)
+                const res = await fetchRecordings(recordingOffset, start, end)
+                setRecordings(res)
+            }
+            else {
+                const start = getUtcTimestamp(date, startTime, true)
+                const end = getUtcTimestamp(date, endTime, true)
+                const res = await fetchAlerts(alertOffset, serviceType, start, end)
+                setIsDateFiltered(true)
+                setAlerts(res)
+            }
             setFilterDial(false)
+            setIsFilterLoading(false)
         }
         return
     }
@@ -258,23 +289,25 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
             }
             const res = await protectApi<unknown, typeof payload>(url, "POST", payload)
             if (res.status === 200) {
-                toast.success(`Camera stream  ${toggleValue ? 'started ' : 'stoped'} successfully`)
+                showToast(`Camera stream  ${toggleValue ? 'started ' : 'stoped'} successfully`)
                 setStream(toggleValue)
             }
         } catch (error) {
-            console.error("err:", error)
+            console.error("err:", error),
+                showToast(error.response.data.message, "error")
         } finally {
             setIsMlService(false)
         }
 
     }
+    
     const handleSave = async () => {
         setIsEditLoading(true)
         const fallbackFolderId =
-            formData.folderId && Number(formData.folderId) > 0
-                ? formData.folderId
-                : formData.subfolder && Number(formData.subfolder) > 0
-                    ? formData.subfolder
+            formData.subfolder && Number(formData.subfolder) > 0
+                ? formData.subfolder
+                : formData.folderId && Number(formData.folderId) > 0
+                    ? formData.folderId
                     : null;
 
         const payload: Partial<StreamFormData> = {
@@ -296,8 +329,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
             if (res.status === 200) {
                 setIsEdit(false)
-                toast.success(`Camera stream updated successfully`)
-
+                showToast(`Camera stream updated successfully`, "success")
                 const cam = await fetchCamera(id)
                 const newFormData: Partial<StreamFormData> = {};
                 setCamera(cam);
@@ -313,14 +345,16 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
 
         } catch (error) {
             console.error(error)
-            toast.error(error.message ?? 'An error occured')
+            showToast(error.message ?? 'An error occured', "error")
         } finally {
             setIsEditLoading(false)
         }
     }
 
     const changeTab = async (tab: string) => {
-        if (tab === selectedTab) {
+        setSelectedTab(tab);
+        if (tab === selectedTab || tab === 'move' || tab === 'occu') {
+            console.log("returning")
             return
         }
         setIsDateFiltered(false)
@@ -345,13 +379,26 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         } else {
             setServiceType(null);
         }
-        setSelectedTab(tab);
+
         setAlertOffset(0)
         setHasMore(true)
-    };
-    const isFullscreen = useSelector((state: RootState) => state.camera.isFullScreen)
+    }
+    const resetCounters = async () => {
+        try {
+            const res = await protectApi<unknown, { cameraId: string }>(`/camera/footfall-reset`, 'POST', { cameraId: camera?.camera_id ?? '' })
+            if (res.status === 200) {
+                setFootFallCount({ camera_id: '', inCount: 0, outCount: 0 })
+                showToast(res.data?.message ?? "", "success")
+            }
+        } catch (error) {
+            showToast(error.response.data.message, "error")
+            console.error(error)
+        }
+    }
+    const isFullscreen = useStore((state: RootState) => state.camera.isFullScreen)
+    const isAlertFullScreen = useStore((state: RootState) => state.camera.isAlertFullScreen)
     return (
-        <StreamPageView setIsAllAlertsLoading={setIsAllAlertLoading} isAllAlertLoading={isAllAlertLoading} isAiServiceLoading={isMlService} loading={loading} selectedTab={selectedTab} setAlertOffset={setAlertOffset} setAlerts={setAlerts} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setFormData={setFormData} setHasMore={setHasMore} setHasRecordingMore={setHasRecordingMore} setIsDateFiltered={setIsDateFiltered} setIsEdit={setIsEdit} setRecordingLoading={setRecordingLoading} setRecordingOffset={setRecordingOffset} setRecordings={setRecordings} setSelectedTab={changeTab} setSettingDial={setSettingDial} setStartTime={setStartTime} settingDial={settingDial} startTime={startTime} stream={stream} isDateFiltered={isDateFiltered} isEdit={isEdit} isEditLoading={isEditLoading} isFullscreen={isFullscreen} camera={camera} cameraLocation={cameraLocation} makeFav={makeFav} toggleStreamFav={toggleStreamFav} handleAiToggle={handleAiToggle} handleApplyFilter={handleApplyFilter} handleMotionToggle={handleMotionToggle} handleRecordingToggle={handleRecordinToggle} serviceType={serviceType} handleSave={handleSave} handleToggleStream={handleToggleStream} hasMore={hasMore} hasRecordingMore={hasRecordingMore} fetchAlerts={fetchAlerts} fetchRecordings={fetchRecordings} filterDial={filterDial} filteredAlerts={filteredAlerts} formData={formData} recordingLoading={recordingLoading} recordingOffset={recordingOffset} recordingref={recordingref} recordings={recordings} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} date={date} endTime={endTime} organizations={organizations} />
+        <StreamPageView setIsAiLoading={setIsMlService} resetCounters={resetCounters} isAlertFullScreen={isAlertFullScreen} setIsRecordingFiltered={setIsRecordingFiltered} isRecordingFiltered={isRecordingFIltered} topRecordingRef={topRecordingRef} setIsAllAlertsLoading={setIsAllAlertLoading} isAllAlertLoading={isAllAlertLoading} isAiServiceLoading={isMlService} loading={loading} selectedTab={selectedTab} setAlertOffset={setAlertOffset} setAlerts={setAlerts} setAlertsLoading={setAlertsLoading} setDate={setDate} setEndTime={setEndTime} setFilterDial={setFilterDial} setFormData={setFormData} setHasMore={setHasMore} setHasRecordingMore={setHasRecordingMore} setIsDateFiltered={setIsDateFiltered} setIsEdit={setIsEdit} setRecordingLoading={setRecordingLoading} setRecordingOffset={setRecordingOffset} setRecordings={setRecordings} setSelectedTab={changeTab} setSettingDial={setSettingDial} setStartTime={setStartTime} settingDial={settingDial} startTime={startTime} stream={stream} isDateFiltered={isDateFiltered} isEdit={isEdit} isEditLoading={isEditLoading} isFullscreen={isFullscreen} camera={camera} cameraLocation={cameraLocation} makeFav={makeFav} toggleStreamFav={toggleStreamFav} handleAiToggle={handleAiToggle} handleApplyFilter={handleApplyFilter} handleMotionToggle={handleMotionToggle} handleRecordingToggle={handleRecordinToggle} serviceType={serviceType} handleSave={handleSave} handleToggleStream={handleToggleStream} hasMore={hasMore} hasRecordingMore={hasRecordingMore} fetchAlerts={fetchAlerts} fetchRecordings={fetchRecordings} filterDial={filterDial} filteredAlerts={filteredAlerts} formData={formData} recordingLoading={recordingLoading} recordingOffset={recordingOffset} recordingref={recordingref} recordings={recordings} alertEndRef={alertEndRef} alertOffset={alertOffset} alerts={alerts} alertsLoading={alertsLoading} date={date} endTime={endTime} organizations={organizations} />
     )
 }
 

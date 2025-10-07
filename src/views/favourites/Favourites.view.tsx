@@ -1,11 +1,16 @@
-import { CameraDetailsViewToggleButton } from '@/components/camera/CameraDetailsViewToggleButton'
-import CameraStreamCard from '@/components/camera/CameraStreamCard'
-import ColumnDropdown from '@/components/camera/ColumnDropdown'
-import SearchBar from '@/components/common/Searchbar'
+
+const CameraDetailsViewToggleButton = dynamic(() => import("@/components/camera/CameraDetailsViewToggleButton").then((mod) => mod.CameraDetailsViewToggleButton),
+    { ssr: false });
+const ColumnDropdown = dynamic(() => import("@/components/camera/ColumnDropdown"),
+    { ssr: false });
+const SearchBar = dynamic(() => import("@/components/common/Searchbar"),
+    { ssr: false });
+import CameraStreamCard from '@/components/camera/CameraStreamCard';
 import Spinner from '@/components/ui/Spinner'
 import { cn } from '@/lib/utils'
 import { FavouriteViewProps } from '@/models/favourite'
 import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic';
 import React from 'react'
 
 const FavouritesView: React.FC<FavouriteViewProps> = ({search, setSearch, setIsDelete, isDelete, loading, err, filteredFavourites, toogleColumnValue, handleDelete}) => {

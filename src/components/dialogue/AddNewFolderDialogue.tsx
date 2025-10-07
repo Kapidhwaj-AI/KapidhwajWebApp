@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { IconX, IconCheck, IconPlus, IconFolder, IconTrash, IconPencil } from '@tabler/icons-react';
 import Modal from '../ui/Modal';

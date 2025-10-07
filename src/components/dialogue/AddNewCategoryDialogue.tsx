@@ -1,12 +1,11 @@
-'use client';
-
 import { SetStateAction } from 'react';
-import { IconX, IconCheck } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
 import { InputField } from '../ui/Input.field';
 import { useTranslations } from 'next-intl';
 import Spinner from '../ui/Spinner';
-
+import dynamic from 'next/dynamic';
+const IconX = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconX))
+const IconCheck = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconCheck))
 interface AddNewCategoryDialogueProps {
     onClose: () => void;
     colors: string[];

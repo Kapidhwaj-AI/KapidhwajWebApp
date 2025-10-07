@@ -1,4 +1,3 @@
-'use client';
 import { IconCameraPlus, IconCheck, IconX } from '@tabler/icons-react';
 import Modal from '../ui/Modal';
 import Image from 'next/image';
@@ -22,6 +21,7 @@ export function ProfileDialogue({ isOpen, isLoading, onClose, name, setName, id,
                         width={1000}
                         height={1000}
                         className="w-full h-full  object-cover rounded-full border-2 border-gray-300 shadow"
+                        priority={false}
                     />
                     <input
                         type="file"
@@ -42,8 +42,7 @@ export function ProfileDialogue({ isOpen, isLoading, onClose, name, setName, id,
                 </div>
                 <div className="flex-1 w-full space-y-3">
                     <InputField value={id} label={t('settings.customer_id')} placeholder={"CUS07621"} disabled setValue={setId}/>
-                   
-                    {/* Name Field */}
+
                     <InputField value={name} label={t('settings.name')} placeholder={t('settings.enter_name_here')} setValue={setName} />
                     <InputField disabled value={email} setValue={setEmail} placeholder={t('settings.enter_email')} label={t('settings.email')}/>
                     <InputField disabled value={phone} setValue={setPhone} placeholder={t('settings.enter_phone')} label={t('settings.phone')} />

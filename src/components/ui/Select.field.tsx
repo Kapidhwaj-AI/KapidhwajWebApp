@@ -1,20 +1,27 @@
 import React from 'react';
-import {
-    Select,
-    SelectTrigger,
-    SelectValue,
-    SelectContent,
-    SelectItem,
-    SelectLabel,
-    SelectGroup,
-} from './select';
 import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
+const Select = dynamic(() => import("./select").then((mod) => mod.Select),
+    { ssr: false });
+const SelectTrigger = dynamic(() => import("./select").then((mod) => mod.SelectTrigger),
+    { ssr: false });
+const SelectValue = dynamic(() => import("./select").then((mod) => mod.SelectValue),
+    { ssr: false });
 
+const SelectContent = dynamic(() => import("./select").then((mod) => mod.SelectContent),
+    { ssr: false });
+const SelectItem = dynamic(() => import("./select").then((mod) => mod.SelectItem),
+    { ssr: false });
+
+const SelectLabel = dynamic(() => import("./select").then((mod) => mod.SelectLabel),
+    { ssr: false });
+const SelectGroup = dynamic(() => import("./select").then((mod) => mod.SelectGroup),
+    { ssr: false });
 interface SelectFieldProps {
     value: string | number;
     setValue: (val: string) => void;
     data?: { id: string | number; name: string }[];
-    label: string;
+    label?: string;
     placeholder: string;
     required?: boolean;
 }
@@ -31,10 +38,10 @@ const SelectField: React.FC<SelectFieldProps> = ({
     return (
         <Select required={required} value={value.toString()} onValueChange={(e) => setValue(e)}>
             <SelectGroup className='space-y-1.5 sm:space-y-2'>
-                <SelectLabel className='flex gap-1 text-xs sm:text-sm text-black dark:text-white p-0'>
+                {label &&<SelectLabel className='flex gap-1 text-xs sm:text-sm text-black dark:text-white p-0'>
                     {label}
                    {required && <span className='text-red-500'>*</span>}
-                    </SelectLabel>
+                </SelectLabel>}
                 <SelectTrigger
                     className="w-full min-h-[35px] sm:min-h-[40px] md:min-h-[45px] bg-transparent  px-4  rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] dark:text-gray-400">
                     <SelectValue className='text-gray-500' placeholder={placeholder} />

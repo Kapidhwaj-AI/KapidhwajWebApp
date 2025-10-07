@@ -1,29 +1,34 @@
 import SearchBar from '@/components/common/Searchbar'
-import { TimeFiltersDialogue } from '@/components/dialogue/TimeFiltersDialogue'
 import InfiniteScrolling from '@/components/ui/InfiniteScrolling'
 import Spinner from '@/components/ui/Spinner'
 import { getLocalStorageItem } from '@/lib/storage'
 import { PersonDetails, PersonDetailsViewProps } from '@/models/person-details'
 import { GOOGLE_KPH_BUCKET_URL } from '@/services/config'
 import { filterButtonClassname } from '@/styles/tailwind-class'
-import { IconFilter, IconFilterX } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import React from 'react'
 import { AlertCard } from '../alert/AlertCard'
+import dynamic from 'next/dynamic'
+
+const IconFilter = dynamic(() => import('@tabler/icons-react').then((mode) => mode.IconFilter))
+const IconFilterX = dynamic(() => import('@tabler/icons-react').then((mode) => mode.IconFilterX))
+const TimeFiltersDialogue = dynamic(() => import('@/components/dialogue/TimeFiltersDialogue').then((mode) => mode.TimeFiltersDialogue))
+
+
 
 const PersonDetailsView: React.FC<PersonDetailsViewProps> = ({ personDetails, offset, divRef, isLoading, setOffset, date, err, startTime, alertsLoading, hasMore,setAlertsLoading, setHasMore, endTime, handleApplyFilter, filterDial, setFilterDial, setIsDateFiltered, isDateFiltered, fetchAlertsByPersonId, setDate, setEndTime, setIsLoading, setPersonDetails, setStartTime }) => {
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
     const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-    const baseUrl = isValidHub ? remoteHub.id ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
+    const baseUrl = isValidHub ? remoteHub.id ? `http://turn.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
     const t = useTranslations()
     return (
         <div className="h-full flex flex-col gap-3 min-h-0 px-2 md:px-4">
             {isLoading ? <Spinner/>:<>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 ">
                 <div className='flex items-center gap-3'>
-                    <Image className="rounded-full object-cover w-20 h-20 aspect-auto" src={baseUrl + personDetails[0]?.persons[0]?.gcp_image_path} alt={personDetails[0]?.persons[0]?.name} width={200} height={200} />
+                        <Image priority={false} className="rounded-full object-cover w-20 h-20 aspect-auto" src={baseUrl + personDetails[0]?.persons[0]?.gcp_image_path} alt={personDetails[0]?.persons[0]?.name} width={200} height={200} />
                     <div className='flex flex-col items-start'>
                         <h1 className="sm:text-md md:text-lg lg:text-xl xl:text-2xl font-bold whitespace-nowrap">
                             {personDetails[0]?.persons[0]?.name}

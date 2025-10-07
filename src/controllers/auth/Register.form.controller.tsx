@@ -1,18 +1,14 @@
 "use client";
-
 import { RegisterForm } from "@/views/auth/Register.form";
 import { setLocalStorageItem } from "@/lib/storage";
-import { allowRegisterOtpAccess } from "@/redux/slices/authSlice";
-import { setUserEmail, setUserPhone } from "@/redux/slices/userSlice";
-import { AppDispatch } from "@/redux/store";
 import { apiBaseUrl } from "@/services/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { OtpFormController } from "./Otp.form.controller";
-import { toast } from "react-toastify";
-
+const OtpFormController = dynamic(() => import('./Otp.form.controller').then((mod) => mod.OtpFormController))
+import { showToast } from "@/lib/showToast";
+import dynamic from "next/dynamic";
+import { RootActions, useStore } from "@/store";
 export const RegisterFormController = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -27,7 +23,9 @@ export const RegisterFormController = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
+  const allowRegisterOtpAccess = useStore((state: RootActions) => state.allowRegisterOtpAccess);
+  const setUserEmail = useStore((state: RootActions) => state.setUserEmail);
+  const setUserPhone = useStore((state: RootActions) => state.setUserPhone);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,10 +41,10 @@ export const RegisterFormController = () => {
       });
 
       if (res.status === 200) {
-        toast.success("OTP sent successfully")
-        dispatch(setUserEmail(email));
-        dispatch(setUserPhone(phone));
-        dispatch(allowRegisterOtpAccess());
+        showToast("OTP sent successfully", "success")
+        setUserEmail(email)
+        setUserPhone(phone)
+        allowRegisterOtpAccess()
         setLocalStorageItem('email', email)
         setIsOpen(true)
       }
@@ -54,7 +52,7 @@ export const RegisterFormController = () => {
     } catch (error) {
       console.error(error);
       setIsError(true);
-      toast.error(error.response?.data?.message)
+      showToast(error.response?.data?.message, "error")
       setError(error.response?.data?.message || "Registration failed")
     } finally {
       setIsLoading(false);

@@ -1,4 +1,3 @@
-'use client'
 import { useQuery } from '@tanstack/react-query';
 import { Organization } from '@/models/organization';
 import { protectApi } from '@/lib/protectApi';
@@ -14,8 +13,7 @@ export const useOrganizations = (organizationId?: string, isNotCustomHeader?: bo
       );
       return res.data.data.map((item: { organization: Organization }) => item.organization);
     },
-    gcTime: 10 * 60 * 1000, // 10 minutes
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnMount: 'always',  
   });
 
   return {

@@ -1,31 +1,41 @@
 'use client'
 import { getLocalStorageItem } from '@/lib/storage';
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import { apiSocketUrl } from '../../services/config'
-import { setNotificationCount } from '@/redux/slices/userSlice';
-import { setPeopleCount } from '@/redux/slices/singleCameraSlice';
-import { toast } from 'react-toastify';
-import { toggleFaceDetection, toggleFireSmokeDetection, toggleIntrusionDetection, toggleLicensePlateDetection, toggleMotionDetection, togglePeopleCountDetected, togglePeopleDetection } from '@/redux/slices/singleCameraSettingSlice';
-import { RootState } from '@/redux/store';
+import { showToast } from '@/lib/showToast';
+import { RootActions, RootState, useStore } from '@/store';
 const SocketNotification = () => {
-    const dispatch = useDispatch();
     const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
-    const reduxLocal = useSelector((state: RootState) => state.hub.localHub)
-    const reduxRemote = useSelector((state: RootState) => state.hub.remoteHub)
+    const reduxLocal = useStore((state: RootState) => state.hub.localHub)
+    const reduxRemote = useStore((state: RootState) => state.hub.remoteHub)
+    const togglePeopleDetection = useStore((state: RootActions) => state.togglePeopleDetection);
+    const toggleFaceDetection = useStore((state: RootActions) => state.toggleFaceDetection);
+    const toggleFireSmokeDetection = useStore((state: RootActions) => state.toggleFireSmokeDetection);
+    const toggleIntrusionDetection = useStore((state: RootActions) => state.toggleIntrusionDetection);
+    const toggleLicensePlateDetection = useStore((state: RootActions) => state.toggleLicensePlateDetection);
+    const toggleMotionDetection = useStore((state: RootActions) => state.toggleMotionDetection);
+    const togglePeopleCountDetected = useStore((state: RootActions) => state.togglePeopleCountDetected);
+    const setNotificationCount = useStore((state: RootActions) => state.setNotificationCount);
+    const setPeopleCount = useStore((state: RootActions) => state.setPeopleCount);
+    const setFootFallCount = useStore((state: RootActions) => state.setFootFallCount);
+
+    const setPorts = useStore((state: RootActions) => state.setPorts);
+
     const [isValid, setIsValid] = useState(false)
     useEffect(() => {
         if (((reduxLocal !== null || reduxRemote !== null) && (reduxLocal?.id || reduxRemote?.id)) || (remoteHub.id || localHub.id)) {
             setIsValid(true)
         }
-    }, [reduxLocal, reduxRemote, remoteHub.id, localHub.id ])
-   
+    }, [reduxLocal, reduxRemote])
+
+    const baseUrl =  (localHub.id || reduxLocal?.id) ? `ws://${localHub.id || reduxLocal?.id}.local:8084` : apiSocketUrl
     useEffect(() => {
         const baseUrl = isValid && !(remoteHub.id || reduxRemote?.id) ? `ws://${localHub.id || reduxLocal?.id}.local:8084` : apiSocketUrl
         if (token) {
+            console.log(isValid, "socketValid", (!remoteHub.id || !reduxRemote?.id), remoteHub.id, reduxRemote?.id)
             const socket = io(baseUrl, {
                 auth: {
                     token,
@@ -54,38 +64,55 @@ const SocketNotification = () => {
             });
 
             socket.on('unseen_count', (data: { unSeenCount: number }) => {
-                dispatch(setNotificationCount(data.unSeenCount));
+                setNotificationCount(data.unSeenCount);
             });
 
             socket.on('people_count', (data: {
                 camera_id: string;
                 people_count: string;
             }) => {
-                dispatch(setPeopleCount(data));
+                setPeopleCount(data);
             });
+            socket.on('footfall_count', (data: {
+                camera_id: string;
+                inCount: number;
+                outCount: number;
+            }) => {
+                console.log(data, "footfall_count_socket")
+                setFootFallCount(data);
+            });
+            socket.on('update_ports', (data: {
+                static_port: number;
+                live_port: number;
+            }) => {
+                setPorts(data)
+            })
 
             socket.on('notification', (notification: { type: string, message: string }) => {
                 const type = notification.type;
-                toast.info(notification.message);
+                showToast(notification.message, "info")
                 if (type === 'intrusion_detected') {
-                    dispatch(toggleIntrusionDetection());
+                    toggleIntrusionDetection();
                 } else if (type === 'face_detected') {
-                    dispatch(toggleFaceDetection());
+                    toggleFaceDetection();
                 } else if (type === 'face_detected') {
-                    dispatch(togglePeopleDetection());
+                    togglePeopleDetection();
                 } else if (type === 'people_count') {
-                    dispatch(togglePeopleCountDetected());
+                    togglePeopleCountDetected();
                 } else if (type === 'license_plate_detected') {
-                    dispatch(toggleLicensePlateDetection());
+                    toggleLicensePlateDetection();
                 } else if (type === 'motion_detected') {
-                    dispatch(toggleMotionDetection());
+                    toggleMotionDetection();
                 } else if (type === 'fire_smoke_detected') {
-                    dispatch(toggleFireSmokeDetection());
+                    toggleFireSmokeDetection();
                 }
             });
 
-            socket.on('disconnect', (reason) => {
+            socket.on('disconnect', reason => {
                 console.log('Disconnected from server. Reason:', reason);
+                if (reason === 'io server disconnect') {
+                    socket.connect();
+                }
             });
 
             return () => {

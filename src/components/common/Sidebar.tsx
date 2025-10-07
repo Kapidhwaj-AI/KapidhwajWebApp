@@ -1,15 +1,31 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { IconBellRinging, IconFolderStar, IconSettings2, IconShareplay, IconSmartHome, IconUrgent, IconMenu2, IconX } from '@tabler/icons-react';
+const IconBellRinging = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBellRinging),
+  { ssr: false });
+const IconSettings2 = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconSettings2),
+  { ssr: false });
+const IconShareplay = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconShareplay),
+  { ssr: false });
+const IconSmartHome = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconSmartHome),
+  { ssr: false });
+const IconUrgent = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconUrgent),
+  { ssr: false });
+const IconMenu2 = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconMenu2),
+  { ssr: false });
+const IconX = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconX),
+  { ssr: false });
+const IconFolderHeart = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFolderHeart),
+  { ssr: false });
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ProfileMenu } from './ProfileMenu';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { getLocalStorageItem } from '@/lib/storage';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
+import dynamic from 'next/dynamic';
+import { RootState, useStore } from '@/store';
+import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
 
 type SidebarTabs = "/home" | "/streams" | "/alerts" | "/favourites" | "/notifications" | "/settings";
 
@@ -29,19 +45,22 @@ export default function Sidebar() {
   const [isValidHub, setIsValidHub] = useState(false)
   const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
   const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
-  const localHub = useSelector((state: RootState) => state.hub.localHub)
-  const remoteHub = useSelector((state: RootState) => state.hub.remoteHub)
+  const localHub = useStore((state: RootState) => state.hub.localHub)
+  const remoteHub = useStore((state: RootState) => state.hub.remoteHub)
   const t = useTranslations();
   useEffect(() => {
-    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub.id || savedRemoteHub.id)) {
+    if (((remoteHub !== null || localHub !== null) && (remoteHub?.id || localHub?.id)) || (savedLocalHub?.id || savedRemoteHub?.id)) {
       setIsValidHub(true)
     }
-  }, [localHub, remoteHub, savedLocalHub.id, savedRemoteHub.id])
+  }, [localHub, remoteHub])
+  const staticPort = remoteHub?.static_port || savedRemoteHub?.static_port
+  const id = localHub?.id || savedLocalHub.id
+  const baseUrl = isValidHub ? remoteHub?.id ? `http://turn.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/`: GOOGLE_KPH_BUCKET_URL
   const menuItems: MenuItemType[] = [
     { icon: <IconSmartHome />, label: t('home_title'), path: '/home' },
     { icon: <IconShareplay />, label: t('streams.title'), path: '/streams' },
     { icon: <IconUrgent />, label: t('alerts.title'), path: '/alerts' },
-    { icon: <IconFolderStar />, label: t('favourites.title'), path: '/favourites' },
+    { icon: <IconFolderHeart />, label: t('favourites.title'), path: '/favourites' },
     { icon: <IconBellRinging />, label: t('notifications.title'), path: '/notifications' },
     { icon: <IconSettings2 />, label: t('settings.title'), path: '/settings' },
   ];
@@ -57,7 +76,7 @@ export default function Sidebar() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+  const userProfile = JSON.parse(getLocalStorageItem('user') ?? '{}').profile_image;
   const shouldExpand = isMobile ? isExpanded : (isExpanded || isHovering);
   useEffect(() => {
     if (!isHovering || !isExpanded) {
@@ -67,14 +86,15 @@ export default function Sidebar() {
   return (
     <>
       {isMobile && (
-        <div className="flex items-center justify-between bg-[var(--surface-200)] px-4 py-2 rounded-2xl mx-4">
+        <div className="flex items-center justify-between bg-[var(--surface-200)] px-4 py-2 rounded-2xl">
           <div className="flex items-center gap-2">
             <Image
-              src="/assets/images/logo-square.png"
+              src="/assets/images/logo-square.webp"
               alt="Logo"
               width={40}
               height={40}
               className="rounded-full object-cover"
+              priority={false}
             />
             <span className="font-semibold text-base">Kapidhwaj AI</span>
           </div>
@@ -86,8 +106,6 @@ export default function Sidebar() {
           </button>
         </div>
       )}
-
-      {/* MOBILE SIDEBAR DRAWER */}
       {isMobile && isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 flex">
           <div className="bg-[var(--surface-200)] w-64 h-full p-4 flex flex-col justify-between">
@@ -98,12 +116,12 @@ export default function Sidebar() {
                   <div className="w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
                     <Image
                       onClick={() => setIsExpanded(!isExpanded)}
-                      src="/assets/images/logo-square.png"
+                      src="/assets/images/logo-square.webp"
                       alt="Logo"
                       width={98}
                       height={98}
                       className="rounded-full object-cover w-full h-full"
-                      priority={true}
+                      priority={false}
                     />
                   </div>
 
@@ -146,11 +164,12 @@ export default function Sidebar() {
                 className="flex items-center gap-3 w-full rounded-lg px-4 py-2 hover:ring-2 hover:ring-blue-500"
               >
                 <Image
-                  src="/assets/images/person-logo.png"
+                  src={userProfile ? baseUrl+ userProfile : "/assets/images/person-logo.webp"}
                   alt="Profile"
                   width={40}
                   height={40}
                   className="rounded-full object-cover"
+                  priority={false}
                 />
                 <span className="text-sm">{t('your_profile')}</span>
               </button>
@@ -170,7 +189,7 @@ export default function Sidebar() {
       {!isMobile && (
         <div
           className={cn(
-            'bg-[var(--surface-200)] flex md:flex-col items-center justify-between md:py-4  mx-4 md:transition-[width] md:duration-1000',
+            'bg-[var(--surface-200)] flex md:flex-col items-center justify-between md:py-4  md:transition-[width] md:duration-1000',
             shouldExpand ? 'w-60 rounded-4xl' : 'w-24 rounded-full'
           )}
           onMouseEnter={() => !isMobile && setIsHovering(true)}
@@ -187,12 +206,12 @@ export default function Sidebar() {
               <div className="w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
                 <Image
                   onClick={() => setIsExpanded(!isExpanded)}
-                  src="/assets/images/logo-square.png"
+                  src="/assets/images/logo-square.webp"
                   alt="Logo"
                   width={98}
                   height={98}
                   className="rounded-full object-cover w-full h-full"
-                  priority={true}
+                  priority={false}
                 />
               </div>
               {shouldExpand && (
@@ -240,11 +259,12 @@ export default function Sidebar() {
               )}
             >
               <Image
-                src="/assets/images/person-logo.png"
+                src={userProfile ? baseUrl + userProfile : "/assets/images/person-logo.webp"}
                 alt="Profile"
                 width={48}
                 height={48}
                 className="rounded-full object-cover"
+                priority={false}
               />
               {shouldExpand && (
                 <span className="text-sm text-gray-700 dark:text-gray-200">{t('your_profile')}</span>

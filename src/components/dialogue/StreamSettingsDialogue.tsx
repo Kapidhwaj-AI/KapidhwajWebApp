@@ -1,21 +1,28 @@
-"use client";
+const Switch = dynamic(() => import("../ui/CustomeSwitch").then((mod) => mod.Switch),
+  { ssr: false });
+const IconBounceRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconBounceRight),
+  { ssr: false });
+const IconVideo = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconVideo),
+  { ssr: false });
+const IconFireExtinguisher = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFireExtinguisher),
+  { ssr: false });
+const IconFriends = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFriends),
+  { ssr: false });
+const IconLicense = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconLicense),
+  { ssr: false });
 
-import { Switch } from "../ui/CustomeSwitch";
-import {
-  IconVideo,
-  IconTreadmill,
-  IconBounceRight,
-  IconFriends,
-  IconLicense,
-  IconUserScan,
-  IconFireExtinguisher,
-} from "@tabler/icons-react";
-import { useState } from "react";
+const IconUserScan = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconUserScan),
+  { ssr: false });
+const IconTreadmill = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTreadmill),
+  { ssr: false });
+import { useEffect, useState } from "react";
 import Modal from "../ui/Modal";
 import { AxiosResponse } from "axios";
 import { ApiResponse } from "@/lib/protectApi";
 import { useTranslations } from "next-intl";
-import Spinner from "../ui/Spinner";
+import dynamic from "next/dynamic";
+import LogoSpinner from "../ui/LogoSpinner";
+import { RootActions, RootState, useStore } from "@/store";
 
 export function StreamSettingsDialogue({
   isOpen,
@@ -32,7 +39,9 @@ export function StreamSettingsDialogue({
   handleRecordingToggle,
   loading,
   handleToggleStream,
-  isStream
+  isStream,
+  peopleCountLine,
+  temp
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -44,23 +53,17 @@ export function StreamSettingsDialogue({
   face: boolean;
   fireSmoke: boolean;
   loading: boolean;
-  handleAiStremToggle: (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection', toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
+  temp: boolean;
+  handleAiStremToggle: (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection' | "footfall_count" | "temp", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
-  handleToggleStream:(isStream: boolean) =>  void;
+  handleToggleStream: (isStream: boolean) => void;
   isStream: boolean
+  peopleCountLine: boolean;
 }) {
-  const [settings, setSettings] = useState({
-    recordings: recordings,
-    motion: motion,
-    intrusion_detection: intrusion,
-    people_count: people,
-    license_plate_detection: license,
-    face_detection: face,
-    fire_smoke_detection: fireSmoke
-  });
-
-
+  const setIsFootFallCount = useStore((state: RootActions) => state.setIsFootFallCount);
+  const setSettings = useStore((state: RootActions) => state.setSettings);
+  const settings = useStore((state: RootState) => state.singleCameraSettings.settings);
 
   const toggleSetting = async (key: keyof typeof settings, toggleValue: boolean) => {
     let res;
@@ -71,18 +74,24 @@ export function StreamSettingsDialogue({
       res = await handleMotionToggle(toggleValue)
     }
     else {
-      res = await handleAiStremToggle(key, toggleValue)
+      if (key === "footfall_count" && toggleValue) {
+        setIsFootFallCount(true);
+      }
+      else {
+        res = await handleAiStremToggle(key, toggleValue)
+      }
     }
     if (res.status === 200) {
-      setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
+      setSettings({ ...settings, [key]: !settings[key] });
     }
-  };
+  }
+
+ 
   const t = useTranslations()
   if (isOpen) {
     return (
       <Modal onClose={onClose} title={t('streams.options.settings')}>
-
-        {loading ? <Spinner className="h-[70vh]" /> : <div className="space-y-3 ">
+        {loading ? <LogoSpinner /> : <div className="space-y-3 ">
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">
               <div className="p-2 bg-[#2B4C88] rounded-xl">
@@ -92,7 +101,7 @@ export function StreamSettingsDialogue({
             </div>
             <Switch
               enabled={isStream}
-              onChange={() => handleToggleStream(!isStream)}
+              onChange={() => { handleToggleStream(!isStream); setSettings({ recordings: false, people_count: false, motion: false, intrusion_detection: false, license_plate_detection: false, face_detection: false, fire_smoke_detection: false, footfall_count: false, temp: false }) }}
               trackColor="bg-white"
             />
           </div>
@@ -142,6 +151,20 @@ export function StreamSettingsDialogue({
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">
               <div className="p-2 bg-[#2B4C88] rounded-xl">
+                <IconUserScan stroke={2} color="white" />
+              </div>
+              <span>Face Recognition 2</span>
+            </div>
+
+            <Switch
+              enabled={settings.temp}
+              onChange={() => toggleSetting("temp", !settings.temp)}
+              trackColor="bg-white"
+            />
+          </div>
+          <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
+            <div className="flex gap-4 items-center">
+              <div className="p-2 bg-[#2B4C88] rounded-xl">
                 <IconFireExtinguisher stroke={2} color="white" />
               </div>
               <span>{t('alerts.fire_smoke_detection')}</span>
@@ -174,7 +197,7 @@ export function StreamSettingsDialogue({
               <div className="p-2 bg-[#2B4C88] rounded-xl">
                 <IconFriends stroke={2} color="white" />
               </div>
-              <span>{t('people_detection')}</span>
+              <span>{t('alerts.people_count')}</span>
             </div>
             <Switch
               enabled={settings.people_count}
@@ -196,6 +219,21 @@ export function StreamSettingsDialogue({
             <Switch
               enabled={settings.license_plate_detection}
               onChange={() => toggleSetting("license_plate_detection", !settings.license_plate_detection)}
+              trackColor="bg-white"
+            />
+          </div>
+          <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
+            <div className="flex items-center gap-2">
+              <div className="flex gap-4 items-center">
+                <div className="p-2 bg-[#2B4C88] rounded-xl">
+                  <IconFriends stroke={2} color="white" />
+                </div>
+                <span>{t('alerts.footfall_count')}</span>
+              </div>
+            </div>
+            <Switch
+              enabled={settings.footfall_count}
+              onChange={() => toggleSetting("footfall_count", !settings.footfall_count)}
               trackColor="bg-white"
             />
           </div>

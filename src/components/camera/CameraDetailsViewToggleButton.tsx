@@ -1,15 +1,12 @@
-'use client';
 
-import { CameraDetailView, setToggleCameraDetailsView } from '@/redux/slices/cameraSlice';
-import { AppDispatch, RootState } from '@/redux/store';
+import { CameraDetailView, RootActions, RootState, useStore } from '@/store';
 import { useTranslations } from 'next-intl';
-import { useDispatch, useSelector } from 'react-redux';
 
 export function CameraDetailsViewToggleButton() {
-    const dispatch = useDispatch<AppDispatch>();
-    const cameraDetailView = useSelector((state: RootState) => state.camera.cameraDetailView)
+    const setToggleCameraDetailsView = useStore((state: RootActions) => state.setToggleCameraDetailsView);
+    const cameraDetailView = useStore((state: RootState) => state.camera.cameraDetailView);
     const handleChange = (value: CameraDetailView) => {
-        dispatch(setToggleCameraDetailsView(value))
+        setToggleCameraDetailsView(value)
     }
     const t = useTranslations()
     return (

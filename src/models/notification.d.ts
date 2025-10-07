@@ -28,7 +28,7 @@ export interface NotificationViewProps {
     divRef: React.RefObject<HTMLDivElement | null>
     fetchNotification: (val: number) => Promise<Notification[]>
     offset: number;
-    setOffset: (val: number) => void
+    setOffset: React.Dispatch<React.SetStateAction<number>>
     hasMore: boolean;
     setHasMore: (val: boolean) => void
     handleReadAll: () => void

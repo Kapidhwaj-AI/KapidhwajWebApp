@@ -20,7 +20,7 @@ export interface StreamsViewProps {
     isLoading: boolean;
     organizations: Organization[];
     handleOrganizationSelect: (organization: Organization) => void;
-    selectedOrganization: Organization | null;
+    selectedOrganization: Organization | undefined;
     handleFolderSelect: (data: Folders) => void;
     selectedFolder: Folders | null;
     setSelectedChildFolder: (data: Folders) => void;
@@ -34,20 +34,21 @@ export interface StreamsViewProps {
 export interface StreamsPageViewProps {
     isAllAlertLoading: boolean
     loading: boolean;
+    isAlertFullScreen: boolean
     isFullscreen: boolean;
     cameraLocation: CameraLocation | undefined;
-    camera: Camera | undefined ;
+    camera: Camera | undefined;
     setIsEdit: (val: boolean) => void;
     setSettingDial: (val: boolean) => void;
     setFilterDial: (val: boolean) => void;
-    setAlertOffset: (val: number) => void;
+    setAlertOffset: React.Dispatch<React.SetStateAction<number>>;
     setRecordings: (val: RecordedClip[]) => void;
     makeFav: boolean;
     toggleStreamFav: () => void;
     fetchRecordings: (offSet: number) => Promise<RecordedClip[]>;
     setHasRecordingMore: (val: boolean) => void;
     setRecordingLoading: (val: boolean) => void;
-    setRecordingOffset: (val: number) => void;
+    setRecordingOffset: React.Dispatch<React.SetStateAction<number>>;
     recordingOffset: number;
     recordingLoading: boolean;
     recordings: RecordedClip[];
@@ -59,20 +60,20 @@ export interface StreamsPageViewProps {
     alertOffset: number;
     alertEndRef: React.RefObject<HTMLDivElement | null>;
     alerts: Alert[];
-    fetchAlerts: (offSet: number, serviceType: string|null) => Promise<Alert[]>;
+    fetchAlerts: (offSet: number, serviceType: string | null) => Promise<Alert[]>;
     alertsLoading: boolean;
     setAlertsLoading: (val: boolean) => void;
     setHasMore: (val: boolean) => void;
     hasMore: boolean;
     filteredAlerts: Alert[];
     isDateFiltered: boolean;
-    setIsDateFiltered:(val:boolean) => void;
+    setIsDateFiltered: (val: boolean) => void;
     date: Date | undefined;
     startTime: Date | undefined;
     endTime: Date | undefined;
-    setStartTime: (val: Date | undefined) => void;
+    setStartTime: React.Dispatch<React.SetStateAction<Date | undefined>>;
     setDate: (val: Date | undefined) => void;
-    setEndTime: (val: Date | undefined) => void;
+    setEndTime: React.Dispatch<React.SetStateAction<Date | undefined>>;
     filterDial: boolean;
     isEdit: boolean;
     setIsEdit: (val: boolean) => void;
@@ -84,11 +85,16 @@ export interface StreamsPageViewProps {
     handleToggleStream: (val: boolean) => void;
     handleSave: (formData: StreamFormData) => void;
     settingDial: boolean;
-    handleAiToggle: (key: "intrusion_detection" | "people_count" | "license_plate_detection", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
+    handleAiToggle: (key: "intrusion_detection" | "people_count" | "license_plate_detection" | "footfall_count", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
     handleApplyFilter: (date: Date | undefined, startTime: Date | undefined, endTime: Date | undefined) => void;
     isAiServiceLoading: boolean;
     serviceType: string | null
-    setIsAllAlertsLoading:(val:boolean) => void
+    setIsAllAlertsLoading: (val: boolean) => void;
+    topRecordingRef: React.RefObject<HTMLDivElement | null>
+    setIsRecordingFiltered: React.Dispatch<React.SetStateAction<boolean>>
+    isRecordingFiltered: boolean;
+    resetCounters: () => void;
+    setIsAiLoading: (val: boolean) => void;
 }

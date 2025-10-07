@@ -1,43 +1,56 @@
 'use client'
 import { protectApi } from '@/lib/protectApi'
-import { NetworkData } from '@/models/settings'
+import { showToast } from '@/lib/showToast'
+import { NetworkData, NicsData } from '@/models/settings'
 import NetworkConfigurationView from '@/views/settings/NetworkConfiguration.view'
 import React, { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 
 const NetworkConfigurationController = () => {
     const [loading, setLoading] = useState(false)
     const [newtworkData, setNetworkData] = useState<NetworkData>()
+    const [nics, setNics] = useState<NicsData[]>([])
+    const [nic, setNic] = useState('')
+    const [status, setStatus] = useState<{ isInternetConnected: boolean, isSocketConnected: boolean, isTunnelAlive: boolean }>()
     const getNetwork = async () => {
         try {
             const res = await protectApi<NetworkData>(`/network`)
-            setNetworkData(res.data.data)
+            const nicRes = await protectApi<NicsData[]>('/network/nics')
+            setNetworkData(res?.data.data)
+            setNics(nicRes?.data.data ?? [])
+            setNic((nicRes?.data.data.find((item) => item.id === 'eth0')?.id || res?.data.data.nic) ?? '')
         } catch (err) {
             console.error(err, "Error")
         } finally {
 
         }
     }
+    const healthCheck = async () => {
+        try {
+            const res = await protectApi<{ isInternetConnected: boolean, isSocketConnected: boolean, isTunnelAlive: boolean }>('/devices/hub/health')
+            if (res?.status === 200) {
+                setStatus(res?.data.data)
+            }
+        } catch (error) {
+            console.error("err", error)
+            setStatus(undefined)
+        }
+    }
     const handleSave = async (data: NetworkData) => {
         if (data.mode === 'static') {
-            if (!data.ipv4?.address || !data.ipv4.gateway || !data.ipv4.subnetMask || !data.dns?.alternate || !data.dns.preferrd) {
-                toast.error('Please Fill all the feilds')
+            if (!data.ipv4?.address || !data.ipv4.gateway || !data.ipv4.subnetMask) {
+                console.error("error", data)
+                showToast('Please Fill all the feilds', "error")
                 return
             }
         }
-        if (!data.autoDns) {
-            if (!data.dns?.alternate || !data.dns.preferrd) {
-                toast.error('Please Fill all the feilds')
-                return
-            }
-        }
+
         setLoading(true)
-        console.log("Hello")
+        data.nic = nic
         try {
             const res = await protectApi<unknown, NetworkData>('/network', 'PUT', data)
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 const res = await protectApi<unknown>('/network/apply', 'POST')
-                if (res.status === 200) {
+                if (res?.status === 200) {
                     getNetwork()
                 }
             }
@@ -50,10 +63,11 @@ const NetworkConfigurationController = () => {
     }
     useEffect(() => {
         getNetwork()
+        healthCheck()
     }, [])
     return (
         <>
-            <NetworkConfigurationView loading={loading} networkData={newtworkData} handleSave={handleSave} />
+            <NetworkConfigurationView status={status} healthCheck={healthCheck} nic={nic} setNic={setNic} nicsData={nics} loading={loading} networkData={newtworkData} handleSave={handleSave} />
         </>
     )
 }

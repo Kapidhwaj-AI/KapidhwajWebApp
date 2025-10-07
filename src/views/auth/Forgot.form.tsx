@@ -26,17 +26,12 @@ const ForgotForm = ({
       </h1>
 
       <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
-        {/* Email/Phone Field */}
         <InputField
           label="Email / Phone"
           placeholder="Enter your phone / email  here..."
           value={value}
           setValue={setValue}
         />
-
-
-
-        {/* Error Message */}
         {isError && (
           <div className="text-red-500 text-xs sm:text-sm text-center">
             {error}
@@ -50,8 +45,6 @@ const ForgotForm = ({
         >
           {isLoading ? <Spinner /> : ' Send OTP'}
         </button>
-
-
       </form>
 
     </div>

@@ -1,33 +1,32 @@
-'use client';
-
-import {  IconRouter, IconRefresh, IconCopyPlus } from "@tabler/icons-react";
 import Spinner from "../ui/Spinner";
 import { ManageHub } from "@/models/settings";
 import { useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
 
-
+const IconRouter = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconRouter))
+const IconRefresh = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconRefresh))
+const IconCopyPlus = dynamic(() => import('@tabler/icons-react').then((mod) => mod.IconCopyPlus))
 
 interface NearbyHubsProps {
     className?: string;
     isHubLoading: boolean;
-    fetchHub: () => void;
+    fetchHub: () => Promise<void>;
     nearbyHubs: ManageHub[];
     handleNearbyAdd: (ip: string) => void
 }
 
 export const NearbyHubs: React.FC<NearbyHubsProps> = ({ className = "", isHubLoading, fetchHub, nearbyHubs, handleNearbyAdd }) => {
-    const t= useTranslations()
+    const t = useTranslations('manage_hubs')
 
     return (
-        <div className={`flex flex-col bg-[var(--surface-100)] h-[36vh] max-h-[36vh] md:max-h-auto px-8 rounded-2xl md:rounded-4xl ${className}`}>
-            {/* Header - Fixed height */}
+        <div className={`flex flex-col bg-[var(--surface-100)] h-[36vh] max-h-[36vh]  scrollbar-hide overflow-y-auto px-8 rounded-2xl md:rounded-4xl ${className}`}>
             <div className="flex justify-between items-center pt-4 pb-2 flex-shrink-0">
                 <div className="flex items-center gap-2">
                     <IconRouter size={24} className="text-[var(--text-color)]" />
-                    <h2 className="text-sm font-bold">{t('manage_hubs.nearby_hubs')}</h2>
+                    <h2 className="text-sm font-bold">{t('nearby_hubs')}</h2>
                 </div>
                 <button
-                    onClick={fetchHub}
+                    onClick={async() => await fetchHub()}
                     disabled={isHubLoading}
                     className="p-2 hover:bg-[var(--surface-200)] rounded-full transition-colors disabled:opacity-50"
                 >
@@ -40,7 +39,7 @@ export const NearbyHubs: React.FC<NearbyHubsProps> = ({ className = "", isHubLoa
 
             {/* Scrollable Content */}
             {isHubLoading ? <Spinner /> : nearbyHubs.length === 0 ? <div className="flex justify-center items-center w-full h-full">
-                {t(`manage_hubs.couldn't_get_nearby_hubs`)}
+                {t(`couldn't_get_nearby_hubs`)}
             </div>:
                 <div className="flex-1 overflow-y-auto min-h-0 max-h-[calc(100%-5rem)] pb-4 scrollbar-hide">
                     <div className="space-y-3">

@@ -1,16 +1,27 @@
-"use client";
-import {  IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { RecordedClip } from "@/models/clip";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getLocalStorageItem } from "@/lib/storage";
+import { Pause, Play } from "lucide-react";
+import { RootState, useStore } from "@/store";
 
 export default function CameraStreamRecordingCard({ recording }: { recording: RecordedClip }) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const hub = JSON.parse(getLocalStorageItem('hub') ?? '{}')
-    const  baseUrl = hub ? `http://media.kapidhwaj.ai:${hub.static_port}/` : 'http://media.kapidhwaj.ai:3000/'
+    const [isValidHub, setIsValidHub] = useState(false)
+    const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
+    const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
+    const ports = useStore((state:RootState) => state.singleCamera.ports)
+
+    useEffect(() => {
+        if ( savedLocalHub?.id || savedRemoteHub?.id) {
+            setIsValidHub(true)
+        }
+    }, [savedLocalHub, savedRemoteHub])
+    const staticPort = !Number.isNaN(ports.static_port) ? ports.static_port : savedRemoteHub?.static_port
+    const id =  savedLocalHub.id
+    const baseUrl = isValidHub ? savedRemoteHub?.id ? `http://turn.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/` : 'http://turn.kapidhwaj.ai:3000/'
     const handleTogglePlay = () => {
         const video = videoRef.current;
         if (!video) return;
@@ -28,7 +39,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
             className={cn(
                 'w-full aspect-video bg-white dark:bg-gray-800 rounded shadow-md lg:shadow-lg',
                 'overflow-hidden flex items-center justify-center relative group',
-                'transition-all duration-300 hover:shadow-xl hover:scale-[1.01]'
+                'transition-all duration-300 hover:shadow-xl hover:scale-[1.01] snap-start'
             )}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -51,45 +62,23 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
                     )}
                 >
                     {isPlaying ? (
-                        <IconPlayerPause
-                            stroke={2}
+                        <Pause
+                            stroke={'2'}
                             className="text-white/80 hover:text-white"
                             size={24}
+                            fill="currentColor"
                         />
                     ) : (
-                        <IconPlayerPlay
-                            stroke={2}
+                        <Play
+                            stroke={'2'}
                             className="text-white/80 hover:text-white"
                             size={24}
+                                fill="currentColor"
+
                         />
                     )}
                 </button>
             )}
-    
-
-            {/* Bottom Controls Bar */}
-            {/* <div className={cn(
-                "absolute bottom-0 left-0 right-0",
-                "bg-gradient-to-t from-black/80 to-transparent",
-                "p-2 md:p-3 lg:p-4 flex items-center justify-between",
-                "transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-            )}>
-                 <div className="flex items-center gap-2">
-                    <LiveBadge />
-                    <span className="text-white text-xs md:text-sm font-medium">
-                        Front Camera
-                    </span>
-                </div> 
-
-                <div className="flex items-center gap-2 md:gap-3">
-                    <button className="p-1 md:p-1.5 rounded-full bg-black/30 hover:bg-black/50 transition-colors">
-                        <IconEye className="text-white" size={16} />
-                    </button>
-                    <button className="p-1 md:p-1.5 rounded-full bg-black/30 hover:bg-black/50 transition-colors">
-                        <IconMovie className="text-white" size={16} />
-                    </button>
-                </div>
-            </div> */}
         </div>
     );
 }

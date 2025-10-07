@@ -1,10 +1,11 @@
-import SearchBar from '@/components/common/Searchbar'
-import React from 'react'
+const SearchBar = dynamic(() => import("@/components/common/Searchbar"),
+    { ssr: false });import React from 'react'
 import NotificationCard from './NotificationCard'
 import { NotificationViewProps, Notification } from '@/models/notification'
 import InfiniteScrolling from '@/components/ui/InfiniteScrolling'
 import Spinner from '@/components/ui/Spinner'
 import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic';
 
 const NotificationView: React.FC<NotificationViewProps> = ({ searchQuery, setIsMoreLoading, isMoreLoading, setSearchQuery, isLoading,  allNotifications, filteredNotifications, error, setAllNotifications, divRef, fetchNotification, hasMore, setHasMore, offset, setOffset, handleReadAll }) => {
     const t = useTranslations()

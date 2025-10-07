@@ -1,7 +1,4 @@
 'use client'
-import { AddNewAccessDialogue } from '@/components/dialogue/AddNewAccessDialogue'
-import { AddNewUserDialogue } from '@/components/dialogue/AddNewUserDialogue'
-import { DeleteDialog } from '@/components/dialogue/DeleteDialog'
 import ManageAccessView from '@/views/settings/ManageAccess.view'
 import { useDebounce } from '@/hooks/useDebounce'
 import { protectApi } from '@/lib/protectApi'
@@ -10,6 +7,13 @@ import { AccessLevel, User } from '@/models/settings'
 import { AxiosResponse } from 'axios'
 import { useTranslations } from 'next-intl'
 import React, { useEffect, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { getLocalStorageItem } from '@/lib/storage'
+import { showToast } from '@/lib/showToast'
+import { apiBaseUrl } from '@/services/config'
+const AddNewAccessDialogue = dynamic(() => import('@/components/dialogue/AddNewAccessDialogue').then((mod) => mod.AddNewAccessDialogue))
+const AddNewUserDialogue = dynamic(() => import('@/components/dialogue/AddNewUserDialogue').then((mod) => mod.AddNewUserDialogue))
+const DeleteDialog = dynamic(() => import('@/components/dialogue/DeleteDialog').then((mod) => mod.DeleteDialog))
 
 const ManageAccessController = () => {
     const [sharedUser, setSharedUser] = useState<User[]>([])
@@ -36,6 +40,8 @@ const ManageAccessController = () => {
     const [isAccessLoading, setIsAccessLoading] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
+    const storedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
+    const storedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const t = useTranslations()
     const fetchUser = async () => {
         setIsLoading(true)
@@ -81,14 +87,24 @@ const ManageAccessController = () => {
             console.error("Error:", err)
         }
     }
+    const token = JSON.parse(getLocalStorageItem('kapi-token') ?? '{}')?.token
     const fetchSearchedUser = async () => {
         if (debouncedQuery.trim().length < 3) return;
         try {
-            const res = await protectApi<{ userId: string }>(`/user/exists?username=${debouncedQuery}`, undefined, undefined, undefined, true)
-            if (res.status === 200) {
-                setSearchedUsers([{ name: debouncedQuery, userId: res.data.data.userId }])
-                setOpen(true)
+            const res = await fetch(`https://apilive.kapidhwaj.ai/api-backend/user/exists?username=${debouncedQuery}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (!res.ok) {
+                throw new Error(`Error: ${res.status}`);
             }
+            const data = await res.json();
+            console.log("search", data)
+            setSearchedUsers([{ name: debouncedQuery, userId: data.data.userId }]);
+            setOpen(true)
         } catch (error) {
             console.error("err:", error)
         }
@@ -104,9 +120,22 @@ const ManageAccessController = () => {
         }
     }
     useEffect(() => {
-        fetchUser();
-        fetchAccessLevels();
-        fetchSharedOrg();
+        const fetchAll = async () => {
+            const results = await Promise.allSettled([
+                fetchUser(),
+                fetchAccessLevels(),
+                fetchSharedOrg()
+            ]);
+
+            results.forEach((result, index) => {
+                if (result.status === 'rejected') {
+                    const name = ['fetchUser', 'fetchAccessLevel', 'fetchSharedSites'][index];
+                    console.error(`${name} failed:`, result.reason);
+                }
+            });
+        };
+
+        fetchAll();
     }, [])
     useEffect(() => {
         if (isEdit) {
@@ -125,6 +154,7 @@ const ManageAccessController = () => {
         try {
             const res = await protectApi<AxiosResponse, { userId: string, roleId: number }>('/organizations/removeUser?action=remove', "POST", { userId: selectedShareableUser?.id ?? '', roleId: selectedShareableUser?.role_id ?? NaN })
             if (res.status === 200) {
+                setIsDelete(false)
                 fetchUser()
             }
         } catch (err) {
@@ -136,10 +166,35 @@ const ManageAccessController = () => {
         setUsername(user.name);
         setOpen(false);
     };
+    const syncUser = async () => {
+        try {
+            const res = await fetch(`${apiBaseUrl}/devices/hub/sync/user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    userId: selectedUser?.userId ?? '',
+                    hubId: storedLocalHub?.id || storedRemoteHub?.id
+                }),
+            });
+
+            return res.ok; // true if status is 2xx, false otherwise
+        } catch (error) {
+            console.error('Sync user failed', error);
+            showToast('Sync user failed', 'error')
+            return false;
+        }
+    };
     const handleSave = async () => {
+        console.log(selectedStreams.size, selectedUser, "useruser")
         if (selectedStreams.size === 0) return;
         if (!selectedUser?.userId) return;
         setIsSaving(true);
+        const isSync = await syncUser()
+        if (!isSync) return;
+
         const orgCam: { [key: string]: { cameraId: string }[] } = {};
         const revokedCameras: { [key: string]: { cameraId: string }[] } = {};
         shareableOrg.forEach((org) => {
@@ -256,18 +311,17 @@ const ManageAccessController = () => {
 
         } catch (error) {
             console.error("Camera sharing failed:", error);
-
-
         } finally {
             setIsSaving(false);
         }
+
     };
 
 
     return (
         <>
             <ManageAccessView accessLevels={accessLevels} isAccessLoading={isAccessLoading} setIsEdit={setIsEdit} setIsDelete={setIsDelete} selectedShareableUser={selectedShareableUser} setSelectedShareableUser={setSelectedShareableUser} isLoading={isLoading} sharedUser={sharedUser} setAddAccessModalOpen={setAddAccessModalOpen} setAddUserModalOpen={setAddUserModalOpen} />
-            <AddNewUserDialogue
+            {isAddUserModalOpen && <AddNewUserDialogue
                 isEdit={isEdit}
                 isLoading={isSaving}
                 handleSave={handleSave}
@@ -292,12 +346,12 @@ const ManageAccessController = () => {
                 setSearchQuery={setSearchQuery}
                 selectedStreams={selectedStreams}
                 setSelectedStreams={setSelectedStreams}
-            />
+            />}
 
-            <AddNewAccessDialogue
+            {isAddAccessModalOpen && <AddNewAccessDialogue
                 isOpen={isAddAccessModalOpen}
                 onClose={() => setAddAccessModalOpen(false)}
-            />
+            />}
             {isDelete && <DeleteDialog title={t('managePeople.delete_access_user')} data={{ userId: selectedShareableUser?.id, roleId: selectedShareableUser?.role_id }} onClose={() => setIsDelete(false)} handleDelete={handleRemoveUser} />}
         </>
     )

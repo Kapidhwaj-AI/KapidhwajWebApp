@@ -1,5 +1,5 @@
-'use client'
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 
 export const InputField = ({
   label,
@@ -11,7 +11,7 @@ export const InputField = ({
   setShowPassword,
   showForgotPasswordLabel = false,
   forgotPasswordLabel = "Forgot Password?",
- 
+
   required = false,
   isOtp,
   setOtp,
@@ -35,9 +35,16 @@ export const InputField = ({
   handleOnKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>, index?: number) => void;
   handleOnPaste?: (e: React.ClipboardEvent<HTMLInputElement>) => void;
   type?: string,
-  disabled?:boolean 
+  disabled?: boolean
 }) => {
-
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (document.activeElement === inputRef.current) e.preventDefault();
+    };
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, []);
   return (
     <div className="space-y-1.5 w-full  sm:space-y-2">
       {isPasswordField && showForgotPasswordLabel ? (
@@ -61,7 +68,8 @@ export const InputField = ({
       <div className="relative">
 
         <input id={isOtp ? `otp-${index}` : `${label?.toLowerCase()}`}
-          type={isPasswordField ? (showPassword ? 'text' : 'password') : type ??'text'}
+          ref={inputRef}
+          type={isPasswordField ? (showPassword ? 'text' : 'password') : type ?? 'text'}
           value={value}
           disabled={disabled}
           onChange={(e) => {
@@ -74,12 +82,17 @@ export const InputField = ({
           }}
           required={required}
           placeholder={placeholder}
-          onKeyDown={(e) => handleOnKeyDown && handleOnKeyDown(e, index)}
+          onKeyDown={(e) => {
+            if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+              e.preventDefault()
+            }
+            if (handleOnKeyDown) handleOnKeyDown(e, index);
+          }}
           onPaste={handleOnPaste}
           maxLength={isOtp ? 1 : undefined}
-          className={`w-full h-[35px] sm:h-[40px] md:h-[45px] p-2 px-4 ${disabled ?'bg-gray-100' :'bg-transparent'} z-50 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none  rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] text-gray-600 dark:text-white`}
+          className={`w-full h-[35px] sm:h-[40px] md:h-[45px] p-2 px-4 ${disabled ? 'bg-gray-100' : 'bg-transparent'} z-50 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none  rounded-full border-none focus:outline-none ring-2 ring-[#2B4C88] text-gray-600 dark:text-white`}
         />
-        {isPasswordField && setShowPassword && <button type="button" className="absolute inset-y-0 cursor-pointer top-1/2 right-3 transform -translate-y-1/2 text-gray-600"
+        {isPasswordField && setShowPassword && <button type="button" name="Password visibility" className="absolute inset-y-0 cursor-pointer top-1/2 right-3 transform -translate-y-1/2 text-gray-600"
           onClick={() => setShowPassword(!showPassword)}
         >
           {showPassword ? (

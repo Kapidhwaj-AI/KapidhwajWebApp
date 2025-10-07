@@ -3,10 +3,9 @@ import NotificationView from '@/views/notification/Notification.view';
 import { protectApi } from '@/lib/protectApi';
 import { Notification } from '@/models/notification';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
+import { showToast } from '@/lib/showToast';
+import { RootState, useStore } from '@/store';
 
 const NotificationsController = () => {
     const [offset, setOffset] = useState(0);
@@ -31,8 +30,8 @@ const NotificationsController = () => {
         licensePlateDetected,
         fireSmokeDetected,
         faceDetection
-    } = useSelector
-            ((state: RootState) => state.singleCameraSetting);
+    } = useStore
+            ((state: RootState) => state.singleCameraSettings);
     const handleReadAll = async () => {
         try {
 
@@ -46,31 +45,13 @@ const NotificationsController = () => {
         }
     };
     useEffect(() => {
-        const loadNotification = async () => {
-            setLoading(true)
-            try {
-                setAllNotifications(await fetchNotification(0))
-            } catch (error) {
-
-                if (error instanceof AxiosError && error.response?.status === 400) {
-                    toast.error(error.response?.data.error)
-                }
-
-                setErr(error)
-            } finally {
-                setLoading(false)
-            }
-        }
-        loadNotification()
-    }, [])
-    useEffect(() => {
         const loadOnalerts = async () => {
             try {
                 setAllNotifications(await fetchNotification(0))
             } catch (error) {
 
                 if (error instanceof AxiosError && error.response?.status === 400) {
-                    toast.error(error.response?.data.error)
+                    showToast(error.response?.data.error, "error")
                 }
 
                 setErr(error)
@@ -88,8 +69,7 @@ const NotificationsController = () => {
         return allNotifications.filter(notification => !searchQuery ||
             notification.title.toLowerCase().includes(searchQuery.toLowerCase()))
     }, [allNotifications, searchQuery])
-
-    return <NotificationView setIsMoreLoading={setIsMoreLoading} isMoreLoading={isMoreLoading} handleReadAll={handleReadAll} offset={offset} filteredNotifications={filteredNotifications} error={err} divRef={divRef} isDateFiltered={isDateFiltered} setIsDateFiltered={setIsDateFiltered} setAllNotifications={setAllNotifications} setOffset={setOffset} searchQuery={searchQuery} setSearchQuery={setSearchQuery} allNotifications={allNotifications} fetchNotification={fetchNotification} isLoading={loading} setHasMore={setHasMore} hasMore={hasMore} />
+    return <NotificationView setIsMoreLoading={setIsMoreLoading} isMoreLoading={isMoreLoading} handleReadAll={handleReadAll} offset={offset} filteredNotifications={filteredNotifications} error={err} divRef={divRef} isDateFiltered={isDateFiltered} setIsDateFiltered={setIsDateFiltered}  setAllNotifications={setAllNotifications} setOffset={setOffset} searchQuery={searchQuery} setSearchQuery={setSearchQuery} allNotifications={allNotifications} fetchNotification={fetchNotification} isLoading={loading} setHasMore={setHasMore} hasMore={hasMore} />
 }
 
 export default NotificationsController

@@ -1,12 +1,21 @@
 import React from 'react'
 import Modal from '../ui/Modal'
-import { IconCheck, IconX } from '@tabler/icons-react';
+const IconCheck = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconCheck),
+    { ssr: false });
+
+const IconX = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconX),
+    { ssr: false });
 import { StreamFormData } from '@/models/stream';
 import { useTranslations } from 'next-intl';
-import { InputField } from '../ui/Input.field';
-import SelectField from '../ui/Select.field';
+
+const InputField = dynamic(() => import("../ui/Input.field").then((mod) => mod.InputField),
+    { ssr: false });
+const SelectField = dynamic(() => import("../ui/Select.field"),
+    { ssr: false });
 import Spinner from '../ui/Spinner';
-import CustomSlider from '../ui/CustomSlider';
+const CustomSlider = dynamic(() => import("../ui/CustomSlider"),
+    { ssr: false });
+import dynamic from 'next/dynamic';
 
 interface KeyValue {
     key: string;
@@ -17,7 +26,6 @@ interface EditStreamDialogueProps {
     onClose: () => void;
     formData: StreamFormData;
     setFormData: (data: StreamFormData) => void;
-
     organizations: KeyValue[] | undefined;
     folders: KeyValue[] | undefined;
     subfolders: KeyValue[] | undefined;

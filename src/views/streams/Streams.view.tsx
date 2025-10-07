@@ -1,18 +1,23 @@
-import { CameraDetailsViewToggleButton } from '@/components/camera/CameraDetailsViewToggleButton'
+const CameraDetailsViewToggleButton = dynamic(() => import("@/components/camera/CameraDetailsViewToggleButton").then((mod) => mod.CameraDetailsViewToggleButton),
+    { ssr: false });
+const ColumnDropdown = dynamic(() => import("@/components/camera/ColumnDropdown"),
+    { ssr: false });
+const OrganizationFilterButtons = dynamic(() => import("@/components/camera/OrganizationFilterButtons"),
+    { ssr: false });
+const SearchBar = dynamic(() => import("@/components/common/Searchbar"),
+    { ssr: false });
+
 import CameraStreamCard from '@/components/camera/CameraStreamCard'
-import ColumnDropdown from '@/components/camera/ColumnDropdown'
-import OrganizationFilterButtons from '@/components/camera/OrganizationFilterButtons'
-import SearchBar from '@/components/common/Searchbar'
-import { fetchRefreshToken } from '@/lib/protectApi'
 import { cn } from '@/lib/utils'
 import { StreamsViewProps } from '@/models/stream'
 import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic';
 import React from 'react'
 
 const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFolder, setSearchQuery, setSelectedChildFolder, selectedData, selectedFolder, visibleCameras, cameraCount, selectedOrganization, isLoading, organizations, handleFolderSelect, handleOrganizationSelect, toogleColumnValue,}) => {
     const t = useTranslations()
   return (
-      <div className="flex flex-col  scrollbar-hide gap-4 p-4">
+      <div className="flex flex-col  scrollbar-hide gap-4 p-6">
           <div className="flex flex-wrap justify-between items-center">
               <h1 className="text-2xl font-bold">{t('streams.title')}</h1>
               <div className="flex md:flex-row flex-col gap-2">
@@ -23,7 +28,6 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
                       setSearch={(e) => setSearchQuery(e.target.value)}
                       placeholder={t("streams.search_placeholder")}
                   />
-                  <button onClick={fetchRefreshToken}>Refresh Token</button>
               </div>
           </div>
           <div className="">

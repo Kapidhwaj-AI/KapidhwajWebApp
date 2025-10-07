@@ -47,7 +47,7 @@ const ManagePeopleConroller = () => {
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}')
     const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-    const baseUrl = isValidHub ? remoteHub.id ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
+    const baseUrl = isValidHub ? remoteHub.id ? `http://turn.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
     const fetchSites = async () => {
         setIsLoading(true)
         try {
@@ -100,7 +100,6 @@ const ManagePeopleConroller = () => {
         setIsSaving(true)
         try {
             const dob = format(formData.dob ?? '', "yyyy-MM-dd")
-            console.log(dob, "dataDate")
             const url = isPersonEdit ? `/person?action=manage&personId=${personId}&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${dob}&gender=${formData.gender}` : `/gcp/image?action=manage&personName=${formData.name}&categoryId=${formData.category}&organizationId=${selectedId}&dob=${dob}&gender=${formData.gender}`
             const imageData = new FormData();
             if (formData.file) {
@@ -157,7 +156,6 @@ const ManagePeopleConroller = () => {
         setCatId(cat.id)
     };
     const handleEditePerson = (person: Person) => {
-        console.log('persons', person)
         setIsPersonEdit(true)
         setAddPersonModalOpen(true)
         setPersonId(person.id)

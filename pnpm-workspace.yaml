@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - esbuild
+  - next-translate-plugin
+  - puppeteer
+  - sharp
+  - unrs-resolver

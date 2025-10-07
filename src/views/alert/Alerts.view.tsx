@@ -1,14 +1,24 @@
-import { TimeFiltersDialogue } from '@/components/dialogue/TimeFiltersDialogue';
-import { IconFilter, IconFilterX } from '@tabler/icons-react';
+const TimeFiltersDialogue = dynamic(() => import("@/components/dialogue/TimeFiltersDialogue").then((mod) => mod.TimeFiltersDialogue),
+    { ssr: false });
+const IconFilter = dynamic(() =>
+    import('@tabler/icons-react').then(m => m.IconFilter)
+);
+const IconFilterX = dynamic(() =>
+    import('@tabler/icons-react').then(m => m.IconFilterX)
+);
 import React from 'react'
-import AlertsFiltersButtons from './AlertsFiltersButtons';
+const AlertsFiltersButtons = dynamic(() => import("./AlertsFiltersButtons"),
+    { ssr: false });
 import Spinner from '@/components/ui/Spinner';
-import InfiniteScrolling from '@/components/ui/InfiniteScrolling';
+
 import { Alert, AlertViewProps } from '@/models/alert';
 import { AlertCard } from './AlertCard';
-import SearchBar from '@/components/common/Searchbar';
+const SearchBar = dynamic(() => import("@/components/common/Searchbar"),
+    { ssr: false });
 import { useTranslations } from 'next-intl';
 import { filterButtonClassname } from '@/styles/tailwind-class';
+import dynamic from 'next/dynamic';
+import InfiniteScrolling from '@/components/ui/InfiniteScrolling';
 
 const AlertsView: React.FC<AlertViewProps> = ({ err, search, setSearch, setAlerts, serviceType, filteredAlerts, setAlertOffset, alertOffset, setFilterDial, isDateFiltered, setIsDateFiltered, isLoading, fetchAlerts, filterDial, setDate, setEndTime, setIsLoading, setStartTime, handleApplyFilter, date, startTime, endTime, alertEndRef, alerts, alertsLoading, hasMore, selectedTab, setHasMore, setSelectedTab, setAlertsLoading }) => {
     const t = useTranslations()
@@ -17,7 +27,7 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, search, setSearch, setAlert
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold">{t('alerts.title')}</h1>
                 <div className="flex items-center gap-4">
-                    <SearchBar search={search} setSearch={(e) => { setSearch(e.target.value) }} placeholder={t("alerts.search_alerts")} />
+                    <SearchBar search={search} setSearch={setSearch} placeholder={t("alerts.search_alerts")} />
                     {!isDateFiltered && <button
                         className={filterButtonClassname}
                         onClick={() => { setFilterDial(true); setAlertOffset(0) }}
@@ -26,9 +36,17 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, search, setSearch, setAlert
                         <span className="hidden sm:inline">{t('alerts.filter')}</span>
                     </button>}
                     {isDateFiltered && <button onClick={async () => {
-                        setDate(undefined);
-                        setStartTime(undefined);
-                        setEndTime(undefined);
+                        setDate(new Date())
+                        setStartTime(() => {
+                            const start = new Date();
+                            start.setHours(0, 0, 0, 0);
+                            return start;
+                        })
+                        setEndTime(() => {
+                            const end = new Date();
+                            end.setHours(23, 59, 0, 0);
+                            return end
+                        })
                         setIsDateFiltered(false);
                         setAlertOffset(0);
                         setIsLoading(true);
@@ -47,8 +65,8 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, search, setSearch, setAlert
             <AlertsFiltersButtons setSelectedTab={setSelectedTab} selectedTab={selectedTab} />
             <div className="flex-1 flex flex-col gap-2 mb-2 overflow-y-auto scrollbar-hide">
                 {isLoading ? <Spinner /> :
-                    <div className='flex-1 md:max-h-[59vh] max-h-[35vh] overflow-auto scrollbar-hide'>
-                        <div className={filteredAlerts.length > 0 ? "grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid grid-cols-1 h-full w-full"}>
+                    <div className='flex-1 max-h-full h-full overflow-y-auto scrollbar-hide'>
+                        <div className={filteredAlerts.length > 0 ? "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "grid grid-cols-1 h-full w-full"}>
                             <InfiniteScrolling<Alert> setData={setAlerts} serviceType={serviceType} setOffset={setAlertOffset} offset={alertOffset} divRef={alertEndRef} data={alerts} fetchData={fetchAlerts} isLoading={alertsLoading} setIsLoading={setAlertsLoading} setHasMore={setHasMore} hasMore={hasMore}>
                                 {filteredAlerts.length > 0 ? <>
 
@@ -67,7 +85,7 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, search, setSearch, setAlert
                     </div>
                 }
             </div>
-            <TimeFiltersDialogue
+            {filterDial && <TimeFiltersDialogue
 
                 date={date}
                 startTime={startTime}
@@ -78,7 +96,7 @@ const AlertsView: React.FC<AlertViewProps> = ({ err, search, setSearch, setAlert
                 isOpen={filterDial}
                 onClose={() => setFilterDial(false)}
                 handleApplyFilter={handleApplyFilter}
-            />
+            />}
         </div >
     )
 }

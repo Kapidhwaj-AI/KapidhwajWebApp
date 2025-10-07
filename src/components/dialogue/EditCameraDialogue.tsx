@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { IconX, IconCheck } from '@tabler/icons-react';
 

@@ -1,6 +1,18 @@
 import { Folders, Organization } from '@/models/organization';
-import { IconChevronRight, IconFolder, IconFolders, IconPencil, IconSitemap, IconTrash } from '@tabler/icons-react';
+import dynamic from 'next/dynamic';
 import React from 'react'
+const IconChevronRight = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconChevronRight),
+    { ssr: false });
+const IconFolder = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFolder),
+    { ssr: false });
+const IconPencil = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconPencil),
+    { ssr: false });
+const IconTrash = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconTrash),
+    { ssr: false });
+const IconFolders = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconFolders),
+    { ssr: false });
+const IconSitemap = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconSitemap),
+    { ssr: false });
 
 
 interface ListCardProps {

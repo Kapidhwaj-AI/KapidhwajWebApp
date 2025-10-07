@@ -1,12 +1,11 @@
-import { ProfileDialogue } from '@/components/dialogue/ProfileDialogue';
 import { protectApi } from '@/lib/protectApi';
 import { getLocalStorageItem, setLocalStorageItem } from '@/lib/storage';
-import { setIsProfileOpen } from '@/redux/slices/settingsSlice';
-import { AppDispatch, RootState } from '@/redux/store';
 import { GOOGLE_KPH_BUCKET_URL } from '@/services/config';
+import { RootActions, RootState, useStore } from '@/store';
 import { AxiosResponse } from 'axios';
+import dynamic from 'next/dynamic';
 import React, { useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+const ProfileDialogue = dynamic(() => import('@/components/dialogue/ProfileDialogue').then((mod) => mod.ProfileDialogue))
 
 const ProfileController = () => {
     const [file, setFile] = useState<File>()
@@ -14,7 +13,9 @@ const ProfileController = () => {
     const remoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const localHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
     const isValidHub = (remoteHub || localHub) && (typeof remoteHub === 'object' || typeof localHub === 'object') && ('id' in remoteHub || 'id' in localHub);
-    const baseUrl = isValidHub ? remoteHub ? `http://media.kapidhwaj.ai:${remoteHub.static_port}/` : `http://${localHub.id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
+    const staticPort = remoteHub?.static_port
+    const id = localHub?.id
+    const baseUrl = isValidHub ? remoteHub.id ? `http://turn.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/` : GOOGLE_KPH_BUCKET_URL
     const user = JSON.parse(getLocalStorageItem('user') ?? '{}')
     const [preview, setPreview] = useState(baseUrl + user.profile_image)
     const [name, setName] = useState(user.name ?? '');
@@ -22,8 +23,9 @@ const ProfileController = () => {
     const [email, setEmail] = useState(user.email ?? '');
     const [phone, setPhone] = useState(user.phone ?? '')
     const fileInputRef = useRef<HTMLInputElement | null>(null)
-    const showProfileDial = useSelector((state: RootState) => state.settings.isProfileOpen)
-    const dispatch = useDispatch<AppDispatch>();
+    const showProfileDial = useStore((state: RootState) => state.settings.isProfileOpen)
+    const setIsProfileOpen = useStore((state: RootActions) => state.setIsProfileOpen);
+
     const handleImageClick = () => {
         fileInputRef.current?.click();
     };
@@ -52,18 +54,18 @@ const ProfileController = () => {
             const res = await protectApi<AxiosResponse, typeof formData>(`/user/updateUser`, "PUT", formData, 'multipart/form-data')
             if (res.status === 200) {
                 setLocalStorageItem('user', JSON.stringify(res.data.data))
-                dispatch(setIsProfileOpen(false))
+                setIsProfileOpen(false)
             }
         } catch (error) {
             console.error("err:", error)
         }
         finally {
-            dispatch(setIsProfileOpen(false))
+            setIsProfileOpen(false)
+            setIsLoading(false)
         }
     }
     return (
-        <ProfileDialogue isLoading={isLoading} name={name} phone={phone} id={customerId} email={email} setName={setName} setPhone={setPhone} setId={setCustomerId} setEmail={setEmail} setFile={setFile} preview={preview} setPreview={setPreview} handleSave={handleProfileSave} handleImageClick={handleImageClick} handleImageChange={handleImageChange} fileInputRef={fileInputRef} file={file} isOpen={showProfileDial} onClose={() => { dispatch(setIsProfileOpen(false)) }} />
-
+        <ProfileDialogue isLoading={isLoading} name={name} phone={phone} id={customerId} email={email} setName={setName} setPhone={setPhone} setId={setCustomerId} setEmail={setEmail} setFile={setFile} preview={preview} setPreview={setPreview} handleSave={handleProfileSave} handleImageClick={handleImageClick} handleImageChange={handleImageChange} fileInputRef={fileInputRef} file={file} isOpen={showProfileDial} onClose={() => { setIsProfileOpen(false) }} />
     )
 }
 

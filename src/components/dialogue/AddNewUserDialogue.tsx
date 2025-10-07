@@ -1,18 +1,28 @@
-'use client';
-
 import { useMemo } from 'react';
-import { IconX, IconCheck, IconSearch } from '@tabler/icons-react';
 import { AccessLevel } from '@/models/settings';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import clsx from 'clsx';
 import { Organization } from '@/models/organization';
-import { Checkbox } from '../ui/checkbox';
 import StreamsCard from '@/views/settings/StreamsCard';
 import Spinner from '../ui/Spinner';
 import { useTranslations } from 'next-intl';
 import SelectField from '../ui/Select.field';
 import { InputField } from '../ui/Input.field';
-
+import dynamic from 'next/dynamic';
+const IconX = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconX),
+    { ssr: false });
+const IconCheck = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconCheck),
+    { ssr: false });
+const IconSearch = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconSearch),
+    { ssr: false });
+const Popover = dynamic(() => import("@/components/ui/popover").then((mod) => mod.Popover),
+    { ssr: false });
+const PopoverContent = dynamic(() => import("@/components/ui/popover").then((mod) => mod.PopoverContent),
+    { ssr: false });
+const PopoverTrigger = dynamic(() => import("@/components/ui/popover").then((mod) => mod.PopoverTrigger),
+    { ssr: false });
+const Checkbox = dynamic(() => import("@/components/ui/checkbox").then((mod) => mod.Checkbox),
+    { ssr: false });
+    
 interface AddNewUserDialogueProps {
     isOpen: boolean;
     onClose: () => void;
@@ -132,6 +142,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
 
     const allVisibleSelected = getVisibleStreamIds().every(id => selectedStreams.has(id));
     const t = useTranslations()
+    console.log(searchedUsers,"searchedUser")
     if (!isOpen) return null;
 
     return (
@@ -150,7 +161,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
                         </div>
                         <div className="flex-1">
                             <div className="mb-4">
-                                <Popover open={open && !isEdit} onOpenChange={setOpen} >
+                                <Popover open={open && !isEdit && searchedUsers.length > 0} onOpenChange={setOpen} >
                                     <PopoverTrigger className='w-full'>
                                         <InputField
                                             placeholder={t('settings.enter_username')}
@@ -164,7 +175,7 @@ export function AddNewUserDialogue({ isOpen, isEdit, isLoading, onClose, searchQ
                                         />
                                     </PopoverTrigger>
 
-                                    <PopoverContent className="p-0 w-full" ref={popoverRef} sideOffset={5}>
+                                    <PopoverContent className="p-0 w-full z-[999]"  sideOffset={5}>
                                         <ul className="max-h-64 overflow-y-auto py-1 w-full">
                                             {searchedUsers.length === 0 && (
                                                 <li className="text-sm text-muted-foreground px-4 py-2">

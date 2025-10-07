@@ -12,7 +12,7 @@ export interface Camera {
   isRegistered: number;
   site_id: number;
   room_id: number;
-  hub_id: number;
+  hub_id: string;
   uri?: string;
   rtsp_url?: string;
   webrtc_url: string;
@@ -37,6 +37,8 @@ export interface Camera {
   topk_pre_nms: number;
   createdAt?: Date;
   updatedAt?: Date;
+  is_footfall_active: number;
+  is_temp_ai_stream_active: number;
 }
 
 export interface CameraLocation {

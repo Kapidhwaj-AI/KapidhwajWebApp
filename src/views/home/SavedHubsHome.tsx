@@ -1,11 +1,13 @@
 import Spinner from '@/components/ui/Spinner';
 import { getLocalStorageItem } from '@/lib/storage';
 import { Hub } from '@/models/settings';
-import { RootState } from '@/redux/store';
-import { IconRefresh, IconRouter } from '@tabler/icons-react';
-import { useTranslations } from 'next-intl';
+import { RootState, useStore } from '@/store';
+const IconRefresh = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconRefresh),
+    { ssr: false });
+const IconRouter = dynamic(() => import("@tabler/icons-react").then((mod) => mod.IconRouter),
+    { ssr: false });import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 import React from 'react'
-import { useSelector } from 'react-redux';
 
 interface SavedHubsProps {
     savedHubs: Hub[];
@@ -18,7 +20,7 @@ interface SavedHubsProps {
 const SavedHubsHome: React.FC<SavedHubsProps> = ({ savedHubs, setIsAddModal, isSavedHubLoading, fetchSavedHubs, handleAccessRemotely, }) => {
     const t = useTranslations()
     const storedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}')
-    const storedHub = useSelector((state: RootState) => state.hub.remoteHub)
+    const storedHub = useStore((state: RootState) => state.hub.remoteHub)
     return (
         <div className={`flex flex-col bg-[var(--surface-100)] px-8 pb-4 rounded-2xl md:rounded-4xl `}>
             <div className="flex justify-between items-center pt-4 pb-2 flex-shrink-0">

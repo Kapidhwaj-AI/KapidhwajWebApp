@@ -11,20 +11,16 @@ export interface ManageHub {
     txt: string
 }
 export interface ManageDeviceViewProp {
-    setSiteModalOpen: (val: boolean) => void;
-    setAddFolderModalOpen: (val: boolean) => void;
     setSelectedHub: (val: Hub | null) => void;
     selectedHub: Hub | null;
-    siteModalOpen: boolean;
-    isAddFolderModalOpen: boolean;
     isHubLoading: boolean;
     setIsHubLoading: (val: boolean) => void;
-    fetchHub: () => void;
+    fetchHub: () => Promis<void>;
     nearbyHubs: ManageHub[]
     savedHubs: Hub[]
     isSavedHubLoading: boolean;
-    fetchSavedHubs: () => void;
-    toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: number) => Promise<AxiosResponse>
+    fetchSavedHubs: () => Promis<void>;
+    toggleStream: (toggleVal: boolean, id: string, physical_address: string, hub_id: string) => Promise<AxiosResponse>
     handleCopyIp: (ip: string) => void;
     isDelete: boolean;
     setIsDelete: (val: boolean) => void;
@@ -36,6 +32,8 @@ export interface ManageDeviceViewProp {
     setSelectedSite: (val: string) => void;
     selectedSite: string;
     sites: Organization[]
+    camera: Camera | undefined;
+    setCamera:(val: Camera) => void
 }
 
 
@@ -50,7 +48,7 @@ export interface Hub {
     organization_id: string;
     physical_address: string;
     cameras: Camera[];
-    static_port: string | number;
+    static_port: string | number
 }
 
 export interface Profile {
@@ -162,10 +160,8 @@ export interface PersonFormaData {
 
 
 export interface SettingsViewProps {
-    setShowMainSettingDial: (val: boolean) => void;
     setShowSelectLanguageDial: (val: boolean) => void;
     setShowHelpDial: (val: boolean) => void;
-    showMainSettingDial: boolean;
     showSelectLanguageDial: boolean;
     showHelpDial: boolean;
     settingsItems: {
@@ -194,11 +190,20 @@ interface NetworkData {
     autoDns?: boolean,
     mtu?: number
 }
-
-interface NetworkViewProps {
+export interface NicsData {
+    id: string;
+    label: string;
+    mac: string
+}
+export interface NetworkViewProps {
     networkData?: NetworkData;
     loading: boolean;
     handleSave: (val: NetworkData | undefined) => void
+    nicsData: NicsData[]
+    nic: string;
+    setNic: (val: string) => void;
+    healthCheck?: () => void;
+    status?: { isInternetConnected: boolean, isSocketConnected: boolean, isTunnelAlive: boolean }
 }
 
 //custom services
@@ -217,4 +222,20 @@ export interface AttendanceViewProps {
     sites: Organization[];
     categories: Category[]
     setIsStartModal: (val: boolean) => void;
+}
+
+
+export interface StorageUsage {
+    sizeGB: number;
+    usedGB: number;
+    freeGB: number;
+    usedPercent: number;
+    freePercent: number;
+    imagesGB: number;
+    clipsGB: number;
+}
+
+export interface StorageUsageViewProps {
+    storageUsage: StorageUsage ;
+    loading: boolean
 }

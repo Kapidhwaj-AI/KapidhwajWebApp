@@ -1,6 +1,5 @@
 {
     "language": "Language",
-    "select_language": "Select Language",
     "choose_language": "Choose language...",
     "close": "Close",
     "save": "Save",
@@ -22,6 +21,7 @@
     "yes": "Yes",
     "no": "No",
     "settings": {
+        "select_language": "Select Language",
         "detection_sensitivity": "Detection Sensitivity",
         "overlap_sensitivity": "Overlap Sensitivity",
         "scene_density": "Scene Density",
@@ -39,7 +39,7 @@
         "mac": "MAC",
         "status": "Status",
         "nearby_error": "Couldn't get nearby cameras",
-        "manage_sites": "Manage Sites & Folders",
+        "manage_sites": "Manage Folders",
         "sites": "Sites",
         "folders": "Folders",
         "subfolders": "Subfolders",
@@ -99,7 +99,7 @@
         "delete": "Delete",
         "enter_otp": "Enter your OTP",
         "otp_sent_info": "We've sent otp to your email. Check spam if not received.",
-        "close": "✕",
+        "close": "Close",
         "are_you_sure": "Are you sure?",
         "logout_confirm": "Are you sure you want to logout?",
         "cancel": "Cancel",
@@ -159,6 +159,8 @@
         "enter_people_threshold_count": "Enter People Threshold Count",
         "network_configuration": "Network Configuration",
         "custom_services": "Custom Services",
+        "storage": "Storage",
+        "manage_site_folders": "Manage Folders",
         "network": {
             "dhcp": "DHCP",
             "ipv4": "IPv4 Address",
@@ -179,10 +181,9 @@
     "no_user_data": " No users available",
     "no_access_data": "No access data found",
     "update_user": "Update User",
-    "manage_site_folders": "Manage Sites & Folder",
     "main_settings": "Main Settings",
     "manage_cameras": "Manage Cameras",
-    "manage_sites_and_folders": "Manage Sites & Folder",
+    "manage_sites_and_folders": "Manage Folders",
     "select_languages": "Select Languages",
     "profile": "Profile",
     "change_password": "Change Password",
@@ -193,7 +194,7 @@
     "logout": "Logout",
     "record_all_videos": "Record All Videos",
     "intrusion_detection": "Intrusion Detection",
-    "fire_smoke_detection": "Fire & Smoke Detection",
+    "fire_smoke_detection": "Fire Detection",
     "motion_detection": "Motion Detection",
     "people_detection": "People Count",
     "license_detection": "",
@@ -223,10 +224,11 @@
         "recordings": "Recordings",
         "intrusion_detection": "Intrusion Detection",
         "people_count": "People Count",
-        "face_detection": "Face Detection",
+        "footfall_count": "Line Crossing",
+        "face_detection": "Face Recognition",
         "motion_detection": "Motion Detection",
-        "license_plate_detection": "License Plate Detection",
-        "fire_smoke_detection": "Fire & Smoke Detection",
+        "license_plate_detection": "Vehicle Recognition",
+        "fire_smoke_detection": "Fire Detection",
         "select_date": "Select Date",
         "start_time": "Select Start Time",
         "end_time": "Seletc End Time",
@@ -279,8 +281,8 @@
             "settings": "Settings"
         }
     },
-    "person_details":{
-        "title":"Person Details",
+    "person_details": {
+        "title": "Person Details",
         "single_streams_page": "Single Person Details Page"
     },
     "managePeople": {
