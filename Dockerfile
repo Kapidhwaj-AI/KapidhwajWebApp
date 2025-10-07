@@ -36,8 +36,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Build the Next.js app
-RUN --mount=type=cache,target=/root/.npm \
-    pnpm run build
+RUN npm install -g pnpm
+RUN pnpm install
+RUN pnpm run build
 
 # -----------------------------
 # Runtime image
