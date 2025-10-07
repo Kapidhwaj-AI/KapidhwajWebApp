@@ -10,9 +10,9 @@ export const jakarta = localFont({
         {
             path: "../../public/fonts/PlusJakartaSans-Medium.ttf",
             weight: "500",
-            style: "normal",
+            style: "normal", 
         },
-        {
+        {  
             path: "../../public/fonts/PlusJakartaSans-SemiBold.ttf",
             weight: "600",
             style: "normal",
@@ -22,6 +22,7 @@ export const jakarta = localFont({
             weight: "700",
             style: "normal",
         },
+        
     ],
     variable: "--font-jakarta",
     display: "swap"
