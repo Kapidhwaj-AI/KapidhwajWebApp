@@ -8,13 +8,14 @@ RUN apk add --no-cache python3 make g++ libc6-compat
 FROM base AS deps
 COPY package*.json ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci --no-audit --no-fund
+    npm i pnpm
+    pnpm ci --no-audit --no-fund
 
 FROM base AS build
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN --mount=type=cache,target=/root/.npm \
-    npm run build
+    pnpm run build
 
 FROM node:22-alpine AS runner
 WORKDIR /app
@@ -29,4 +30,4 @@ COPY --from=build /app/public ./public
 COPY --from=build /app/next.config.* ./
 
 EXPOSE 3001
-CMD ["npm", "run", "start", "--", "-p", "3001"]
+CMD ["pnpm", "run", "start", "--", "-p", "3001"]
