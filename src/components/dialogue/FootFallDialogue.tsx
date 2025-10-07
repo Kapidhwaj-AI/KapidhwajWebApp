@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "../ui/Modal";
 import { IconRefresh, IconTrash } from "@tabler/icons-react";
-import { ApiResponse, protectApi } from "@/lib/protectApi";
+import { ApiResponse, BASE_URL, protectApi } from "@/lib/protectApi";
 import { AxiosResponse } from "axios";
 import { getLocalStorageItem } from "@/lib/storage";
 import { RootActions, RootState, useStore } from "@/store";
@@ -152,7 +152,10 @@ const FootFallDialogue = ({
     };
     const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
     const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
-    const streamUrl = savedLocalHub.id ? `http://${savedLocalHub.id}.local:8889/${cameraId}` : savedRemoteHub?.id ? `http://turn.kapidhwaj.ai:${savedRemoteHub?.live_port}/${cameraId}` : url
+    const streamUrl = `${BASE_URL}:8889/${cameraId}/?net=offline`
+
+
+    
 
     return (
         <Modal className="bg-[var(--surface-200)] dark:bg-gray-800 max-h-[90vh] overflow-auto scrollbar-hide rounded-[29px] w-auto h-auto  p-4 md:p-8 shadow-xl flex flex-col" onClose={onClose} title="Foot Fall Count">
