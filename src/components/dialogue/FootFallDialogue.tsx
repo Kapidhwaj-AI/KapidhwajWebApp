@@ -31,6 +31,7 @@ const FootFallDialogue = ({
 }) => {
     const [lines, setLines] = useState<Line[]>([]);
     const [loading, setLoading] = useState(true);
+    const [cameraError, setCameraError] = useState(false);
     const setSettings = useStore((state: RootActions) => state.setSettings);
     const settings = useStore((state: RootState) => state.singleCameraSettings.settings);
     const fetchLines = async () => {
@@ -39,9 +40,9 @@ const FootFallDialogue = ({
                 lineCoords: {
                     lx1: number; ly1: number; lx2: number; ly2: number;
                 }, footfallOrientationFlag: boolean
-            }>(`/camera/config?cameraId=${cameraId}`, 'GET'); // adjust endpoint
+            }>(`/camera/config?cameraId=${cameraId}`, 'GET');
             const data = await res?.data?.data;
-
+            setCameraError(false);
 
             setLines([{
                 id: Date.now().toString(),
@@ -54,7 +55,7 @@ const FootFallDialogue = ({
 
         } catch (err) {
             console.error("Error fetching lines:", err);
-            // Fallback default
+            setCameraError(true);
             const defaultLine: Line = {
                 id: Date.now().toString(),
                 x1: 300,
@@ -92,7 +93,6 @@ const FootFallDialogue = ({
         setLines((prev) => prev.filter((l) => l.id !== id));
     };
 
-    // Add new custom line
     const addLine = () => {
         const newLine: Line = {
             id: Date.now().toString(),
@@ -105,7 +105,6 @@ const FootFallDialogue = ({
         setLines((prev) => [...prev, newLine]);
     };
 
-    // Drag handler
     const handleDrag = (
         e: React.MouseEvent,
         id: string,
@@ -140,9 +139,9 @@ const FootFallDialogue = ({
         try {
             const res = await protectApi('/camera/config', 'POST', { cameraId: cameraId, lineCoords: { lx1: lines[0].x1 * 2, ly1: lines[0].y1 * 2, lx2: lines[0].x2 * 2, ly2: lines[0].y2 * 2 }, maskedLineCoords: { w1: 50, h1: 400, w2: 250, h2: 800 }, footfallOrientationFlag: lines[0].direction === 'in-out' ? true : false });
             if (res?.status === 200) {
-                const res = await handleToggleAiStream("footfall_count", true)
+                const toggelRes = await handleToggleAiStream("footfall_count", true)
                 onClose();
-                if (res.status) {
+                if (toggelRes.status) {
                     setSettings({ ...settings, footfall_count: true });
                 }
             }
@@ -153,14 +152,19 @@ const FootFallDialogue = ({
     const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
     const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
     const streamUrl = `${BASE_URL}:8889/${cameraId}/?net=offline`
-
+    const handleClose = () => {
+        if (!cameraError) {
+            handleToggleAiStream("footfall_count", true)
+            setSettings({ ...settings, footfall_count: true });
+        }
+        onClose();
+    }
 
     
 
     return (
-        <Modal className="bg-[var(--surface-200)] dark:bg-gray-800 max-h-[90vh] overflow-auto scrollbar-hide rounded-[29px] w-auto h-auto  p-4 md:p-8 shadow-xl flex flex-col" onClose={onClose} title="Foot Fall Count">
+        <Modal className="bg-[var(--surface-200)] dark:bg-gray-800 max-h-[90vh] overflow-auto scrollbar-hide rounded-[29px] w-auto h-auto  p-4 md:p-8 shadow-xl flex flex-col" onClose={handleClose} title="Foot Fall Count">
             <div className="relative  mx-auto w-[960px] aspect-[16/9]">
-
                 <iframe
                     src={streamUrl}
                     allowFullScreen
@@ -313,7 +317,7 @@ const FootFallDialogue = ({
                 <div className="flex gap-3">
                     <button
                         className="px-4 py-2 bg-gray-400 text-white rounded"
-                        onClick={onClose}
+                        onClick={handleClose}
                     >
                         Cancel
                     </button>

@@ -64,7 +64,9 @@ export function StreamSettingsDialogue({
   const setIsFootFallCount = useStore((state: RootActions) => state.setIsFootFallCount);
   const setSettings = useStore((state: RootActions) => state.setSettings);
   const settings = useStore((state: RootState) => state.singleCameraSettings.settings);
-
+  useEffect(() => {
+    setSettings({ recordings: recordings, intrusion_detection: intrusion, motion: motion, people_count: people, license_plate_detection: license, face_detection: face, fire_smoke_detection: fireSmoke, footfall_count: settings.footfall_count, temp: temp })
+  }, [recordings, intrusion, motion, people, license, face, fireSmoke, temp])
   const toggleSetting = async (key: keyof typeof settings, toggleValue: boolean) => {
     let res;
     if (key === 'recordings') {
@@ -86,7 +88,7 @@ export function StreamSettingsDialogue({
     }
   }
 
- 
+
   const t = useTranslations()
   if (isOpen) {
     return (
