@@ -28,6 +28,13 @@ const StreamSettingsDialogue = dynamic(() => import("@/components/dialogue/Strea
     { ssr: false });
 const EditStreamDialogue = dynamic(() => import("@/components/dialogue/EditStreamDialogue"),
     { ssr: false });
+
+const FootFallDialogue = dynamic(() => import("@/components/dialogue/FootFallDialogue"),
+    { ssr: false });
+
+const OccupancyTrends = dynamic(() => import("@/components/camera/OccupancyTrends"),
+    { ssr: false });
+
 import { useTranslations } from 'next-intl';
 import React from 'react'
 import { Alert } from '@/models/alert';
@@ -38,8 +45,7 @@ import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import CameraMovement from '@/components/camera/CameraMovement';
 import { RootActions, RootState, useStore } from '@/store';
-import FootFallDialogue from '@/components/dialogue/FootFallDialogue';
-import OccupancyTrends from '@/components/camera/OccupancyTrends';
+
 
 
 const StreamPageView: React.FC<StreamsPageViewProps> = ({ setIsAiLoading, resetCounters, isRecordingFiltered, setIsRecordingFiltered, isAlertFullScreen, isAllAlertLoading, topRecordingRef, setIsAllAlertsLoading, setIsDateFiltered, isAiServiceLoading, serviceType, loading, isDateFiltered, isEdit, isEditLoading, isFullscreen, camera, cameraLocation, toggleStreamFav, makeFav, setIsEdit, selectedTab, setAlertOffset, setAlerts, setAlertsLoading, setDate, setEndTime, setFilterDial, setFormData, setHasMore, setHasRecordingMore, setRecordingLoading, setRecordingOffset, setRecordings, changeTab, setSettingDial, setStartTime, settingDial,
@@ -305,7 +311,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ setIsAiLoading, resetC
                 handleAiStremToggle={handleAiToggle}
                 handleMotionToggle={handleMotionToggle}
                 handleRecordingToggle={handleRecordingToggle}
-                peopleCountLine={camera ? camera?.is_footfall_active > 0 : false}
+                footfall_count={camera ? camera?.is_footfall_active > 0 : false}
                 temp={camera ? camera?.is_temp_ai_stream_active > 0 : false}
             />}
             {isFootFallCountEnabled && <FootFallDialogue setAiLoading={setIsAiLoading} handleToggleAiStream={handleAiToggle} cameraId={camera?.camera_id} url={camera?.webrtc_url ?? ''} onClose={() => setIsFootFallCount(false)} />}

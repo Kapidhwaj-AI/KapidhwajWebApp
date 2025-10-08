@@ -23,11 +23,11 @@ const AlertPreviewDialogue: React.FC<AlertPreviewDialogueProps> = ({ onClose, im
     const resetZoom = () => setZoom(1);
     const isFullscreen = useStore((state: RootState) => state.camera.isAlertFullScreen);
     const setIsFullScreenMode = useStore((state: RootActions) => state.setIsAlertFullScreen);
-    const className = isFullscreen ? 'h-[100vh] w-[100vw] overflow-auto rounded-[29px]  shadow-xl flex flex-col' : 'max-h-[90vh] overflow-auto rounded-[29px] w-[90%] md:w-[748px] h-auto  p-4 md:p-8 shadow-xl flex flex-col'
+    const className = isFullscreen ? 'h-[100vh] w-[100vw] overflow-auto rounded-[29px] bg-[var(--surface-200)] shadow-xl flex flex-col' : 'max-h-[90vh] overflow-auto bg-[var(--surface-150)] rounded-[29px] w-[90%] md:w-[748px] h-auto  p-4 md:p-8 shadow-xl flex flex-col'
     return (
         <Modal onClose={() => { onClose(); setIsFullScreenMode(false); }} title={alertType} className={className}>
 
-            <div className={`relative w-full ${isFullscreen ? 'h-full w-full' : ' h-[500px]'} bg-[var(--surface-200)] overflow-auto scrollbar-hide rounded-xl flex justify-center items-center`}>
+            <div className={`relative w-full ${isFullscreen ? 'h-full w-full' : ' h-[500px]'}  overflow-auto scrollbar-hide rounded-xl flex justify-center items-center`}>
                 <div
                     style={{
                         transform: `scale(${zoom})`,
@@ -35,7 +35,7 @@ const AlertPreviewDialogue: React.FC<AlertPreviewDialogueProps> = ({ onClose, im
                         transformOrigin: 'top left',
                         }}
                     >
-                        <button className='absolute top-[1%] right-1 bg-white rounded-lg' onClick={() => { setIsFullScreenMode(!isFullscreen) }}>
+                    <button className='absolute top-[1%] right-1 bg-[var(--surface-150)] rounded-lg' onClick={() => { setIsFullScreenMode(!isFullscreen) }}>
                             {isFullscreen ? <Minimize stroke={'2'} size={30} /> : <Maximize className='text-4xl' stroke={'2'} size={30} />}
                         </button>
                         <Image

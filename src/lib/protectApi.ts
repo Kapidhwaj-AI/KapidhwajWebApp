@@ -6,6 +6,8 @@ export interface ApiResponse<T> {
     data: T;
     status: number;
     message?: string;
+    total_in_count?: number;
+    total_out_count?: number;
 }
 
 export const getApiBaseUrl = () => {

@@ -40,7 +40,7 @@ export function StreamSettingsDialogue({
   loading,
   handleToggleStream,
   isStream,
-  peopleCountLine,
+  footfall_count,
   temp
 }: {
   isOpen: boolean;
@@ -59,13 +59,13 @@ export function StreamSettingsDialogue({
   handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
   handleToggleStream: (isStream: boolean) => void;
   isStream: boolean
-  peopleCountLine: boolean;
+  footfall_count: boolean;
 }) {
   const setIsFootFallCount = useStore((state: RootActions) => state.setIsFootFallCount);
   const setSettings = useStore((state: RootActions) => state.setSettings);
   const settings = useStore((state: RootState) => state.singleCameraSettings.settings);
   useEffect(() => {
-    setSettings({ recordings: recordings, intrusion_detection: intrusion, motion: motion, people_count: people, license_plate_detection: license, face_detection: face, fire_smoke_detection: fireSmoke, footfall_count: settings.footfall_count, temp: temp })
+    setSettings({ recordings: recordings, intrusion_detection: intrusion, motion: motion, people_count: people, license_plate_detection: license, face_detection: face, fire_smoke_detection: fireSmoke, footfall_count: footfall_count, temp: temp })
   }, [recordings, intrusion, motion, people, license, face, fireSmoke, temp])
   const toggleSetting = async (key: keyof typeof settings, toggleValue: boolean) => {
     let res;
