@@ -27,7 +27,7 @@ const AlertPreviewDialogue: React.FC<AlertPreviewDialogueProps> = ({ onClose, im
     return (
         <Modal onClose={() => { onClose(); setIsFullScreenMode(false); }} title={alertType} className={className}>
            
-                <div className={`relative w-full ${isFullscreen ? 'h-full w-full' : ' h-[500px]'} overflow-auto scrollbar-hide rounded-xl flex justify-center items-center`}>
+                <div className={`relative w-full ${isFullscreen ? 'h-full w-full' : ' h-[500px]'} bg-[var(--surface-200)] overflow-auto scrollbar-hide rounded-xl flex justify-center items-center`}>
                     <div
                         style={{
                             transform: `scale(${zoom})`,
