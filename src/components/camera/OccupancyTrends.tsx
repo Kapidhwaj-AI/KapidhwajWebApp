@@ -125,7 +125,7 @@ const OccupancyTrends = ({ camera_id, setLoading, loading, }: { camera_id: strin
     useEffect(() => {
         fetchOccupancyTrends();
     }, [filter, range]);
-    const CustomDayTick = ({ x, y, payload }: any) => {
+    const CustomDayTick = ({ x, y, payload }: { x: number, y: number, payload: { coordinate: number, value: string, index: 0, offset: number, tickCoord: number, isShow: boolean } }) => {
         const isSunday = payload.value === "Sunday";
         const value = filter === 'day' ? payload.value.charAt(0) : payload.value;
         console.log(value, 'value')
@@ -200,7 +200,7 @@ const OccupancyTrends = ({ camera_id, setLoading, loading, }: { camera_id: strin
                             margin={{ top: 10, right: 20, left: 0, bottom: 10 }}
                         >
                             <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                            <XAxis dataKey="label" stroke="#555" tick={<CustomDayTick />} />
+                            <XAxis dataKey="label" stroke="#555" tick={(props) =><CustomDayTick  {...props} />} />
                             <YAxis domain={["dataMin", "dataMax"]} stroke="#555" tickFormatter={(value) => Math.abs(value).toString()} />
                             <Legend
                                 formatter={(value) =>
