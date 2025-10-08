@@ -306,7 +306,7 @@ const FootFallDialogue = ({
             <div className="flex justify-between items-center mt-4">
                 <button
                     onClick={addLine}
-                    className="px-4 py-2 bg-blue-500 text-white rounded"
+                    className="px-4 py-2 bg-[#2B4C88] text-white rounded"
                 >
                     Add Line
                 </button>
@@ -319,7 +319,7 @@ const FootFallDialogue = ({
                         Cancel
                     </button>
                     <button
-                        className="px-4 py-2 bg-blue-600 text-white rounded"
+                        className="px-4 py-2 bg-[#2B4C88] text-white rounded"
                         onClick={handleSave}
                     >
                         Save
