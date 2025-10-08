@@ -22,4 +22,4 @@ RUN pnpm build
 EXPOSE 3001
 
 # Start your app (customize as needed)
-CMD ["pnpm", "start"]
+CMD ["pnpm", "start", "--hostname", "0.0.0.0"]
