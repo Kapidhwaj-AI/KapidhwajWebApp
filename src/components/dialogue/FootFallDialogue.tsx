@@ -32,7 +32,7 @@ const FootFallDialogue = ({
     handleToggleAiStream: (key: "fire_smoke_detection" | "face_detection" | "intrusion_detection" | "people_count" | "license_plate_detection" | "footfall_count", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
 }) => {
     const [lines, setLines] = useState<Line[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [cameraError, setCameraError] = useState(false);
     const setSettings = useStore((state: RootActions) => state.setSettings);
     const settings = useStore((state: RootState) => state.singleCameraSettings.settings);
