@@ -6,6 +6,10 @@ import { ApiResponse, BASE_URL, protectApi } from "@/lib/protectApi";
 import { AxiosResponse } from "axios";
 import { getLocalStorageItem } from "@/lib/storage";
 import { RootActions, RootState, useStore } from "@/store";
+import { set } from "date-fns";
+import { showToast } from "@/lib/showToast";
+import { se } from "date-fns/locale";
+import Spinner from "../ui/Spinner";
 
 interface Line {
     id: string;
@@ -66,7 +70,7 @@ const FootFallDialogue = ({
             };
             setLines([defaultLine]);
         } finally {
-            setLoading(false);
+
         }
     };
     useEffect(() => {
@@ -136,9 +140,15 @@ const FootFallDialogue = ({
 
     const handleSave = async () => {
         setAiLoading(true);
+        setLoading(true);
+        if (lines.length === 0) {
+            showToast("Please add at least one line.");
+            return;
+        }
         try {
             const res = await protectApi('/camera/config', 'POST', { cameraId: cameraId, lineCoords: { lx1: lines[0].x1 * 2, ly1: lines[0].y1 * 2, lx2: lines[0].x2 * 2, ly2: lines[0].y2 * 2 }, maskedLineCoords: { w1: 50, h1: 400, w2: 250, h2: 800 }, footfallOrientationFlag: lines[0].direction === 'in-out' ? true : false });
             if (res?.status === 200) {
+                showToast("Footfall line saved successfully.");
                 const toggelRes = await handleToggleAiStream("footfall_count", true)
                 onClose();
                 if (toggelRes.status) {
@@ -147,6 +157,10 @@ const FootFallDialogue = ({
             }
         } catch (err) {
             console.error("Error saving lines:", err);
+        }
+        finally {
+            setAiLoading(false);
+            setLoading(false);
         }
     };
     const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
@@ -160,7 +174,7 @@ const FootFallDialogue = ({
         onClose();
     }
 
-    
+
 
     return (
         <Modal className="bg-[var(--surface-200)] dark:bg-gray-800 max-h-[90vh] overflow-auto scrollbar-hide rounded-[29px] w-auto h-auto  p-4 md:p-8 shadow-xl flex flex-col" onClose={handleClose} title="Foot Fall Count">
@@ -325,7 +339,7 @@ const FootFallDialogue = ({
                         className="px-4 py-2 bg-[#2B4C88] text-white rounded"
                         onClick={handleSave}
                     >
-                        Save
+                        {loading ? <Spinner /> : 'Save'}
                     </button>
                 </div>
             </div>

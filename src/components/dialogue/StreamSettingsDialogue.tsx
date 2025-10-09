@@ -146,7 +146,7 @@ export function StreamSettingsDialogue({
               trackColor="bg-white"
             />
           </div>
-          <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
+          {/* <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">
               <div className="p-2 bg-[#2B4C88] rounded-xl">
                 <IconUserScan stroke={2} color="white" />
@@ -159,7 +159,7 @@ export function StreamSettingsDialogue({
               onChange={() => toggleSetting("temp", !settings.temp)}
               trackColor="bg-white"
             />
-          </div>
+          </div> */}
           <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
             <div className="flex gap-4 items-center">
               <div className="p-2 bg-[#2B4C88] rounded-xl">
