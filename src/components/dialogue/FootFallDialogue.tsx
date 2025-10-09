@@ -6,9 +6,7 @@ import { ApiResponse, BASE_URL, protectApi } from "@/lib/protectApi";
 import { AxiosResponse } from "axios";
 import { getLocalStorageItem } from "@/lib/storage";
 import { RootActions, RootState, useStore } from "@/store";
-import { set } from "date-fns";
 import { showToast } from "@/lib/showToast";
-import { se } from "date-fns/locale";
 import Spinner from "../ui/Spinner";
 
 interface Line {
@@ -69,8 +67,6 @@ const FootFallDialogue = ({
                 direction: "in-out",
             };
             setLines([defaultLine]);
-        } finally {
-
         }
     };
     useEffect(() => {
@@ -142,13 +138,15 @@ const FootFallDialogue = ({
         setAiLoading(true);
         setLoading(true);
         if (lines.length === 0) {
-            showToast("Please add at least one line.");
+            showToast("Please add at least one line.", "error");
+            setLoading(false);
+            setAiLoading(false);
             return;
         }
         try {
             const res = await protectApi('/camera/config', 'POST', { cameraId: cameraId, lineCoords: { lx1: lines[0].x1 * 2, ly1: lines[0].y1 * 2, lx2: lines[0].x2 * 2, ly2: lines[0].y2 * 2 }, maskedLineCoords: { w1: 50, h1: 400, w2: 250, h2: 800 }, footfallOrientationFlag: lines[0].direction === 'in-out' ? true : false });
             if (res?.status === 200) {
-                showToast("Footfall line saved successfully.");
+                showToast("Footfall line saved successfully.", "success");
                 const toggelRes = await handleToggleAiStream("footfall_count", true)
                 onClose();
                 if (toggelRes.status) {
@@ -159,8 +157,8 @@ const FootFallDialogue = ({
             console.error("Error saving lines:", err);
         }
         finally {
-            setAiLoading(false);
             setLoading(false);
+            setAiLoading(false);
         }
     };
     const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
@@ -185,7 +183,7 @@ const FootFallDialogue = ({
                     className="absolute top-0 left-0 w-full h-full rounded"
                 />
 
-                {!loading && (
+                {lines.length > 0 && (
                     <svg
                         width="100%"
                         height="100%"
