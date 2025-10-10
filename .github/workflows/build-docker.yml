@@ -2,7 +2,7 @@ name: Build & Push (canary on main, version on tags)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "network" ]
     tags: [ "v*.*.*" ]
   workflow_dispatch:
 
@@ -40,7 +40,7 @@ jobs:
       - name: Compute tags
         id: tags
         run: |
-          if [[ "${GITHUB_REF_TYPE}" == "branch" && "${GITHUB_REF_NAME}" == "main" ]]; then
+          if [[ "${GITHUB_REF_TYPE}" == "branch" && "${GITHUB_REF_NAME}" == "network" ]]; then
             echo "tags=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LC }}:canary" >> $GITHUB_OUTPUT
           elif [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             echo "tags=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LC }}:${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
