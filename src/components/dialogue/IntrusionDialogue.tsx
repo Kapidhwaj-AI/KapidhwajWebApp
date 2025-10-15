@@ -35,17 +35,17 @@ const IntrusionDialogue = ({
         const fetchCoords = async () => {
             try {
                 setErr(false)
-                const res = await protectApi<{box:Point[]}>(`/camera/config?cameraId=${cameraId}`)
-                const coords = res.data.data.box;
+                const res = await protectApi<{ polygon: Point[] }>(`/camera/config?cameraId=${cameraId}`)
+                const coords = res.data.data.polygon;
                 if (coords) {
                     setPoints(coords);
                 } else {
                     setErr(true)
                     setPoints([
                         { x: 10, y: 10 },
-                        { x: REFERENCE_WIDTH-10, y: 10 },
-                        { x: REFERENCE_WIDTH-10, y: REFERENCE_HEIGHT-10 },
-                        { x: 10, y: REFERENCE_HEIGHT-10 },
+                        { x: (REFERENCE_WIDTH) - 10, y: 10 },
+                        { x: (REFERENCE_WIDTH) - 10, y: (REFERENCE_HEIGHT) - 10 },
+                        { x: 10, y: (REFERENCE_HEIGHT) - 10 },
                     ]);
                 }
             } catch (error) {
@@ -73,10 +73,16 @@ const IntrusionDialogue = ({
 
         const scaleX = REFERENCE_WIDTH / rect.width;
         const scaleY = REFERENCE_HEIGHT / rect.height;
+        let newX = (e.clientX - rect.left) * scaleX;
+        let newY = (e.clientY - rect.top) * scaleY;
+
+        // Clamp the values to ensure they stay within bounds
+        newX = Math.max(0, Math.min(newX, REFERENCE_WIDTH - 1)); // Clamp between 0 and REFERENCE_WIDTH - 1
+        newY = Math.max(0, Math.min(newY, REFERENCE_HEIGHT - 1)); // Clamp between 0 and REFERENCE_HEIGHT - 1
 
         const newPoint = {
-            x: (e.clientX - rect.left),
-            y: (e.clientY - rect.top),
+            x: newX,
+            y: newY,
         };
         requestAnimationFrame(() => {
             setPoints((prevPoints) => {
@@ -91,7 +97,7 @@ const IntrusionDialogue = ({
         setIsDragging(null);
         console.log("New polygon (1920x1080 scale):", points);
     };
-  
+
 
     const scaledPoints = useMemo(() => {
         if (!containerRef.current) return points;
@@ -99,28 +105,28 @@ const IntrusionDialogue = ({
         const scaleX = rect.width / REFERENCE_WIDTH;
         const scaleY = rect.height / REFERENCE_HEIGHT;
         return points?.map((p) => ({
-            x: p.x ,
-            y: p.y,
+            x: p.x * scaleX,
+            y: p.y * scaleY,
         }));
-    },[points, containerRef.current]);
+    }, [points, containerRef.current]);
     const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
-       const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
-       const streamUrl = savedLocalHub.id ? `http://${savedLocalHub.id}.local:8889/${cameraId}` : savedRemoteHub?.id ? `http://turn.kapidhwaj.ai:${savedRemoteHub?.live_port}/${cameraId}` : url
-       const handleClose = () => {
-           if (!err) {
-               handleToggleAiStream("footfall_count", true)
-               setSettings({ ...settings, footfall_count: true });
-           }
-           onClose();
-       }
-       console.log(points,"points")
+    const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
+    const streamUrl = savedLocalHub.id ? `http://${savedLocalHub.id}.local:8889/${cameraId}` : savedRemoteHub?.id ? `http://turn.kapidhwaj.ai:${savedRemoteHub?.live_port}/${cameraId}` : url
+    const handleClose = () => {
+        if (!err) {
+            handleToggleAiStream("footfall_count", true)
+            setSettings({ ...settings, footfall_count: true });
+        }
+        onClose();
+    }
+    console.log(points, "points")
     return (
         <Modal className="bg-[var(--surface-200)] dark:bg-gray-800 max-h-[90vh] overflow-auto scrollbar-hide rounded-[29px] w-auto h-auto  p-4 md:p-8 shadow-xl flex flex-col" onClose={handleClose} title="Foot Fall Count">
             <div
                 ref={containerRef}
                 className="relative w-[960px] aspect-[16/9] rounded"
             >
-               <iframe
+                <iframe
                     src={streamUrl}
                     allowFullScreen
                     className="absolute w-[960px] aspect-[16/9] rounded"
