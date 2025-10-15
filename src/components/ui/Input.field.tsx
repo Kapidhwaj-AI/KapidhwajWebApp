@@ -39,12 +39,19 @@ export const InputField = ({
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      if (document.activeElement === inputRef.current) e.preventDefault();
-    };
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    return () => window.removeEventListener("wheel", handleWheel);
+    if (type === 'number') {
+      console.log(type)
+      const handleWheel = (e: WheelEvent) => {
+        if (document.activeElement === inputRef.current) e.preventDefault();
+      };
+    
+      inputRef.current?.addEventListener('wheel', handleWheel, { passive: false });
+      return () => {
+        inputRef.current?.removeEventListener('wheel', handleWheel);
+      };
+    }
   }, []);
+
   return (
     <div className="space-y-1.5 w-full  sm:space-y-2">
       {isPasswordField && showForgotPasswordLabel ? (
@@ -70,13 +77,15 @@ export const InputField = ({
         <input id={isOtp ? `otp-${index}` : `${label?.toLowerCase()}`}
           ref={inputRef}
           type={isPasswordField ? (showPassword ? 'text' : 'password') : type ?? 'text'}
-          value={value}
+          value={value === 0 ? "" : value}
           disabled={disabled}
           onChange={(e) => {
             const newValue = isOtp ? e.target.value.replace(/\D/g, '') : e.target.value;
+            console.log(newValue, "newValue")
             if (isOtp && setOtp) {
               setOtp(newValue, index);
             } else if (setValue) {
+
               setValue(newValue);
             }
           }}

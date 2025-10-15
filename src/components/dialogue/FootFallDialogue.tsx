@@ -116,13 +116,15 @@ const FootFallDialogue = ({
         const move = (ev: MouseEvent) => {
             const x = ev.clientX - rect.left;
             const y = ev.clientY - rect.top;
-            if (point === "x1y1") {
-                updateLine(id, "x1", x);
-                updateLine(id, "y1", y);
-            } else {
-                updateLine(id, "x2", x);
-                updateLine(id, "y2", y);
-            }
+            requestAnimationFrame(() => {
+                if (point === "x1y1") {
+                    updateLine(id, "x1", x);
+                    updateLine(id, "y1", y);
+                } else {
+                    updateLine(id, "x2", x);
+                    updateLine(id, "y2", y);
+                }
+            });
         };
 
         const up = () => {
@@ -180,15 +182,39 @@ const FootFallDialogue = ({
                 <iframe
                     src={streamUrl}
                     allowFullScreen
-                    className="absolute top-0 left-0 w-full h-full rounded"
+                    className="absolute top-0 left-0 w-[960px] aspect-[16/9] rounded"
                 />
 
                 {lines.length > 0 && (
                     <svg
                         width="100%"
                         height="100%"
-                        className="absolute top-0 left-0 pointer-events-none"
+                        className="absolute top-0 left-0"
                     >
+                        <defs>
+                            <marker
+                                id="arrowhead"
+                                markerWidth="10"
+                                markerHeight="10"
+                                refX="0"
+                                refY="4"
+                                orient="auto"
+                                markerUnits="strokeWidth"
+                            >
+                                <path stroke={'white'} d="M0,0 L8,4 L0,8 Z" fill="black" />
+                            </marker>
+                            <marker
+                                id="arrowTail"
+                                markerWidth="10"
+                                markerHeight="10"
+                                refX="8"
+                                refY="4"
+                                orient="auto"
+                                markerUnits="strokeWidth"
+                            >
+                                <path stroke={'white'} d="M0,4 L8,0 L8,8 Z" fill="black" />
+                            </marker>
+                        </defs>
                         {lines.map((line) => {
                             const midX = (line.x1 + line.x2) / 2;
                             const midY = (line.y1 + line.y2) / 2;
@@ -197,9 +223,8 @@ const FootFallDialogue = ({
                             const dy = line.y2 - line.y1;
                             const angleDeg = (Math.atan2(dy, dx) * 180) / Math.PI;
 
-                            const arrowLength = 40;
+                            const arrowLength = 85;
                             const isInOut = line.direction === "in-out";
-
                             return (
                                 <g key={line.id}>
                                     {/* main line */}
@@ -209,16 +234,14 @@ const FootFallDialogue = ({
                                         x2={line.x2}
                                         y2={line.y2}
                                         stroke="white"
-                                        strokeWidth="3"
+                                        strokeWidth="2"
                                     />
-
-                                    {/* drag handles */}
                                     <circle
                                         cx={line.x1}
                                         cy={line.y1}
                                         r={6}
-                                        fill="white"
-                                        stroke="black"
+                                        fill="black"
+                                        stroke="white"
                                         strokeWidth={2}
                                         className="cursor-move pointer-events-auto"
                                         onMouseDown={(e) => handleDrag(e, line.id, "x1y1")}
@@ -227,8 +250,8 @@ const FootFallDialogue = ({
                                         cx={line.x2}
                                         cy={line.y2}
                                         r={6}
-                                        fill="white"
-                                        stroke="black"
+                                        fill="black"
+                                        stroke="white"
                                         strokeWidth={2}
                                         className="cursor-move pointer-events-auto"
                                         onMouseDown={(e) => handleDrag(e, line.id, "x2y2")}
@@ -252,7 +275,7 @@ const FootFallDialogue = ({
                                     <g
                                         transform={`translate(${midX},${midY}) rotate(${angleDeg})`}
                                         onClick={() => toggleDirection(line.id)}
-                                        className="cursor-pointer"
+                                        className="cursor-pointer pointer-events-none"
                                     >
                                         <line
                                             x1={0}
@@ -269,7 +292,7 @@ const FootFallDialogue = ({
                                             <>
                                                 <text
                                                     x={0}
-                                                    y={-arrowLength / 2 - 10}
+                                                    y={(-arrowLength / 2) -20}
                                                     fill="white"
                                                     textAnchor="middle"
                                                     fontSize="12"
@@ -278,7 +301,7 @@ const FootFallDialogue = ({
                                                 </text>
                                                 <text
                                                     x={0}
-                                                    y={arrowLength / 2 + 15}
+                                                    y={(arrowLength / 2) + 28}
                                                     fill="white"
                                                     textAnchor="middle"
                                                     fontSize="12"
@@ -313,11 +336,13 @@ const FootFallDialogue = ({
                             );
                         })}
 
+                        <defs>
 
+                        </defs>
                     </svg>)}
             </div>
 
-            {/* Footer Actions */}
+
             <div className="flex justify-between items-center mt-4">
                 <button
                     onClick={addLine}

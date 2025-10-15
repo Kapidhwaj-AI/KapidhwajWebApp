@@ -19,6 +19,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
             setIsPlaying(true);
         }
     };
+    const utcTimestamp = recording.utc_stamp - 5.5 * 3600; // Adjust IST to UTC
     return (
         <div
             className={
@@ -33,7 +34,11 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
                 src={BASE_URL + ':3000/' + recording.recorded_path}
                 className="w-full h-full object-cover rounded"
             />
-
+            <div className="p-1 bg-[var(--surface-150)] rounded-2xl absolute top-1.5 left-1.5">
+                <span className="text-xs md:text-md">
+                    {new Date(utcTimestamp * 1000).toLocaleDateString()} {new Date(utcTimestamp * 1000).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
+                </span>
+            </div>
             {(!isPlaying || isHovered) && (
                 <button
                     onClick={handleTogglePlay}
@@ -56,7 +61,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
                             stroke={'2'}
                             className="text-white/80 hover:text-white"
                             size={24}
-                                fill="currentColor"
+                            fill="currentColor"
 
                         />
                     )}

@@ -49,7 +49,7 @@ export default function CameraStreamCardMedium({ camera, camLocation }: { camera
         backgroundPosition: "center",
       }}
       className={cn(isFullscreen ? "absolute top-0 left-0 right-0 w-full rounded-2xl overflow-hidden aspect-video " :
-        "aspect-[16/9] bg-white dark:bg-gray-800 rounded-xl md:rounded-3xl lg:rounded-4xl overflow-hidden flex items-center justify-center relative ring-background"
+        `${camera?.webrtc_url ? 'rounded-xl md:rounded-3xl lg:rounded-4xl':''} aspect-[16/9] bg-white dark:bg-gray-800  overflow-hidden flex items-center justify-center relative ring-background`
       )}
     >
       {camera?.webrtc_url &&
