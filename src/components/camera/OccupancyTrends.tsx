@@ -114,7 +114,7 @@ const OccupancyTrends = ({ camera_id, setLoading, loading, }: { camera_id: strin
 
                 setData(formattedData);
             }
-        } catch (error: any) {
+        } catch (error) {
             showToast(error?.response?.data?.message ?? "Something went wrong", "error");
             console.error(error);
         } finally {

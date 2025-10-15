@@ -12,15 +12,15 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
     const [isValidHub, setIsValidHub] = useState(false)
     const savedRemoteHub = JSON.parse(getLocalStorageItem('Remotehub') ?? '{}');
     const savedLocalHub = JSON.parse(getLocalStorageItem('Localhub') ?? '{}');
-    const ports = useStore((state:RootState) => state.singleCamera.ports)
+    const ports = useStore((state: RootState) => state.singleCamera.ports)
 
     useEffect(() => {
-        if ( savedLocalHub?.id || savedRemoteHub?.id) {
+        if (savedLocalHub?.id || savedRemoteHub?.id) {
             setIsValidHub(true)
         }
     }, [savedLocalHub, savedRemoteHub])
     const staticPort = !Number.isNaN(ports.static_port) ? ports.static_port : savedRemoteHub?.static_port
-    const id =  savedLocalHub.id
+    const id = savedLocalHub.id
     const baseUrl = isValidHub ? savedRemoteHub?.id ? `http://turn.kapidhwaj.ai:${staticPort}/` : `http://${id}.local:3000/` : 'http://turn.kapidhwaj.ai:3000/'
     const handleTogglePlay = () => {
         const video = videoRef.current;
@@ -34,6 +34,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
             setIsPlaying(true);
         }
     };
+    const utcTimestamp = recording.utc_stamp - 5.5 * 3600; // Adjust IST to UTC
     return (
         <div
             className={cn(
@@ -50,7 +51,11 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
                 src={baseUrl + recording.recorded_path}
                 className="w-full h-full object-cover rounded"
             />
-
+            <div className="p-1 bg-[var(--surface-150)] rounded-2xl absolute top-1.5 left-1.5">
+                <span className="text-xs md:text-md">
+                    {new Date(utcTimestamp * 1000).toLocaleDateString()} {new Date(utcTimestamp * 1000).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
+                </span>
+            </div>
             {(!isPlaying || isHovered) && (
                 <button
                     onClick={handleTogglePlay}
@@ -73,7 +78,7 @@ export default function CameraStreamRecordingCard({ recording }: { recording: Re
                             stroke={'2'}
                             className="text-white/80 hover:text-white"
                             size={24}
-                                fill="currentColor"
+                            fill="currentColor"
 
                         />
                     )}

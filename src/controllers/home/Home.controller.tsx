@@ -50,17 +50,20 @@ const HomeController = () => {
 
     }
     const fetchSavedHubs = async () => {
-        setIsSavedHubsLoading(true)
-        try {
-            const res = await protectApi<Hub[]>(`/devices/hub`, "GET", undefined, undefined, true);
-            const data = res.data.data
-            setDevices(res.data.data.length)
-            setSavedHubs(data)
-        } catch (error) {
-            console.error("err:", error)
-        } finally {
-            setIsSavedHubsLoading(false)
-        }
+       
+            console.log(localHub, storedLocalHub, "isChecking")
+            setIsSavedHubsLoading(true)
+            try {
+                const res = await protectApi<Hub[]>(`/devices/hub`, "GET", undefined, undefined, true);
+                const data = res.data.data
+                setDevices(res.data.data.length)
+                setSavedHubs(data)
+            } catch (error) {
+                console.error("err:", error)
+            } finally {
+                setIsSavedHubsLoading(false)
+            }
+        
     }
     const fetchSites = async () => {
         try {

@@ -64,7 +64,7 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
               )}
           </div>
           <h4 className="text-xl dark:text-white"> {t('streams.showing_streams', { count: cameraCount })}</h4>
-          {selectedData ? (
+          {selectedData && !isLoading ? (
               <div className={cn("grid grid-cols-1 gap-6  overflow-y-auto scrollbar-hide p-2",
                   {
                       "md:grid-cols-1": toogleColumnValue === 1,
@@ -90,7 +90,7 @@ const StreamsView: React.FC<StreamsViewProps> = ({searchQuery, selectedChildFold
               </div>
           }
 
-          {selectedOrganization && visibleCameras?.length === 0 && (
+          {selectedOrganization && visibleCameras?.length === 0 && !isLoading && (
               <div className="text-center text-gray-500">
                   No cameras found
               </div>

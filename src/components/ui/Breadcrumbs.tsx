@@ -28,9 +28,10 @@ const Breadcrumbs = () => {
     const style = 'sm:text-md md:text-lg lg:text-xl xl:text-2xl font-medium whitespace-nowrap'
     const t = useTranslations()
     if (isFullscreen) return null
+    console.log(paths,"paths")
     return (
         <div className='flex gap-2 pt-4  px-4 items-center flex-wrap'>
-            <BackButton />
+            {paths.length>0 &&<BackButton />}
             <Link href="/" className={style}>{t('home_title')}</Link>
             {paths.map((item, index) => {
                 return (

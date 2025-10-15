@@ -45,6 +45,7 @@ import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import CameraMovement from '@/components/camera/CameraMovement';
 import { RootActions, RootState, useStore } from '@/store';
+import IntrusionDialogue from '@/components/dialogue/IntrusionDialogue';
 
 
 
@@ -59,6 +60,8 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ setIsAiLoading, resetC
     );
     const isFootFallCountEnabled = useStore((state: RootState) => state.singleCameraSettings.isFootFallCountEnabled);
     const setIsFootFallCount = useStore((state: RootActions) => state.setIsFootFallCount);
+    const isIntrusionEnabled = useStore((state: RootState) => state.singleCameraSettings.isIntrusionEnabled);
+    const setIsIntrusionEnabled = useStore((state: RootActions) => state.setIsIntrusionEnabled);
     return (
         <div className={isFullscreen ? "h-full" : "h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4"}>
             {(!isFullscreen || isAlertFullScreen) && <div className="flex flex-col md:flex-row justify-between items-start  gap-3">
@@ -128,10 +131,10 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ setIsAiLoading, resetC
             </div>}
             {loading ? <Spinner /> :
                 <div className={isFullscreen ? "relative top-0 left-0 right-0 w-full h-full rounded-2xl" : "grid grid-cols-1 lg:grid-cols-6 gap-3 md:gap-4   md:h-full  h-auto overflow-y-auto scrollbar-hide"}>
-                    <div className={isFullscreen ? "w-full h-full" : "lg:col-span-4 flex flex-col gap-3 md:gap-5 h-full"}>
+                    <div className={isFullscreen ? "w-full h-full" : "lg:col-span-4 flex flex-col gap-3 md:gap-5 h-full "}>
                         <div
                             className={cn(
-                                "overflow-y-auto scrollbar-hide rounded-2xl",
+                                "",
                                 isFullscreen
                                     ? "h-full"
                                     : "h-auto lg:flex-[1]" // mobile fixed 33vh, desktop grow ratio 3
@@ -274,7 +277,17 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ setIsAiLoading, resetC
             {isEdit && <EditStreamDialogue
                 isLoading={isEditLoading}
                 formData={formData}
-                onClose={() => setIsEdit(false)}
+                onClose={() => {
+                    setIsEdit(false); setFormData({
+                        name: camera?.name ?? '', people_threshold_count: camera?.people_threshold_count ?? NaN,
+                        organizationId: camera?.organization_id ?? '',
+                        folderId: cameraLocation?.parantFolderId ?? NaN,
+                        subfolder: cameraLocation?.folderId ?? NaN,
+                        detectionSensitivity: camera?.obj_thresh,
+                        overlapSensitivity: camera?.nms_thresh,
+                        sceneDensity: camera?.topk_pre_nms
+                    })
+                }}
                 setFormData={setFormData}
                 folders={organizations?.find((item) => item.id === formData.organizationId)?.folders.map((folder) => ({ key: folder.id.toString(), value: folder.name }))}
                 organizations={organizations?.map((item) => ({ key: item.id, value: item.name }))}
@@ -302,6 +315,7 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ setIsAiLoading, resetC
                 temp={camera ? camera?.is_temp_ai_stream_active > 0 : false}
             />}
             {isFootFallCountEnabled && <FootFallDialogue setAiLoading={setIsAiLoading} handleToggleAiStream={handleAiToggle} cameraId={camera?.camera_id} url={camera?.webrtc_url ?? ''} onClose={() => setIsFootFallCount(false)} />}
+            {isIntrusionEnabled && <IntrusionDialogue setAiLoading={setIsAiLoading} handleToggleAiStream={handleAiToggle} cameraId={camera?.camera_id} url={camera?.webrtc_url ?? ''} onClose={() => setIsIntrusionEnabled(false)} />}
         </div>
     )
 }

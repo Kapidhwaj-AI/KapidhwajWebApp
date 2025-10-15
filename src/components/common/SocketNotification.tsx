@@ -77,7 +77,6 @@ const SocketNotification = () => {
                 inCount: number;
                 outCount: number;
             }) => {
-                console.log(data, "footfall_count_socket")
                 setFootFallCount(data);
             });
             socket.on('update_ports', (data: {
@@ -89,6 +88,7 @@ const SocketNotification = () => {
 
             socket.on('notification', (notification: { type: string, message: string }) => {
                 const type = notification.type;
+                console.log(notification, "notification")
                 showToast(notification.message, "info")
                 if (type === 'intrusion_detected') {
                     toggleIntrusionDetection();

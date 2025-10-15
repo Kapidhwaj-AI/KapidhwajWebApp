@@ -62,6 +62,7 @@ export function StreamSettingsDialogue({
   footfall_count: boolean;
 }) {
   const setIsFootFallCount = useStore((state: RootActions) => state.setIsFootFallCount);
+  const setIsIntrusionEnabled = useStore((state: RootActions) => state.setIsIntrusionEnabled);
   const setSettings = useStore((state: RootActions) => state.setSettings);
   const settings = useStore((state: RootState) => state.singleCameraSettings.settings);
   useEffect(() => {
@@ -78,6 +79,10 @@ export function StreamSettingsDialogue({
     else {
       if (key === "footfall_count" && toggleValue) {
         setIsFootFallCount(true);
+        return;
+      } else if (key === 'intrusion_detection' && toggleValue) {
+        setIsIntrusionEnabled(true)
+        return;
       }
       else {
         res = await handleAiStremToggle(key, toggleValue)

@@ -56,9 +56,9 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         organizationId: camera?.organization_id ?? '',
         folderId: cameraLocation?.parantFolderId ?? NaN,
         subfolder: cameraLocation?.folderId ?? NaN,
-        detectionSensitivity: 0,
-        overlapSensitivity: 0,
-        sceneDensity: 0
+        detectionSensitivity: camera?.obj_thresh,
+        overlapSensitivity: camera?.nms_thresh,
+        sceneDensity: camera?.topk_pre_nms
     });
     const setIsPeople = useStore((state: RootActions) => state.setIsPeople);
     const setCurrentCameraId = useStore((state: RootActions) => state.setCurrentCameraId);
