@@ -161,6 +161,7 @@
         "custom_services": "Custom Services",
         "storage": "Storage",
         "manage_site_folders": "Manage Folders",
+        "check_updates":"Check Updates",
         "network": {
             "dhcp": "DHCP",
             "ipv4": "IPv4 Address",

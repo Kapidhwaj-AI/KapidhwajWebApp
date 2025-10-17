@@ -173,6 +173,7 @@
         "network_configuration": "नेटवर्क कॉन्फ़िगरेशन",
         "custom_services": "कस्टम सेवा",
         "storage": "स्टोरेज",
+        "check_updates": "अद्यतन जाँचें",
         "manage_site_folders": "फ़ोल्डरस प्रबंधित करें",
         "network": {
             "dhcp": "डीएचसीपी",

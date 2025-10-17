@@ -2,12 +2,14 @@ import axios, { isAxiosError, Method } from "axios";
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "./storage";
 import { apiBaseUrl, LOCALSTORAGE_KEY } from "@/services/config";
 import { showToast } from "./showToast";
+import { UpdatesData } from "@/models/settings";
 export interface ApiResponse<T> {
     data: T;
     status: number;
     message?: string;
     total_in_count?: number;
     total_out_count?: number;
+    updatesData?: UpdatesData
 }
 
 export async function protectApi<T, D = undefined>(

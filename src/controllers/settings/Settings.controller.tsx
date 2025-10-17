@@ -86,6 +86,12 @@ const SettingsController = () => {
             icon: <IconServer2 size={40} />,
             path: "/settings/storage"
         },
+        {
+            id: 12,
+            title: t("check_updates"),
+            icon: <IconServer2 size={40} />,
+            path: "/settings/check-updates"
+        },
     ];
     return (
         <SettingsView

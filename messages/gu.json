@@ -181,6 +181,7 @@
         "network_configuration": "જાલ વિધાન",
         "custom_services": "કસ્ટમ સેવા",
         "storage": "સંગ્રહ",
+        "check_updates": "અપડેટ્સ ચકાસો",
         "manage_site_folders": "ફોલ્ડરસ મેનેજ કરો",
         "network": {
             "dhcp": "ડીએચસીપી",

@@ -239,3 +239,23 @@ export interface StorageUsageViewProps {
     storageUsage: StorageUsage ;
     loading: boolean
 }
+
+
+export interface UpdatesData{
+    current:{
+        ["api-backend "]: string;
+        ["media-server"]: string;
+        ["onvif-node"]: string;
+        ["ml-server"]: string;
+        ["web-app"]: string;
+    };
+    target:{
+        api:string;
+        media: string;
+        onvif: string;
+        ml: string;
+        updater: string;
+        web: string 
+    };
+    channel: string | null 
+}
