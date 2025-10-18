@@ -59,6 +59,7 @@ const StreamPageController = ({ params }: { params: Promise<{ id: string }> }) =
         detectionSensitivity: camera?.obj_thresh,
         overlapSensitivity: camera?.nms_thresh,
         sceneDensity: camera?.topk_pre_nms
+        
     });
     const setIsPeople = useStore((state: RootActions) => state.setIsPeople);
     const setCurrentCameraId = useStore((state: RootActions) => state.setCurrentCameraId);
