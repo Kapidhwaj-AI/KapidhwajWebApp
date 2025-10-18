@@ -167,7 +167,7 @@ const IntrusionDialogue = ({
         try {
             const absPoints = points.map(toAbsolute);
             const roi = arrayToRoi(absPoints);
-            let payload = { cameraId }
+            const  payload = { cameraId }
             if (isTrack) {
                 console.log(isTrack, "isTrack")
                 payload['intrusionTrackRoi'] = { ...roi, dwellTime }
