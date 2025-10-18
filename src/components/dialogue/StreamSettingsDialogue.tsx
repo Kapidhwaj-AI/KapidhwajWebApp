@@ -40,6 +40,7 @@ export function StreamSettingsDialogue({
   loading,
   handleToggleStream,
   isStream,
+  track,
   footfall_count,
   temp
 }: {
@@ -53,8 +54,9 @@ export function StreamSettingsDialogue({
   face: boolean;
   fireSmoke: boolean;
   loading: boolean;
+  track: boolean
   temp: boolean;
-  handleAiStremToggle: (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection' | "footfall_count" | "temp", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
+  handleAiStremToggle: (key: 'fire_smoke_detection' | 'face_detection' | 'intrusion_detection' | 'people_count' | 'license_plate_detection' | "footfall_count" | "temp" | "intrusion_track_detection", toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleMotionToggle: (toggleValue: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>;
   handleRecordingToggle: (isRecord: boolean) => Promise<AxiosResponse<ApiResponse<unknown>, unknown>>
   handleToggleStream: (isStream: boolean) => void;
@@ -63,10 +65,11 @@ export function StreamSettingsDialogue({
 }) {
   const setIsFootFallCount = useStore((state: RootActions) => state.setIsFootFallCount);
   const setIsIntrusionEnabled = useStore((state: RootActions) => state.setIsIntrusionEnabled);
+  const setIsTrackEnabled = useStore((state: RootActions) => state.setIsTrackEnabled);
   const setSettings = useStore((state: RootActions) => state.setSettings);
   const settings = useStore((state: RootState) => state.singleCameraSettings.settings);
   useEffect(() => {
-    setSettings({ recordings: recordings, intrusion_detection: intrusion, motion: motion, people_count: people, license_plate_detection: license, face_detection: face, fire_smoke_detection: fireSmoke, footfall_count: footfall_count, temp: temp })
+    setSettings({ recordings: recordings, intrusion_detection: intrusion, motion: motion, people_count: people, license_plate_detection: license, face_detection: face, fire_smoke_detection: fireSmoke, footfall_count: footfall_count, temp: temp, intrusion_track_detection: track })
   }, [recordings, intrusion, motion, people, license, face, fireSmoke, temp])
   const toggleSetting = async (key: keyof typeof settings, toggleValue: boolean) => {
     let res;
@@ -83,6 +86,8 @@ export function StreamSettingsDialogue({
       } else if (key === 'intrusion_detection' && toggleValue) {
         setIsIntrusionEnabled(true)
         return;
+      }else if (key === 'intrusion_track_detection' && toggleValue){
+        setIsTrackEnabled(true)
       }
       else {
         res = await handleAiStremToggle(key, toggleValue)
@@ -108,7 +113,7 @@ export function StreamSettingsDialogue({
             </div>
             <Switch
               enabled={isStream}
-              onChange={() => { handleToggleStream(!isStream); setSettings({ recordings: false, people_count: false, motion: false, intrusion_detection: false, license_plate_detection: false, face_detection: false, fire_smoke_detection: false, footfall_count: false, temp: false }) }}
+              onChange={() => { handleToggleStream(!isStream); setSettings({ recordings: false, people_count: false, motion: false, intrusion_detection: false, license_plate_detection: false, face_detection: false, fire_smoke_detection: false, footfall_count: false, temp: false, intrusion_track_detection: false }) }}
               trackColor="bg-white"
             />
           </div>
@@ -135,6 +140,20 @@ export function StreamSettingsDialogue({
             <Switch
               enabled={settings.intrusion_detection}
               onChange={() => toggleSetting("intrusion_detection", !settings.intrusion_detection)}
+              trackColor="bg-white"
+            />
+          </div>
+          <div className="flex justify-between items-center bg-[var(--surface-800)] py-3 px-6 rounded-3xl">
+            <div className="flex gap-4 items-center">
+              <div className="p-2 bg-[#2B4C88] rounded-xl">
+                <IconTreadmill stroke={2} color="white" />
+              </div>
+              <span>Track Intrusion</span>
+            </div>
+
+            <Switch
+              enabled={settings.intrusion_track_detection}
+              onChange={() => toggleSetting("intrusion_track_detection", !settings.intrusion_track_detection)}
               trackColor="bg-white"
             />
           </div>

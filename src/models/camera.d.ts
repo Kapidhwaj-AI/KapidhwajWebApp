@@ -38,6 +38,7 @@ export interface Camera {
   createdAt?: Date;
   updatedAt?: Date;
   is_footfall_active: number;
+  is_intrusion_track_detection_active: number;
   is_temp_ai_stream_active: number;
 }
 

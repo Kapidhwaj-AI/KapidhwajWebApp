@@ -62,6 +62,8 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ setIsAiLoading, resetC
     const setIsFootFallCount = useStore((state: RootActions) => state.setIsFootFallCount);
     const isIntrusionEnabled = useStore((state: RootState) => state.singleCameraSettings.isIntrusionEnabled);
     const setIsIntrusionEnabled = useStore((state: RootActions) => state.setIsIntrusionEnabled);
+    const isTrackEnabled = useStore((state: RootState) => state.singleCameraSettings.isTrackEnabled);
+    const setIsTrackEnabled = useStore((state: RootActions) => state.setIsTrackEnabled);
     return (
         <div className={isFullscreen ? "h-full" : "h-full flex flex-col gap-3 md:gap-5 min-h-0 px-2 md:px-4"}>
             {(!isFullscreen || isAlertFullScreen) && <div className="flex flex-col md:flex-row justify-between items-start  gap-3">
@@ -316,9 +318,11 @@ const StreamPageView: React.FC<StreamsPageViewProps> = ({ setIsAiLoading, resetC
                 handleRecordingToggle={handleRecordingToggle}
                 footfall_count={camera ? camera?.is_footfall_active > 0 : false}
                 temp={camera ? camera?.is_temp_ai_stream_active > 0 : false}
+                track={camera ? camera?.is_intrusion_track_detection_active > 0 && camera.is_intrusion_track_detection_active !== null : false}
             />}
             {isFootFallCountEnabled && <FootFallDialogue setAiLoading={setIsAiLoading} handleToggleAiStream={handleAiToggle} cameraId={camera?.camera_id} url={camera?.webrtc_url ?? ''} onClose={() => setIsFootFallCount(false)} />}
             {isIntrusionEnabled && <IntrusionDialogue setAiLoading={setIsAiLoading} handleToggleAiStream={handleAiToggle} cameraId={camera?.camera_id} url={camera?.webrtc_url ?? ''} onClose={() => setIsIntrusionEnabled(false)} />}
+            {isTrackEnabled && <IntrusionDialogue setAiLoading={setIsAiLoading} handleToggleAiStream={handleAiToggle} cameraId={camera?.camera_id} url={camera?.webrtc_url ?? ''} isTrack onClose={() => setIsTrackEnabled(false)} />}
         </div>
     )
 }

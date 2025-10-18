@@ -1,4 +1,3 @@
-"use client"
 
 import React, { useState } from "react"
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
@@ -29,7 +28,7 @@ const StorageView: React.FC<StorageUsageViewProps> = ({ storageUsage, loading })
     const id = "pie-interactive"
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
     if (!storageUsage) {
-        return <div>Loading storage data...</div>
+        return <div>No Storage Data Found...</div>
     }
     const storageData = [
         { type: "images", storage: parseInt(storageUsage?.imagesGB.toString()), fill: "var(--chart-1)" },
